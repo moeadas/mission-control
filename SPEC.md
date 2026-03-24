@@ -1,411 +1,320 @@
-# Agency Mission Control — SPEC.md
+# Mission Control — Product Specification
 
-## 1. Concept & Vision
+## Overview
 
-**Agency Mission Control** is a browser-based command center that gives a creative/digital marketing agency a living, breathing virtual office. It feels like a cross between a NASA control room and a stylish co-working space — professional but alive, with animated bot agents doing their thing in real-time. The aesthetic is **dark-mode ops center** with neon accent glows, making it feel like you're piloting something powerful.
+Mission Control is a Next.js-based agency management application for orchestrating virtual AI agents through configurable workflows.
 
-The vibe: *"The agency is always running, even when you're not watching."*
+## Vision
 
----
-
-## 2. Design Language
-
-### Aesthetic Direction
-Dark ops-center with glassmorphism panels. Think: control room for a creative agency — clean, purposeful, with subtle energy. Not gamer-dark, not corporate-gray — **modern command center**.
-
-### Color Palette
-```
---bg-base:        #0d0f14        (deep space black)
---bg-panel:       #141720        (panel surface)
---bg-card:        #1a1e2a        (card / elevated surface)
---border:         #2a2f3d        (subtle borders)
---border-glow:    #3d4459        (hover borders)
-
---text-primary:   #e8eaf0        (bright white)
---text-secondary: #8b92a8        (muted)
---text-dim:       #555b73        (disabled / placeholder)
-
---accent-blue:    #4f8ef7        (primary actions, links)
---accent-purple:  #9b6dff        (strategy / planning agents)
---accent-cyan:    #00d4aa        (creative / design agents)
---accent-orange:  #ff7c42        (production / dev agents)
---accent-pink:    #ff5fa0        (analytics / insights)
---accent-yellow:  #ffd166        (client services)
-
---glow-blue:      rgba(79, 142, 247, 0.15)
---glow-purple:    rgba(155, 109, 255, 0.15)
---glow-cyan:      rgba(0, 212, 170, 0.15)
-```
-
-### Typography
-- **Headings:** `Space Grotesk` — bold, technical, agency-forward
-- **UI Labels:** `JetBrains Mono` — monospace for that ops feel
-- **Body:** `DM Sans` — clean, readable, friendly
-
-### Spatial System
-- Base unit: 8px
-- Panels: 16px padding, 12px border-radius
-- Cards: 20px padding, 16px border-radius
-- Gaps: 12px (tight), 20px (normal), 32px (spacious)
-
-### Motion Philosophy
-- **Agents:** Continuous subtle float/pulse animations (never static)
-- **Panels:** Fade + slide-up on mount (200ms ease-out, staggered 50ms)
-- **Hover states:** 150ms ease transitions with subtle glow expansion
-- **Bot activity:** Smooth CSS keyframe animations — bobbing, blinking, typing indicators
-- **Tab transitions:** Horizontal slide with opacity fade (250ms)
-
-### Visual Assets
-- **Icons:** Lucide React (consistent 20px stroke icons)
-- **Agent avatars:** Custom SVG bot faces, each with a distinct personality color
-- **Decorative:** Subtle grid pattern on background, scan-line overlay on office view
+A production-grade agency command center that feels like mission control at NASA — every agent, task, and deliverable tracked with precision and clarity.
 
 ---
 
-## 3. Layout & Structure
+## Phase 1: Config-Driven Agency System ✅
 
-### App Shell
-```
-┌─────────────────────────────────────────────────────┐
-│  TOPBAR: Logo | Mission Control title | Status bar  │
-├──────────┬──────────────────────────────────────────┤
-│          │                                          │
-│  LAYERED │         MAIN CONTENT AREA               │
-│   MENU   │    (switches based on active tab)       │
-│  (LEFT)  │                                          │
-│          │                                          │
-│          │                                          │
-└──────────┴──────────────────────────────────────────┘
-```
+### What's Built
 
-### Layered Menu Tabs (Left Sidebar)
-Each tab opens a **layer** — a distinct view. Layers can have sub-tabs.
+**Core Infrastructure**
+- `src/lib/config-loader.ts` — Central utility for loading all JSON configs
+- `src/config/` directory with all editable configs
+- No hardcoded values — everything editable via JSON
 
-**Layer 1 — Dashboard** *(default view)*
-- Agency overview metrics
-- Active agents at a glance
-- Recent activity feed
-- Quick-actions panel
+**Agent System**
+- 10 agents with individual JSON configs in `src/config/agents/`
+- 5 divisions: orchestration, client-services, creative, media, research
+- Skills-based configuration with 100+ predefined skills
+- Tool registry with 40+ tools
+- AI config (Ollama, model: minimax-m2.7:cloud)
 
-**Layer 2 — Virtual Office**
-- 2D animated office floor plan
-- Agent bots moving/working at stations
-- Click agent → side panel with agent details
-- Office themed rooms: Creative Lab, Strategy Room, Production Suite, Analytics Hub
+**Workflow Templates**
+- 3 workflow templates: `campaign-brief`, `social-content`, `ad-creative`
+- 5 phases per workflow: Intake → Strategy → Creative → Review → Delivery
+- Quality checkpoints at each phase transition
+- Activity-level checklists
 
-**Layer 3 — Agents**
-- Agent roster grid
-- Click to expand → full agent config editor
-- Add new agent button
-- Agent status, specialty, current task, model config
+**Client Templates**
+- 4 client templates: default, ecommerce, saas, healthcare
+- Preconfigured tool sets per template
 
-**Layer 4 — Campaigns** *(scope extensible)*
-- Campaign cards
-- Pipeline view (Kanban-style)
-- Agent assignments per campaign
-
-**Layer 5 — Settings**
-- Agency profile
-- Agent defaults & system prompt templates
-- Theme / display preferences
-- Import / Export config
-
-### Responsive Strategy
-- Desktop-first (1200px+ optimal)
-- Tablet: sidebar collapses to icon-only
-- Mobile: sidebar becomes bottom sheet
+**Quality Checkpoints**
+- Q1-Q5 phase gates ensuring deliverables meet standards before progression
 
 ---
 
-## 4. Features & Interactions
+## Phase 2: Production Pipeline ✅
 
-### Virtual Office (Layer 2)
-- SVG-based 2D floor plan with styled "rooms"
-- Each agent is a small animated bot (CSS sprite/div animations)
-- Bots have: idle bobbing, working (typing animation), idle with thought bubble, resting
-- Clicking a bot opens a quick-view panel (name, role, current task, live log)
-- Bots move between stations on task assignment
-- Ambient office soundscape toggle (optional)
+### What's Built
 
-### Agent System (Layer 3)
-- Each agent has:
-  - **Name, Role, Specialty tag**
-  - **Avatar** (select from preset bot faces, each color-coded)
-  - **System Prompt** (textarea — editable, with template snippets)
-  - **Model** (dropdown: GPT-4, GPT-3.5, Claude, Gemini)
-  - **Temperature, Max Tokens** (sliders)
-  - **Tools enabled** (checkboxes: web search, code, image gen, etc.)
-  - **Status:** Active / Idle / Paused
-- **Add Agent** opens a creation wizard (slide-over panel)
-- **Edit Agent** opens full config panel (right slide-over)
-- **Clone Agent** — duplicate with new name
-- **Delete Agent** — confirmation modal
-- Agents are saved to `agents.json` in the project
+**Core Files**
+- `src/lib/workflow-engine.ts` — Task generation, phase gates, checklist tracking, prompt builder
+- `src/lib/workflow-store.ts` — Zustand store for workflow instances, tasks, handoffs
+- `src/lib/pipeline-loader.ts` — Loads predefined pipelines from JSON
+- `src/lib/agents-from-config.ts` — Builds agents from individual JSON configs
 
-### Editable Agent Prompts
-- Template library: "Social Media Strategist", "Copywriter", "SEO Analyst", "Graphic Designer", "Project Manager"
-- Prompt editor with syntax highlighting (CodeMirror or simple textarea with markdown)
-- Variables: `{{agency_name}}`, `{{client}}`, `{{campaign_goal}}` — auto-injected at runtime
-- Version history for prompts (last 5 saves)
+**Predefined Pipelines** (`src/config/pipelines/pipelines.json`)
+- Campaign Brief (14 days) — 5 phases, 12 activities
+- Social Content Pipeline (30 days) — 4 phases, 7 activities
+- Ad Creative Production (7 days) — 4 phases, 6 activities
+- SEO Audit & Strategy (10 days) — 4 phases, 7 activities
+- Competitor Research Report (5 days) — 3 phases, 5 activities
+- Media Plan Development (7 days) — 4 phases, 7 activities
 
-### 2D Bot Animations
-Each bot rendered as a styled `<div>` with CSS animations:
-- **Idle:** Gentle Y-axis bob (3s ease-in-out infinite)
-- **Working:** Faster bob + typing dots animation
-- **Thinking:** Slow pulse + "..." bubble
-- **Resting:** Dimmed, slower bob
-- **Alert:** Glow pulse + slight shake
+**Agent Configs** (`src/config/agents/*.json`)
+- 10 individual agent JSON files: iris, sage, piper, maya, finn, echo, nova-studio, nova, atlas, dex
+- Each agent has: skills, responsibilities, handoffs, quality checkpoints, tools, AI config
 
-### Activity Log
-- Real-time log of what each agent is doing
-- Timestamped entries
-- Filterable by agent / action type
-- Copy log entry as prompt snippet
+**Skills Library** (`src/config/skills/skills-library.json`)
+- 7 skill categories with 100+ individual skills
+- Full reference in `docs/skills.md`
+- Skills organized: Strategy, Creative, Project Management, Media, Research, Client Services, Operations
 
-### Dashboard Metrics (Layer 1)
-- Total agents active
-- Tasks completed today
-- Campaigns in progress
-- Quick-launch buttons for common actions
+**Pipeline UI** (`/pipeline`)
+- Kanban-style columns per phase with activity cards
+- Status indicators: pending, in-progress, completed, blocked
+- Progress tracking per phase and overall
+- Mission selector dropdown
+- Pipeline selector dropdown
 
----
+**Agent Editor** (`/agents`)
+- Form-based editor for all agent properties
+- Add/remove skills with reference to skills.md
+- Add/remove responsibilities
+- Division selector with color coding
+- AI settings (temperature, max tokens)
+- System prompt editor
 
-## 5. Component Inventory
+**Config Editor** (`/config`)
+- Organized by category: Workflows & Skills, Agents & Tools, Templates
+- In-app JSON viewer for all config files
+- Save to localStorage as backup
+- Links to GitHub for each file
 
-### `<TopBar>`
-- Logo (SVG) + "Mission Control" wordmark
-- Live clock + date
-- Connection status dot (green/yellow/red)
-- User avatar + dropdown
+### Pending
 
-### `<Sidebar>`
-- Layered nav items with icons
-- Active state: left border accent + background tint
-- Hover: subtle glow
-- Collapsed state: icon-only with tooltips
-
-### `<AgentBot>`
-- SVG or styled div bot face
-- Color from agent's accent color
-- Animation class prop
-- Tooltip on hover
-- Click → open agent panel
-
-### `<AgentCard>`
-- Avatar, name, role, specialty badge
-- Status indicator (colored dot)
-- Current task preview
-- Quick actions (edit, pause, delete)
-- Hover: lift shadow + border glow
-
-### `<AgentEditor>` (slide-over panel)
-- Full form: name, role, avatar picker, system prompt, model config, tools
-- Save / Cancel / Delete buttons
-- Prompt template inserter toolbar
-- Validation (name required, prompt min 50 chars)
-
-### `<OfficeFloor>`
-- SVG floor plan
-- Room labels
-- Agent position markers
-- Animated background grid
-
-### `<BotStation>`
-- Positioned bot at a coordinate
-- Status badge
-- Click target for agent details
-
-### `<ActivityFeed>`
-- Scrollable log list
-- Agent avatar + action text + timestamp
-- Action types: "started task", "completed", "error", "thinking"
-
-### `<CampaignCard>`
-- Campaign name, client, status badge
-- Assigned agents (avatar stack)
-- Progress bar
-- Due date
-
-### `<TabBar>` (sub-tabs within layers)
-- Horizontal scrollable tabs
-- Active underline slide animation
-
-### `<Modal>`
-- Glassmorphism backdrop
-- Slide-up with backdrop blur
-- Used for: delete confirmation, agent creation wizard, settings
-
-### `<Toast>`
-- Bottom-right notification stack
-- Success (cyan), Error (pink), Info (blue)
-- Auto-dismiss 4s
+- [ ] Phase 3: Tool Integrations (OAuth, external APIs)
+- [ ] Phase 4: Intelligence (analytics, AI learning)
 
 ---
 
-## 6. Technical Approach
+## Phase 3: Tool Integrations
 
-### Stack
-- **Next.js 14** (App Router)
-- **React 18** with hooks
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **Lucide React** for icons
-- **Zustand** for state management (agents, UI state)
-- **Framer Motion** for layout animations
-- **localStorage** for agent config persistence (JSON file generated/importable)
+### Goals
 
-### Architecture
-```
-/app
-  layout.tsx          — root layout with sidebar
-  page.tsx           — redirects to /dashboard
-  /dashboard
-  /office
-  /agents
-  /campaigns
-  /settings
+Connect to external tools and platforms for a fully functional virtual agency.
 
-/components
-  /ui                — primitives (Button, Card, Modal, Input, etc.)
-  /agents            — AgentCard, AgentEditor, AgentBot, AgentAvatar
-  /office            — OfficeFloor, BotStation, RoomLabel
-  /layout            — TopBar, Sidebar, LayeredNav
-  /dashboard         — MetricsCards, ActivityFeed, QuickActions
+### Planned
 
-/lib
-  agents-store.ts    — Zustand store for agent state
-  agent-templates.ts — default prompt templates
-  bot-animations.ts  — CSS keyframe definitions
-  types.ts           — TypeScript interfaces
+**OAuth Connections**
+- Google Workspace (Drive, Docs, Sheets)
+- Notion API
+- Linear
+- Figma
+- Slack
 
-/data
-  agents.json        — persisted agent configurations
-```
+**Platform Integrations**
+- Google Ads API
+- Meta Business API
+- LinkedIn Marketing API
+- Analytics platforms
 
-### Agent Data Model
+**Local Tools**
+- Web search
+- Document creation
+- Spreadsheet generation
+- Presentation tools
+- Image generation
+
+### Status
+
+Not started
+
+---
+
+## Phase 4: Intelligence
+
+### Goals
+
+Analytics, AI learning, and predictive capabilities.
+
+### Planned
+
+**Performance Analytics**
+- Campaign performance dashboards
+- Agent productivity metrics
+- ROI tracking
+- A/B test analysis
+
+**AI Learning**
+- Learn from past campaigns
+- Pattern recognition
+- Success factor identification
+
+**Predictive Timelines**
+- Estimated delivery times
+- Bottleneck prediction
+- Resource optimization
+
+### Status
+
+Not started
+
+---
+
+## Data Model
+
+### Agent
+
 ```typescript
 interface Agent {
-  id: string;                    // uuid
-  name: string;                  // "Maya the Strategist"
-  role: string;                  // "Chief Strategy Officer"
-  specialty: string;             // "strategy" | "creative" | "production" | "analytics" | "client"
-  color: string;                 // accent hex
-  avatar: string;                // preset avatar id
-  systemPrompt: string;
-  model: "gpt-4" | "gpt-3.5" | "claude-3" | "gemini-pro";
-  temperature: number;           // 0-2
-  maxTokens: number;             // 256-4096
-  tools: string[];               // ["web-search", "code", "image-gen"]
-  status: "active" | "idle" | "paused";
-  currentTask?: string;
-  lastActive?: string;           // ISO timestamp
-  position?: { x: number; y: number; room: string; };
+  id: string
+  name: string
+  role: string
+  division: 'orchestration' | 'client-services' | 'creative' | 'media' | 'research'
+  skills: string[]
+  responsibilities: string[]
+  tools: string[]
+  systemPrompt: string
+  temperature: number
+  maxTokens: number
+  color: string
+  avatar: string | null
+  status: 'active' | 'idle' | 'paused'
 }
 ```
 
-### Bot Animation CSS
-```css
-/* idle bob */
-@keyframes bot-idle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+### Pipeline
+
+```typescript
+interface Pipeline {
+  id: string
+  name: string
+  phases: Phase[]
 }
-/* working - faster bob + typing dots */
-@keyframes bot-working {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-3px) scale(1.02); }
+
+interface Phase {
+  id: string
+  name: string
+  color: string
+  activities: Activity[]
 }
-/* thinking bubble */
-@keyframes bubble-pop {
-  0% { opacity: 0; transform: scale(0.8) translateY(4px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+
+interface Activity {
+  id: string
+  name: string
+  assignedRole: string
+  inputs: string[]
+  outputs: string[]
+  checklist: string[]
 }
 ```
 
-### API Routes (if backend needed)
-- `GET /api/agents` — list agents
-- `POST /api/agents` — create agent
-- `PUT /api/agents/:id` — update agent
-- `DELETE /api/agents/:id` — delete agent
-- `POST /api/agents/:id/talk` — send message to agent
+### Mission
 
-*(For MVP, all state is client-side with localStorage)*
+```typescript
+interface Mission {
+  id: string
+  name: string
+  clientId: string
+  status: MissionStatus
+  currentPhase: string
+  workflowId: string
+  tasks: string[]
+  createdAt: number
+}
+```
+
+### Quality Checkpoint
+
+```typescript
+interface QualityCheckpoint {
+  id: string
+  name: string
+  phase: string
+  requirements: string[]
+  approvableBy: string[]
+  status: 'pending' | 'approved' | 'rejected'
+}
+```
 
 ---
 
-## 7. Agency Agents (Default Roster)
+## Tech Stack
 
-| Agent | Role | Specialty | Color |
-|-------|------|-----------|-------|
-| **Maya** | Chief Strategy Officer | Strategy | Purple |
-| **Finn** | Creative Director | Creative | Cyan |
-| **Dex** | Head of Production | Production | Orange |
-| **Nova** | Analytics Lead | Analytics | Pink |
-| **Sage** | Client Services Manager | Client | Yellow |
-
-These 5 are pre-loaded on first launch. User can edit, add, remove.
+- **Framework**: Next.js 14/15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animation**: Framer Motion
+- **State**: Zustand (localStorage persistence)
+- **Icons**: Lucide React
 
 ---
 
-## 8. File Structure
+## File Structure
 
 ```
-agency-mission-control/
-├── SPEC.md
-├── package.json
-├── next.config.js
-├── tailwind.config.ts
-├── tsconfig.json
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── dashboard/
-│   │   │   └── page.tsx
-│   │   ├── office/
-│   │   │   └── page.tsx
-│   │   ├── agents/
-│   │   │   └── page.tsx
-│   │   ├── campaigns/
-│   │   │   └── page.tsx
-│   │   └── settings/
-│   │       └── page.tsx
-│   ├── components/
-│   │   ├── ui/
-│   │   │   ├── Button.tsx
-│   │   │   ├── Card.tsx
-│   │   │   ├── Modal.tsx
-│   │   │   ├── Input.tsx
-│   │   │   ├── Badge.tsx
-│   │   │   ├── Slider.tsx
-│   │   │   ├── Toggle.tsx
-│   │   │   ├── Select.tsx
-│   │   │   └── Toast.tsx
-│   │   ├── layout/
-│   │   │   ├── TopBar.tsx
-│   │   │   ├── Sidebar.tsx
-│   │   │   └── LayeredNav.tsx
-│   │   ├── agents/
-│   │   │   ├── AgentCard.tsx
-│   │   │   ├── AgentEditor.tsx
-│   │   │   ├── AgentBot.tsx
-│   │   │   ├── AgentAvatar.tsx
-│   │   │   └── AgentTemplatePicker.tsx
-│   │   ├── office/
-│   │   │   ├── OfficeFloor.tsx
-│   │   │   ├── BotStation.tsx
-│   │   │   └── RoomLabel.tsx
-│   │   └── dashboard/
-│   │       ├── MetricsCards.tsx
-│   │       ├── ActivityFeed.tsx
-│   │       └── QuickActions.tsx
-│   ├── lib/
-│   │   ├── agents-store.ts
-│   │   ├── agent-templates.ts
-│   │   ├── bot-animations.ts
-│   │   └── types.ts
-│   └── styles/
-│       └── globals.css
+src/
+├── app/
+│   ├── agents/page.tsx
+│   ├── config/page.tsx
+│   ├── dashboard/page.tsx
+│   ├── office/page.tsx
+│   ├── outputs/page.tsx
+│   ├── pipeline/page.tsx
+│   └── settings/page.tsx
+├── components/
+│   ├── agents/
+│   │   ├── AgentBot.tsx
+│   │   ├── AgentCard.tsx
+│   │   └── AgentEditor.tsx
+│   ├── dashboard/
+│   │   └── MetricsCards.tsx
+│   └── layout/
+│       └── Sidebar.tsx
+├── config/
+│   ├── agents/
+│   │   ├── iris.json
+│   │   ├── sage.json
+│   │   └── ...
+│   ├── clients/
+│   │   └── clients.json
+│   ├── pipelines/
+│   │   └── pipelines.json
+│   ├── skills/
+│   │   └── skills-library.json
+│   ├── tools/
+│   │   └── tools.json
+│   ├── quality-checkpoints.json
+│   └── workflows/
+│       └── workflows.json
+├── lib/
+│   ├── agents-store.ts
+│   ├── config-loader.ts
+│   ├── pipeline-loader.ts
+│   ├── types.ts
+│   └── workflow-engine.ts
+│   └── workflow-store.ts
+└── config/
+    └── ...
 ```
+
+---
+
+## Constraints
+
+1. **Config-first**: All business logic in editable JSON
+2. **No deletion**: Never delete anything without explicit permission
+3. **Editable**: No hardcoded values — everything configurable
+4. **Opaque identifiers**: Preserve exactly as written
+5. **Local first**: All data stored in localStorage
+6. **No Git pushes**: Get explicit approval before pushing
+
+---
+
+## Next Steps
+
+1. **Complete Agent Editor** integration
+2. **Add task assignment** to specific agents
+3. **Implement handoff workflow** with notifications
+4. **Build checklist progress** persistence
+5. **Create pipeline editing UI**
+6. **Phase 3**: Tool integrations

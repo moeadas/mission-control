@@ -12,6 +12,9 @@ import {
   Users,
   Settings,
   ChevronRight,
+  GitBranch,
+  UserCircle,
+  Code,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -57,12 +60,28 @@ const NAV_ITEMS = [
     description: 'Requested work',
   },
   {
+    id: 'pipeline',
+    label: 'Pipeline',
+    icon: GitBranch,
+    href: '/pipeline',
+    color: '#00d4aa',
+    description: 'Workflow production',
+  },
+  {
     id: 'outputs',
     label: 'Outputs',
     icon: FileText,
     href: '/outputs',
     color: '#38bdf8',
     description: 'Saved deliverables',
+  },
+  {
+    id: 'config',
+    label: 'Config Editor',
+    icon: Code,
+    href: '/config',
+    color: '#ff5fa0',
+    description: 'Edit JSON configs',
   },
   {
     id: 'settings',

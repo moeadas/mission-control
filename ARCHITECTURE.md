@@ -1,154 +1,87 @@
-# Mission Control - Agency OS
-
-**Version:** 2.0 (Phase 1)
-**Last Updated:** 2026-03-24
-
----
+# Mission Control — Architecture
 
 ## Overview
 
-Mission Control is an AI-powered virtual creative agency command center. It enables agencies to run campaigns with structured workflows, specialized AI agents, and professional quality gates.
+Mission Control is a Next.js-based agency management application designed to orchestrate virtual AI agents through configurable workflows. The system follows a config-first philosophy where all business logic is stored as editable JSON.
 
----
+## Tech Stack
 
-## Architecture Philosophy
+- **Framework**: Next.js 14/15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animation**: Framer Motion
+- **State**: Zustand (localStorage persistence)
+- **Icons**: Lucide React
 
-**Config-Driven, Not Hardcoded**
+## Architecture Layers
 
-All critical business logic is stored in editable JSON config files in `/src/config/`:
-
-- Agents don't have hardcoded prompts — they use templates from `agent-roles/`
-- Workflows aren't embedded in code — they're defined in `workflows/`
-- Tools aren't hardcoded — they're configured in `tools/`
-- Client structures aren't fixed — they're templated in `client-templates/`
-
-This means you can optimize, add to, and customize the entire agency behavior by editing JSON files — no code changes needed.
-
----
-
-## Config Files
-
-### `/src/config/workflows/campaign-workflows.json`
-
-Defines standard agency workflows. Each workflow has:
-- **Phases**: Logical groupings of activities (Intake → Strategy → Creative → Review → Delivery)
-- **Activities**: Individual tasks with checklist items
-- **Assigned Roles**: Which agent role handles each activity
-- **Inputs/Outputs**: What each activity consumes and produces
-- **Timeline**: Default durations per phase
-
-**Current Workflows:**
-- `campaign-brief`: Full campaign from intake to launch
-- `social-content`: Social media content pipeline
-- `ad-creative`: Ad creative production with A/B testing
-
-**Adding a new workflow:** Copy an existing workflow JSON, modify phases/activities, add to array.
-
----
-
-### `/src/config/agent-roles/agent-roles.json`
-
-Defines agent roles with full professional context:
-
-- **Methodology**: The framework/approach this role uses (e.g., "Agile/Scrum", "Keller's Brand Equity")
-- **Core Competencies**: What this role does well
-- **Tools**: Which tools this role uses (references `tools-config.json`)
-- **Responsibilities**: Key duties
-- **Work Products**: What deliverables this role produces
-- **Handoff Protocol**: Who this role receives from and delivers to
-- **Quality Checkpoints**: Standards this role must meet
-- **AI Config**: Provider, model, temperature, and **system prompt template** with `{{variables}}`
-
-**Key Feature: System Prompt Templates**
-
-```json
-"aiConfig": {
-  "systemPromptTemplate": "You are a Brand Strategist specializing in {{industry}}. 
-    You follow the Keller's Brand Equity model. Current project: {{project}}."
-}
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        UI Layer                            │
+│  (Pages, Components, Layouts)                              │
+├─────────────────────────────────────────────────────────────┤
+│                      State Layer                           │
+│  (Zustand Stores: agents-store, workflow-store)            │
+├─────────────────────────────────────────────────────────────┤
+│                      Config Layer                          │
+│  (JSON configs: agents, pipelines, skills, tools, etc.)   │
+├─────────────────────────────────────────────────────────────┤
+│                       Data Layer                           │
+│  (localStorage persistence)                                │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-The `{{variables}}` get replaced at runtime with project-specific context, giving each agent tailored instructions.
+## Configuration Files
 
----
+### Core Configs
 
-### `/src/config/tools/tools-config.json`
+| File | Purpose |
+|------|---------|
+| `src/config/agents/*.json` | Individual agent configurations (10 agents) |
+| `src/config/pipelines/pipelines.json` | Predefined pipeline templates (6 pipelines) |
+| `src/config/skills/skills-library.json` | Available skills taxonomy (100+ skills) |
+| `src/config/tools/tools-config.json` | Tool registry |
+| `src/config/client-templates/client-templates.json` | Client templates |
+| `src/config/checkpoints/quality-checkpoints.json` | Phase transition gates |
+| `docs/skills.md` | Skills reference guide |
 
-All tools the agency can use, organized by category:
-- **Productivity**: Linear, Notion, Asana, Trello, Google Sheets
-- **Advertising**: Google Ads, Meta Business, TikTok Ads, LinkedIn Ads
-- **Analytics**: GA4, Search Console, SEMrush, Ahrefs, Hotjar
-- **Creative**: Figma, Canva, Adobe CC, Image Generation
-- **Communication**: Slack, Zoom, Email
-- **Research**: Web Search, Social Listening, Surveys
-- **Content**: WordPress, Webflow, Social Scheduling
-- **Document**: PDF/DOCX generation, E-Signature
-
-Each tool has:
-- **Actions**: What the tool can do (referenced by workflows)
-- **API Status**: Whether it's connected
-- **Documentation**: Link to API docs
-
----
-
-### `/src/config/client-templates/client-templates.json`
-
-Client onboarding templates. Each template has:
-- **Sections**: Logical groupings of fields
-- **Fields**: Label, type (text/textarea/select/url/color/toggle), required status
-
-**Current Templates:**
-- `default`: Standard client with brand, audience, competitive landscape, goals
-- `ecommerce`: Retail-specific with funnel metrics (AOV, conversion rate, cart abandonment)
-- `saas`: SaaS metrics (MRR, ARR, churn, LTV:CAC ratio)
-- `healthcare`: Compliance-first with HIPAA considerations
-
----
-
-### `/src/config/checkpoints/quality-checkpoints.json`
-
-Quality gates that must pass before moving phases:
-- **Strategy Approved**: Research complete, audience validated, positioning clear, KPIs defined
-- **Creative Approved**: Copy complete, visuals complete, brand compliance, technical specs met
-- **Client Approved**: Presentation ready, feedback incorporated, formal approval received
-- **Delivery Approved**: Campaigns set up, assets uploaded, launch verified
-
-Also includes `qualityStandards` — minimum requirements for each discipline (min data sources, required documents, etc.)
-
----
-
-## Workflow Engine
-
-### How It Works
-
-1. **Workflow Selected**: User picks a workflow template (e.g., "Campaign Brief")
-2. **Client Context Injected**: Client data fills in workflow variables
-3. **Phases Activated**: Activities unlock in order as previous phase completes
-4. **Agent Tasks Generated**: Each activity creates a task assigned to the appropriate role
-5. **Checkpoints Enforced**: Phase gates require all checklist items checked
-6. **Handoffs Tracked**: Tasks show who receives from whom and delivery status
-
-### Workflow JSON Structure
+### Agent Config Structure
 
 ```json
 {
-  "id": "campaign-brief",
+  "id": "unique-id",
+  "name": "Agent Name",
+  "role": "Job Title",
+  "division": "orchestration|client-services|creative|media|research",
+  "skills": ["skill-id", "skill-id"],
+  "responsibilities": ["Responsibility 1", "Responsibility 2"],
+  "tools": ["tool-id", "tool-id"],
+  "systemPrompt": "Custom system prompt",
+  "temperature": 0.7,
+  "maxTokens": 1536,
+  "color": "#hex",
+  "avatar": null,
+  "status": "active|idle|paused"
+}
+```
+
+### Pipeline Structure
+
+```json
+{
+  "id": "pipeline-id",
+  "name": "Pipeline Name",
   "phases": [
     {
-      "id": "intake",
-      "name": "Intake & Discovery",
-      "order": 1,
+      "id": "phase-id",
+      "name": "Phase Name",
+      "color": "#hex",
       "activities": [
         {
-          "id": "intake-1",
-          "name": "Client Brief Collection",
-          "assignedRole": "client-services",
-          "inputs": ["client-questionnaire"],
-          "outputs": ["collected-brief"],
-          "checklist": [
-            "Business objectives confirmed",
-            "Target audience defined"
-          ]
+          "id": "activity-id",
+          "name": "Activity Name",
+          "assignedRole": "role-id",
+          "checklist": ["Item 1", "Item 2"]
         }
       ]
     }
@@ -156,82 +89,122 @@ Also includes `qualityStandards` — minimum requirements for each discipline (m
 }
 ```
 
----
+## State Management
 
-## Agent System
+### Agents Store (`agents-store.ts`)
 
-### Role-Based, Not Agent-Specific
+Manages agent state, missions, and client data.
 
-Agents are assigned **roles**, not fixed personalities. The same agent can operate as Brand Strategist on one project and Media Planner on another.
+```typescript
+interface AgentsState {
+  agents: Agent[]
+  missions: Mission[]
+  clients: Client[]
+  // ... CRUD operations
+}
+```
 
-Each **Agent Instance** has:
-- Assigned roles
-- Current task(s)
-- Status (active/idle/paused)
-- Workload capacity
+### Workflow Store (`workflow-store.ts`)
 
-Each **Role Definition** (from `agent-roles.json`) has:
-- Methodology and competencies
-- Tools and responsibilities
-- Handoff protocols
-- Quality checkpoints
-- AI configuration
+Manages workflow instances, tasks, and handoffs.
 
-### Agent Card View
+```typescript
+interface WorkflowState {
+  workflowInstances: Map<string, WorkflowInstance>
+  tasks: Map<string, WorkflowTask>
+  handoffs: Handoff[]
+  // ... Task management
+}
+```
 
-Shows:
-- Role and division
-- Current assignments
-- Availability/workload
-- Key competencies
-- Methodological approach
+## Key Libraries
 
----
+| Library | Purpose |
+|---------|---------|
+| `config-loader.ts` | Dynamic JSON config loading |
+| `workflow-engine.ts` | Task generation, phase gates |
+| `pipeline-loader.ts` | Pipeline template loading |
 
-## Phase 2+ Roadmap
+## Pages
 
-### Phase 2: Production Pipeline
-- [ ] Production Pipeline dashboard with Kanban
-- [ ] Handoff protocol tracking between agents
-- [ ] Quality checkpoint UI and enforcement
-- [ ] Real-time progress tracking
+| Route | Purpose |
+|-------|---------|
+| `/dashboard` | Main agency dashboard |
+| `/office` | Virtual office with agent interactions |
+| `/agents` | Agent roster and management |
+| `/pipeline` | Production pipeline with Kanban view |
+| `/config` | In-app JSON config editor |
+| `/outputs` | Saved deliverables |
 
-### Phase 3: Tool Integrations
-- [ ] OAuth connections to ad platforms
-- [ ] Linear/Notion API integration
-- [ ] Figma asset management
-- [ ] Slack notifications
+## Skills Taxonomy
 
-### Phase 4: Intelligence
-- [ ] Performance analytics dashboard
-- [ ] AI learning from past campaigns
-- [ ] Predictive timelines
-- [ ] Automated A/B analysis
+Skills are organized into categories:
 
----
+- **Strategy & Planning**: Brand strategy, campaign planning, competitive analysis
+- **Creative & Copy**: Creative concepts, copywriting, visual direction
+- **Project & Traffic Management**: Task triage, workflow design, coordination
+- **Media & Advertising**: Media planning, campaign setup, optimization
+- **Research & Insights**: Market research, SEO, competitive intelligence
+- **Client Services**: Relationship management, account planning
+- **Operations**: Agency operations, tool integration
 
-## Quick Reference
+## Predefined Pipelines
 
-| Config File | What It Controls | How to Edit |
-|------------|------------------|-------------|
-| `workflows/*.json` | Agency processes | Add phases, activities, checklists |
-| `agent-roles/*.json` | Agent behavior | Edit prompts, tools, responsibilities |
-| `tools/*.json` | Available tools | Add integrations, actions |
-| `client-templates/*.json` | Client structure | Add fields, sections, templates |
-| `checkpoints/*.json` | Quality gates | Modify requirements |
+1. **Campaign Brief**: Full campaign from intake to launch (14 days)
+2. **Social Content Pipeline**: Social content creation and scheduling (30 days)
+3. **Ad Creative Production**: Ad creative with A/B testing (7 days)
+4. **SEO Audit & Strategy**: Comprehensive SEO audit (10 days)
+5. **Competitor Research Report**: Competitive intelligence (5 days)
+6. **Media Plan Development**: Media strategy creation (7 days)
 
----
+## Quality Checkpoints
 
-## Philosophy
+Quality checkpoints enforce phase transitions:
 
-**Professional Agency Standards**
-Each workflow, role, and tool is modeled after real agency best practices — not generic AI chat.
+- **Q1: Intake Complete** — All client info collected
+- **Q2: Strategy Approved** — Strategy approved by client
+- **Q3: Creative Approved** — Creative work signed off
+- **Q4: Pre-Launch** — Final QA before launch
+- **Q5: Launch Verified** — Campaign live and verified
 
-**Editable by Non-Developers**
-All configs are JSON — readable and editable without coding. Future UI will make this even easier.
+## Division Structure
 
-**Handoff-First Design**
-Work flows between agents formally, with documented inputs/outputs — like a real agency handoff.
+| Division | Color | Roles |
+|----------|-------|-------|
+| Orchestration | Purple | Operations Lead |
+| Client Services | Blue | Client Services Director, Traffic Manager |
+| Creative | Teal | Creative Director, Copy Lead, Visual Producer |
+| Media | Pink | Media Planning Lead, Performance Lead |
+| Research | Sky Blue | Research & Insights Lead |
 
-**Quality Gates**
-Nothing moves forward until checkpoints pass — ensuring consistent output quality.
+## Workflow Engine
+
+The workflow engine (`workflow-engine.ts`) handles:
+
+1. **Task Generation**: Creates tasks from workflow templates
+2. **Phase Gates**: Enforces quality checkpoints between phases
+3. **Checklist Tracking**: Tracks completion of activity checklists
+4. **Prompt Building**: Constructs agent prompts with context
+5. **Handoff Management**: Documents work transfers between agents
+
+## Phase Flow
+
+```
+Intake → Strategy → Creative → Review → Delivery
+   ↓         ↓          ↓         ↓         ↓
+  Q1        Q2         Q3        Q4        Q5
+```
+
+## Adding New Configs
+
+1. Create JSON file in `src/config/`
+2. Add TypeScript interface in `src/lib/types.ts`
+3. Create loader function in `src/lib/config-loader.ts`
+4. Update SPEC.md
+
+## Constraints
+
+- All configs stored as editable JSON in `src/config/`
+- No hardcoded values — everything editable
+- Opaque identifiers preserved exactly as written
+- Config changes don't require code changes
