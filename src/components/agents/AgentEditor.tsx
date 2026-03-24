@@ -111,7 +111,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           <div className="flex items-center gap-4">
             <AgentBot name={agent.name} avatar={agent.avatar} color={agent.color} size={40} />
             <div>
-              <h2 className="text-xl font-bold">Edit Agent</h2>
+              <h2 className="text-xl font-bold text-white">Edit Agent</h2>
               <p className="text-sm text-gray-400">{agent.name} — {agent.role}</p>
             </div>
           </div>
@@ -125,7 +125,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           {/* Basic Info */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Name</label>
+              <label className="block text-sm font-medium mb-1 text-gray-200">Name</label>
               <input
                 type="text"
                 value={formData.name}
@@ -134,7 +134,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Role</label>
+              <label className="block text-sm font-medium mb-1 text-gray-200">Role</label>
               <input
                 type="text"
                 value={formData.role}
@@ -145,7 +145,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">Bio</label>
+            <label className="block text-sm font-medium mb-1 text-gray-200">Bio</label>
             <textarea
               value={formData.bio}
               onChange={e => setFormData(prev => ({ ...prev, bio: e.target.value }))}
@@ -156,7 +156,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">Methodology</label>
+            <label className="block text-sm font-medium mb-1 text-gray-200">Methodology</label>
             <input
               type="text"
               value={formData.methodology}
@@ -168,7 +168,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           
           {/* Division */}
           <div>
-            <label className="block text-sm font-medium mb-2">Division</label>
+            <label className="block text-sm font-medium mb-2 text-gray-200">Division</label>
             <div className="flex gap-2 flex-wrap">
               {DIVISIONS.map(div => (
                 <button
@@ -177,7 +177,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     formData.division === div
                       ? 'ring-2 ring-offset-2 ring-offset-base-200'
-                      : 'bg-[#1a1d26] hover:bg-base-100'
+                      : 'bg-[#1a1d26] hover:bg-[#252830]'
                   }`}
                   style={{
                     backgroundColor: formData.division === div ? DIVISION_COLORS[div] + '20' : undefined,
@@ -193,10 +193,10 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           
           {/* Skills */}
           <div>
-            <label className="block text-sm font-medium mb-2">Skills</label>
+            <label className="block text-sm font-medium mb-2 text-gray-200">Skills</label>
             <div className="flex flex-wrap gap-2 mb-2">
               {formData.skills.map(skill => (
-                <span key={skill} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1">
+                <span key={skill} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1 text-white">
                   {skill}
                   <button onClick={() => removeSkill(skill)} className="hover:text-red-500">
                     <X size={12} />
@@ -224,10 +224,10 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           
           {/* Responsibilities */}
           <div>
-            <label className="block text-sm font-medium mb-2">Responsibilities</label>
+            <label className="block text-sm font-medium mb-2 text-gray-200">Responsibilities</label>
             <div className="space-y-1 mb-2">
               {formData.responsibilities.map(r => (
-                <div key={r} className="flex items-center gap-2 px-3 py-1 bg-[#1a1d26] rounded text-sm">
+                <div key={r} className="flex items-center gap-2 px-3 py-1 bg-[#1a1d26] rounded text-sm text-white">
                   <span className="flex-1">{r}</span>
                   <button onClick={() => removeResponsibility(r)} className="hover:text-red-500">
                     <Trash2 size={14} />
@@ -252,10 +252,10 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           
           {/* Tools */}
           <div>
-            <label className="block text-sm font-medium mb-2">Tools</label>
+            <label className="block text-sm font-medium mb-2 text-gray-200">Tools</label>
             <div className="flex flex-wrap gap-2 mb-2">
               {formData.tools.map(tool => (
-                <span key={tool} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1">
+                <span key={tool} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1 text-white">
                   {tool}
                   <button onClick={() => setFormData(prev => ({ ...prev, tools: prev.tools.filter(t => t !== tool) }))}>
                     <X size={12} />
@@ -268,7 +268,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 <button
                   key={tool}
                   onClick={() => setFormData(prev => ({ ...prev, tools: [...prev.tools, tool] }))}
-                  className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs hover:bg-base-100"
+                  className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs hover:bg-base-100 text-white"
                 >
                   + {tool}
                 </button>
@@ -279,7 +279,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           {/* AI Settings */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Temperature</label>
+              <label className="block text-sm font-medium mb-1 text-gray-200">Temperature</label>
               <input
                 type="number"
                 value={formData.temperature}
@@ -291,7 +291,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Max Tokens</label>
+              <label className="block text-sm font-medium mb-1 text-gray-200">Max Tokens</label>
               <input
                 type="number"
                 value={formData.maxTokens}
@@ -300,7 +300,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Color</label>
+              <label className="block text-sm font-medium mb-1 text-gray-200">Color</label>
               <input
                 type="color"
                 value={formData.color}
@@ -312,7 +312,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           
           {/* System Prompt */}
           <div>
-            <label className="block text-sm font-medium mb-1">System Prompt</label>
+            <label className="block text-sm font-medium mb-1 text-gray-200">System Prompt</label>
             <textarea
               value={formData.systemPrompt}
               onChange={e => setFormData(prev => ({ ...prev, systemPrompt: e.target.value }))}
