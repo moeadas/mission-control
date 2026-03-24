@@ -32,7 +32,10 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
       {/* Left section */}
       <div className="flex items-center gap-3">
         <button
-          onClick={onMobileMenuToggle}
+          onClick={() => {
+            console.log('🍔 Hamburger clicked!')
+            onMobileMenuToggle?.()
+          }}
           className="flex md:hidden p-2 -ml-2 rounded-xl hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center"
           aria-label="Open navigation menu"
         >

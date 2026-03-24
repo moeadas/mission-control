@@ -2,51 +2,48 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "tone-adaptation",
   "name": "Tone Adaptation",
-  "description": "Adjusts writing style and tone for different contexts, audiences, and platforms to ensure messaging resonates across all communications.",
+  "description": "Adapts brand voice and communication tone across different platforms, audiences, contexts, and cultural moments — ensuring copy and messaging land right every time, whether professional, playful, urgent, or empathetic.",
   "category": "content",
-  "difficulty": "beginner",
+  "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when adapting copy for different audiences, platforms, or contexts — e.g., making formal copy casual for social media, or adjusting B2B copy for B2C.",
-      "context": "You are a tone adaptation specialist who understands how to shift voice and tone across different contexts while maintaining brand consistency. You adapt copy so it sounds right for every channel and audience.",
-      "instructions": "## Tone Adaptation Workflow\n\n- [ ] 1. Identify the source copy and its current tone\n- [ ] 2. Define the target tone and context\n- [ ] 3. Adapt vocabulary, sentence structure, and style\n- [ ] 4. Maintain the core message while shifting delivery\n- [ ] 5. Review for consistency with brand voice\n\n## Key Inputs\n- Source Copy: {{source_copy}}\n- Source Tone: {{source_tone}}\n- Target Tone: {{target_tone}}\n- Target Context: {{target_context}}",
-      "output_template": "## Tone Adaptation\n\n### Original\n**Tone:** [e.g., formal, professional]\n**Copy:** [original text]\n\n### Adapted\n**Tone:** [e.g., casual, conversational]\n**Context:** [where this will be used]\n**Copy:** [adapted text]\n\n### Changes Made\n| Element | Original | Adapted |\n|---------|---------|---------|\n| Vocabulary | | |\n| Sentence Structure | | |\n| Tone Markers | | |\n\n### Preserved\n- [ ] Core message intact\n- [ ] Key benefit communicated"
+      "trigger": "Use when adapting copy for different platforms, adjusting brand voice for a new audience segment, responding in a crisis with the right tone, or when copy feels off-brand and needs recalibration.",
+      "context": "You are a tone adaptation specialist for a creative advertising agency. You have a calibrated ear — you know exactly what makes copy feel right in one context and completely wrong in another, and you can shift a brand's voice without losing its identity.",
+      "instructions": "## Tone Adaptation Workflow\n\n- [ ] 1. Identify the source tone — what is the original brand voice and what makes it distinctive?\n- [ ] 2. Define the target context — platform, audience, cultural moment, and emotional register\n- [ ] 3. Identify the tone delta — what's the same, what's different, what must change\n- [ ] 4. Apply the adaptation — rewrite or adapt copy for the new context\n- [ ] 5. Preserve brand DNA — ensure the adapted copy still sounds recognizably on-brand\n- [ ] 6. Test the adapted copy against the brand voice checklist\n- [ ] 7. Document the tone rules for future reference\n\n## Key Inputs\n- Original copy: {{original_copy}}\n- Source brand/voice: {{source_brand}}\n- Target platform/context: {{target_context}}\n- Audience: {{audience}}\n- Desired tone shift: {{tone_shift}}",
+      "output_template": "## Tone Adaptation\n\n### Source: {{source_brand}}\n### Target: {{target_context}}\n\n### Tone Delta Analysis\n| Element | Source Tone | Target Tone | Adaptation Needed |\n|---------|------------|------------|-------------------|\n| Vocabulary | | | |\n| Sentence structure | | | |\n| Emotional register | | | |\n| Humor/formality | | | |\n| Cultural references | | | |\n\n### Adapted Copy\n> [Full adapted version]\n\n### Brand DNA Preserved\n- [ ] Core brand personality still recognizable\n- [ ] Key message intact\n- [ ] Distinctive voice elements maintained\n\n### Voice Checklist\n- [ ] Vocabulary matches target context\n- [ ] Sentence rhythm appropriate for platform\n- [ ] Emotional register matches audience expectation\n- [ ] Cultural sensitivity considered\n\n### Tone Rules for Future Reference\n> [Documented rules for adapting this brand voice]"
     }
   },
   "variables": [
-    { "name": "source_copy", "type": "string", "required": true, "description": "The original copy to adapt" },
-    { "name": "source_tone", "type": "string", "required": true, "description": "Current tone of the source copy" },
-    { "name": "target_tone", "type": "string", "required": true, "description": "Desired target tone" },
-    { "name": "target_context", "type": "string", "required": false, "description": "Where or how the adapted copy will be used" }
+    { "name": "original_copy", "type": "string", "required": true, "description": "The original copy or content to be adapted" },
+    { "name": "source_brand", "type": "string", "required": true, "description": "The brand voice and tone guidelines to adapt from" },
+    { "name": "target_context", "type": "string", "required": true, "description": "The target platform, context, or cultural moment" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience and their tone expectations" },
+    { "name": "tone_shift", "type": "string", "required": false, "description": "Specific tone direction — e.g., more playful, more formal, more urgent" }
   ],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Analyze source", "action": "Identify tone markers in source copy", "verify": "Core message is identified" },
-      { "step": 2, "name": "Adapt tone", "action": "Shift vocabulary, structure, and style", "verify": "Tone is consistent throughout" },
-      { "step": 3, "name": "Preserve message", "action": "Ensure core message survives the adaptation", "verify": "Key benefit is intact" }
+      { "step": 1, "name": "Analyze source tone", "action": "Identify the core elements of the source brand voice", "verify": "Distinctive voice elements documented" },
+      { "step": 2, "name": "Define target context", "action": "Map the platform, audience, and emotional register of the target", "verify": "Target tone parameters clearly defined" },
+      { "step": 3, "name": "Analyze tone delta", "action": "Compare source and target, noting what must shift and what must stay", "verify": "Tone delta documented element by element" },
+      { "step": 4, "name": "Adapt copy", "action": "Rewrite or adapt the copy for the new context while preserving brand DNA", "verify": "Adapted copy reviewed for tone accuracy" },
+      { "step": 5, "name": "Verify brand DNA", "action": "Check that adapted copy still sounds recognizably on-brand", "verify": "Brand voice checklist passed" },
+      { "step": 6, "name": "Document rules", "action": "Capture tone adaptation rules for future use", "verify": "Rules documented and shared with copy team" }
     ]
   },
   "examples": [
-    {
-      "input": "Source: 'Our platform delivers enterprise-grade security with SOC 2 Type II certification, ensuring your data is protected at every layer.' Target: Casual social media post for Instagram. Source tone: Technical, formal.",
-      "output": "Adapted: 'Your data is safer than a vault run by robots 🛡️ We're SOC 2 Type II certified — which basically means enterprise-grade security, no matter what.' Tone shifts from technical to conversational. Core message (security, certification) is preserved."
-    }
+    { "input": "original_copy: Serif brand manifesto for website about craftsmanship | source_brand: Heritage watchmaker, premium, formal, artisanal | target_context: TikTok caption, product reveal, 60-second video | audience: 18-30 watch enthusiasts, streetwear culture | tone_shift: More casual, more immediate, still premium", "output": "TikTok caption that preserves the heritage brand's craftsmanship emphasis but speaks in short, punchy sentences with Gen Z energy — still recognizably premium, just not stuffy" }
   ],
   "checklist": [
-    "Core message is preserved through adaptation",
-    "Tone shift is consistent throughout",
-    "Vocabulary is appropriate for target context",
-    "Key benefit or message is still communicated",
-    "Adaptation sounds natural, not forced"
+    "Source brand voice fully analyzed and distinctive elements documented",
+    "Target context tone parameters clearly defined",
+    "Tone delta mapped element by element",
+    "Adapted copy preserves brand DNA",
+    "Brand voice checklist verified",
+    "Tone adaptation rules documented for future reference"
   ],
   "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["content-pipeline"],
-  "metadata": {
-    "version": "1.0",
-    "author": "agency",
-    "tags": ["tone-adaptation", "copywriting", "brand-voice", "content"],
-    "lastUpdated": "2026-03-24"
-  }
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": { "version": "1.0", "author": "agency", "tags": ["tone-of-voice", "brand-voice", "copywriting", "content-adaptation"], "lastUpdated": "2026-03-24" }
 }

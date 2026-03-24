@@ -2,57 +2,48 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "upselling",
   "name": "Upselling",
-  "description": "Identifying and pursuing growth opportunities within existing client relationships. Expand scope, increase value, and deepen partnerships — upselling that feels like service, not sales.",
+  "description": "Identifies and executes strategic growth opportunities within existing client accounts — expanding scope, introducing new services, and deepening the agency's value to grow revenue without losing relationship quality.",
   "category": "client-management",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when identifying upsell opportunities with existing clients, expanding scope of engagements, proposing additional services, or building growth strategies for client accounts.",
-      "context": "You are an upselling specialist who helps agencies grow existing client relationships naturally. You focus on identifying real needs and proposing solutions that genuinely add value.",
-      "instructions": "## Upselling Workflow\n\n- [ ] 1. Assess current engagement and client needs\n- [ ] 2. Identify unmet needs and opportunities\n- [ ] 3. Qualify opportunities by fit and timing\n- [ ] 4. Develop upsell proposal with value\n- [ ] 5. Present in context of existing relationship\n- [ ] 6. Follow up and close\n\n## Key Inputs\n- Client: {{client}}\n- Current Engagement: {{current}}\n- Client Goals: {{goals}}\n- Available Services: {{services}}\n- Relationship Strength: {{relationship}}",
-      "output_template": "## Upselling Strategy\n\n### Client Context\n| Element | Details |\n|---------|---------|\n| Client | |\n| Current Engagement | |\n| Revenue | |\n| Relationship Stage | |\n\n### Opportunity Assessment\n| Opportunity | Client Need | Fit | Timing | Priority |\n|------------|------------|-----|--------|----------|\n| | | | | |\n\n### Needs Analysis\n| Current Pain Point | Service Solution | Value |\n|------------------|----------------|------|\n| | | |\n\n### Upsell Proposal\n| Service | Description | Investment | Expected ROI |\n|---------|------------|------------|-------------|\n| | | | |\n\n### Value Proposition\n**Why This Makes Sense Now:**\n\n**What Client Gains:**\n\n**Investment:**\n\n### Presentation Approach\n| Element | Strategy |\n|---------|----------|\n| Timing | |\n| Champion | |\n| Supporting Data | |\n\n### Follow-Up Plan\n| Touch | Format | Timing |\n|-------|--------|--------|\n| | | |"
+      "trigger": "Use when reviewing an existing client's account, identifying growth opportunities with current clients, preparing for QBRs, or when you want to proactively expand the agency's footprint with an existing client.",
+      "context": "You are an upselling specialist for a creative advertising agency. You believe the best growth comes from helping existing clients succeed more — and you identify opportunities where the agency's capabilities solve problems the client hasn't even named yet.",
+      "instructions": "## Upselling Workflow\n\n- [ ] 1. Audit the current account — what is the agency currently delivering, and what isn't it?\n- [ ] 2. Understand the client's roadmap — where are they growing, what are they launching?\n- [ ] 3. Identify whitespace — unmet needs the agency is uniquely positioned to solve\n- [ ] 4. Build the business case — why this opportunity, why now, what's the value?\n- [ ] 5. Time the approach — align the pitch to the client's natural decision cycles\n- [ ] 6. Develop a tailored proposal with clear ROI\n- [ ] 7. Present with confidence — position as partnership, not sales\n\n## Key Inputs\n- Client account: {{client}}\n- Current services: {{current_services}}\n- Client's business goals: {{client_goals}}\n- Known expansion areas: {{expansion_areas}}\n- Relationship context: {{relationship}}",
+      "output_template": "## Upselling Opportunity Assessment\n\n### Client: {{client}}\n### Date: {{date}}\n\n### Current Account Snapshot\n| Service | Monthly Value | Client Satisfaction | Expansion Potential |\n|---------|-------------|--------------------|-------------------|\n| | | | |\n\n### Identified White Space\n| Opportunity | Current Gap | Why the Agency | Estimated Value |\n|------------|-----------|---------------|----------------|\n| | | | |\n\n### Client Business Triggers\n> [Upcoming launches, growth plans, or challenges that create urgency]\n\n### Timing Recommendation\n> [When to approach — aligned with client's budget cycle, launches, etc.]\n\n### Business Case\n> [Why this expansion serves the client — framed as partnership, not upsell]\n\n### Proposed Approach\n| Step | Action | Owner | Timing |\n|------|--------|-------|--------|\n| | | | |\n\n### Expected Outcome\n- Revenue impact: ...\n- Relationship impact: ..."
     }
   },
   "variables": [
-    { "name": "client", "type": "string", "required": true, "description": "Client name and context" },
-    { "name": "current", "type": "string", "required": true, "description": "Current engagement scope" },
-    { "name": "goals", "type": "string", "required": false, "description": "Client's stated goals" },
-    { "name": "services", "type": "string", "required": false, "description": "Services available to offer" },
-    { "name": "relationship", "type": "string", "required": false, "description": "Relationship strength and openness to expansion" }
+    { "name": "client", "type": "string", "required": true, "description": "Client account name" },
+    { "name": "current_services", "type": "string", "required": true, "description": "Services currently delivered to this client" },
+    { "name": "client_goals", "type": "string", "required": true, "description": "Client's stated business goals and growth plans" },
+    { "name": "expansion_areas", "type": "string", "required": false, "description": "Known areas where client could expand services" },
+    { "name": "relationship", "type": "string", "required": true, "description": "Current relationship quality and trust level" }
   ],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Assess context", "action": "Understand current engagement", "verify": "Opportunities visible" },
-      { "step": 2, "name": "Identify needs", "action": "Find unmet client needs", "verify": "Needs are real" },
-      { "step": 3, "name": "Qualify", "action": "Assess fit and timing", "verify": "Opportunity is viable" },
-      { "step": 4, "name": "Develop proposal", "action": "Create compelling offer", "verify": "Value is clear" },
-      { "step": 5, "name": "Present", "action": "Position naturally in relationship", "verify": "Client sees value" },
-      { "step": 6, "name": "Close", "action": "Follow up and secure", "verify": "Growth achieved" }
+      { "step": 1, "name": "Audit current account", "action": "Document what the agency is and isn't delivering for this client", "verify": "Full account snapshot completed" },
+      { "step": 2, "name": "Research client roadmap", "action": "Understand client's upcoming launches, growth plans, and challenges", "verify": "At least 3 client business triggers identified" },
+      { "step": 3, "name": "Identify whitespace", "action": "Find unmet needs where agency's capabilities create clear client value", "verify": "At least 2 solid opportunities identified" },
+      { "step": 4, "name": "Build business case", "action": "Frame expansion as partnership — what's in it for the client", "verify": "ROI or value proposition clearly articulated" },
+      { "step": 5, "name": "Time the approach", "action": "Align pitch timing to client's natural decision cycles", "verify": "Timing reviewed with account lead" },
+      { "step": 6, "name": "Develop proposal", "action": "Create tailored proposal with clear scope, pricing, and outcomes", "verify": "Proposal reviewed by agency leadership" }
     ]
   },
   "examples": [
-    { "input": "Identify upsell opportunities for a social media management client who only uses content creation — they haven't tried paid social.", "output": "Upsell strategy with needs analysis, service proposal, and conversation guide." },
-    { "input": "Develop an upsell proposal for a branding client who just completed a rebrand — options for ongoing brand stewardship.", "output": "Expansion proposal with value proposition and timing rationale." }
+    { "input": "client: Regional restaurant chain | current_services: Social media management | client_goals: Drive foot traffic to 12 new locations opening Q3 | relationship: High-trust, 3-year relationship | expansion_areas: Paid media, local SEO, in-app promotions", "output": "Upsell proposal for hyper-local paid media campaign targeting 1-mile radius around new locations — framed as foot traffic solution for expansion, estimated at $15K/month additional retainer, timed for QBR in Q2" }
   ],
   "checklist": [
-    "Client needs thoroughly understood",
-    "Opportunities identified are real needs",
-    "Fit with existing relationship confirmed",
-    "Timing is right",
-    "Value proposition is compelling",
-    "Proposal is specific and actionable",
-    "Pricing is appropriate",
-    "Presentation approach planned",
-    "Follow-up scheduled"
+    "Full audit of current account scope completed",
+    "At least 3 client business triggers identified",
+    "At least 2 whitespace opportunities documented",
+    "Business case clearly framed as client value, not agency revenue",
+    "Pitch timing aligned with client's decision cycle",
+    "Proposal reviewed and approved before client presentation"
   ],
-  "tools": ["document", "presentation"],
+  "tools": ["document", "spreadsheet"],
   "agents": ["nova"],
   "pipelines": [],
-  "metadata": {
-    "version": "1.0",
-    "author": "agency",
-    "tags": ["upselling", "account-growth", "client-expansion", "revenue", "new-services"],
-    "lastUpdated": "2026-03-24"
-  }
+  "metadata": { "version": "1.0", "author": "agency", "tags": ["upselling", "account-growth", "revenue", "client-management"], "lastUpdated": "2026-03-24" }
 }
