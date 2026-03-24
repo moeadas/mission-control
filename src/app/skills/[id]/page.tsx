@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useAgentsStore } from '@/lib/agents-store'
 import { SKILL_CATEGORIES, DIFFICULTY_LEVELS, FREEDOM_LEVELS, type Skill } from '@/lib/skill-schema'
 import { ClientShell } from '@/components/ClientShell'
-import { Save, Plus, Trash2, X, ChevronDown, ChevronRight, BookOpen, Workflow, ListChecks, Lightbulb, FileText, MessageSquare } from 'lucide-react'
+import { Save, Plus, Trash2, X, ChevronDown, ChevronRight, BookOpen, Workflow, ListChecks, Lightbulb, FileText, MessageSquare, Settings } from 'lucide-react'
 import { clsx } from 'clsx'
 
 interface SkillEditorProps {
@@ -328,7 +328,7 @@ Use tools: pdfplumber, pypdf`}
               <div className="flex items-center gap-3">
                 <FileText size={18} className="text-[#9b6dff]" />
                 <h3 className="text-sm font-semibold text-white">Variables</h3>
-                <span className="text-xs text-gray-500">({{placeholder}} syntax)</span>
+                <span className="text-xs text-gray-500">(&#123;&#123;placeholder&#125;&#125; syntax)</span>
               </div>
               <button
                 onClick={addVariable}
@@ -380,7 +380,7 @@ Use tools: pdfplumber, pypdf`}
               ))}
               {(!skill.variables || skill.variables.length === 0) && (
                 <p className="text-sm text-gray-500 italic text-center py-4">
-                  No variables yet. Add {{variableName}} placeholders used in your prompts.
+                  No variables yet. Add &#123;&#123;variableName&#125;&#125; placeholders used in your prompts.
                 </p>
               )}
             </div>
@@ -625,5 +625,11 @@ Use tools: pdfplumber, pypdf`}
     )
   }
 
-  return <ClientShell>{content}</ClientShell>
+  return (
+    <ClientShell>
+      <div className="flex-1 overflow-y-auto">
+        {content}
+      </div>
+    </ClientShell>
+  )
 }

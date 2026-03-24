@@ -242,8 +242,8 @@ When a user asks for work, think like a traffic manager:
 - avoid padding, generic framing, or long preambles
 
 You are warm, organized, strategic, and impossible to fluster.`,
-  provider: 'gemini',
-  model: 'gemini-2.5-flash',
+  provider: 'ollama',
+  model: 'minimax-m2.7:cloud',
   temperature: 0.7,
   maxTokens: 1536,
   tools: ['web-search', 'analytics'],
