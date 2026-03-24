@@ -1,21 +1,60 @@
 {
-  "id": "brand-strategy",
-  "name": "Brand Strategy",
-  "description": "Developing brand positioning, architecture, and long-term strategic direction",
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "name": "brand-strategy",
+  "description": "Develops brand positioning, architecture, and long-term strategic direction. Use when clients need brand strategy, positioning framework, brand architecture, or strategic brand planning.",
   "category": "strategy",
+  "difficulty": "advanced",
+  "freedom": "medium",
   "prompts": {
-    "en": "Develop brand positioning, architecture, and long-term strategic direction for {{brand_name}}. Industry: {{industry}}. Target audience: {{target_audience}}."
+    "en": {
+      "trigger": "When to use this skill",
+      "context": "You are a brand strategist working on {{client_name}} in the {{industry}} industry.",
+      "instructions": "## Brand Strategy Development\n\nFollow this workflow:\n\n- [ ] 1. Discovery: Analyze {{brand_name}}'s current position, competitors ({{competitors}}), and market dynamics\n- [ ] 2. Positioning: Define unique value proposition and brand positioning framework\n- [ ] 3. Architecture: Design brand architecture (house of brands / branded house / hybrid)\n- [ ] 4. Personality: Define brand personality, voice, and tone guidelines\n- [ ] 5. Strategic roadmap: Create 3-5 year brand strategy with milestones\n\n## Key inputs\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Target audience: {{target_audience}}\n- Competitors: {{competitors}}\n- Current brand perception: {{current_perception}}\n",
+      "output_template": "## Brand Strategy: {{client_name}}\n\n### Executive Summary\n[2-3 paragraph overview of strategic direction]\n\n### 1. Market Position\n[Current position analysis and competitive landscape]\n\n### 2. Brand Positioning\n[Unique value proposition and positioning statement]\n\n### 3. Brand Architecture\n[Architecture recommendation with rationale]\n\n### 4. Brand Personality\n[Voice, tone, and personality guidelines]\n\n### 5. Strategic Roadmap\n| Phase | Timeline | Objectives | Key Milestones |\n|-------|----------|------------|----------------|\n| Foundation | 0-6 months | | |\n| Growth | 6-18 months | | |\n| Scale | 18-36 months | | |\n\n### 6. Success Metrics\n[KPI framework for measuring brand health]"
+    },
+    "ar": {
+      "trigger": "متى تستخدم هذه المهارة",
+      "context": "أنت خبير في العلامة التجارية تعمل على {{client_name}} في مجال {{industry}}.",
+      "instructions": "## تطوير استراتيجية العلامة التجارية\n\nاتبع هذا سير العمل:\n\n- [ ] 1. الاكتشاف: حلل وضع {{brand_name}} الحالي والمنافسين ({{competitors}})\n- [ ] 2. المواقع: حدد القيمة الفريدة وإطار المواقع\n- [ ] 3. الهيكل: صمم هيكل العلامة التجارية\n- [ ] 4. الشخصية: حدد شخصية العلامة التجارية ونبرة الصوت\n- [ ] 5. خارطة الطريق: أنشئ استراتيجية للعلامية التجارية لـ 3-5 سنوات",
+      "output_template": "## استراتيجية العلامة التجارية: {{client_name}}\n\n### الملخص التنفيذي\n[نظرة عامة على الاتجاه الاستراتيجي]\n\n### 1. الموقع في السوق\n[تحليل الموقع الحالي والمنافسين]\n\n### 2. موقع العلامة التجارية\n[ proposition القيمة الفريدة]"
+    }
   },
   "variables": [
-    "brand_name",
-    "industry",
-    "target_audience"
+    { "name": "client_name", "type": "string", "required": true, "description": "Client or brand name" },
+    { "name": "industry", "type": "string", "required": true, "description": "Industry sector" },
+    { "name": "target_audience", "type": "string", "required": true, "description": "Primary target audience" },
+    { "name": "competitors", "type": "string", "required": false, "description": "Main competitors (comma separated)" },
+    { "name": "current_perception", "type": "string", "required": false, "description": "How brand is currently perceived" }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Discovery", "action": "Analyze current brand position and competitive landscape", "verify": "Understand the market context and client's starting point" },
+      { "step": 2, "name": "Positioning", "action": "Define unique value proposition and brand positioning", "verify": "Positioning is distinct and defensible" },
+      { "step": 3, "name": "Architecture", "action": "Design brand architecture model", "verify": "Architecture supports business structure" },
+      { "step": 4, "name": "Personality", "action": "Define brand personality and voice guidelines", "verify": "Personality is consistent and appropriate" },
+      { "step": 5, "name": "Roadmap", "action": "Create strategic roadmap with milestones", "verify": "Roadmap is realistic and measurable" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Create brand strategy for Bloom - a sustainable fashion brand targeting millennials in the UAE",
+      "output": "Full brand strategy document with positioning as 'conscious luxury', architecture as branded house, personality guide for eco-conscious premium positioning"
+    }
+  ],
+  "checklist": [
+    "Positioning statement is unique and differentiated",
+    "Brand architecture supports product line structure",
+    "Personality guidelines are actionable for content creators",
+    "Strategic roadmap has measurable milestones",
+    "Success metrics are defined and trackable"
+  ],
+  "tools": ["web-search", "document", "presentation"],
+  "agents": ["maya", "sage"],
+  "pipelines": ["campaign-brief"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["strategy", "positioning", "branding"],
+    "lastUpdated": "2026-03-24"
   }
 }

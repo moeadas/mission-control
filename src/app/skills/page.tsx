@@ -1,219 +1,248 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useState, useEffect } from 'react'
 import { ClientShell } from '@/components/ClientShell'
-import { useSkillsStore } from '@/lib/stores/skills-store'
-import { Plus, Search, ChevronDown, ChevronUp, Pencil, BookOpen, ArrowLeft } from 'lucide-react'
+import { SKILL_CATEGORIES, type Skill } from '@/lib/skill-schema'
+import Link from 'next/link'
+import { Plus, Search, Filter, ChevronRight, BookOpen, Workflow, ListChecks, Star, Edit, Trash2 } from 'lucide-react'
 import { clsx } from 'clsx'
 
-const CATEGORY_COLORS: Record<string, string> = {
-  strategy: '#4f8ef7',
-  creative: '#00d4aa',
-  'project-management': '#ffd166',
-  media: '#ff5fa0',
-  research: '#38bdf8',
-  'client-services': '#a78bfa',
-  operations: '#f97316',
-}
-
-const CATEGORY_ICONS: Record<string, string> = {
-  strategy: '🎯',
-  creative: '🎨',
-  'project-management': '📋',
-  media: '📺',
-  research: '🔬',
-  'client-services': '🤝',
-  operations: '⚙️',
-}
-
 export default function SkillsPage() {
-  const router = useRouter()
-  const categories = useSkillsStore(s => s.categories)
-  const skillsMap = useSkillsStore(s => s.skillsMap)
-  const isLoaded = useSkillsStore(s => s.isLoaded)
-  const loadSkills = useSkillsStore(s => s.loadSkills)
+  const [skills, setSkills] = useState<Skill[]>([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
-  const [showAllCategories, setShowAllCategories] = useState(false)
+  const [category, setCategory] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards')
 
   useEffect(() => {
-    loadSkills()
-  }, [loadSkills])
+    fetch('/api/skills')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) setSkills(data)
+        else setSkills([])
+      })
+      .catch(() => setSkills([]))
+      .finally(() => setLoading(false))
+  }, [])
 
-  // Filter skills by search
-  const filteredCategories = categories.map(cat => ({
-    ...cat,
-    skills: cat.skills.filter(s =>
-      !search ||
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.description.toLowerCase().includes(search.toLowerCase())
+  const filteredSkills = skills.filter(skill => {
+    const matchesSearch = !search || 
+      skill.name.toLowerCase().includes(search.toLowerCase()) ||
+      skill.description.toLowerCase().includes(search.toLowerCase())
+    const matchesCategory = !category || skill.category === category
+    return matchesSearch && matchesCategory
+  })
+
+  const getCategoryColor = (catId: string) => {
+    return SKILL_CATEGORIES.find(c => c.id === catId)?.color || '#666'
+  }
+
+  const getCategoryName = (catId: string) => {
+    return SKILL_CATEGORIES.find(c => c.id === catId)?.name || catId
+  }
+
+  if (loading) {
+    return (
+      <ClientShell>
+        <div className="flex items-center justify-center h-full">
+          <div className="animate-spin w-8 h-8 border-2 border-[#9b6dff] border-t-transparent rounded-full" />
+        </div>
+      </ClientShell>
     )
-  })).filter(cat => cat.skills.length > 0)
-
-  const displayedCategories = showAllCategories ? filteredCategories : filteredCategories.slice(0, 4)
-
-  const toggleCategory = (catId: string) => {
-    setExpandedCategories(prev => {
-      const next = new Set(prev)
-      if (next.has(catId)) next.delete(catId)
-      else next.add(catId)
-      return next
-    })
   }
 
   return (
     <ClientShell>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2d38] flex-shrink-0">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/config')}
-              className="p-2 rounded-lg hover:bg-[#1a1d26] text-gray-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={18} />
-            </button>
+        <div className="px-6 py-4 border-b border-[#2a2d38] flex-shrink-0">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                <BookOpen size={20} className="text-accent-purple" />
+              <h1 className="text-xl font-heading font-bold text-white flex items-center gap-3">
+                <BookOpen size={22} className="text-[#9b6dff]" />
                 Skills Library
               </h1>
-              <p className="text-xs text-gray-400 mt-0.5">
-                {Object.keys(skillsMap).length} skills across {categories.length} categories
+              <p className="text-xs text-gray-400 mt-1">
+                {skills.length} skills · Solid, reusable capabilities for your agency agents
               </p>
             </div>
+            <Link
+              href="/skills/new"
+              className="px-4 py-2 bg-[#9b6dff] text-white rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[#9b6dff]/80 transition-colors"
+            >
+              <Plus size={16} />
+              New Skill
+            </Link>
           </div>
-          <button
-            onClick={() => router.push('/skills/new')}
-            className="flex items-center gap-2 px-4 py-2 bg-accent-purple text-white rounded-lg text-sm font-medium hover:bg-accent-purple/80 transition-colors"
-          >
-            <Plus size={16} />
-            New Skill
-          </button>
         </div>
 
-        {/* Search */}
-        <div className="px-6 py-4 border-b border-[#2a2d38] bg-[#12141a]/50">
-          <div className="relative max-w-md">
+        {/* Filters */}
+        <div className="px-6 py-3 border-b border-[#2a2d38] flex items-center gap-4 flex-shrink-0">
+          <div className="flex-1 relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search skills by name or description..."
-              className="w-full pl-10 pr-4 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-500 outline-none focus:border-accent-purple"
+              placeholder="Search skills..."
+              className="w-full pl-10 pr-4 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-500 outline-none focus:border-[#9b6dff]"
             />
+          </div>
+          <div className="flex items-center gap-2">
+            {SKILL_CATEGORIES.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setCategory(category === cat.id ? null : cat.id)}
+                className={clsx(
+                  'px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
+                  category === cat.id
+                    ? 'text-white'
+                    : 'text-gray-400 hover:text-white'
+                )}
+                style={{
+                  backgroundColor: category === cat.id ? cat.color + '30' : undefined,
+                  borderColor: category === cat.id ? cat.color : undefined,
+                }}
+              >
+                {cat.name}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Categories */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {!isLoaded ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="w-8 h-8 border-2 border-accent-purple border-t-transparent rounded-full animate-spin" />
-            </div>
-          ) : displayedCategories.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-center">
-              <BookOpen size={48} className="text-gray-600 mb-4" />
-              <p className="text-gray-400">No skills found</p>
-              <button
-                onClick={() => router.push('/skills/new')}
-                className="mt-4 px-4 py-2 bg-accent-purple text-white rounded-lg text-sm"
+        {/* Skills Grid */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {filteredSkills.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <Star size={48} className="text-gray-600 mb-4" />
+              <h3 className="text-lg font-medium text-white mb-2">No skills found</h3>
+              <p className="text-sm text-gray-400 mb-4">
+                {search ? 'Try a different search term' : 'Create your first skill to get started'}
+              </p>
+              <Link
+                href="/skills/new"
+                className="px-4 py-2 bg-[#9b6dff] text-white rounded-lg text-sm font-medium flex items-center gap-2"
               >
-                Create your first skill
-              </button>
+                <Plus size={16} />
+                Create Skill
+              </Link>
             </div>
-          ) : (
-            displayedCategories.map(cat => {
-              const color = CATEGORY_COLORS[cat.id] || '#9b6dff'
-              const icon = CATEGORY_ICONS[cat.id] || '📋'
-              const isExpanded = expandedCategories.has(cat.id)
-              return (
-                <div key={cat.id} className="border border-[#2a2d38] rounded-xl overflow-hidden">
-                  {/* Category Header */}
-                  <button
-                    onClick={() => toggleCategory(cat.id)}
-                    className="w-full px-5 py-4 flex items-center justify-between bg-[#1a1d26] hover:bg-[#1f2230] transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{icon}</span>
-                      <div className="text-left">
-                        <h2 className="text-sm font-semibold text-white">{cat.name}</h2>
-                        <p className="text-xs text-gray-500">{cat.skills.length} skills</p>
-                      </div>
+          ) : viewMode === 'cards' ? (
+            <div className="grid grid-cols-3 gap-4">
+              {filteredSkills.map(skill => (
+                <div
+                  key={skill.name}
+                  className="bg-[#1a1d26] rounded-xl border border-[#2a2d38] p-5 hover:border-[#4a4d58] transition-all group"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="px-2 py-0.5 rounded text-[10px] font-medium"
+                        style={{
+                          backgroundColor: getCategoryColor(skill.category) + '20',
+                          color: getCategoryColor(skill.category),
+                        }}
+                      >
+                        {getCategoryName(skill.category)}
+                      </span>
+                      <span className={clsx(
+                        'px-2 py-0.5 rounded text-[10px] font-medium',
+                        skill.difficulty === 'advanced' ? 'bg-red-500/20 text-red-400' :
+                        skill.difficulty === 'intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-green-500/20 text-green-400'
+                      )}>
+                        {skill.difficulty}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-20 h-1.5 bg-[#2a2d38] rounded-full overflow-hidden">
-                        <div className="h-full rounded-full" style={{ width: '100%', backgroundColor: color }} />
-                      </div>
-                      {isExpanded ? (
-                        <ChevronUp size={16} className="text-gray-500" />
-                      ) : (
-                        <ChevronDown size={16} className="text-gray-500" />
-                      )}
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Link
+                        href={`/skills/${skill.name}`}
+                        className="p-1.5 hover:bg-[#252830] rounded-lg text-gray-400 hover:text-white"
+                      >
+                        <Edit size={14} />
+                      </Link>
                     </div>
-                  </button>
+                  </div>
 
-                  {/* Skills Grid */}
-                  {isExpanded && (
-                    <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {cat.skills.map(skill => (
-                        <button
-                          key={skill.id}
-                          onClick={() => router.push(`/skills/${skill.id}`)}
-                          className="p-4 bg-[#12141a] rounded-lg border border-[#2a2d38] hover:border-[#3a3d48] text-left transition-all group"
-                        >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1 min-w-0">
-                              <h3 className="text-sm font-medium text-white group-hover:text-accent-purple transition-colors truncate">
-                                {skill.name}
-                              </h3>
-                              <p className="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
-                                {skill.description}
-                              </p>
-                              {skill.variables && skill.variables.length > 0 && (
-                                <div className="flex flex-wrap gap-1 mt-2">
-                                  {skill.variables.slice(0, 3).map(v => (
-                                    <span key={v} className="px-1.5 py-0.5 bg-accent-purple/10 text-accent-purple rounded text-[10px] font-mono">
-                                      {`{{${v}}}`}
-                                    </span>
-                                  ))}
-                                  {skill.variables.length > 3 && (
-                                    <span className="text-[10px] text-gray-500">+{skill.variables.length - 3}</span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                            <Pencil size={14} className="text-gray-600 group-hover:text-accent-purple ml-2 flex-shrink-0 mt-1 transition-colors" />
-                          </div>
-                          {skill.metadata?.difficulty && (
-                            <div className="flex items-center gap-2 mt-3">
-                              <span className="px-2 py-0.5 rounded text-[10px] font-medium" style={{ backgroundColor: color + '20', color }}>
-                                {skill.metadata.difficulty}
-                              </span>
-                              {skill.prompts?.ar && (
-                                <span className="text-[10px] text-gray-500">🇬🇧 🇸🇦</span>
-                              )}
-                            </div>
-                          )}
-                        </button>
-                      ))}
+                  <h3 className="text-sm font-semibold text-white mb-2 font-mono">
+                    {skill.name}
+                  </h3>
+                  <p className="text-xs text-gray-400 line-clamp-2 mb-4">
+                    {skill.description}
+                  </p>
+
+                  {/* Variables count */}
+                  {skill.variables && skill.variables.length > 0 && (
+                    <div className="flex items-center gap-1 text-[10px] text-gray-500 mb-2">
+                      <span className="font-mono">{skill.variables.length} variables</span>
                     </div>
                   )}
-                </div>
-              )
-            })
-          )}
 
-          {!showAllCategories && filteredCategories.length > 4 && (
-            <button
-              onClick={() => setShowAllCategories(true)}
-              className="w-full py-3 text-sm text-gray-400 hover:text-white border border-dashed border-[#2a2d38] rounded-lg hover:border-gray-500 transition-colors"
-            >
-              Show {filteredCategories.length - 4} more categories
-            </button>
+                  {/* Checklist preview */}
+                  {skill.checklist && skill.checklist.length > 0 && (
+                    <div className="flex items-center gap-1 text-[10px] text-gray-500">
+                      <ListChecks size={12} />
+                      <span>{skill.checklist.length} checklist items</span>
+                    </div>
+                  )}
+
+                  {/* Workflow steps */}
+                  {skill.workflow?.steps && skill.workflow.steps.length > 0 && (
+                    <div className="flex items-center gap-1 text-[10px] text-gray-500 mt-1">
+                      <Workflow size={12} />
+                      <span>{skill.workflow.steps.length} workflow steps</span>
+                    </div>
+                  )}
+
+                  <Link
+                    href={`/skills/${skill.name}`}
+                    className="mt-4 flex items-center justify-center gap-2 w-full py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-xs text-gray-400 hover:text-white hover:border-[#9b6dff] transition-all"
+                  >
+                    Edit Skill
+                    <ChevronRight size={14} />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {filteredSkills.map(skill => (
+                <Link
+                  key={skill.name}
+                  href={`/skills/${skill.name}`}
+                  className="flex items-center gap-4 p-4 bg-[#1a1d26] rounded-xl border border-[#2a2d38] hover:border-[#4a4d58] transition-all"
+                >
+                  <div className="w-32">
+                    <span className="text-sm font-mono text-white">{skill.name}</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-300">{skill.description}</p>
+                  </div>
+                  <span
+                    className="px-2 py-0.5 rounded text-[10px] font-medium"
+                    style={{
+                      backgroundColor: getCategoryColor(skill.category) + '20',
+                      color: getCategoryColor(skill.category),
+                    }}
+                  >
+                    {getCategoryName(skill.category)}
+                  </span>
+                  <ChevronRight size={16} className="text-gray-500" />
+                </Link>
+              ))}
+            </div>
           )}
+        </div>
+
+        {/* Best Practices Tip */}
+        <div className="px-6 py-3 border-t border-[#2a2d38] bg-[#1a1d26] flex-shrink-0">
+          <p className="text-[11px] text-gray-500 flex items-center gap-2">
+            <Star size={12} className="text-yellow-500" />
+            <strong>Best practice:</strong> Skills should be concise, have clear workflows, and include verification checklists.
+            <a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices" target="_blank" className="text-[#9b6dff] hover:underline ml-1">
+              Learn more →
+            </a>
+          </p>
         </div>
       </div>
     </ClientShell>

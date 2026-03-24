@@ -1,389 +1,629 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import React, { useState, useEffect } from 'react'
+import { useAgentsStore } from '@/lib/agents-store'
+import { SKILL_CATEGORIES, DIFFICULTY_LEVELS, FREEDOM_LEVELS, type Skill } from '@/lib/skill-schema'
 import { ClientShell } from '@/components/ClientShell'
-import { useSkillsStore, SkillDefinition } from '@/lib/stores/skills-store'
-import { ArrowLeft, Save, Trash2, Plus, X } from 'lucide-react'
+import { Save, Plus, Trash2, X, ChevronDown, ChevronRight, BookOpen, Workflow, ListChecks, Lightbulb, FileText, MessageSquare } from 'lucide-react'
 import { clsx } from 'clsx'
 
-const CATEGORIES = [
-  { id: 'strategy', name: 'Strategy & Planning' },
-  { id: 'creative', name: 'Creative & Copy' },
-  { id: 'project-management', name: 'Project & Traffic Management' },
-  { id: 'media', name: 'Media & Advertising' },
-  { id: 'research', name: 'Research & Insights' },
-  { id: 'client-services', name: 'Client Services & Account Management' },
-  { id: 'operations', name: 'Operations & Productivity' },
-]
+interface SkillEditorProps {
+  skillId?: string
+  isModal?: boolean
+  onClose?: () => void
+}
 
-const DIFFICULTIES = ['beginner', 'intermediate', 'advanced'] as const
-
-const DEFAULT_SKILL: Partial<SkillDefinition> = {
-  id: '',
+const EMPTY_SKILL = (): Partial<Skill> => ({
   name: '',
   description: '',
   category: 'strategy',
-  prompts: { en: '' },
+  difficulty: 'intermediate',
+  freedom: 'medium',
+  prompts: {
+    en: {
+      trigger: '',
+      context: '',
+      instructions: '',
+      output_template: '',
+    }
+  },
   variables: [],
-  inputs: [],
-  outputs: [],
   checklist: [],
-  metadata: { version: '1.0', difficulty: 'intermediate' },
-}
+  metadata: {
+    version: '1.0',
+    tags: [],
+    lastUpdated: new Date().toISOString().split('T')[0],
+  },
+})
 
-export default function SkillEditPage() {
-  const router = useRouter()
-  const params = useParams()
-  const skillId = params.id as string
-  const isNew = skillId === 'new'
-
-  const skillsMap = useSkillsStore(s => s.skillsMap)
-  const isLoaded = useSkillsStore(s => s.isLoaded)
-  const loadSkills = useSkillsStore(s => s.loadSkills)
-  const addSkill = useSkillsStore(s => s.addSkill)
-  const updateSkill = useSkillsStore(s => s.updateSkill)
-  const deleteSkill = useSkillsStore(s => s.deleteSkill)
-
-  const [form, setForm] = useState<Partial<SkillDefinition>>(DEFAULT_SKILL)
-  const [newVariable, setNewVariable] = useState('')
-  const [newInput, setNewInput] = useState('')
-  const [newOutput, setNewOutput] = useState('')
-  const [newChecklistItem, setNewChecklistItem] = useState('')
+export default function SkillEditorPage({ skillId, isModal, onClose }: SkillEditorProps & { onSave?: (skill: Skill) => void }) {
+  const skillsDir = useAgentsStore((state: any) => state.skillsDir)
+  const [skill, setSkill] = useState<Partial<Skill>>(EMPTY_SKILL())
+  const [activeTab, setActiveTab] = useState<'main' | 'workflow' | 'examples' | 'advanced'>('main')
+  const [expandedSection, setExpandedSection] = useState<string | null>('prompt-en')
+  const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
-  useEffect(() => { loadSkills() }, [loadSkills])
-
   useEffect(() => {
-    if (!isNew && isLoaded) {
-      const existing = skillsMap[skillId]
-      if (existing) setForm(existing)
+    if (skillId) {
+      // Load skill from filesystem or API
+      fetch(`/api/skills/${skillId}`)
+        .then(r => r.json())
+        .then(data => setSkill(data))
+        .catch(() => {
+          // Fallback: try to load from window
+          const skills = (window as any).__AGENCY_SKILLS__ || []
+          const found = skills.find((s: any) => s.id === skillId || s.name === skillId)
+          if (found) setSkill(found)
+        })
     }
-  }, [isNew, isLoaded, skillId, skillsMap])
+  }, [skillId])
 
-  const handleSave = () => {
-    if (!form.name?.trim() || !form.id?.trim()) return
-    if (isNew) {
-      addSkill(form as SkillDefinition)
-    } else {
-      updateSkill(skillId, form)
-    }
-    setSaved(true)
-    setTimeout(() => {
-      setSaved(false)
-      router.push('/skills')
-    }, 800)
-  }
-
-  const handleDelete = () => {
-    if (confirm('Delete this skill? This cannot be undone.')) {
-      deleteSkill(skillId)
-      router.push('/skills')
-    }
+  const updatePrompt = (lang: 'en' | 'ar', field: string, value: string) => {
+    setSkill(prev => ({
+      ...prev,
+      prompts: {
+        ...prev.prompts,
+        [lang]: {
+          ...prev.prompts?.[lang],
+          [field]: value,
+        }
+      }
+    }))
   }
 
   const addVariable = () => {
-    const v = newVariable.trim().replace(/\{\{|\}\}/g, '')
-    if (!v) return
-    setForm(prev => ({
+    setSkill(prev => ({
       ...prev,
-      variables: [...(prev.variables || []), v]
-    }))
-    setNewVariable('')
-  }
-
-  const removeVariable = (v: string) => {
-    setForm(prev => ({
-      ...prev,
-      variables: (prev.variables || []).filter(x => x !== v)
+      variables: [...(prev.variables || []), { name: '', type: 'string', required: false, description: '' }]
     }))
   }
 
-  const addInput = () => {
-    const v = newInput.trim()
-    if (!v) return
-    setForm(prev => ({
+  const updateVariable = (index: number, field: string, value: any) => {
+    setSkill(prev => ({
       ...prev,
-      inputs: [...(prev.inputs || []), v]
+      variables: prev.variables?.map((v, i) => i === index ? { ...v, [field]: value } : v) || []
     }))
-    setNewInput('')
   }
 
-  const addOutput = () => {
-    const v = newOutput.trim()
-    if (!v) return
-    setForm(prev => ({
+  const removeVariable = (index: number) => {
+    setSkill(prev => ({
       ...prev,
-      outputs: [...(prev.outputs || []), v]
+      variables: prev.variables?.filter((_, i) => i !== index) || []
     }))
-    setNewOutput('')
   }
 
   const addChecklistItem = () => {
-    const v = newChecklistItem.trim()
-    if (!v) return
-    setForm(prev => ({
+    setSkill(prev => ({
       ...prev,
-      checklist: [...(prev.checklist || []), v]
+      checklist: [...(prev.checklist || []), '']
     }))
-    setNewChecklistItem('')
   }
 
-  const generateId = (name: string) =>
-    name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  const updateChecklistItem = (index: number, value: string) => {
+    setSkill(prev => ({
+      ...prev,
+      checklist: prev.checklist?.map((c, i) => i === index ? value : c) || []
+    }))
+  }
 
-  return (
-    <ClientShell>
-      <div className="flex flex-col h-full">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2d38] flex-shrink-0">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/skills')}
-              className="p-2 rounded-lg hover:bg-[#1a1d26] text-gray-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={18} />
-            </button>
-            <div>
-              <h1 className="text-xl font-bold text-white">
-                {isNew ? 'New Skill' : `Edit: ${form.name || skillId}`}
-              </h1>
-              <p className="text-xs text-gray-400 mt-0.5">
-                {isNew ? 'Create a new reusable skill' : `Skill ID: ${skillId}`}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {!isNew && (
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors flex items-center gap-2"
-              >
-                <Trash2 size={16} />
-                Delete
-              </button>
-            )}
-            <button
-              onClick={handleSave}
-              disabled={!form.name?.trim() || !form.id?.trim()}
-              className={clsx(
-                'px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all',
-                form.name?.trim() && form.id?.trim()
-                  ? 'bg-accent-purple text-white hover:bg-accent-purple/80'
-                  : 'bg-[#1a1d26] text-gray-500 cursor-not-allowed'
-              )}
-            >
-              <Save size={16} />
-              {saved ? 'Saved!' : 'Save Skill'}
-            </button>
-          </div>
+  const removeChecklistItem = (index: number) => {
+    setSkill(prev => ({
+      ...prev,
+      checklist: prev.checklist?.filter((_, i) => i !== index) || []
+    }))
+  }
+
+  const handleSave = async () => {
+    setSaving(true)
+    // Save to API or filesystem
+    try {
+      const response = await fetch('/api/skills', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(skill),
+      })
+      if (response.ok) {
+        setSaved(true)
+        setTimeout(() => setSaved(false), 2000)
+      }
+    } catch (error) {
+      console.error('Failed to save skill:', error)
+    }
+    setSaving(false)
+  }
+
+  const content = (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-white">
+            {skillId ? 'Edit Skill' : 'Create New Skill'}
+          </h1>
+          <p className="text-sm text-gray-400 mt-1">
+            Build solid, reusable skills following best practices
+          </p>
         </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className={clsx(
+              'px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all',
+              saved
+                ? 'bg-green-500/20 text-green-400'
+                : 'bg-[#9b6dff] text-white hover:bg-[#9b6dff]/80'
+            )}
+          >
+            <Save size={16} />
+            {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Skill'}
+          </button>
+        </div>
+      </div>
 
-        {/* Form */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-3xl space-y-8">
-            {/* Basic Info */}
-            <section className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Basic Info</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Skill Name *</label>
-                  <input
-                    type="text"
-                    value={form.name || ''}
-                    onChange={e => {
-                      const name = e.target.value
-                      setForm(prev => ({
-                        ...prev,
-                        name,
-                        id: prev.id || generateId(name),
-                      }))
-                    }}
-                    placeholder="e.g., Brand Strategy Development"
-                    className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Skill ID *</label>
-                  <input
-                    type="text"
-                    value={form.id || ''}
-                    onChange={e => setForm(prev => ({ ...prev, id: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') }))}
-                    placeholder="e.g., brand-strategy"
-                    className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple font-mono"
-                  />
-                  <p className="text-[10px] text-gray-600 mt-1">Lowercase, hyphenated. Used to reference this skill.</p>
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Description</label>
-                <textarea
-                  value={form.description || ''}
-                  onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
-                  rows={2}
-                  placeholder="Brief description of what this skill does..."
-                  className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple resize-none"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Category</label>
-                  <select
-                    value={form.category || 'strategy'}
-                    onChange={e => setForm(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white outline-none focus:border-accent-purple"
-                  >
-                    {CATEGORIES.map(c => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Difficulty</label>
-                  <select
-                    value={form.metadata?.difficulty || 'intermediate'}
-                    onChange={e => setForm(prev => ({
-                      ...prev,
-                      metadata: { ...prev.metadata, difficulty: e.target.value as any }
-                    }))}
-                    className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white outline-none focus:border-accent-purple"
-                  >
-                    {DIFFICULTIES.map(d => (
-                      <option key={d} value={d}>{d}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </section>
+      {/* Tabs */}
+      <div className="flex gap-1 border-b border-[#2a2d38]">
+        {[
+          { id: 'main', label: 'Main', icon: BookOpen },
+          { id: 'workflow', label: 'Workflow', icon: Workflow },
+          { id: 'examples', label: 'Examples', icon: Lightbulb },
+          { id: 'advanced', label: 'Advanced', icon: Settings },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={clsx(
+              'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors',
+              activeTab === tab.id
+                ? 'border-[#9b6dff] text-[#9b6dff]'
+                : 'border-transparent text-gray-400 hover:text-white'
+            )}
+          >
+            <tab.icon size={16} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-            {/* Prompts */}
-            <section className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Execution Prompts</h3>
+      {/* Main Tab */}
+      {activeTab === 'main' && (
+        <div className="space-y-6">
+          {/* Basic Info */}
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38] space-y-4">
+            <h3 className="text-sm font-semibold text-white">Basic Information</h3>
+            
+            <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">
-                  English Prompt <span className="text-accent-purple">*</span>
-                </label>
-                <textarea
-                  value={form.prompts?.en || ''}
-                  onChange={e => setForm(prev => ({
-                    ...prev,
-                    prompts: { ...prev.prompts, en: e.target.value }
-                  }))}
-                  rows={8}
-                  placeholder="The main prompt that will be injected and executed when this skill is called. Use {{variable}} placeholders..."
-                  className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple resize-none font-mono"
-                />
-                <p className="text-[10px] text-gray-600 mt-1">
-                  Variables: Use {'{{variableName}}'} — these are auto-detected from the prompt text.
-                </p>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">
-                  Arabic Prompt <span className="text-gray-600">(optional)</span>
-                </label>
-                <textarea
-                  value={form.prompts?.ar || ''}
-                  onChange={e => setForm(prev => ({
-                    ...prev,
-                    prompts: { ...prev.prompts, ar: e.target.value }
-                  }))}
-                  rows={8}
-                  placeholder="المطلب الرئيسي الذي سيتم حقنه وتنفيذه عند استدعاء هذه المهارة..."
-                  className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple resize-none font-mono"
-                  dir="rtl"
-                />
-              </div>
-            </section>
-
-            {/* Variables */}
-            <section className="space-y-4">
-              <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Variables</h3>
-              <div className="flex flex-wrap gap-2">
-                {(form.variables || []).map(v => (
-                  <span key={v} className="px-3 py-1 bg-accent-purple/10 text-accent-purple rounded-lg text-sm font-mono flex items-center gap-1.5">
-                    {`{{${v}}}`}
-                    <button onClick={() => removeVariable(v)} className="hover:text-red-400 transition-colors">
-                      <X size={12} />
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <div className="flex gap-2">
+                <label className="block text-xs text-gray-400 mb-1.5">Skill Name (kebab-case)</label>
                 <input
                   type="text"
-                  value={newVariable}
-                  onChange={e => setNewVariable(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && addVariable()}
-                  placeholder="Variable name (e.g., brand_name)"
-                  className="flex-1 px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple"
+                  value={skill.name || ''}
+                  onChange={e => setSkill(prev => ({ ...prev, name: e.target.value.toLowerCase().replace(/\s+/g, '-') }))}
+                  placeholder="brand-strategy"
+                  className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
                 />
-                <button onClick={addVariable} className="px-4 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80">
-                  <Plus size={16} />
-                </button>
               </div>
-            </section>
-
-            {/* Inputs & Outputs */}
-            <section className="grid grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Inputs</h3>
-                <div className="space-y-1.5">
-                  {(form.inputs || []).map((inp, i) => (
-                    <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1d26] rounded text-sm text-white">
-                      <span className="flex-1 truncate">{inp}</span>
-                      <button onClick={() => setForm(prev => ({ ...prev, inputs: prev.inputs?.filter((_, j) => j !== i) }))} className="text-gray-500 hover:text-red-400">
-                        <X size={14} />
-                      </button>
-                    </div>
+              <div>
+                <label className="block text-xs text-gray-400 mb-1.5">Category</label>
+                <select
+                  value={skill.category || 'strategy'}
+                  onChange={e => setSkill(prev => ({ ...prev, category: e.target.value }))}
+                  className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white outline-none focus:border-[#9b6dff]"
+                >
+                  {SKILL_CATEGORIES.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
-                </div>
-                <div className="flex gap-2">
-                  <input type="text" value={newInput} onChange={e => setNewInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addInput()} placeholder="Input name..." className="flex-1 px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple" />
-                  <button onClick={addInput} className="px-3 py-2 bg-accent-purple text-white rounded-lg hover:bg-accent-purple/80"><Plus size={16} /></button>
-                </div>
+                </select>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Outputs</h3>
-                <div className="space-y-1.5">
-                  {(form.outputs || []).map((out, i) => (
-                    <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1d26] rounded text-sm text-white">
-                      <span className="flex-1 truncate">{out}</span>
-                      <button onClick={() => setForm(prev => ({ ...prev, outputs: prev.outputs?.filter((_, j) => j !== i) }))} className="text-gray-500 hover:text-red-400">
-                        <X size={14} />
-                      </button>
-                    </div>
+              <div>
+                <label className="block text-xs text-gray-400 mb-1.5">Difficulty</label>
+                <select
+                  value={skill.difficulty || 'intermediate'}
+                  onChange={e => setSkill(prev => ({ ...prev, difficulty: e.target.value as any }))}
+                  className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white outline-none focus:border-[#9b6dff]"
+                >
+                  {DIFFICULTY_LEVELS.map(diff => (
+                    <option key={diff.value} value={diff.value}>{diff.label}</option>
                   ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs text-gray-400 mb-1.5">Description (third person, max 1024 chars)</label>
+              <textarea
+                value={skill.description || ''}
+                onChange={e => setSkill(prev => ({ ...prev, description: e.target.value.slice(0, 1024) }))}
+                placeholder="Processes Excel files and generates reports. Use when working with spreadsheets, tabular data, or .xlsx files."
+                rows={2}
+                className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] resize-none"
+              />
+              <p className="text-[10px] text-gray-600 mt-1">{skill.description?.length || 0}/1024</p>
+            </div>
+          </div>
+
+          {/* Prompts Section */}
+          <div className="bg-[#1a1d26] rounded-xl border border-[#2a2d38] overflow-hidden">
+            <button
+              onClick={() => setExpandedSection(expandedSection === 'prompt-en' ? null : 'prompt-en')}
+              className="w-full px-5 py-4 flex items-center justify-between text-left hover:bg-[#252830]"
+            >
+              <div className="flex items-center gap-3">
+                <MessageSquare size={18} className="text-[#9b6dff]" />
+                <span className="text-sm font-semibold text-white">English Prompts</span>
+                <span className="text-xs text-gray-500">(Primary)</span>
+              </div>
+              {expandedSection === 'prompt-en' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+            </button>
+            
+            {expandedSection === 'prompt-en' && (
+              <div className="px-5 pb-5 space-y-4 border-t border-[#2a2d38] pt-4">
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Trigger (When to use this skill)</label>
+                  <input
+                    type="text"
+                    value={skill.prompts?.en?.trigger || ''}
+                    onChange={e => updatePrompt('en', 'trigger', e.target.value)}
+                    placeholder="Use when working with PDF files, forms, or document extraction."
+                    className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                  />
                 </div>
-                <div className="flex gap-2">
-                  <input type="text" value={newOutput} onChange={e => setNewOutput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addOutput()} placeholder="Output name..." className="flex-1 px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple" />
-                  <button onClick={addOutput} className="px-3 py-2 bg-accent-purple text-white rounded-lg hover:bg-accent-purple/80"><Plus size={16} /></button>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Context (Agent persona)</label>
+                  <textarea
+                    value={skill.prompts?.en?.context || ''}
+                    onChange={e => updatePrompt('en', 'context', e.target.value)}
+                    placeholder="You are a PDF processing specialist with expertise in document extraction, form filling, and document manipulation."
+                    rows={2}
+                    className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Instructions (Step-by-step workflow)</label>
+                  <textarea
+                    value={skill.prompts?.en?.instructions || ''}
+                    onChange={e => updatePrompt('en', 'instructions', e.target.value)}
+                    placeholder={`## Task Workflow
+
+Follow these steps:
+
+- [ ] 1. Analyze the input
+- [ ] 2. Process according to requirements
+- [ ] 3. Validate output
+- [ ] 4. Format and deliver
+
+Use tools: pdfplumber, pypdf`}
+                    rows={8}
+                    className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] font-mono resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Output Template</label>
+                  <textarea
+                    value={skill.prompts?.en?.output_template || ''}
+                    onChange={e => updatePrompt('en', 'output_template', e.target.value)}
+                    placeholder={`## Output Structure
+
+### Summary
+[1-2 sentence overview]
+
+### Details
+[Detailed findings]
+
+### Recommendations
+1. [Specific action item]
+2. [Specific action item]`}
+                    rows={6}
+                    className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] font-mono resize-none"
+                  />
                 </div>
               </div>
-            </section>
+            )}
+          </div>
 
-            {/* Checklist */}
-            <section className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Checklist</h3>
-              <p className="text-xs text-gray-600">Step-by-step actions the agent takes when executing this skill.</p>
-              <div className="space-y-1.5">
-                {(form.checklist || []).map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 px-3 py-2 bg-[#1a1d26] rounded text-sm text-white border border-[#2a2d38]">
-                    <span className="w-5 h-5 rounded border border-[#3a3d48] flex items-center justify-center text-[10px] text-gray-500 flex-shrink-0">{i + 1}</span>
-                    <span className="flex-1">{item}</span>
-                    <button onClick={() => setForm(prev => ({ ...prev, checklist: prev.checklist?.filter((_, j) => j !== i) }))} className="text-gray-500 hover:text-red-400">
-                      <X size={14} />
-                    </button>
+          {/* Variables */}
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38] space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <FileText size={18} className="text-[#9b6dff]" />
+                <h3 className="text-sm font-semibold text-white">Variables</h3>
+                <span className="text-xs text-gray-500">({{placeholder}} syntax)</span>
+              </div>
+              <button
+                onClick={addVariable}
+                className="px-3 py-1.5 bg-[#9b6dff]/20 text-[#9b6dff] rounded-lg text-xs font-medium hover:bg-[#9b6dff]/30 flex items-center gap-1"
+              >
+                <Plus size={14} /> Add Variable
+              </button>
+            </div>
+            
+            <div className="space-y-2">
+              {skill.variables?.map((variable, i) => (
+                <div key={i} className="flex gap-3 items-start bg-[#12141a] p-3 rounded-lg border border-[#2a2d38]">
+                  <input
+                    type="text"
+                    value={variable.name}
+                    onChange={e => updateVariable(i, 'name', e.target.value)}
+                    placeholder="variable_name"
+                    className="flex-1 px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                  />
+                  <select
+                    value={variable.type}
+                    onChange={e => updateVariable(i, 'type', e.target.value)}
+                    className="px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white outline-none"
+                  >
+                    <option value="string">String</option>
+                    <option value="number">Number</option>
+                    <option value="boolean">Boolean</option>
+                  </select>
+                  <label className="flex items-center gap-1.5 text-xs text-gray-400 py-1.5">
+                    <input
+                      type="checkbox"
+                      checked={variable.required}
+                      onChange={e => updateVariable(i, 'required', e.target.checked)}
+                      className="rounded"
+                    />
+                    Required
+                  </label>
+                  <input
+                    type="text"
+                    value={variable.description}
+                    onChange={e => updateVariable(i, 'description', e.target.value)}
+                    placeholder="Description"
+                    className="flex-1 px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                  />
+                  <button onClick={() => removeVariable(i)} className="p-1.5 text-gray-500 hover:text-red-400">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+              {(!skill.variables || skill.variables.length === 0) && (
+                <p className="text-sm text-gray-500 italic text-center py-4">
+                  No variables yet. Add {{variableName}} placeholders used in your prompts.
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Checklist */}
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38] space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <ListChecks size={18} className="text-[#9b6dff]" />
+                <h3 className="text-sm font-semibold text-white">Quality Checklist</h3>
+                <span className="text-xs text-gray-500">(Verification steps)</span>
+              </div>
+              <button
+                onClick={addChecklistItem}
+                className="px-3 py-1.5 bg-[#9b6dff]/20 text-[#9b6dff] rounded-lg text-xs font-medium hover:bg-[#9b6dff]/30 flex items-center gap-1"
+              >
+                <Plus size={14} /> Add Item
+              </button>
+            </div>
+            
+            <div className="space-y-2">
+              {skill.checklist?.map((item, i) => (
+                <div key={i} className="flex gap-3 items-center bg-[#12141a] p-3 rounded-lg border border-[#2a2d38]">
+                  <span className="text-xs text-gray-500 w-6">#{i + 1}</span>
+                  <input
+                    type="text"
+                    value={item}
+                    onChange={e => updateChecklistItem(i, e.target.value)}
+                    placeholder="Verification item..."
+                    className="flex-1 px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                  />
+                  <button onClick={() => removeChecklistItem(i)} className="p-1.5 text-gray-500 hover:text-red-400">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+              {(!skill.checklist || skill.checklist.length === 0) && (
+                <p className="text-sm text-gray-500 italic text-center py-4">
+                  No checklist items. Add quality checkpoints for verification.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Workflow Tab */}
+      {activeTab === 'workflow' && (
+        <div className="space-y-4">
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38]">
+            <div className="flex items-center gap-3 mb-4">
+              <Workflow size={18} className="text-[#9b6dff]" />
+              <h3 className="text-sm font-semibold text-white">Workflow Steps</h3>
+            </div>
+            <p className="text-xs text-gray-400 mb-4">
+              Define explicit steps with verification criteria. Use for complex, multi-step tasks.
+            </p>
+            
+            <div className="space-y-3">
+              {skill.workflow?.steps?.map((step, i) => (
+                <div key={i} className="bg-[#12141a] p-4 rounded-lg border border-[#2a2d38]">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-8 h-8 rounded-full bg-[#9b6dff]/20 text-[#9b6dff] flex items-center justify-center text-sm font-bold">
+                      {step.step}
+                    </span>
+                    <input
+                      type="text"
+                      value={step.name}
+                      onChange={e => {
+                        const newSteps = [...(skill.workflow?.steps || [])]
+                        newSteps[i] = { ...step, name: e.target.value }
+                        setSkill(prev => ({ ...prev, workflow: { steps: newSteps } }))
+                      }}
+                      placeholder="Step name"
+                      className="flex-1 px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                    />
                   </div>
-                ))}
+                  <textarea
+                    value={step.action}
+                    onChange={e => {
+                      const newSteps = [...(skill.workflow?.steps || [])]
+                      newSteps[i] = { ...step, action: e.target.value }
+                      setSkill(prev => ({ ...prev, workflow: { steps: newSteps } }))
+                    }}
+                    placeholder="What to do in this step..."
+                    rows={2}
+                    className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] resize-none mb-2"
+                  />
+                  <input
+                    type="text"
+                    value={step.verify}
+                    onChange={e => {
+                      const newSteps = [...(skill.workflow?.steps || [])]
+                      newSteps[i] = { ...step, verify: e.target.value }
+                      setSkill(prev => ({ ...prev, workflow: { steps: newSteps } }))
+                    }}
+                    placeholder="How to verify completion..."
+                    className="w-full px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Examples Tab */}
+      {activeTab === 'examples' && (
+        <div className="space-y-4">
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38]">
+            <div className="flex items-center gap-3 mb-4">
+              <Lightbulb size={18} className="text-[#9b6dff]" />
+              <h3 className="text-sm font-semibold text-white">Examples</h3>
+            </div>
+            <p className="text-xs text-gray-400 mb-4">
+              Input/output pairs help the model understand desired output quality and format.
+            </p>
+            
+            <div className="space-y-4">
+              {skill.examples?.map((example, i) => (
+                <div key={i} className="bg-[#12141a] p-4 rounded-lg border border-[#2a2d38] space-y-3">
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1.5">Input</label>
+                    <textarea
+                      value={example.input}
+                      onChange={e => {
+                        const newExamples = [...(skill.examples || [])]
+                        newExamples[i] = { ...example, input: e.target.value }
+                        setSkill(prev => ({ ...prev, examples: newExamples }))
+                      }}
+                      placeholder="User request or input..."
+                      rows={2}
+                      className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] resize-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1.5">Expected Output</label>
+                    <textarea
+                      value={example.output}
+                      onChange={e => {
+                        const newExamples = [...(skill.examples || [])]
+                        newExamples[i] = { ...example, output: e.target.value }
+                        setSkill(prev => ({ ...prev, examples: newExamples }))
+                      }}
+                      placeholder="What the skill should produce..."
+                      rows={4}
+                      className="w-full px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff] resize-none"
+                    />
+                  </div>
+                  <button
+                    onClick={() => setSkill(prev => ({ ...prev, examples: prev.examples?.filter((_, j) => j !== i) || [] }))}
+                    className="text-xs text-red-400 hover:text-red-300"
+                  >
+                    Remove example
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => setSkill(prev => ({ ...prev, examples: [...(prev.examples || []), { input: '', output: '' }] }))}
+                className="w-full px-4 py-3 bg-[#9b6dff]/20 text-[#9b6dff] rounded-lg text-sm font-medium hover:bg-[#9b6dff]/30 flex items-center justify-center gap-2"
+              >
+                <Plus size={16} /> Add Example
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Advanced Tab */}
+      {activeTab === 'advanced' && (
+        <div className="space-y-4">
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38] space-y-4">
+            <h3 className="text-sm font-semibold text-white">Freedom Level</h3>
+            <p className="text-xs text-gray-400">
+              How much flexibility to give the model when executing this skill.
+            </p>
+            <div className="grid grid-cols-3 gap-3">
+              {FREEDOM_LEVELS.map(level => (
+                <button
+                  key={level.value}
+                  onClick={() => setSkill(prev => ({ ...prev, freedom: level.value as any }))}
+                  className={clsx(
+                    'p-4 rounded-lg border text-left transition-all',
+                    skill.freedom === level.value
+                      ? 'border-[#9b6dff] bg-[#9b6dff]/10'
+                      : 'border-[#2a2d38] hover:border-[#4a4d58]'
+                  )}
+                >
+                  <p className="text-sm font-medium text-white">{level.label}</p>
+                  <p className="text-xs text-gray-400 mt-1">{level.description}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-[#1a1d26] rounded-xl p-5 border border-[#2a2d38] space-y-4">
+            <h3 className="text-sm font-semibold text-white">Linked Agents & Pipelines</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-gray-400 mb-2">Assigned Agents</label>
+                <input
+                  type="text"
+                  value={skill.agents?.join(', ') || ''}
+                  onChange={e => setSkill(prev => ({ ...prev, agents: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))}
+                  placeholder="iris, maya, sage"
+                  className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                />
               </div>
-              <div className="flex gap-2">
-                <input type="text" value={newChecklistItem} onChange={e => setNewChecklistItem(e.target.value)} onKeyDown={e => e.key === 'Enter' && addChecklistItem()} placeholder="Add a checklist step..." className="flex-1 px-3 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-accent-purple" />
-                <button onClick={addChecklistItem} className="px-3 py-2 bg-accent-purple text-white rounded-lg hover:bg-accent-purple/80"><Plus size={16} /></button>
+              <div>
+                <label className="block text-xs text-gray-400 mb-2">Related Pipelines</label>
+                <input
+                  type="text"
+                  value={skill.pipelines?.join(', ') || ''}
+                  onChange={e => setSkill(prev => ({ ...prev, pipelines: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))}
+                  placeholder="campaign-brief, content-calendar"
+                  className="w-full px-3 py-2 bg-[#12141a] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-600 outline-none focus:border-[#9b6dff]"
+                />
               </div>
-            </section>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
+  if (isModal) {
+    return (
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-[#12141a] rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-[#2a2d38]">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2d38]">
+            <h2 className="text-lg font-bold text-white">Edit Skill</h2>
+            <button onClick={onClose} className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white">
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-6">
+            {content}
           </div>
         </div>
       </div>
-    </ClientShell>
-  )
+    )
+  }
+
+  return <ClientShell>{content}</ClientShell>
 }
