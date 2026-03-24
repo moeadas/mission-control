@@ -4,29 +4,14 @@ import React, { useState, useEffect } from 'react'
 import { ClientShell } from '@/components/ClientShell'
 import { useAgentsStore } from '@/lib/agents-store'
 import {
-  Search,
-  Filter,
-  Clock,
-  CheckCircle2,
-  Circle,
+  BarChart3,
   ChevronDown,
   ChevronRight,
-  Play,
-  Pause,
-  RotateCcw,
-  Plus,
-  GripVertical,
-  FileText,
-  MessageSquare,
-  Lightbulb,
-  Target,
-  Rocket,
-  BarChart3,
+  CheckCircle2,
+  Circle,
   AlertCircle,
-  ArrowRight,
-  User,
-  Users,
-  Zap,
+  Globe,
+  Plus,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -39,6 +24,14 @@ interface Activity {
   inputs: string[]
   outputs: string[]
   checklist: string[]
+  prompts?: {
+    en: string
+    ar?: string
+  }
+  batching?: {
+    batchSize: number
+    parallel: boolean
+  }
 }
 
 interface Phase {
@@ -56,17 +49,19 @@ interface Pipeline {
   isDefault: boolean
   estimatedDuration: string
   phases: Phase[]
+  clientProfileFields?: string[]
+  weeklyArc?: string
 }
 
 interface WorkflowTask {
   id: string
-  missionId: string
+  clientId: string
   pipelineId: string
   phaseId: string
   activityId: string
   title: string
-  description: string
   status: 'pending' | 'in-progress' | 'completed' | 'blocked'
+  language: 'en' | 'ar' | 'both'
   assignedAgent: string | null
   checklist: string[]
   completedItems: string[]
@@ -75,33 +70,43 @@ interface WorkflowTask {
 }
 
 const PHASE_ICONS: Record<string, React.ReactNode> = {
-  intake: <Search size={14} />,
-  research: <Lightbulb size={14} />,
-  strategy: <Target size={14} />,
-  planning: <FileText size={14} />,
-  briefing: <MessageSquare size={14} />,
-  creative: <Zap size={14} />,
+  intake: <Globe size={14} />,
+  research: <Globe size={14} />,
+  strategy: <Globe size={14} />,
+  planning: <Globe size={14} />,
+  briefing: <Globe size={14} />,
+  creative: <Globe size={14} />,
   creation: <Plus size={14} />,
-  production: <Rocket size={14} />,
-  review: <Filter size={14} />,
+  production: <Plus size={14} />,
+  review: <Globe size={14} />,
   approval: <CheckCircle2 size={14} />,
   testing: <BarChart3 size={14} />,
   analysis: <BarChart3 size={14} />,
-  delivery: <Rocket size={14} />,
+  delivery: <CheckCircle2 size={14} />,
   analytics: <BarChart3 size={14} />,
-  concepting: <Lightbulb size={14} />,
-  identification: <Search size={14} />,
-  strategy: <Target size={14} />,
+  concepting: <Globe size={14} />,
+  ideas: <Globe size={14} />,
+  hooks: <Globe size={14} />,
+  drafting: <Globe size={14} />,
+  assembly: <Globe size={14} />,
+  repurposing: <Globe size={14} />,
+  hashtags: <Globe size={14} />,
+  visual: <Globe size={14} />,
+  export: <Globe size={14} />,
 }
 
 export default function PipelinePage() {
   const agents = useAgentsStore(state => state.agents)
+  const clients = useAgentsStore(state => state.clients)
+  const missions = useAgentsStore(state => state.missions)
+  
   const [pipelines, setPipelines] = useState<Pipeline[]>([])
   const [selectedPipeline, setSelectedPipeline] = useState<string | null>(null)
+  const [selectedClient, setSelectedClient] = useState<string | null>(null)
+  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'ar'>('en')
   const [expandedPhases, setExpandedPhases] = useState<Set<string>>(new Set())
   const [tasks, setTasks] = useState<WorkflowTask[]>([])
-  const [showNewMission, setShowNewMission] = useState(false)
-  const [selectedMission, setSelectedMission] = useState<string>('mission-1')
+  const [showLanguageSelector, setShowLanguageSelector] = useState(true)
 
   // Load pipelines
   useEffect(() => {
@@ -119,9 +124,16 @@ export default function PipelinePage() {
     loadPipelines()
   }, [])
 
+  // Set first client as default
+  useEffect(() => {
+    if (clients.length > 0 && !selectedClient) {
+      setSelectedClient(clients[0].id)
+    }
+  }, [clients, selectedClient])
+
   const currentPipeline = pipelines.find(p => p.id === selectedPipeline)
-  const mission = useAgentsStore(state => state.missions.find(m => m.id === selectedMission))
-  const missionTasks = tasks.filter(t => t.missionId === selectedMission)
+  const client = clients.find(c => c.id === selectedClient)
+  const clientTasks = tasks.filter(t => t.clientId === selectedClient && t.pipelineId === selectedPipeline)
 
   const togglePhase = (phaseId: string) => {
     setExpandedPhases(prev => {
@@ -136,13 +148,20 @@ export default function PipelinePage() {
   }
 
   const getTaskStatus = (phaseId: string, activityId: string): WorkflowTask['status'] => {
-    const task = missionTasks.find(t => t.phaseId === phaseId && t.activityId === activityId)
+    const task = clientTasks.find(t => t.phaseId === phaseId && t.activityId === activityId)
     return task?.status || 'pending'
   }
 
   const toggleTaskStatus = (phaseId: string, activityId: string, activityName: string) => {
+    if (!selectedClient || !selectedPipeline) return
+    
     setTasks(prev => {
-      const existing = prev.find(t => t.phaseId === phaseId && t.activityId === activityId && t.missionId === selectedMission)
+      const existing = prev.find(t => 
+        t.phaseId === phaseId && 
+        t.activityId === activityId && 
+        t.clientId === selectedClient &&
+        t.pipelineId === selectedPipeline
+      )
       if (existing) {
         return prev.map(t => {
           if (t.id === existing.id) {
@@ -157,13 +176,13 @@ export default function PipelinePage() {
       } else {
         const newTask: WorkflowTask = {
           id: `task-${Date.now()}`,
-          missionId: selectedMission,
-          pipelineId: selectedPipeline || '',
+          clientId: selectedClient,
+          pipelineId: selectedPipeline,
           phaseId,
           activityId,
           title: activityName,
-          description: '',
           status: 'in-progress',
+          language: selectedLanguage,
           assignedAgent: null,
           checklist: [],
           completedItems: [],
@@ -176,7 +195,7 @@ export default function PipelinePage() {
   }
 
   const getPhaseProgress = (phase: Phase): { completed: number; total: number } => {
-    const phaseTasks = missionTasks.filter(t => t.phaseId === phase.id)
+    const phaseTasks = clientTasks.filter(t => t.phaseId === phase.id)
     const completed = phaseTasks.filter(t => t.status === 'completed').length
     return { completed, total: phase.activities.length }
   }
@@ -184,8 +203,103 @@ export default function PipelinePage() {
   const getTotalProgress = (): { completed: number; total: number } => {
     if (!currentPipeline) return { completed: 0, total: 0 }
     const total = currentPipeline.phases.reduce((sum, p) => sum + p.activities.length, 0)
-    const completed = missionTasks.filter(t => t.status === 'completed').length
+    const completed = clientTasks.filter(t => t.status === 'completed').length
     return { completed, total }
+  }
+
+  const handleStartPipeline = () => {
+    if (!selectedPipeline || !selectedClient) return
+    setShowLanguageSelector(false)
+    // Expand all phases by default
+    if (currentPipeline) {
+      setExpandedPhases(new Set(currentPipeline.phases.map(p => p.id)))
+    }
+  }
+
+  const handleChangePipeline = () => {
+    setShowLanguageSelector(true)
+    setTasks([])
+    setExpandedPhases(new Set())
+  }
+
+  // Language selector overlay
+  if (showLanguageSelector && selectedPipeline) {
+    return (
+      <ClientShell>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="bg-base-200 rounded-xl p-8 w-full max-w-md border border-border">
+            <div className="text-center mb-6">
+              <Globe size={48} className="text-accent-purple mx-auto mb-3" />
+              <h2 className="text-xl font-bold">{currentPipeline.name}</h2>
+              <p className="text-sm text-text-secondary mt-1">
+                {currentPipeline.description}
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Select Client</label>
+                <select
+                  value={selectedClient || ''}
+                  onChange={e => setSelectedClient(e.target.value)}
+                  className="w-full bg-base-300 border border-border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent-purple"
+                >
+                  {clients.length === 0 && (
+                    <option value="">No clients yet — add one first</option>
+                  )}
+                  {clients.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Content Language</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setSelectedLanguage('en')}
+                    className={clsx(
+                      'p-4 rounded-lg border text-center transition-all',
+                      selectedLanguage === 'en'
+                        ? 'bg-accent-purple/20 border-accent-purple ring-2 ring-accent-purple'
+                        : 'bg-base-300 border-border hover:border-accent-purple'
+                    )}
+                  >
+                    <span className="text-2xl mb-1 block">🇬🇧</span>
+                    <span className="text-sm font-medium">English</span>
+                  </button>
+                  <button
+                    onClick={() => setSelectedLanguage('ar')}
+                    className={clsx(
+                      'p-4 rounded-lg border text-center transition-all',
+                      selectedLanguage === 'ar'
+                        ? 'bg-accent-purple/20 border-accent-purple ring-2 ring-accent-purple'
+                        : 'bg-base-300 border-border hover:border-accent-purple'
+                    )}
+                  >
+                    <span className="text-2xl mb-1 block">🇸🇦</span>
+                    <span className="text-sm font-medium">العربية</span>
+                  </button>
+                </div>
+              </div>
+              
+              <button
+                onClick={handleStartPipeline}
+                disabled={!selectedClient}
+                className={clsx(
+                  'w-full py-3 rounded-lg font-medium transition-all mt-2',
+                  selectedClient
+                    ? 'bg-accent-purple text-white hover:bg-accent-purple/80'
+                    : 'bg-base-300 text-text-dim cursor-not-allowed'
+                )}
+              >
+                Start Pipeline
+              </button>
+            </div>
+          </div>
+        </div>
+      </ClientShell>
+    )
   }
 
   return (
@@ -200,24 +314,29 @@ export default function PipelinePage() {
             </h1>
             <p className="text-xs text-text-secondary mt-0.5">
               {currentPipeline?.name || 'Select a pipeline'} — {currentPipeline?.estimatedDuration || ''}
+              {client && <span className="ml-2">• {client.name}</span>}
+              <span className="ml-2">• {selectedLanguage === 'en' ? '🇬🇧 English' : '🇸🇦 العربية'}</span>
             </p>
           </div>
           <div className="flex items-center gap-3">
-            {/* Mission Selector */}
+            {/* Client Selector */}
             <select
-              value={selectedMission}
-              onChange={e => setSelectedMission(e.target.value)}
-              className="bg-base border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue"
+              value={selectedClient || ''}
+              onChange={e => setSelectedClient(e.target.value)}
+              className="bg-base border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-blue"
             >
-              <option value="mission-1">Campaign Brief</option>
-              <option value="mission-2">Social Content</option>
-              <option value="mission-3">Ad Creative</option>
+              {clients.map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
             </select>
             {/* Pipeline Selector */}
             <select
               value={selectedPipeline || ''}
-              onChange={e => setSelectedPipeline(e.target.value)}
-              className="bg-base border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent-blue"
+              onChange={e => {
+                setSelectedPipeline(e.target.value)
+                handleChangePipeline()
+              }}
+              className="bg-base border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent-blue"
             >
               {pipelines.map(p => (
                 <option key={p.id} value={p.id}>{p.name}</option>
@@ -248,7 +367,7 @@ export default function PipelinePage() {
               </div>
             </div>
             <div className="text-xs text-text-secondary text-right">
-              {mission?.name || 'No mission selected'}
+              {client?.name || 'No client selected'}
             </div>
           </div>
         </div>
@@ -341,7 +460,7 @@ export default function PipelinePage() {
                                 <p className="text-xs text-text-secondary mt-0.5 line-clamp-2">
                                   {activity.description}
                                 </p>
-                                <div className="flex items-center gap-1 mt-2">
+                                <div className="flex items-center gap-1 mt-2 flex-wrap">
                                   <span
                                     className="px-2 py-0.5 rounded text-[10px] font-medium"
                                     style={{
@@ -351,6 +470,16 @@ export default function PipelinePage() {
                                   >
                                     {activity.assignedRole}
                                   </span>
+                                  {activity.batching?.parallel && (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-accent-blue/10 text-accent-blue">
+                                      parallel
+                                    </span>
+                                  )}
+                                  {activity.prompts?.ar && (
+                                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-accent-green/10 text-accent-green">
+                                      🇬🇧 🇸🇦
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -365,8 +494,7 @@ export default function PipelinePage() {
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
               <BarChart3 size={48} className="text-text-dim mb-4" />
-              <p className="text-text-secondary">No pipeline selected</p>
-              <p className="text-xs text-text-dim mt-1">Select a pipeline to view the workflow</p>
+              <p className="text-text-secondary">Select a pipeline to get started</p>
             </div>
           )}
         </div>
