@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react'
 import { useAgentsStore } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
-import { X, Save, Plus, Trash2 } from 'lucide-react'
+import { SkillPicker } from '@/components/ui/SkillPicker'
+import skillsLibrary from '@/config/skills/skills-library.json'
+import { X, Save } from 'lucide-react'
 
 interface AgentEditorProps {
   agentId: string | null
-  isOpen?: boolean
   onClose: () => void
 }
 
@@ -19,6 +20,11 @@ const DIVISION_COLORS: Record<string, string> = {
   media: '#ff5fa0',
   research: '#38bdf8',
 }
+
+// Flatten skills from library for the picker
+const AVAILABLE_SKILLS = skillsLibrary.skillCategories.flatMap(cat =>
+  cat.skills.map(s => ({ ...s, category: cat.name }))
+)
 
 export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   const agents = useAgentsStore(state => state.agents)
@@ -40,7 +46,6 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
     maxTokens: 1536,
   })
   
-  const [newSkill, setNewSkill] = useState('')
   const [newResponsibility, setNewResponsibility] = useState('')
   
   useEffect(() => {
@@ -81,21 +86,21 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
     onClose()
   }
   
-  const addSkill = () => {
-    const skill = newSkill.trim()
-    if (skill && !formData.skills.includes(skill)) {
-      setFormData(prev => ({ ...prev, skills: [...prev.skills, skill] }))
+  const addSkill = (skillId: string) => {
+    if (!formData.skills.includes(skillId)) {
+      setFormData(prev => ({ ...prev, skills: [...prev.skills, skillId] }))
     }
   }
   
-  const removeSkill = (skill: string) => {
-    setFormData(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill) }))
+  const removeSkill = (skillId: string) => {
+    setFormData(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skillId) }))
   }
   
   const addResponsibility = () => {
     const resp = newResponsibility.trim()
     if (resp && !formData.responsibilities.includes(resp)) {
       setFormData(prev => ({ ...prev, responsibilities: [...prev.responsibilities, resp] }))
+      setNewResponsibility('')
     }
   }
   
@@ -115,7 +120,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               <p className="text-sm text-gray-400">{agent.name} — {agent.role}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-[#1a1d26] rounded-lg">
+          <button onClick={onClose} className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white">
             <X size={20} />
           </button>
         </div>
@@ -150,7 +155,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               value={formData.bio}
               onChange={e => setFormData(prev => ({ ...prev, bio: e.target.value }))}
               rows={2}
-              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple resize-none text-white"
+              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple resize-none text-white placeholder-gray-500"
               placeholder="Brief description of the agent..."
             />
           </div>
@@ -174,15 +179,11 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 <button
                   key={div}
                   onClick={() => setFormData(prev => ({ ...prev, division: div, color: DIVISION_COLORS[div] }))}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    formData.division === div
-                      ? 'ring-2 ring-offset-2 ring-offset-[#12141a]'
-                      : 'bg-[#1a1d26] hover:bg-[#252830] text-gray-200'
-                  }`}
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
                   style={{
-                    backgroundColor: formData.division === div ? DIVISION_COLORS[div] + '20' : undefined,
+                    backgroundColor: formData.division === div ? DIVISION_COLORS[div] + '20' : '#1a1d26',
                     color: formData.division === div ? DIVISION_COLORS[div] : '#d1d5db',
-                    ringColor: formData.division === div ? DIVISION_COLORS[div] : undefined,
+                    border: formData.division === div ? `1px solid ${DIVISION_COLORS[div]}` : '1px solid transparent',
                   }}
                 >
                   {div}
@@ -191,55 +192,31 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
             </div>
           </div>
           
-          {/* Skills */}
-          {/* Skills */}
+          {/* Skills - Using Picker */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-200">Skills</label>
-            <p className="text-xs text-gray-400 mb-2">Agent capabilities and specialties</p>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {formData.skills.length === 0 && (
-                <span className="text-xs text-gray-500 italic">No skills added yet</span>
-              )}
-              {formData.skills.map(skill => (
-                <span key={skill} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1 text-white border border-[#2a2d38]">
-                  {skill}
-                  <button onClick={() => removeSkill(skill)} className="text-gray-400 hover:text-red-400 ml-1">
-                    <X size={12} />
-                  </button>
-                </span>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={newSkill}
-                onChange={e => setNewSkill(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && (addSkill(), setNewSkill(''))}
-                className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
-                placeholder="Type a skill name and press Enter..."
-              />
-              <button onClick={() => { addSkill(); setNewSkill('') }} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
-                <Plus size={16} />
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Tip: Each skill should be unique. Examples: "SEO Writing", "Facebook Ads", "Content Strategy"
-            </p>
+            <p className="text-xs text-gray-500 mb-3">Select from the skills library. Each skill includes detailed prompts and instructions.</p>
+            <SkillPicker
+              selectedSkillIds={formData.skills}
+              availableSkills={AVAILABLE_SKILLS}
+              onAddSkill={addSkill}
+              onRemoveSkill={removeSkill}
+            />
           </div>
           
           {/* Responsibilities */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-200">Responsibilities</label>
-            <p className="text-xs text-gray-400 mb-2">What this agent is responsible for</p>
+            <p className="text-xs text-gray-500 mb-2">What this agent is responsible for</p>
             <div className="space-y-1 mb-2">
               {formData.responsibilities.length === 0 && (
                 <span className="text-xs text-gray-500 italic">No responsibilities added yet</span>
               )}
               {formData.responsibilities.map(r => (
-                <div key={r} className="flex items-center gap-2 px-3 py-1 bg-[#1a1d26] rounded text-sm text-white border border-[#2a2d38]">
+                <div key={r} className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1d26] rounded text-sm text-white border border-[#2a2d38]">
                   <span className="flex-1">{r}</span>
-                  <button onClick={() => removeResponsibility(r)} className="text-gray-400 hover:text-red-400">
-                    <Trash2 size={14} />
+                  <button onClick={() => removeResponsibility(r)} className="text-gray-500 hover:text-red-400">
+                    <X size={14} />
                   </button>
                 </div>
               ))}
@@ -253,8 +230,8 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
                 placeholder="Type a responsibility and press Enter..."
               />
-              <button onClick={() => { addResponsibility(); setNewResponsibility('') }} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
-                <Plus size={16} />
+              <button onClick={() => { addResponsibility(); setNewResponsibility('') }} className="px-4 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80">
+                Add
               </button>
             </div>
           </div>
@@ -262,26 +239,30 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           {/* Tools */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-200">Tools</label>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {formData.tools.map(tool => (
-                <span key={tool} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1 text-white">
-                  {tool}
-                  <button onClick={() => setFormData(prev => ({ ...prev, tools: prev.tools.filter(t => t !== tool) }))}>
-                    <X size={12} />
+            <div className="flex flex-wrap gap-2">
+              {['web-search', 'analytics', 'document', 'spreadsheet', 'presentation', 'image-gen', 'figma', 'canva'].map(tool => {
+                const isSelected = formData.tools.includes(tool)
+                return (
+                  <button
+                    key={tool}
+                    onClick={() => {
+                      if (isSelected) {
+                        setFormData(prev => ({ ...prev, tools: prev.tools.filter(t => t !== tool) }))
+                      } else {
+                        setFormData(prev => ({ ...prev, tools: [...prev.tools, tool] }))
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs transition-all"
+                    style={{
+                      backgroundColor: isSelected ? 'rgba(155, 109, 255, 0.2)' : '#1a1d26',
+                      color: isSelected ? '#9b6dff' : '#d1d5db',
+                      border: `1px solid ${isSelected ? '#9b6dff' : '#2a2d38'}`,
+                    }}
+                  >
+                    {isSelected ? '✓ ' : '+ '}{tool}
                   </button>
-                </span>
-              ))}
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              {['web-search', 'analytics', 'document', 'spreadsheet', 'presentation', 'image-gen', 'figma', 'canva'].filter(t => !formData.tools.includes(t)).map(tool => (
-                <button
-                  key={tool}
-                  onClick={() => setFormData(prev => ({ ...prev, tools: [...prev.tools, tool] }))}
-                  className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs hover:bg-base-100 text-white"
-                >
-                  + {tool}
-                </button>
-              ))}
+                )
+              })}
             </div>
           </div>
           
@@ -296,7 +277,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 step={0.1}
                 min={0}
                 max={1}
-                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
+                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white"
               />
             </div>
             <div>
@@ -305,7 +286,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="number"
                 value={formData.maxTokens}
                 onChange={e => setFormData(prev => ({ ...prev, maxTokens: parseInt(e.target.value) || 1536 }))}
-                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
+                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white"
               />
             </div>
             <div>
@@ -314,7 +295,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="color"
                 value={formData.color}
                 onChange={e => setFormData(prev => ({ ...prev, color: e.target.value }))}
-                className="w-full h-10 bg-[#1a1d26] rounded-lg cursor-pointer"
+                className="w-full h-10 bg-[#1a1d26] rounded-lg cursor-pointer border border-[#2a2d38]"
               />
             </div>
           </div>
@@ -326,7 +307,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               value={formData.systemPrompt}
               onChange={e => setFormData(prev => ({ ...prev, systemPrompt: e.target.value }))}
               rows={6}
-              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple font-mono resize-none text-white"
+              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple font-mono resize-none text-white placeholder-gray-500"
               placeholder="Agent system prompt..."
             />
           </div>
