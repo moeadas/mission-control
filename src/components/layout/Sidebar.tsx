@@ -15,6 +15,8 @@ import {
   GitBranch,
   UserCircle,
   Code,
+  Zap,
+  BarChart3,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -74,6 +76,14 @@ const NAV_ITEMS = [
     href: '/pipeline/run',
     color: '#ff5fa0',
     description: 'Execute & route tasks',
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics',
+    icon: BarChart3,
+    href: '/analytics',
+    color: '#9b6dff',
+    description: 'Performance & AI insights',
   },
   {
     id: 'outputs',
