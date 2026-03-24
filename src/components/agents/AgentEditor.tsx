@@ -82,9 +82,9 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   }
   
   const addSkill = () => {
-    if (newSkill.trim() && !formData.skills.includes(newSkill.trim())) {
-      setFormData(prev => ({ ...prev, skills: [...prev.skills, newSkill.trim()] }))
-      setNewSkill('')
+    const skill = newSkill.trim()
+    if (skill && !formData.skills.includes(skill)) {
+      setFormData(prev => ({ ...prev, skills: [...prev.skills, skill] }))
     }
   }
   
@@ -93,9 +93,9 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   }
   
   const addResponsibility = () => {
-    if (newResponsibility.trim() && !formData.responsibilities.includes(newResponsibility.trim())) {
-      setFormData(prev => ({ ...prev, responsibilities: [...prev.responsibilities, newResponsibility.trim()] }))
-      setNewResponsibility('')
+    const resp = newResponsibility.trim()
+    if (resp && !formData.responsibilities.includes(resp)) {
+      setFormData(prev => ({ ...prev, responsibilities: [...prev.responsibilities, resp] }))
     }
   }
   
@@ -176,12 +176,12 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                   onClick={() => setFormData(prev => ({ ...prev, division: div, color: DIVISION_COLORS[div] }))}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     formData.division === div
-                      ? 'ring-2 ring-offset-2 ring-offset-base-200'
-                      : 'bg-[#1a1d26] hover:bg-[#252830]'
+                      ? 'ring-2 ring-offset-2 ring-offset-[#12141a]'
+                      : 'bg-[#1a1d26] hover:bg-[#252830] text-gray-200'
                   }`}
                   style={{
                     backgroundColor: formData.division === div ? DIVISION_COLORS[div] + '20' : undefined,
-                    color: formData.division === div ? DIVISION_COLORS[div] : undefined,
+                    color: formData.division === div ? DIVISION_COLORS[div] : '#d1d5db',
                     ringColor: formData.division === div ? DIVISION_COLORS[div] : undefined,
                   }}
                 >
@@ -192,13 +192,18 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
           </div>
           
           {/* Skills */}
+          {/* Skills */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-200">Skills</label>
+            <p className="text-xs text-gray-400 mb-2">Agent capabilities and specialties</p>
             <div className="flex flex-wrap gap-2 mb-2">
+              {formData.skills.length === 0 && (
+                <span className="text-xs text-gray-500 italic">No skills added yet</span>
+              )}
               {formData.skills.map(skill => (
-                <span key={skill} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1 text-white">
+                <span key={skill} className="px-3 py-1 bg-[#1a1d26] rounded-full text-xs flex items-center gap-1 text-white border border-[#2a2d38]">
                   {skill}
-                  <button onClick={() => removeSkill(skill)} className="hover:text-red-500">
+                  <button onClick={() => removeSkill(skill)} className="text-gray-400 hover:text-red-400 ml-1">
                     <X size={12} />
                   </button>
                 </span>
@@ -209,27 +214,31 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="text"
                 value={newSkill}
                 onChange={e => setNewSkill(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && addSkill()}
+                onKeyDown={e => e.key === 'Enter' && (addSkill(), setNewSkill(''))}
                 className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
-                placeholder="Add a skill..."
+                placeholder="Type a skill name and press Enter..."
               />
-              <button onClick={addSkill} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
+              <button onClick={() => { addSkill(); setNewSkill('') }} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
                 <Plus size={16} />
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-1">
-              See full skill list in docs/skills.md
+            <p className="text-xs text-gray-500 mt-2">
+              Tip: Each skill should be unique. Examples: "SEO Writing", "Facebook Ads", "Content Strategy"
             </p>
           </div>
           
           {/* Responsibilities */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-200">Responsibilities</label>
+            <p className="text-xs text-gray-400 mb-2">What this agent is responsible for</p>
             <div className="space-y-1 mb-2">
+              {formData.responsibilities.length === 0 && (
+                <span className="text-xs text-gray-500 italic">No responsibilities added yet</span>
+              )}
               {formData.responsibilities.map(r => (
-                <div key={r} className="flex items-center gap-2 px-3 py-1 bg-[#1a1d26] rounded text-sm text-white">
+                <div key={r} className="flex items-center gap-2 px-3 py-1 bg-[#1a1d26] rounded text-sm text-white border border-[#2a2d38]">
                   <span className="flex-1">{r}</span>
-                  <button onClick={() => removeResponsibility(r)} className="hover:text-red-500">
+                  <button onClick={() => removeResponsibility(r)} className="text-gray-400 hover:text-red-400">
                     <Trash2 size={14} />
                   </button>
                 </div>
@@ -240,11 +249,11 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="text"
                 value={newResponsibility}
                 onChange={e => setNewResponsibility(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && addResponsibility()}
+                onKeyDown={e => e.key === 'Enter' && (addResponsibility(), setNewResponsibility(''))}
                 className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
-                placeholder="Add a responsibility..."
+                placeholder="Type a responsibility and press Enter..."
               />
-              <button onClick={addResponsibility} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
+              <button onClick={() => { addResponsibility(); setNewResponsibility('') }} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
                 <Plus size={16} />
               </button>
             </div>
