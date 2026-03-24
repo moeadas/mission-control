@@ -68,6 +68,14 @@ const NAV_ITEMS = [
     description: 'Workflow production',
   },
   {
+    id: 'runner',
+    label: 'Pipeline Runner',
+    icon: Zap,
+    href: '/pipeline/run',
+    color: '#ff5fa0',
+    description: 'Execute & route tasks',
+  },
+  {
     id: 'outputs',
     label: 'Outputs',
     icon: FileText,
