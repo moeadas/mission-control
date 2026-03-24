@@ -10,12 +10,17 @@ export const PROVIDER_OPTIONS: { value: AIProvider; label: string }[] = [
   { value: 'gemini', label: PROVIDER_LABELS.gemini },
 ]
 
+// Default model options - will be overridden by verified models from the system
 export const MODEL_OPTIONS: ProviderOption[] = [
+  { id: 'minimax-m2.7:cloud', label: 'MiniMax M2.7 (Cloud)', provider: 'ollama' },
   { id: 'llama3.2:latest', label: 'Llama 3.2', provider: 'ollama' },
   { id: 'llama3.1:latest', label: 'Llama 3.1', provider: 'ollama' },
+  { id: 'gemini-2.0-flash-exp', label: 'Gemini 2.0 Flash (Experimental)', provider: 'gemini' },
   { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', provider: 'gemini' },
   { id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', provider: 'gemini' },
-  { id: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash', provider: 'gemini' },
+  { id: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash', provider: 'gemini' },
+  { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', provider: 'gemini' },
+  { id: 'gemini-1.0-pro', label: 'Gemini 1.0 Pro', provider: 'gemini' },
 ]
 
 export function getProviderModels(provider: AIProvider): ProviderOption[] {

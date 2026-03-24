@@ -1,17 +1,16 @@
 'use client'
 
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { MessageSquare, Send, Sparkles, Target, Trash2, X } from 'lucide-react'
 import { useAgentsStore, ChatMessage } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { clsx } from 'clsx'
 import { getModelLabel, getProviderLabel } from '@/lib/providers'
-import { buildTaskTitleFromRequest } from '@/lib/task-output'
+import { Paperclip, Send, Sparkles, X, Image, FileText, File, CheckCircle2, AlertCircle, Loader2, Plus, MessageSquare } from 'lucide-react'
 
 const IRIS = {
   id: 'iris',
   name: 'Iris',
-  role: 'Personal Assistant & Traffic Manager',
+  role: 'Operations Lead',
   avatar: 'bot-purple',
   color: '#a78bfa',
   status: 'active' as const,
@@ -21,13 +20,11 @@ function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 }
 
-function formatConversationTime(iso: string) {
-  return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-}
-
-function getConversationPreview(message?: ChatMessage) {
-  if (!message?.content) return 'No messages yet'
-  return message.content.length > 42 ? `${message.content.slice(0, 39)}...` : message.content
+function getFileIcon(type: string) {
+  if (type.startsWith('image/')) return <Image size={14} className="text-accent-purple" />
+  if (type.includes('pdf')) return <FileText size={14} className="text-accent-red" />
+  if (type.includes('sheet') || type.includes('excel')) return <FileText size={14} className="text-accent-green" />
+  return <File size={14} className="text-accent-blue" />
 }
 
 async function requestChat(
@@ -42,13 +39,11 @@ async function requestChat(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
-
     const data = await response.json()
     if (!response.ok) {
       onError(data.error || 'Request failed')
       return
     }
-
     onChunk(data.response || '')
     onDone(data.meta)
   } catch (err: any) {
@@ -84,9 +79,12 @@ export function IrisChat() {
 
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [attachments, setAttachments] = useState<File[]>([])
+  const [attachedText, setAttachedText] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const activeConv = conversations.find((conversation) => conversation.id === activeConversationId)
   const irisAgent = agents.find((agent) => agent.id === 'iris')
@@ -101,12 +99,51 @@ export function IrisChat() {
     if (isIrisOpen) setTimeout(() => inputRef.current?.focus(), 300)
   }, [isIrisOpen])
 
+  // Extract text from files
+  const extractFileText = async (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      if (file.type.startsWith('text/') || file.type === 'application/json') {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = () => resolve(`[Could not read file: ${file.name}]`)
+        reader.readAsText(file)
+      } else if (file.type.startsWith('image/')) {
+        // For images, we'll include a placeholder - actual vision would need API support
+        resolve(`[Image file: ${file.name} - ${(file.size / 1024).toFixed(1)}KB]`)
+      } else {
+        resolve(`[File: ${file.name} - ${(file.size / 1024).toFixed(1)}KB - ${file.type}]`)
+      }
+    })
+  }
+
+  const handleFileAttach = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (!files.length) return
+    setAttachments(prev => [...prev, ...files])
+    // Extract text from each file
+    const texts = await Promise.all(files.map(extractFileText))
+    setAttachedText(prev => prev + '\n\n' + texts.join('\n\n'))
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index))
+  }
+
   const handleSend = useCallback(async () => {
-    if (!input.trim() || !activeConversationId || chatStatus !== 'idle') return
+    if (!input.trim() && attachments.length === 0 && !attachedText) return
+    if (!activeConversationId || chatStatus !== 'idle') return
 
     const userMsg = input.trim()
+    const attachmentContent = attachedText.trim()
+    const fullMessage = attachmentContent 
+      ? `${userMsg}\n\n[Attached files context]\n${attachmentContent}`
+      : userMsg
+
     setInput('')
     setError(null)
+    setAttachments([])
+    setAttachedText('')
     sendMessage(activeConversationId, userMsg)
 
     const createdMissionId = createMissionFromPrompt(userMsg, {
@@ -123,29 +160,13 @@ export function IrisChat() {
         model: irisAgent?.model || agencySettings.defaultModel,
         temperature: irisAgent?.temperature || 0.7,
         maxTokens: irisAgent?.maxTokens || 1024,
-        messages: [...(activeConv?.messages || []), { role: 'user', content: userMsg }],
+        messages: [...(activeConv?.messages || []), { role: 'user', content: fullMessage }],
         systemPrompt: irisAgent?.systemPrompt,
         providerSettings,
         agentMemories,
-        artifacts: artifacts
-          .filter((artifact) => !activeMission?.clientId || artifact.clientId === activeMission.clientId)
-          .slice(0, 12),
+        artifacts: artifacts.slice(0, 12),
         agents: agents.map((agent) => ({ id: agent.id, name: agent.name, specialty: agent.specialty, role: agent.role })),
-        clients: clients.map((client) => ({
-          id: client.id,
-          name: client.name,
-          industry: client.industry,
-          description: client.description,
-          missionStatement: client.missionStatement,
-          brandPromise: client.brandPromise,
-          targetAudiences: client.targetAudiences,
-          productsAndServices: client.productsAndServices,
-          usp: client.usp,
-          keyMessages: client.keyMessages,
-          toneOfVoice: client.toneOfVoice,
-          strategicPriorities: client.strategicPriorities,
-          notes: client.notes,
-        })),
+        clients: clients.map((client) => ({ id: client.id, name: client.name, industry: client.industry })),
         missions: missions.slice(0, 8),
         currentClientId: activeMission?.clientId,
         currentCampaignId: activeMission?.campaignId,
@@ -158,42 +179,24 @@ export function IrisChat() {
       (meta) => {
         const missionForArtifact = missions.find((mission) => mission.id === createdMissionId) || activeMission
         const deliverableType = (meta?.deliverableType as any) || missionForArtifact?.deliverableType || 'status-report'
-        const taskTitle = buildTaskTitleFromRequest(userMsg, deliverableType)
         const artifactId = fullResponse.trim()
           ? addArtifact({
-              title: taskTitle,
+              title: userMsg.slice(0, 60),
               deliverableType,
               status: 'draft',
               format: 'markdown',
               content: fullResponse,
               sourcePrompt: meta?.executionPrompt,
-              notes: 'Generated by Iris chat and stored as an internal app artifact. Not delivered externally unless marked delivered.',
+              notes: 'Generated by Iris',
               clientId: meta?.clientId || activeMission?.clientId,
               campaignId: meta?.campaignId || activeMission?.campaignId,
               missionId: createdMissionId,
               agentId: meta?.routedAgentId || 'iris',
-              creative:
-                deliverableType === 'creative-asset'
-                  ? {
-                      assetType: 'social-post',
-                      visualDirection: 'Premium scientific creative with clear hierarchy and clean educational storytelling.',
-                      imagePrompt: meta?.executionPrompt || fullResponse,
-                      aspectRatio: userMsg.toLowerCase().includes('story') ? '9:16' : userMsg.toLowerCase().includes('carousel') ? '4:5' : '1:1',
-                      referenceNotes: '',
-                      deliverableSpecs: [],
-                      assetUrl: '',
-                      assetPath: '',
-                    }
-                  : undefined,
             })
           : undefined
-        addAssistantMessage(activeConversationId, fullResponse, meta?.routedAgentId || 'iris', {
-          ...meta,
-          missionId: createdMissionId,
-          artifactId,
-        })
+        addAssistantMessage(activeConversationId, fullResponse, meta?.routedAgentId || 'iris', { ...meta, missionId: createdMissionId, artifactId })
         updateMission(createdMissionId, {
-          title: taskTitle,
+          title: userMsg.slice(0, 60),
           summary: userMsg,
           deliverableType,
           status: fullResponse.trim() ? 'review' : 'in_progress',
@@ -204,22 +207,12 @@ export function IrisChat() {
         })
         rememberAgentWork('iris', {
           title: userMsg.slice(0, 48),
-          summary: `Handled: ${userMsg.slice(0, 120)} | Replied: ${fullResponse.slice(0, 160)}`,
+          summary: `Handled: ${userMsg.slice(0, 120)}`,
           clientId: meta?.clientId || activeMission?.clientId,
           campaignId: meta?.campaignId || activeMission?.campaignId,
           missionId: createdMissionId,
           conversationId: activeConversationId,
         })
-        if (meta?.routedAgentId && meta.routedAgentId !== 'iris') {
-          rememberAgentWork(meta.routedAgentId, {
-            title: userMsg.slice(0, 48),
-            summary: `Supported: ${fullResponse.slice(0, 160)}`,
-            clientId: meta?.clientId || activeMission?.clientId,
-            campaignId: meta?.campaignId || activeMission?.campaignId,
-            missionId: createdMissionId,
-            conversationId: activeConversationId,
-          })
-        }
         setChatStatus('idle')
       },
       (err) => {
@@ -227,36 +220,7 @@ export function IrisChat() {
         setChatStatus('error')
       }
     )
-  }, [
-    input,
-    activeConversationId,
-    chatStatus,
-    sendMessage,
-    createMissionFromPrompt,
-    addArtifact,
-    updateMission,
-    activeMission,
-    setChatStatus,
-    irisAgent,
-    agencySettings,
-    providerSettings,
-    agentMemories,
-    agents,
-    clients,
-    missions,
-    artifacts,
-    activeConv,
-    upsertAssistantDraft,
-    addAssistantMessage,
-    rememberAgentWork,
-  ])
-
-  useEffect(() => {
-    if (chatStatus === 'error') {
-      const timeout = setTimeout(() => setChatStatus('idle'), 1500)
-      return () => clearTimeout(timeout)
-    }
-  }, [chatStatus, setChatStatus])
+  }, [input, attachments, attachedText, activeConversationId, chatStatus])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -266,7 +230,7 @@ export function IrisChat() {
   }
 
   const startNewChat = () => {
-    const id = createConversation('Chat with Iris')
+    const id = createConversation('New Chat')
     setActiveConversation(id)
   }
 
@@ -274,186 +238,186 @@ export function IrisChat() {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={closeIris} />
-      <div className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-panel border-l border-border z-50 flex flex-col animate-slide-in-right shadow-2xl">
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-border flex-shrink-0">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${IRIS.color}20` }}>
-            <Sparkles size={16} style={{ color: IRIS.color }} />
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={closeIris} />
+      <div className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#12141a] border-l border-[#2a2d38] z-50 flex flex-col shadow-2xl">
+        {/* Header */}
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#2a2d38]">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${IRIS.color}20` }}>
+            <Sparkles size={18} style={{ color: IRIS.color }} />
           </div>
           <div className="flex-1">
-            <h2 className="text-sm font-heading font-semibold text-text-primary">{IRIS.name}</h2>
-            <p className="text-[10px] font-mono" style={{ color: IRIS.color }}>{IRIS.role}</p>
-            <p className="text-[10px] text-text-dim">
-              {getModelLabel(irisAgent?.model || agencySettings.defaultModel)} via {getProviderLabel(irisAgent?.provider || agencySettings.defaultProvider)}
+            <h2 className="text-base font-semibold text-white">{IRIS.name}</h2>
+            <p className="text-xs text-gray-400">
+              {getModelLabel(irisAgent?.model || agencySettings.defaultModel)} · {getProviderLabel(irisAgent?.provider || agencySettings.defaultProvider)}
             </p>
           </div>
-          <div className="flex items-center gap-1">
-            {activeConversationId && (
-              <button onClick={() => clearConversation(activeConversationId)} className="p-2 rounded-lg text-text-dim hover:text-text-secondary hover:bg-card transition-colors" title="Clear chat">
-                <Trash2 size={14} />
-              </button>
+          <div className="flex items-center gap-2">
+            {chatStatus === 'idle' && (
+              <span className="w-2 h-2 rounded-full bg-green-500" title="Ready" />
             )}
-            <button onClick={closeIris} className="p-2 rounded-lg text-text-dim hover:text-text-primary hover:bg-card transition-colors">
-              <X size={16} />
+            {chatStatus === 'thinking' && (
+              <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" title="Thinking..." />
+            )}
+            <button onClick={startNewChat} className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white transition-colors" title="New chat">
+              <Plus size={18} />
+            </button>
+            <button onClick={closeIris} className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white transition-colors">
+              <X size={18} />
             </button>
           </div>
         </div>
 
-        {activeMission && (
-          <div className="px-4 py-3 border-b border-border bg-base/60 flex items-start gap-2">
-            <Target size={14} className="text-accent-orange mt-0.5" />
-            <div>
-              <p className="text-[10px] font-mono uppercase text-text-dim">Active mission</p>
-              <p className="text-sm text-text-primary">{activeMission.title}</p>
-              <p className="text-[11px] text-text-secondary">{activeMission.summary}</p>
+        {/* Messages */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto">
+          {!activeConv || activeConv.messages.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+              <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-5" style={{ background: `${IRIS.color}15` }}>
+                <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="idle" size={64} />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Chat with Iris</h3>
+              <p className="text-sm text-gray-400 max-w-xs leading-relaxed mb-8">
+                Ask anything about your clients, campaigns, or agency operations. Attach files for context.
+              </p>
+              <div className="flex flex-col gap-2 w-full max-w-sm">
+                {[
+                  'What campaigns need attention?',
+                  'Show me the agency status',
+                  'Plan a content calendar for a new client',
+                  'Route a campaign brief for TechStart',
+                ].map((s) => (
+                  <button key={s} onClick={() => setInput(s)} className="text-left px-4 py-3 rounded-xl bg-[#1a1d26] border border-[#2a2d38] text-sm text-gray-300 hover:text-white hover:border-[#9b6dff] transition-all">
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="p-5 space-y-5">
+              {activeConv.messages.map((msg, i) => {
+                const isUser = msg.role === 'user'
+                const showAvatar = !isUser && (i === 0 || activeConv.messages[i - 1].role === 'user')
+                return (
+                  <div key={`${msg.id}-${i}`} className={clsx('flex gap-3', isUser && 'flex-row-reverse')}>
+                    {!isUser && (
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${IRIS.color}20` }}>
+                        <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="idle" size={28} />
+                      </div>
+                    )}
+                    <div className={clsx('max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed', 
+                      isUser 
+                        ? 'bg-[#9b6dff] text-white rounded-tr-sm' 
+                        : 'bg-[#1a1d26] text-gray-200 border border-[#2a2d38] rounded-tl-sm'
+                    )}>
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                      <p className={clsx('text-[10px] mt-2 opacity-60', isUser ? 'text-right' : 'text-gray-500')}>
+                        {formatTime(msg.timestamp)}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+              
+              {/* Streaming indicator */}
+              {chatStatus === 'thinking' && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${IRIS.color}20` }}>
+                    <Loader2 size={16} className="animate-spin" style={{ color: IRIS.color }} />
+                  </div>
+                  <div className="bg-[#1a1d26] border border-[#2a2d38] rounded-2xl rounded-tl-sm px-4 py-3">
+                    <p className="text-sm text-gray-400">Thinking...</p>
+                  </div>
+                </div>
+              )}
+              
+              {chatStatus === 'streaming' && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${IRIS.color}20` }}>
+                    <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="idle" size={28} />
+                  </div>
+                  <div className="bg-[#1a1d26] border border-[#2a2d38] rounded-2xl rounded-tl-sm px-4 py-3">
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#9b6dff] animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#9b6dff] animate-bounce mx-0.5" style={{ animationDelay: '150ms' }} />
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#9b6dff] animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              )}
+              
+              {/* Error */}
+              {error && (
+                <div className="flex items-center gap-2 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                  <AlertCircle size={16} />
+                  <span>{error}</span>
+                </div>
+              )}
+              
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+        </div>
+
+        {/* Attachments Preview */}
+        {attachments.length > 0 && (
+          <div className="px-5 py-2 border-t border-[#2a2d38]">
+            <div className="flex flex-wrap gap-2">
+              {attachments.map((file, i) => (
+                <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-xs text-gray-300">
+                  {getFileIcon(file.type)}
+                  <span className="max-w-[120px] truncate">{file.name}</span>
+                  <button onClick={() => removeAttachment(i)} className="text-gray-500 hover:text-red-400">
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
-        <div className="flex flex-1 overflow-hidden">
-          <div className="w-40 flex flex-col py-3 gap-2 border-r border-border flex-shrink-0 px-2">
-            <button onClick={startNewChat} className="w-full h-9 rounded-lg flex items-center justify-center transition-all text-xs font-mono" style={{ background: `${IRIS.color}15`, border: `1px solid ${IRIS.color}30`, color: IRIS.color }} title="New chat">
-              <span className="font-mono text-sm font-bold" style={{ color: IRIS.color }}>+</span>
-              <span className="ml-2">New chat</span>
+        {/* Input */}
+        <div className="p-4 border-t border-[#2a2d38]">
+          <div className="flex items-end gap-3">
+            <div className="flex-1 flex items-end bg-[#1a1d26] border border-[#2a2d38] rounded-xl focus-within:border-[#9b6dff] transition-colors">
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Message Iris..."
+                rows={1}
+                className="flex-1 bg-transparent px-4 py-3 text-sm text-white placeholder-gray-500 outline-none resize-none max-h-32"
+                style={{ minHeight: '44px' }}
+              />
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.json"
+                onChange={handleFileAttach}
+                className="hidden"
+              />
+              <button 
+                onClick={() => fileInputRef.current?.click()} 
+                className="p-3 text-gray-500 hover:text-white transition-colors"
+                title="Attach files"
+              >
+                <Paperclip size={18} />
+              </button>
+            </div>
+            <button
+              onClick={handleSend}
+              disabled={(!input.trim() && attachments.length === 0 && !attachedText) || chatStatus !== 'idle'}
+              className={clsx(
+                'w-11 h-11 rounded-xl flex items-center justify-center transition-all',
+                (input.trim() || attachments.length > 0 || attachedText) && chatStatus === 'idle'
+                  ? 'bg-[#9b6dff] text-white hover:bg-[#9b6dff]/80'
+                  : 'bg-[#1a1d26] text-gray-500 cursor-not-allowed'
+              )}
+            >
+              <Send size={18} />
             </button>
-            <div className="px-1">
-              <p className="text-[10px] font-mono uppercase text-text-dim">History</p>
-            </div>
-            <div className="flex-1 flex flex-col gap-2 overflow-y-auto pr-1">
-              {conversations.slice(0, 8).map((conv) => (
-                <button
-                  key={conv.id}
-                  onClick={() => setActiveConversation(conv.id)}
-                  className={clsx(
-                    'w-full rounded-xl p-2 text-left transition-all border',
-                    conv.id === activeConversationId
-                      ? 'bg-card border-border-glow'
-                      : 'bg-base/40 border-transparent hover:bg-card hover:border-border'
-                  )}
-                  title={conv.title}
-                >
-                  <div className="flex items-start gap-2">
-                    <MessageSquare size={13} className="mt-0.5 flex-shrink-0" style={{ color: conv.id === activeConversationId ? IRIS.color : undefined }} />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-medium text-text-primary truncate">{conv.title || 'Chat with Iris'}</p>
-                      <p className="text-[10px] text-text-dim truncate">
-                        {getConversationPreview(conv.messages[conv.messages.length - 1])}
-                      </p>
-                      <p className="text-[9px] font-mono text-text-dim mt-1">{formatConversationTime(conv.updatedAt)}</p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
           </div>
-
-          <div className="flex-1 flex flex-col min-w-0">
-            {!activeConv || activeConv.messages.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ background: `${IRIS.color}15` }}>
-                  <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="idle" size={56} />
-                </div>
-                <h3 className="text-sm font-heading font-semibold text-text-primary mb-1">Iris runs the floor</h3>
-                <p className="text-xs text-text-secondary max-w-[240px] leading-relaxed">
-                  Brief her on a client problem, a campaign need, or an internal mission and she will route the work to the right unit.
-                </p>
-                <div className="mt-6 flex flex-col gap-2 w-full max-w-[240px]">
-                  {[
-                    'Plan a launch mission for TechStart',
-                    'Give me the agency status by team',
-                    'What should Bloom prioritize this week?',
-                    'Route a content sprint for Urban Eats',
-                  ].map((suggestion) => (
-                    <button key={suggestion} onClick={() => setInput(suggestion)} className="text-left px-3 py-2 rounded-lg bg-base border border-border hover:border-border-glow text-xs text-text-secondary hover:text-text-primary transition-all">
-                      → {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <>
-                <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {activeConv.messages.map((msg) => (
-                    <div key={`${msg.id}-${msg.timestamp}`} className={clsx('flex gap-2', msg.role === 'user' ? 'flex-row-reverse' : 'flex-row')}>
-                      {msg.role === 'assistant' && (
-                        <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="idle" size={28} />
-                      )}
-                      <div className={clsx('max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed', msg.role === 'user' ? 'bg-accent-purple/20 text-text-primary rounded-tr-sm' : 'bg-card border border-border text-text-primary rounded-tl-sm')}>
-                        <p className="whitespace-pre-wrap">{msg.content}</p>
-                        {msg.meta?.routedAgentId && (
-                          <p className="text-[10px] font-mono text-text-dim mt-2">
-                            Routed to {agents.find((agent) => agent.id === msg.meta?.routedAgentId)?.name || 'Iris'}
-                          </p>
-                        )}
-                        {msg.meta?.fallbackUsed && (
-                          <p className="text-[10px] font-mono text-amber-400 mt-1">
-                            Gemini quota exhausted. Continued with {getProviderLabel(msg.meta.provider || 'ollama')}
-                            {msg.meta.model ? ` · ${getModelLabel(msg.meta.model)}` : ''}.
-                          </p>
-                        )}
-                        {!msg.meta?.fallbackUsed && msg.meta?.provider && msg.role === 'assistant' && (
-                          <p className="text-[10px] font-mono text-text-dim mt-1">
-                            Responded via {getProviderLabel(msg.meta.provider)}
-                            {msg.meta.model ? ` · ${getModelLabel(msg.meta.model)}` : ''}
-                          </p>
-                        )}
-                        <p className={clsx('text-[10px] font-mono mt-1 opacity-50', msg.role === 'user' ? 'text-right' : '')}>{formatTime(msg.timestamp)}</p>
-                      </div>
-                    </div>
-                  ))}
-                  {chatStatus !== 'idle' && (
-                    <div className="flex gap-2">
-                      <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="working" size={28} />
-                      <div className="bg-card border border-border rounded-2xl rounded-tl-sm px-4 py-3">
-                        <div className="flex gap-1">
-                          {[0, 1, 2].map((i) => (
-                            <span key={i} className="w-2 h-2 rounded-full bg-text-dim animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {error && <div className="bg-red-500/10 border border-red-500/20 rounded-2xl px-4 py-2 text-xs text-red-400">{error}</div>}
-                  <div ref={messagesEndRef} />
-                </div>
-                {chatStatus === 'idle' && (
-                  <div className="px-4 pb-2 flex gap-2 overflow-x-auto">
-                    {['Status update by client', 'Create a new mission', 'What is blocking delivery?'].map((suggestion) => (
-                      <button key={suggestion} onClick={() => setInput(suggestion)} className="flex-shrink-0 text-[10px] font-mono px-2.5 py-1.5 rounded-full bg-base border border-border text-text-dim hover:text-text-secondary hover:border-border-glow transition-all whitespace-nowrap">
-                        {suggestion} →
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-
-            <div className="p-3 border-t border-border flex-shrink-0">
-              <div className="flex gap-2 items-end">
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Ask Iris to coordinate the agency..."
-                  rows={1}
-                  className="flex-1 bg-base border border-border rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder:text-text-dim resize-none focus:outline-none focus:border-accent-purple/50 focus:ring-1 focus:ring-accent-purple/20 transition-all max-h-32"
-                  style={{ minHeight: '42px' }}
-                />
-                <button
-                  onClick={handleSend}
-                  disabled={!input.trim() || chatStatus !== 'idle'}
-                  className={clsx('w-10 h-10 rounded-xl flex items-center justify-center transition-all flex-shrink-0', input.trim() && chatStatus === 'idle' ? 'text-white active:scale-95' : 'text-text-dim cursor-not-allowed')}
-                  style={input.trim() && chatStatus === 'idle' ? { background: IRIS.color } : {}}
-                >
-                  <Send size={16} />
-                </button>
-              </div>
-              <p className="text-[10px] text-text-dim mt-1.5 px-1">
-                {getModelLabel(irisAgent?.model || agencySettings.defaultModel)} via {getProviderLabel(irisAgent?.provider || agencySettings.defaultProvider)} · Press Enter to send
-              </p>
-            </div>
-          </div>
+          <p className="text-[10px] text-gray-600 mt-2 text-center">
+            Attach images, PDFs, Excel, or Word files for context
+          </p>
         </div>
       </div>
     </>
