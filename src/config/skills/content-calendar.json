@@ -1,0 +1,55 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "name": "content-calendar",
+  "description": "Creates content calendars and editorial plans. Use when planning social media content, blog posts, or multi-channel content strategies.",
+  "category": "content",
+  "difficulty": "beginner",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "When to use this skill",
+      "context": "You are a content strategist creating an editorial calendar for {{client_name}}.",
+      "instructions": "## Content Calendar Creation\n\nBuild a comprehensive content calendar:\n\n- [ ] 1. Content Pillars: Define 3-5 content themes based on {{objectives}}\n- [ ] 2. Platform Mix: Select platforms based on {{target_audience}} and objectives\n- [ ] 3. Frequency: Set posting frequency per platform\n- [ ] 4. Content Types: Plan mix of content types (posts, stories, reels, blogs)\n- [ ] 5. Calendar: Map content to specific dates, noting key events and campaigns\n\n## Inputs\n- Client: {{client_name}}\n- Platforms: {{platforms}}\n- Frequency: {{frequency}}\n- Objectives: {{objectives}}\n- Target: {{target_audience}}\n",
+      "output_template": "## Content Calendar: {{client_name}}\n\n### Content Pillars\n| Pillar | Theme | % of Content |\n|--------|-------|---------------|\n| | | |\n\n### Platform Strategy\n| Platform | Frequency | Content Types | Key Times |\n|----------|-----------|---------------|-----------|\n| | | | |\n\n### Monthly Calendar\n\n**Week 1**\n| Day | Platform | Content Type | Pillar | Notes |\n|-----|----------|--------------|---------|-------|\n| Mon | | | | |\n| Tue | | | | |\n| Wed | | | | |\n\n[Continue for all weeks]\n\n### Key Dates & Campaigns\n| Date | Event | Content Theme |\n|------|-------|---------------|\n| | | |"
+    }
+  },
+  "variables": [
+    { "name": "client_name", "type": "string", "required": true, "description": "Client or brand name" },
+    { "name": "platforms", "type": "string", "required": true, "description": "Social platforms (Instagram, LinkedIn, Twitter, etc)" },
+    { "name": "frequency", "type": "string", "required": true, "description": "Posts per week per platform" },
+    { "name": "objectives", "type": "string", "required": true, "description": "Content goals (awareness, engagement, leads)" },
+    { "name": "target_audience", "type": "string", "required": true, "description": "Primary audience" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define Pillars", "action": "Establish content themes based on brand and objectives", "verify": "Pillars are distinct and cover key brand messages" },
+      { "step": 2, "name": "Platform Selection", "action": "Match platforms to audience and objectives", "verify": "Platform choice is strategic, not scattered" },
+      { "step": 3, "name": "Set Cadence", "action": "Determine realistic posting frequency", "verify": "Frequency is sustainable for team capacity" },
+      { "step": 4, "name": "Plan Content Mix", "action": "Balance content types across pillars", "verify": "Mix serves different objectives (awareness, engagement, conversion)" },
+      { "step": 5, "name": "Build Calendar", "action": "Map content to specific dates", "verify": "Calendar is actionable and includes key dates" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Create a content calendar for Bloom - a sustainable fashion brand targeting millennials in UAE, posting 3x/week on Instagram and 2x/week on LinkedIn",
+      "output": "4-week content calendar with content pillars (Sustainability, Style, Behind-the-scenes, Education), weekly breakdown showing post types (carousel, reels, stories), and key dates (UAE Fashion Week, Earth Day)"
+    }
+  ],
+  "checklist": [
+    "Content pillars are distinct and strategic",
+    "Platform strategy matches audience behavior",
+    "Frequency is sustainable for team",
+    "Content mix serves different objectives",
+    "Calendar includes key brand/cultural dates",
+    "Each post has clear purpose and CTA"
+  ],
+  "tools": ["spreadsheet", "document", "presentation"],
+  "agents": ["echo", "piper"],
+  "pipelines": ["content-calendar"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["content", "social media", "planning", "editorial"],
+    "lastUpdated": "2026-03-24"
+  }
+}
