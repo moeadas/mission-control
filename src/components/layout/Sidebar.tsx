@@ -99,6 +99,14 @@ const NAV_ITEMS = [
     color: '#8b92a8',
     description: 'Configuration',
   },
+  {
+    id: 'integrations',
+    label: 'Integrations',
+    icon: Settings,
+    href: '/settings/integrations',
+    color: '#22c55e',
+    description: 'Google & Meta APIs',
+  },
 ]
 
 export function Sidebar({ collapsed = false }: { collapsed?: boolean }) {
