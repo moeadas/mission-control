@@ -1,17 +1,55 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "predictive-analytics",
   "name": "Predictive Analytics",
-  "description": "Forecasting future performance",
-  "category": "media",
+  "description": "Uses historical data, statistical modeling, and machine learning to forecast future advertising performance, audience behavior, and campaign outcomes.",
+  "category": "analytics",
+  "difficulty": "advanced",
+  "freedom": "high",
   "prompts": {
-    "en": "Forecast future performance."
+    "en": {
+      "trigger": "Use when forecasting campaign performance, predicting audience behavior, estimating budget needs, planning seasonal campaigns, or identifying which accounts are at risk of underperforming.",
+      "context": "You are a predictive analytics specialist with deep expertise in time-series forecasting, regression modeling, and machine learning for advertising and marketing contexts. You translate complex predictive models into actionable forecasts.",
+      "instructions": "## Predictive Analytics Workflow\n\n- [ ] 1. Define the prediction objective and horizon (what to predict, how far ahead)\n- [ ] 2. Gather and clean historical data (impressions, spend, conversions, etc.)\n- [ ] 3. Explore patterns: seasonality, trends, anomalies\n- [ ] 4. Select and build the appropriate model (linear regression, ARIMA, gradient boosting, etc.)\n- [ ] 5. Train the model and validate against holdout data\n- [ ] 6. Generate forecast with confidence intervals\n- [ ] 7. Present findings with business implications and caveats\n\n## Key Inputs\n- Prediction Target: {{prediction_target}} (ROAS, conversions, impressions, churn)\n- Time Horizon: {{time_horizon}} (next week, month, quarter)\n- Historical Data: {{historical_data}} (at minimum 12+ periods)\n- Features: {{features}} (spend, creative changes, seasonality, etc.)",
+      "output_template": "## Predictive Analytics Report\n\n### Objective\n[What we are predicting and why]\n\n### Model Used\n[Type of model and why it was selected]\n\n### Forecast Results\n| Period | Predicted Value | 80% CI | 95% CI |\n|--------|----------------|--------|--------|\n| | | | |\n\n### Key Drivers\n| Feature | Impact on Prediction |\n|---------|---------------------|\n| | |\n\n### Confidence Assessment\n- Model Accuracy (holdout MAPE/R²): \n- Data Quality: \n\n### Business Implications\n[What the forecast means for planning and budget allocation]\n\n### Caveats\n[Any limitations or assumptions in the model]"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "prediction_target", "type": "string", "required": true, "description": "What to forecast: ROAS, conversions, impressions, CPA, churn rate" },
+    { "name": "time_horizon", "type": "string", "required": true, "description": "Forecast period: next week, 30 days, next quarter" },
+    { "name": "historical_data", "type": "string", "required": true, "description": "Historical performance data (minimum 12 periods recommended)" },
+    { "name": "features", "type": "string", "required": false, "description": "Additional predictive features: spend, seasonality, creative changes, competitive activity" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define objective", "action": "Clarify prediction target and business question", "verify": "Objective is specific and measurable" },
+      { "step": 2, "name": "Prepare data", "action": "Gather and clean historical data, identify gaps and anomalies", "verify": "Data is complete and reliable" },
+      { "step": 3, "name": "Build model", "action": "Select and train appropriate predictive model", "verify": "Model validated on holdout data" },
+      { "step": 4, "name": "Generate forecast", "action": "Run model to produce predictions with confidence intervals", "verify": "Confidence intervals are realistic" },
+      { "step": 5, "name": "Present insights", "action": "Translate forecast into business recommendations", "verify": "Recommendations are actionable" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Prediction target: Monthly conversions. Time horizon: Next quarter. Historical data: Last 18 months of conversion data by channel.",
+      "output": "Model predicts 23,400 conversions next quarter (95% CI: 19,800-27,100). Primary driver is seasonal uplift in March (+18%). Budget increase of 15% recommended to capture incremental demand."
+    }
+  ],
+  "checklist": [
+    "Historical data covers sufficient time period (minimum 12 periods)",
+    "Data is cleaned and anomalies are documented",
+    "Model is validated against holdout data",
+    "Confidence intervals are reported",
+    "Key drivers and assumptions are documented",
+    "Forecast limitations are acknowledged"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["analytics-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["predictive", "forecasting", "machine-learning", "analytics"],
+    "lastUpdated": "2026-03-24"
   }
 }

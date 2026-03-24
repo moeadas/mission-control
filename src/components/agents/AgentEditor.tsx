@@ -5,6 +5,7 @@ import { useAgentsStore } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { SkillPicker } from '@/components/ui/SkillPicker'
 import { X, Save } from 'lucide-react'
+import type { AgencyDivision } from '@/lib/types'
 
 interface AgentEditorProps {
   agentId: string | null
@@ -33,7 +34,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
     skills: [] as string[],
     responsibilities: [] as string[],
     tools: [] as string[],
-    division: 'creative',
+    division: 'creative' as AgencyDivision,
     color: '#4f8ef7',
     systemPrompt: '',
     temperature: 0.7,
@@ -64,10 +65,12 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   if (!agent) return null
   
   const handleSave = () => {
+    if (!agentId) return
     updateAgent(agentId, {
       name: formData.name,
       role: formData.role,
       bio: formData.bio,
+      methodology: formData.methodology,
       skills: formData.skills,
       responsibilities: formData.responsibilities,
       tools: formData.tools,
@@ -172,7 +175,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               {DIVISIONS.map(div => (
                 <button
                   key={div}
-                  onClick={() => setFormData(prev => ({ ...prev, division: div, color: DIVISION_COLORS[div] }))}
+                  onClick={() => setFormData(prev => ({ ...prev, division: div as AgencyDivision, color: DIVISION_COLORS[div] }))}
                   className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
                   style={{
                     backgroundColor: formData.division === div ? DIVISION_COLORS[div] + '20' : '#1a1d26',

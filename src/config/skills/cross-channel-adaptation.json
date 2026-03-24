@@ -1,17 +1,105 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "cross-channel-adaptation",
   "name": "Cross-Channel Adaptation",
-  "description": "Adapting creative across different platforms and formats",
+  "description": "Adapts creative assets, copy, and messaging across different platforms and formats — ensuring creative remains effective and on-brand while being optimized for each channel's unique requirements and audience behavior.",
   "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Adapt creative across different platforms and formats."
+    "en": {
+      "trigger": "Use when adapting creative across channels — to transform a core creative idea into platform-native formats for LinkedIn, Instagram, Google, TikTok, email, and other channels while maintaining consistency.",
+      "context": "You are a creative strategist who adapts core creative concepts into platform-native executions across all channels, ensuring brand consistency while optimizing for each platform's unique requirements.",
+      "instructions": "## Cross-Channel Adaptation Workflow\n\n- [ ] 1. Define the core creative: The single strategic idea or message to adapt\n- [ ] 2. Map channel requirements: Format, length, aspect ratio, tone for each channel\n- [ ] 3. Create adaptations: Transform the core creative for each channel\n- [ ] 4. Maintain consistency: Ensure brand voice and key message are preserved\n- [ ] 5. Optimize for platform: Use native features, formats, and behaviors\n- [ ] 6. Review each adaptation: Does this work for its specific channel?\n- [ ] 7. Document all versions: Maintain a master file of all adaptations\n\n## Key Inputs\n- Core creative: {{core_creative}}\n- Channels: {{channels}}\n- Brand guidelines: {{brand_guidelines}}\n- Campaign message: {{campaign_message}}",
+      "output_template": "## Cross-Channel Adaptation: {{campaign_name}}\n\n### Core Creative\n**Strategic idea:**\n**Key message:**\n**Brand voice:**\n\n### Channel Adaptation Matrix\n| Channel | Format | Duration/Length | Aspect ratio | Platform nuance | CTA |\n|---------|--------|----------------|-------------|----------------|-----|\n| | | | | | |\n\n### Channel Adaptations\n\n#### LinkedIn\n**Headline:**\n**Body copy:**\n**Image/video concept:**\n**CTA:**\n\n#### Instagram Feed\n**Caption:**\n**Visual concept:**\n**Hashtags:**\n\n#### Google Display\n**Headline:**\n**Description:**\n**Display URL:**\n\n#### TikTok/Reels\n**Hook:**\n**Story arc:**\n**CTA overlay:**\n\n#### Email\n**Subject line:**\n**Preheader:**\n**Body:**\n**CTA:**\n\n### Consistency Check\n| Element | Preserved across channels? | Notes |\n|---------|--------------------------|-------|\n| Key message | ✅/❌ | |\n| Brand voice | ✅/❌ | |\n| Visual identity | ✅/❌ | |\n| Offer/creative hook | ✅/❌ | |\n\n### Master Creative File\n| Asset | Channel | Status | File reference |\n|-------|---------|--------|---------------|\n| | | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign name"
+    },
+    {
+      "name": "core_creative",
+      "type": "string",
+      "required": true,
+      "description": "Core creative concept or message"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Channels to adapt for"
+    },
+    {
+      "name": "brand_guidelines",
+      "type": "string",
+      "required": false,
+      "description": "Brand guidelines to follow"
+    },
+    {
+      "name": "campaign_message",
+      "type": "string",
+      "required": false,
+      "description": "Primary campaign message"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Core Definition",
+        "action": "Define the single strategic idea to adapt",
+        "verify": "Core creative is clear and ownable"
+      },
+      {
+        "step": 2,
+        "name": "Channel Requirements",
+        "action": "Map requirements for each channel",
+        "verify": "Requirements are accurate and current"
+      },
+      {
+        "step": 3,
+        "name": "Adaptation Creation",
+        "action": "Create adaptations for each channel",
+        "verify": "Adaptations are platform-native"
+      },
+      {
+        "step": 4,
+        "name": "Consistency Check",
+        "action": "Verify brand consistency across all adaptations",
+        "verify": "Core message is preserved everywhere"
+      },
+      {
+        "step": 5,
+        "name": "Documentation",
+        "action": "Maintain master file of all adaptations",
+        "verify": "All versions are documented"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Adapt TechStart's Q2 campaign creative across LinkedIn, Instagram, Google Display, TikTok, and email. Core message: 'Automate expense reports in minutes, not days.'",
+      "output": "Full cross-channel adaptation with platform-specific copy, formats, and visual concepts"
+    }
+  ],
+  "checklist": [
+    "Core creative concept is preserved across all adaptations",
+    "Brand voice is consistent in all executions",
+    "Each adaptation is optimized for its platform",
+    "Format, length, and aspect ratios are correct",
+    "All adaptations are documented in a master file"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["creative"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["creative", "cross-channel", "adaptation", "multi-platform"],
+    "lastUpdated": "2026-03-24"
   }
 }

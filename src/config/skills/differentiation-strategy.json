@@ -1,19 +1,112 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "differentiation-strategy",
   "name": "Differentiation Strategy",
-  "description": "Developing unique positioning that creates competitive advantage",
+  "description": "Develops a unique, ownable market position that creates competitive advantage — identifying what makes a brand meaningfully different and communicating it consistently across all touchpoints.",
   "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Develop unique positioning that creates competitive advantage for {{brand_name}}."
+    "en": {
+      "trigger": "Use when developing or refreshing a differentiation strategy — to identify what makes a brand meaningfully different from competitors and create a compelling, ownable competitive position.",
+      "context": "You are a brand strategist who helps brands find and own a distinctive competitive position that resonates with target audiences and is difficult for competitors to replicate.",
+      "instructions": "## Differentiation Strategy Workflow\n\n- [ ] 1. Understand category: How does the category currently differentiate?\n- [ ] 2. Analyze competitors: What positions do competitors already own?\n- [ ] 3. Self-analysis: What are the brand's genuine strengths and differentiators?\n- [ ] 4. Audience insight: What does the audience value most? What are they dissatisfied with?\n- [ ] 5. Find white space: Where is an ownable, meaningful position available?\n- [ ] 6. Build the position: Define what the brand is and isn't\n- [ ] 7. Proof points: What evidence supports the differentiation claim?\n- [ ] 8. Communicate: Integrate differentiation into all brand communications\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Category: {{category}}\n- Target audience: {{target_audience}}\n- Competitors: {{competitors}}",
+      "output_template": "## Differentiation Strategy: {{brand_name}}\n\n### Category Context\n**How differentiation currently works in {{category}}:**\n\n### Competitive Differentiation Map\n| Competitor | Position | Ownable? |\n|------------|---------|----------|\n| | | |\n\n### Self-Assessment\n**Genuine brand strengths:**\n\n**Authentic differentiators:**\n\n**Credible but harder to own:**\n\n### Audience Insights\n**What audiences value most:**\n\n**Current dissatisfaction:**\n\n**Unmet needs:**\n\n### White Space Analysis\n**Available, ownable territory:**\n\n**Why competitors can't easily copy it:**\n\n### Differentiation Statement\n**For** [target audience]\n**Who** [audience need]\n**{{brand_name}}** is the [category]\n**that** [key differentiator]\n**because** [reason to believe]\n\n### What We Are NOT\n[Clear boundaries — what we don't claim]\n\n### Proof Points\n| Claim | Evidence |\n|-------|----------|\n| | |\n\n### Communication Priorities\n| Channel | Differentiation message | How |\n|---------|----------------------|------|\n| | | |\n\n### Competitive Response Plan\n**If competitors try to copy this position:**\n\n**How we stay ahead:**"
+    }
   },
   "variables": [
-    "brand_name"
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being differentiated"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": true,
+      "description": "Competitive category"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary target audience"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Key competitors"
+    }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Category Analysis",
+        "action": "Understand how differentiation currently works",
+        "verify": "Category dynamics are clear"
+      },
+      {
+        "step": 2,
+        "name": "Competitive Mapping",
+        "action": "Map existing competitor positions",
+        "verify": "Owned positions are identified"
+      },
+      {
+        "step": 3,
+        "name": "Self-Analysis",
+        "action": "Identify genuine brand differentiators",
+        "verify": "Differentiators are authentic and credible"
+      },
+      {
+        "step": 4,
+        "name": "White Space Finding",
+        "action": "Find ownable differentiation territory",
+        "verify": "White space is real and defensible"
+      },
+      {
+        "step": 5,
+        "name": "Position Building",
+        "action": "Build the differentiation statement",
+        "verify": "Position is clear, ownable, and credible"
+      },
+      {
+        "step": 6,
+        "name": "Proof Points",
+        "action": "Gather evidence supporting the position",
+        "verify": "Claims can be substantiated"
+      },
+      {
+        "step": 7,
+        "name": "Integration",
+        "action": "Integrate into all brand communications",
+        "verify": "Differentiation is consistent across touchpoints"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Develop a differentiation strategy for TechStart in the B2B expense management space. Category: fintech. Audience: CFOs at mid-market companies in MENA. Competitors: SAP Concur, Moss, Pleo.",
+      "output": "Full differentiation strategy with white space analysis, positioning statement, and proof points"
+    }
+  ],
+  "checklist": [
+    "Competitive positions are accurately mapped",
+    "Differentiators are genuine and credible",
+    "White space is ownable and defensible",
+    "Differentiation is meaningful to the audience",
+    "Proof points support all claims",
+    "Position is consistent across all touchpoints"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova"],
+  "pipelines": ["strategy"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["strategy", "differentiation", "positioning", "competitive"],
+    "lastUpdated": "2026-03-24"
   }
 }

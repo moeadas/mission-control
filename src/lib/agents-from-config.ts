@@ -1,7 +1,7 @@
 // Builds default agents from individual JSON config files
 // This merges the JSON config with required store fields
 
-import { Agent } from './types'
+import { Agent, DeliverableType } from './types'
 import IrisConfig from '@/config/agents/iris.json'
 import SageConfig from '@/config/agents/sage.json'
 import PiperConfig from '@/config/agents/piper.json'
@@ -71,10 +71,12 @@ export function buildAgentsFromConfigs(): Agent[] {
     role: config.role,
     division: DIVISION_MAP[config.division] || 'creative',
     specialty: SPECIALTY_MAP[config.division] || 'creative',
+    unit: DIVISION_MAP[config.division] || 'creative',
     color: config.color,
+    accentColor: 'blue',
     bio: config.bio,
     status: (config.status as Agent['status']) || 'idle',
-    avatar: config.avatar,
+    avatar: config.avatar || 'bot-blue',
     provider: config.ai?.provider as Agent['provider'] || 'ollama',
     model: config.ai?.model as Agent['model'] || 'minimax-m2.7:cloud',
     temperature: config.ai?.temperature || 0.7,
@@ -84,14 +86,15 @@ export function buildAgentsFromConfigs(): Agent[] {
     responsibilities: config.responsibilities || [],
     systemPrompt: `You are ${config.name}, ${config.role}. ${config.methodology ? `Your methodology: ${config.methodology}.` : ''} ${config.bio}`,
     methodology: config.methodology || '',
+    primaryOutputs: [] as DeliverableType[],
     qualityCheckpoints: config.qualityCheckpoints || [],
     handoffs: config.handoffs || { receivesFrom: [], sendsTo: [] },
     // Store-specific fields (not in config)
     isAgent: true,
-    divisionRoom: config.division as Agent['divisionRoom'],
     currentMission: null,
     memory: [],
     unreadCount: 0,
+    position: { x: 200, y: 200, room: DIVISION_MAP[config.division] || 'creative' },
   }))
 }
 

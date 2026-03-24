@@ -1,17 +1,54 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "resource-optimization",
   "name": "Resource Optimization",
-  "description": "Maximizing efficient use of available resources",
+  "description": "Maximizes the efficient use of available resources — people, time, budget, and tools — to deliver the most value across advertising projects and campaigns.",
   "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Maximize efficient use of available resources."
+    "en": {
+      "trigger": "Use when balancing workload across team members, optimizing budget allocation across campaigns, or finding ways to do more with the same resources.",
+      "context": "You are a resource optimization specialist who helps agencies get the most from what they have. You balance competing demands, identify waste, and ensure resources are deployed where they create the most value.",
+      "instructions": "## Resource Optimization Workflow\n\n- [ ] 1. Audit current resource allocation vs. priorities\n- [ ] 2. Identify inefficiencies and low-value activities\n- [ ] 3. Find opportunities to reallocate or consolidate\n- [ ] 4. Model different allocation scenarios\n- [ ] 5. Implement optimized allocation\n- [ ] 6. Monitor and adjust\n\n## Key Inputs\n- Resources: {{resources}} (people, budget, time)\n- Priorities: {{priorities}} (what matters most)\n- Current Allocation: {{current_allocation}}\n- Optimization Goal: {{optimization_goal}}",
+      "output_template": "## Resource Optimization Analysis\n\n### Current State\n| Resource | Allocation | Value Delivered | Utilization |\n|----------|-----------|----------------|------------|\n| | | | |\n\n### Inefficiencies Identified\n| Issue | Resource | Impact | Root Cause |\n|------|---------|--------|-----------|\n| | | | |\n\n### Optimization Options\n| Option | Resource Saved | Impact | Feasibility |\n|--------|--------------|--------|------------|\n| | | | |\n\n### Recommended Allocation\n| Resource | Before | After | Change |\n|----------|--------|-------|--------|\n| | | | |\n\n### Expected Impact\n- [ ] ..."
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "resources", "type": "string", "required": true, "description": "Resources to optimize: people, budget, time, tools" },
+    { "name": "priorities", "type": "string", "required": true, "description": "Current priorities and what matters most" },
+    { "name": "current_allocation", "type": "string", "required": false, "description": "Current resource allocation across projects or tasks" },
+    { "name": "optimization_goal", "type": "string", "required": false, "description": "Goal: cost reduction, efficiency gain, better output quality" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Audit allocation", "action": "Map current resource use against priorities", "verify": "Map is accurate" },
+      { "step": 2, "name": "Find waste", "action": "Identify low-value activities and inefficiencies", "verify": "Inefficiencies are real" },
+      { "step": 3, "name": "Model options", "action": "Test different allocation scenarios", "verify": "Options are feasible" },
+      { "step": 4, "name": "Implement", "action": "Reallocate resources to optimized allocation", "verify": "Changes are communicated" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Resources: $50K monthly media budget, 3-person media team. Priorities: 2 active clients, 1 new business prospect. Current: budget split 70/30 between clients. Goal: better ROI across both accounts.",
+      "output": "Found $8K/month was going to underperforming placements in Client B account. Rebalanced: shifted $8K to top-performing placements in Client A and added $5K test for new CTV inventory. Result: overall ROAS improved from 3.2x to 4.1x."
+    }
+  ],
+  "checklist": [
+    "Current allocation is mapped accurately",
+    "Low-value activities are identified",
+    "Optimization options are feasible",
+    "Trade-offs are understood",
+    "Changes are communicated to affected team members",
+    "Results are monitored after implementation"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["project-management-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["resource-optimization", "efficiency", "budget-optimization", "project-management"],
+    "lastUpdated": "2026-03-24"
   }
 }

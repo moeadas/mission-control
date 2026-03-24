@@ -1,17 +1,113 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "workflow-optimization",
   "name": "Workflow Optimization",
-  "description": "Continuously improving work processes",
-  "category": "project-management",
+  "description": "Analyzes and optimizes existing workflows to eliminate bottlenecks, reduce waste, improve speed, and increase quality in repeatable agency processes.",
+  "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Continuously improve work processes."
+    "en": {
+      "trigger": "Use when optimizing an existing workflow — analyzing performance, identifying bottlenecks, and implementing improvements to make the process faster or better.",
+      "context": "You are a process improvement specialist who diagnoses workflow problems and implements targeted improvements that deliver measurable results.",
+      "instructions": "## Workflow Optimization Workflow\n\nOptimize an existing workflow:\n\n- [ ] 1. Baseline measurement: Establish current performance metrics\n- [ ] 2. Process mapping: Document the current workflow in detail\n- [ ] 3. Bottleneck identification: Find where delays and waste occur\n- [ ] 4. Root cause analysis: Understand why bottlenecks exist\n- [ ] 5. Improvement design: Develop solutions to remove bottlenecks\n- [ ] 6. Impact estimation: Estimate improvement in speed/quality\n- [ ] 7. Implementation: Roll out improvements\n- [ ] 8. Measurement: Track improvement vs. baseline\n\n## Key Inputs\n- Workflow: {{workflow_name}}\n- Problems observed: {{problems}}\n- Performance targets: {{targets}}",
+      "output_template": "## Workflow Optimization: {{workflow_name}}\n\n### Baseline Performance\n| Metric | Current | Target | Gap |\n|--------|---------|--------|-----|\n| Cycle time | | | |\n| Cost per unit | | | |\n| Error rate | | | |\n| Utilization | | | |\n| SLA compliance | | | |\n\n### Bottleneck Analysis\n\n| Bottleneck | Location | Impact | Root cause |\n|-----------|----------|--------|-----------|\n| | | | |\n\n### Current Process Map\n```\n[Step 1] → [Step 2] → [Step 3] → [Step 4] → [Step 5]\n             ↑           ↓\n          [Bottleneck] [Wait]\n```\n\n### Improvement Proposals\n\n#### Improvement 1: [Name]\n| Field | Details |\n|-------|---------|\n| Addresses bottleneck | |\n| Solution | |\n| Implementation effort | |\n| Estimated improvement | |\n| Risk | |\n\n#### Improvement 2: [Name]\n[Same structure]\n\n### Prioritized Improvements\n| Improvement | Impact | Effort | Priority |\n|-------------|--------|--------|----------|\n| | | | |\n\n### Optimized Process Map\n```\n[Step 1] → [Step 2] → [Step 3] → [Step 4] → [Step 5]\n                               ↑\n                        [Improved flow]\n```\n\n### Expected Results\n| Metric | Before | After | Improvement |\n|--------|--------|-------|------------|\n| | | | |\n\n### Implementation Plan\n| Improvement | Owner | Date | Validation |\n|------------|-------|------|-----------|\n| | | | |\n\n### Measurement Plan\n| Metric | How measured | Frequency |\n|--------|-------------|----------|\n| | | |\n\n### Lessons Learned\n1. "
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "workflow_name",
+      "type": "string",
+      "required": true,
+      "description": "Workflow to optimize"
+    },
+    {
+      "name": "problems",
+      "type": "string",
+      "required": true,
+      "description": "Problems or symptoms observed"
+    },
+    {
+      "name": "targets",
+      "type": "string",
+      "required": false,
+      "description": "Performance targets"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Baseline Measurement",
+        "action": "Establish current performance metrics",
+        "verify": "Baseline is documented"
+      },
+      {
+        "step": 2,
+        "name": "Process Mapping",
+        "action": "Document current workflow in detail",
+        "verify": "Process is understood"
+      },
+      {
+        "step": 3,
+        "name": "Bottleneck Analysis",
+        "action": "Find where delays and waste occur",
+        "verify": "Bottlenecks are identified"
+      },
+      {
+        "step": 4,
+        "name": "Improvement Design",
+        "action": "Develop solutions",
+        "verify": "Solutions address root causes"
+      },
+      {
+        "step": 5,
+        "name": "Implementation",
+        "action": "Roll out improvements",
+        "verify": "Changes are communicated and trained"
+      },
+      {
+        "step": 6,
+        "name": "Measurement",
+        "action": "Track improvement vs. baseline",
+        "verify": "Improvement is verified"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Optimize campaign launch workflow. Current cycle time: 15 days. Target: 10 days. Bottleneck appears to be creative review step causing 4-day delays.",
+      "output": "Full optimization analysis with bottleneck identification, improvement proposals, and expected 10-day cycle time outcome"
+    }
+  ],
+  "checklist": [
+    "Baseline metrics are established",
+    "Bottlenecks are identified with data",
+    "Root causes are understood",
+    "Improvements address root causes",
+    "Implementation plan is realistic",
+    "Measurement plan is in place",
+    "Improvement is verified vs. baseline"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "operations"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "operations",
+      "workflow",
+      "optimization",
+      "process-improvement"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

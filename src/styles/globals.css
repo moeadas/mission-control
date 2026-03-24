@@ -23,23 +23,21 @@
 }
 
 [data-theme='light'] {
-  --bg-base: #f4f6fb;
-  --bg-panel: #ffffff;
-  --bg-card: #f8faff;
-  --border: #d8dfef;
-  --border-glow: #bdcae3;
-  --text-primary: #182033;
-  --text-secondary: #536079;
-  --text-dim: #7b879d;
-  --accent-blue: #356df3;
-  --accent-purple: #7a56ef;
-  --accent-cyan: #00a884;
-  --accent-orange: #f26a2f;
-  --accent-pink: #e24d92;
-  --accent-yellow: #c99622;
-  --app-gradient: radial-gradient(circle at top left, rgba(53, 109, 243, 0.14), transparent 34%),
-    radial-gradient(circle at top right, rgba(122, 86, 239, 0.12), transparent 28%),
-    linear-gradient(180deg, #fbfcff, #eef2fa);
+  --bg-base: #ffffff;
+  --bg-panel: #f8fafc;
+  --bg-card: #ffffff;
+  --border: #c1c9d9;
+  --border-glow: #94a3b8;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-dim: #64748b;
+  --accent-blue: #2563eb;
+  --accent-purple: #7c3aed;
+  --accent-cyan: #0d9488;
+  --accent-orange: #ea580c;
+  --accent-pink: #db2777;
+  --accent-yellow: #ca8a04;
+  --app-gradient: linear-gradient(180deg, #f8fafc, #ffffff);
 }
 
 * {
@@ -193,4 +191,20 @@ textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Focus styles - accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better touch */
+button, a {
+  -webkit-tap-highlight-color: transparent;
 }

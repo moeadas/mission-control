@@ -1,19 +1,119 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "audience-persona-creation",
   "name": "Audience Persona Creation",
-  "description": "Developing detailed buyer personas with demographics, psychographics, and behaviors",
-  "category": "strategy",
+  "description": "Creates detailed marketing personas including demographics, psychographics, behaviors, pain points, and content preferences.",
+  "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Develop detailed buyer personas with demographics, psychographics, and behaviors for {{target_audience}}."
+    "en": {
+      "trigger": "Use when creating marketing personas, target audience profiles, or buyer personas for campaign planning and content strategy.",
+      "context": "You are a consumer research specialist with expertise in audience segmentation, persona development, and consumer psychology.",
+      "instructions": "## Persona Creation Workflow\n\nBuild detailed audience personas:\n\n- [ ] 1. Research synthesis: Draw from {{research_sources}} to understand audience\n- [ ] 2. Demographic definition: Define demographics for {{persona_name}}\n- [ ] 3. Psychographic mapping: Identify values, attitudes, and lifestyle\n- [ ] 4. Behavioral analysis: Map media consumption, purchasing patterns\n- [ ] 5. Pain point identification: Define key challenges and motivations\n- [ ] 6. Journey mapping: Document awareness-to-loyalty journey\n\n## Inputs\n- Persona name: {{persona_name}}\n- Industry: {{industry}}\n- Research sources: {{research_sources}}",
+      "output_template": "## Audience Persona: {{persona_name}}\n\n### Persona Overview\n| Attribute | Details |\n|-----------|---------|\n| Name | {{persona_name}} |\n| Age range | |\n| Location | |\n| Income | |\n| Industry | {{industry}} |\n| Role | |\n\n### Demographics\n- **Education:**\n- **Family status:**\n- **Location type:**\n\n### Psychographics\n- **Values:**\n- **Attitudes:**\n- **Interests:**\n- **Lifestyle:**\n\n### Professional Context\n- **Job title:**\n- **Company size:**\n- **Key responsibilities:**\n- **Pain points:**\n\n### Media Consumption\n| Channel | Platform | Frequency |\n|---------|----------|-----------|\n| Social | | |\n| News | | |\n| Industry | | |\n\n### Purchasing Behavior\n- **Budget authority:**\n- **Purchase triggers:**\n- **Decision timeline:**\n\n### Content Preferences\n- **Format:**\n- **Tone:**\n- **Key messages:**"
+    }
   },
   "variables": [
-    "target_audience"
+    {
+      "name": "persona_name",
+      "type": "string",
+      "required": true,
+      "description": "Persona name or archetype"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Industry or market context"
+    },
+    {
+      "name": "research_sources",
+      "type": "string",
+      "required": true,
+      "description": "Data sources for persona development"
+    },
+    {
+      "name": "age_range",
+      "type": "string",
+      "required": false,
+      "description": "Target age range"
+    },
+    {
+      "name": "primary_channel",
+      "type": "string",
+      "required": false,
+      "description": "Primary discovery channel"
+    }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Research Synthesis",
+        "action": "Gather and analyze existing audience data",
+        "verify": "Research is current and relevant"
+      },
+      {
+        "step": 2,
+        "name": "Demographic Definition",
+        "action": "Define core demographic characteristics",
+        "verify": "Demographics are specific and actionable"
+      },
+      {
+        "step": 3,
+        "name": "Psychographic Mapping",
+        "action": "Identify values, attitudes, and lifestyle",
+        "verify": "Psychographics feel human and real"
+      },
+      {
+        "step": 4,
+        "name": "Behavioral Analysis",
+        "action": "Map media and purchasing behaviors",
+        "verify": "Behaviors are observable and measurable"
+      },
+      {
+        "step": 5,
+        "name": "Pain Point Identification",
+        "action": "Define key challenges and motivations",
+        "verify": "Pain points are specific to role/context"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Create output for TechStart - a B2B SaaS company in fintech, targeting CFOs and Finance Directors in UAE",
+      "output": "Full deliverable with all sections filled with B2B fintech context, data-driven insights, and actionable recommendations"
+    }
+  ],
+  "checklist": [
+    "Persona is based on research, not assumptions",
+    "Demographics are specific and verifiable",
+    "Psychographics feel like a real person",
+    "Behaviors are observable actions",
+    "Pain points are tied to business context",
+    "Persona is useful for content and campaign planning"
+  ],
+  "tools": [
+    "spreadsheet",
+    "presentation"
+  ],
+  "agents": [
+    "atlas",
+    "echo"
+  ],
+  "pipelines": [
+    "content-calendar"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "personas",
+      "audience",
+      "targeting",
+      "research"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

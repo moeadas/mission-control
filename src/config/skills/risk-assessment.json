@@ -1,17 +1,53 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "risk-assessment",
   "name": "Risk Assessment",
-  "description": "Identifying and evaluating project risks",
+  "description": "Identifies and evaluates project risks for advertising campaigns, assessing likelihood, impact, and mitigation strategies to keep projects on track.",
   "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Identify and evaluate project risks."
+    "en": {
+      "trigger": "Use when planning a new project or campaign, reviewing project health, preparing for a client meeting, or managing a project that is showing warning signs.",
+      "context": "You are a risk assessment specialist who identifies threats before they become crises. You evaluate risks systematically and develop mitigation plans that let teams act proactively rather than reactively.",
+      "instructions": "## Risk Assessment Workflow\n\n- [ ] 1. Identify all potential risks across scope, timeline, budget, resources, and external factors\n- [ ] 2. Assess likelihood and impact for each risk\n- [ ] 3. Calculate risk priority (likelihood x impact)\n- [ ] 4. Develop mitigation strategies for high-priority risks\n- [ ] 5. Assign risk owners and monitoring triggers\n- [ ] 6. Review and update throughout the project\n\n## Key Inputs\n- Project/Campaign: {{project_campaign}}\n- Known Risks: {{known_risks}}\n- Constraints: {{constraints}}",
+      "output_template": "## Risk Assessment\n\n### Risk Register\n| Risk | Category | Likelihood | Impact | Priority | Owner | Mitigation |\n|------|---------|-----------|--------|----------|-------|------------|\n| | | | | | | |\n\n### Top 3 Priority Risks\n| Risk | Mitigation Plan | Contingency |\n|------|----------------|-------------|\n| | | |\n\n### Monitoring Triggers\n| Risk | Trigger | Review Frequency |\n|------|---------|-----------------|\n| | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "project_campaign", "type": "string", "required": true, "description": "Name of the project or campaign" },
+    { "name": "known_risks", "type": "string", "required": false, "description": "Any known or suspected risks" },
+    { "name": "constraints", "type": "string", "required": false, "description": "Constraints that might introduce risk: budget, timeline, resources" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Identify risks", "action": "Brainstorm all potential risks", "verify": "Risk list is comprehensive" },
+      { "step": 2, "name": "Assess", "action": "Rate likelihood and impact for each risk", "verify": "Ratings are consistent" },
+      { "step": 3, "name": "Plan mitigation", "action": "Develop mitigation for high-priority risks", "verify": "Plans are actionable" },
+      { "step": 4, "name": "Assign owners", "action": "Assign risk owners and monitoring triggers", "verify": "Monitoring is in place" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Project: Multi-channel campaign launch. Risks: creative not approved by launch date, media rates increase, key team member goes on leave, competitor launches similar campaign.",
+      "output": "Top risk: Creative not approved — 40% likelihood, high impact. Mitigation: build 1-week buffer into creative timeline, require weekly sign-offs. Contingency: scale paid media in phases rather than all-at-once launch."
+    }
+  ],
+  "checklist": [
+    "All major risk categories are covered",
+    "Likelihood and impact are assessed consistently",
+    "High-priority risks have mitigation plans",
+    "Risk owners are assigned",
+    "Monitoring triggers are defined",
+    "Risk register is reviewed regularly"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["project-management-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["risk-assessment", "project-management", "risk-register", "planning"],
+    "lastUpdated": "2026-03-24"
   }
 }

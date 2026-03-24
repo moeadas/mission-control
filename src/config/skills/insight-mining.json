@@ -1,19 +1,57 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "insight-mining",
   "name": "Insight Mining",
-  "description": "Extracting actionable insights from data and research",
+  "description": "Extracting golden nuggets of actionable insight from mountains of data, research, and market noise. Transform raw information into strategic recommendations that drive business decisions.",
   "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Extract actionable insights from data and research for {{brand_name}}."
+    "en": {
+      "trigger": "Use when synthesizing research data, finding patterns in research reports, extracting actionable insights from studies, or translating complex data into strategic recommendations for {{brand_name}}.",
+      "context": "You are an insight mining specialist who excels at pattern recognition, connecting disparate data points, and translating findings into strategic implications. You separate noise from signal.",
+      "instructions": "## Insight Mining Workflow\n\n- [ ] 1. Collect and organize all data sources\n- [ ] 2. Look for patterns, anomalies, and contradictions\n- [ ] 3. Connect findings to business implications\n- [ ] 4. Validate insights against evidence\n- [ ] 5. Prioritize by impact and actionability\n- [ ] 6. Present with clear strategic recommendations\n\n## Key Inputs\n- Data Sources: {{sources}}\n- Research Question: {{question}}\n- Brand Context: {{brand_name}}\n- Audience: {{audience}}\n- Business Objective: {{objective}}",
+      "output_template": "## Insight Mining Results\n\n### Key Insight 1: [Title]\n**Insight Statement:**\n\n**Evidence:**\n| Source | Finding |\n|--------|--------|\n| | |\n\n**Business Implication:**\n\n**Recommended Action:**\n\n---\n\n### Key Insight 2: [Title]\n**Insight Statement:**\n\n**Evidence:**\n| Source | Finding |\n|--------|--------|\n| | |\n\n**Business Implication:**\n\n**Recommended Action:**\n\n---\n\n### Cross-Cutting Theme\n| Theme | Supporting Evidence |\n|-------|-------------------|\n| | |\n\n### Insight Prioritization\n| Insight | Impact | Actionability | Priority |\n|---------|--------|---------------|----------|\n| | | | |\n\n### Strategic Recommendations\n| # | Recommendation | Owner | Timeline |\n|---|----------------|-------|----------|\n| 1 | | | |\n| 2 | | | |\n| 3 | | | |"
+    }
   },
   "variables": [
-    "brand_name"
+    { "name": "sources", "type": "string", "required": true, "description": "Data and research sources to analyze" },
+    { "name": "question", "type": "string", "required": true, "description": "Primary research question" },
+    { "name": "brand_name", "type": "string", "required": true, "description": "Brand or client context" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience for insights" },
+    { "name": "objective", "type": "string", "required": false, "description": "Business objective driving this analysis" }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Collect data", "action": "Gather and organize all sources", "verify": "Data is organized by theme" },
+      { "step": 2, "name": "Find patterns", "action": "Look for recurring themes and anomalies", "verify": "Patterns identified" },
+      { "step": 3, "name": "Form insights", "action": "Craft clear insight statements", "verify": "Insights are specific and actionable" },
+      { "step": 4, "name": "Validate", "action": "Cross-check against multiple sources", "verify": "Insights are well-supported" },
+      { "step": 5, "name": "Prioritize", "action": "Rank by impact and actionability", "verify": "Top insights clearly identified" },
+      { "step": 6, "name": "Present", "action": "Package insights with recommendations", "verify": "Insights are ready for stakeholders" }
+    ]
+  },
+  "examples": [
+    { "input": "Mine insights from 12 consumer research reports to identify opportunities for a challenger snack brand.", "output": "Prioritized insights with supporting evidence and strategic recommendations." },
+    { "input": "Extract actionable insights from social listening data, NPS surveys, and sales team feedback for a SaaS company.", "output": "Cross-functional insight synthesis with prioritized action plan." }
+  ],
+  "checklist": [
+    "All data sources reviewed",
+    "Patterns identified across sources",
+    "Contradictions noted and explained",
+    "Insights are specific and actionable",
+    "Evidence cited for each insight",
+    "Implications clearly stated",
+    "Prioritization is logical",
+    "Recommendations are strategic"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["insights", "research", "synthesis", "strategy", "data"],
+    "lastUpdated": "2026-03-24"
   }
 }

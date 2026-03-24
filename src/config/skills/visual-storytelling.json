@@ -1,17 +1,57 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "visual-storytelling",
   "name": "Visual Storytelling",
-  "description": "Using imagery to communicate narratives and emotions",
+  "description": "Using imagery and visual elements to communicate narratives, evoke emotions, and build brand connections. Make audiences feel something — great visuals tell stories words can't.",
   "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Use imagery to communicate narratives and emotions."
+    "en": {
+      "trigger": "Use when developing visual narratives for campaigns, selecting imagery for brand materials, creating mood boards, or directing visual content creation that tells a cohesive story.",
+      "context": "You are a visual storytelling specialist who understands how images communicate meaning and emotion. You create visual narratives that reinforce messaging and create lasting brand impressions.",
+      "instructions": "## Visual Storytelling Workflow\n\n- [ ] 1. Define the narrative and emotional goal\n- [ ] 2. Identify key visual themes and moments\n- [ ] 3. Create mood board or visual direction\n- [ ] 4. Develop visual treatment guidelines\n- [ ] 5. Apply consistently across assets\n- [ ] 6. Evaluate emotional impact\n\n## Key Inputs\n- Story/Narrative: {{story}}\n- Brand: {{brand}}\n- Target Audience: {{audience}}\n- Emotional Goal: {{emotion}}\n- Platform/Context: {{context}}",
+      "output_template": "## Visual Storytelling\n\n### Narrative Brief\n| Element | Details |\n|---------|---------|\n| Story to Tell | |\n| Brand | |\n| Audience | |\n| Emotional Goal | |\n| Platform/Use | |\n\n### Story Arc\n| Stage | Visual Treatment |\n|-------|----------------|\n| Hook | |\n| Conflict | |\n| Resolution | |\n| Call-to-Action | |\n\n### Visual Theme\n| Element | Direction |\n|---------|----------|\n| Color Mood | |\n| Lighting Style | |\n| Composition | |\n| Subject Treatment | |\n| Style/Genre | |\n\n### Mood Board\n| Element | Reference |\n|---------|----------|\n| Color Palette | |\n| Imagery Style | |\n| Typography Feel | |\n| Visual Motifs | |\n\n### Key Visual Moments\n| Moment | Description | Visual Elements |\n|--------|-------------|-----------------|\n| | | |\n\n### Technical Guidelines\n| Element | Specification |\n|---------|--------------|\n| Aspect Ratios | |\n| File Formats | |\n| Color Mode | |\n| Quality Standards | |\n\n### Do's and Don'ts\n| Do | Don't |\n|----|-------|\n| | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "story", "type": "string", "required": true, "description": "The story or narrative to tell" },
+    { "name": "brand", "type": "string", "required": true, "description": "Brand context" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience" },
+    { "name": "emotion", "type": "string", "required": false, "description": "Emotional response to evoke" },
+    { "name": "context", "type": "string", "required": false, "description": "Where visuals will be used" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define narrative", "action": "Clarify story and emotional goal", "verify": "Story is clear" },
+      { "step": 2, "name": "Map story arc", "action": "Plan visual journey", "verify": "Arc is compelling" },
+      { "step": 3, "name": "Create direction", "action": "Develop mood board and style", "verify": "Direction is cohesive" },
+      { "step": 4, "name": "Set guidelines", "action": "Document visual treatment", "verify": "Guidelines are clear" },
+      { "step": 5, "name": "Apply consistently", "action": "Use narrative across assets", "verify": "Consistent storytelling" },
+      { "step": 6, "name": "Evaluate", "action": "Assess emotional impact", "verify": "Story resonates" }
+    ]
+  },
+  "examples": [
+    { "input": "Create visual storytelling direction for a brand campaign about overcoming obstacles — emotional, aspirational tone.", "output": "Visual narrative with mood board, story arc, and technical guidelines." },
+    { "input": "Develop a visual story for a product launch that creates anticipation and excitement.", "output": "Visual storytelling framework with key moments and emotional progression." }
+  ],
+  "checklist": [
+    "Narrative clearly defined",
+    "Emotional goal identified",
+    "Story arc planned",
+    "Mood board created",
+    "Visual themes established",
+    "Technical guidelines documented",
+    "Consistency maintained",
+    "Emotional impact tested"
+  ],
+  "tools": ["document"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["visual-storytelling", "imagery", "mood-board", "creative-direction", "campaign"],
+    "lastUpdated": "2026-03-24"
   }
 }

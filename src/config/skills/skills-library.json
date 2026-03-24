@@ -1,4 +1,52 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "skills-library",
+  "name": "Skills Library",
+  "description": "The complete agency skills library — organized by discipline, this master index maps every available skill to its category. Use this as the authoritative reference for the full spectrum of agency capabilities from strategy through operations.",
+  "category": "operations",
+  "difficulty": "beginner",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when exploring available skills, understanding agency capabilities by category, or navigating the full skill inventory to find the right capability for any task.",
+      "context": "You are browsing the complete agency skills library. This index organizes all available skills by discipline area so you can find the right skill for any challenge — from creative copywriting to media strategy to client management.",
+      "instructions": "## Skills Library Navigation\n\n- [ ] 1. Identify the discipline category needed\n- [ ] 2. Browse skills within that category\n- [ ] 3. Select the most appropriate skill\n- [ ] 4. Apply the skill to the task at hand\n\n## Available Categories\n\n| Category ID | Category Name | Skill Count |\n|------------|--------------|-------------|\n| strategy | Strategy & Planning | 16 |\n| creative | Creative & Copy | 32 |\n| project-management | Project & Traffic Management | 30 |\n| media | Media & Advertising | 28 |\n| research | Research & Insights | 17 |\n| client-services | Client Services & Account Management | 15 |\n| operations | Operations & Productivity | 6 |\n\n## Key Inputs\n- Task/Challenge: {{task}}\n- Required Discipline: {{discipline}}\n- Difficulty Level: {{difficulty}}\n- Agency Context: {{context}}",
+      "output_template": "## Skills Library Reference\n\n### Category: [Category Name]\n\n| Skill ID | Skill Name | Difficulty | Description |\n|----------|-----------|-----------|-------------|\n| | | | |\n\n### Skill Details\n| Field | Value |\n|-------|-------|\n| ID | |\n| Name | |\n| Category | |\n| Difficulty | |\n| Freedom | |\n| Description | |\n\n### Related Skills\n| Related Skill | Relationship |\n|--------------|-------------|\n| | |"
+    }
+  },
+  "variables": [
+    { "name": "task", "type": "string", "required": false, "description": "The task or challenge to find skills for" },
+    { "name": "discipline", "type": "string", "required": false, "description": "Preferred discipline category" },
+    { "name": "difficulty", "type": "string", "required": false, "description": "Preferred difficulty level" },
+    { "name": "context", "type": "string", "required": false, "description": "Agency context for the skill" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Identify category", "action": "Select the relevant discipline category", "verify": "Category confirmed" },
+      { "step": 2, "name": "Find skill", "action": "Locate the specific skill within category", "verify": "Skill identified" },
+      { "step": 3, "name": "Apply skill", "action": "Use the selected skill for the task", "verify": "Skill applied correctly" }
+    ]
+  },
+  "examples": [
+    { "input": "Show me all creative skills available.", "output": "Complete listing of all 32 creative skills with IDs and descriptions." },
+    { "input": "Find a skill for writing a client presentation.", "output": "Presentation Design skill identified from the client services category." }
+  ],
+  "checklist": [
+    "Category identified correctly",
+    "Skill ID is accurate",
+    "Description matches skill purpose",
+    "Category assignment is correct",
+    "Skill count by category verified"
+  ],
+  "tools": ["document"],
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["skills-library", "index", "capabilities", "reference", "agency"],
+    "lastUpdated": "2026-03-24"
+  },
   "skillCategories": [
     {
       "id": "strategy",

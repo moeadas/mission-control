@@ -1,17 +1,58 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "market-research",
   "name": "Market Research",
-  "description": "Conducting systematic market investigations",
+  "description": "Conducting systematic market investigations that reveal customer needs, market opportunities, and competitive dynamics. From survey design to focus group moderation — research that drives confident decisions.",
   "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Conduct systematic market investigations."
+    "en": {
+      "trigger": "Use when conducting market research for new products, understanding customer needs, exploring market opportunities, or validating business assumptions with real data.",
+      "context": "You are a market research specialist who designs rigorous studies, selects appropriate methodologies, and translates findings into actionable insights. You balance depth with speed.",
+      "instructions": "## Market Research Workflow\n\n- [ ] 1. Define research objectives and questions\n- [ ] 2. Select appropriate research methodology\n- [ ] 3. Design research instruments (surveys, discussion guides)\n- [ ] 4. Recruit participants or collect secondary data\n- [ ] 5. Analyze data and synthesize findings\n- [ ] 6. Present insights with strategic recommendations\n\n## Key Inputs\n- Research Objective: {{objective}}\n- Target Market: {{market}}\n- Research Type: {{type}}\n- Budget: {{budget}}\n- Timeline: {{timeline}}",
+      "output_template": "## Market Research Plan\n\n### Research Objectives\n| Objective | Key Question |\n|-----------|-------------|\n| | |\n\n### Methodology\n| Element | Selection |\n|---------|-----------|\n| Primary/Secondary | |\n| Qualitative/Quantitative | |\n| Method | |\n| Sample Size | |\n\n### Research Instruments\n| Instrument | Purpose | Status |\n|----------|---------|--------|\n| Survey | | ☐ Ready |\n| Discussion Guide | | ☐ Ready |\n\n### Timeline\n| Phase | Start | End |\n|-------|-------|------|\n| Design | | |\n| Fieldwork | | |\n| Analysis | | |\n| Reporting | | |\n\n### Findings Summary\n**Key Insight 1:**\n\n**Key Insight 2:**\n\n**Key Insight 3:**\n\n### Strategic Recommendations\n| Recommendation | Supporting Evidence |\n|--------------|-------------------|\n| | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "objective", "type": "string", "required": true, "description": "Research objectives and questions" },
+    { "name": "market", "type": "string", "required": true, "description": "Target market or segment" },
+    { "name": "type", "type": "string", "required": false, "description": "Research type: qualitative, quantitative, mixed" },
+    { "name": "budget", "type": "string", "required": false, "description": "Research budget" },
+    { "name": "timeline", "type": "string", "required": false, "description": "Research timeline" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define objectives", "action": "Clarify research questions and success criteria", "verify": "Objectives are specific and measurable" },
+      { "step": 2, "name": "Select methodology", "action": "Choose appropriate research approach", "verify": "Method fits objectives and constraints" },
+      { "step": 3, "name": "Design instruments", "action": "Create surveys, guides, or analysis frameworks", "verify": "Instruments are rigorous" },
+      { "step": 4, "name": "Execute", "action": "Collect data through appropriate channels", "verify": "Data collection is complete" },
+      { "step": 5, "name": "Analyze", "action": "Synthesize findings into insights", "verify": "Analysis is thorough" },
+      { "step": 6, "name": "Present", "action": "Package insights with recommendations", "verify": "Insights are actionable" }
+    ]
+  },
+  "examples": [
+    { "input": "Design a market research study to understand willingness to pay for a premium sustainable fashion brand.", "output": "Complete research plan with methodology, sampling, and analysis approach." },
+    { "input": "Conduct exploratory research on how small businesses manage their marketing budgets.", "output": "Research findings with key themes and strategic implications." }
+  ],
+  "checklist": [
+    "Research objectives clearly defined",
+    "Appropriate methodology selected",
+    "Sample size adequate for objectives",
+    "Instruments are unbiased",
+    "Data collection quality-controlled",
+    "Analysis is thorough and rigorous",
+    "Insights are statistically valid",
+    "Recommendations are actionable",
+    "Limitations acknowledged"
+  ],
+  "tools": ["document", "spreadsheet", "survey-platform"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["market-research", "consumer-insights", "survey", "focus-group", "quantitative"],
+    "lastUpdated": "2026-03-24"
   }
 }

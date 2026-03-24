@@ -72,6 +72,7 @@ export async function updateGoogleSheet(sheetId: string, range: string, values: 
 
 // Google Ads - Get campaign data
 export async function getGoogleAdsData(customerId: string, auth: any) {
+  // @ts-ignore - Google Ads API library typing issue
   const ads = google.ads({ version: 'v1', auth })
   
   // Get campaigns

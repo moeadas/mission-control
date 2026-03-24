@@ -1,53 +1,67 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TopBar } from '@/components/layout/TopBar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastContainer } from '@/components/ui/Toast'
 import { IrisChat } from '@/components/agents/IrisChat'
 import { useAgentsStore } from '@/lib/agents-store'
-import { Sparkles } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
 
 export function ClientShell({ children }: { children: React.ReactNode }) {
   const openIris = useAgentsStore((state) => state.openIris)
   const isIrisOpen = useAgentsStore((state) => state.isIrisOpen)
   const themeMode = useAgentsStore((state) => state.agencySettings.themeMode)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     document.documentElement.dataset.theme = themeMode
   }, [themeMode])
 
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false)
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
-    <div className="flex flex-col h-screen bg-base overflow-hidden">
-      <TopBar />
+    <div className="flex flex-col h-screen bg-[var(--bg-base)] overflow-hidden">
+      <TopBar onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
+
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-hidden flex flex-col relative">
+        <Sidebar
+          mobileOpen={mobileMenuOpen}
+          onMobileClose={() => setMobileMenuOpen(false)}
+        />
+        <main
+          id="main-content"
+          className="flex-1 overflow-y-auto"
+          tabIndex={-1}
+        >
           {children}
         </main>
       </div>
 
-      {/* Floating Iris button */}
+      {/* Iris Chat FAB */}
       <button
         onClick={openIris}
         className={`
-          fixed bottom-6 right-6 z-30
-          flex items-center gap-3 px-4 py-3 rounded-2xl
-          text-white font-medium text-sm
-          shadow-lg transition-all duration-200
-          hover:scale-105 hover:shadow-xl active:scale-95
-          group
+          fixed bottom-6 right-6 z-40
+          flex items-center justify-center w-14 h-14 rounded-full
+          bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)]
+          text-white shadow-lg
+          transition-all duration-200
+          hover:scale-105 hover:shadow-xl
+          active:scale-95
         `}
-        style={{
-          background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))',
-          boxShadow: '0 0 24px rgba(122,86,239,0.35), 0 4px 20px rgba(0,0,0,0.18)',
-        }}
+        aria-label={isIrisOpen ? 'Close Iris chat' : 'Open Iris chat'}
       >
-        <Sparkles size={16} className="text-white" />
-        <span>Chat with Iris</span>
-        {!isIrisOpen && (
-          <span className="ml-1 w-2 h-2 rounded-full bg-white/60 animate-pulse" />
-        )}
+        <MessageCircle size={24} />
       </button>
 
       <IrisChat />

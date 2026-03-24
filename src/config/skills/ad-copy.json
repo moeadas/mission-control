@@ -1,17 +1,130 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "ad-copy",
   "name": "Ad Copywriting",
-  "description": "Creating advertising copy for various formats",
+  "description": "Creates compelling advertising copy for digital platforms. Covers platform-native formats, A/B variants, and compliance requirements.",
   "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Create advertising copy for various formats."
+    "en": {
+      "trigger": "Use when creating advertising copy for digital ads, social media ads, display ads, or any paid advertising formats.",
+      "context": "You are a creative copywriter specializing in digital advertising with expertise in conversion-focused messaging and platform-native ad formats.",
+      "instructions": "## Ad Copywriting Workflow\n\nCreate compelling advertising copy:\n\n- [ ] 1. Platform adaptation: Adapt copy for {{platform}} format and character limits\n- [ ] 2. Audience targeting: Write to {{target_audience}} pain points and desires\n- [ ] 3. Offer framing: Position {{offer}} with clear value proposition\n- [ ] 4. CTA development: Create compelling call-to-action ({{cta_text}})\n- [ ] 5. A/B variants: Produce multiple headline and body variations\n- [ ] 6. Compliance check: Ensure copy meets platform policies\n\n## Key Inputs\n- Platform: {{platform}}\n- Audience: {{target_audience}}\n- Offer: {{offer}}\n- CTA: {{cta_text}}",
+      "output_template": "## Ad Copy: {{client_name}} - {{campaign_name}}\n\n### Campaign Overview\n| Element | Details |\n|---------|---------|\n| Platform | {{platform}} |\n| Audience | {{target_audience}} |\n| Offer | {{offer}} |\n| CTA | {{cta_text}} |\n\n### Primary Ad Set\n\n**Headline 1** (max {{headline_limit}} chars):\n[Headline text]\n\n**Headline 2** (max {{headline_limit}} chars):\n[Headline text]\n\n**Description** (max {{desc_limit}} chars):\n[Body copy]\n\n**CTA Button:** {{cta_text}}\n\n### Variant Set\n| Variant | Headline | Description | CTA |\n|---------|----------|-------------|-----|\n| A | | | |\n| B | | | |\n| C | | | |\n\n### Compliance Notes\n- [ ] No false urgency\n- [ ] Pricing claims verified\n- [ ] Disclaimers included where required"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "platform",
+      "type": "string",
+      "required": true,
+      "description": "Ad platform (Google, Meta, LinkedIn, TikTok, etc.)"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience description"
+    },
+    {
+      "name": "offer",
+      "type": "string",
+      "required": true,
+      "description": "Product or service being advertised"
+    },
+    {
+      "name": "cta_text",
+      "type": "string",
+      "required": true,
+      "description": "Desired call-to-action text"
+    },
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand or client name"
+    },
+    {
+      "name": "headline_limit",
+      "type": "string",
+      "required": false,
+      "description": "Max headline characters"
+    },
+    {
+      "name": "desc_limit",
+      "type": "string",
+      "required": false,
+      "description": "Max description characters"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Platform Research",
+        "action": "Understand platform specs and best practices",
+        "verify": "Format requirements confirmed"
+      },
+      {
+        "step": 2,
+        "name": "Audience Insight",
+        "action": "Identify audience pain points and desires",
+        "verify": "Messaging resonates with target"
+      },
+      {
+        "step": 3,
+        "name": "Offer Positioning",
+        "action": "Frame offer with clear value proposition",
+        "verify": "Unique value is clear"
+      },
+      {
+        "step": 4,
+        "name": "CTA Development",
+        "action": "Create compelling action-oriented CTAs",
+        "verify": "CTA drives specific action"
+      },
+      {
+        "step": 5,
+        "name": "Variant Creation",
+        "action": "Produce A/B test variations",
+        "verify": "Variants test meaningful differences"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Create output for TechStart - a B2B SaaS company in fintech, targeting CFOs and Finance Directors in UAE",
+      "output": "Full deliverable with all sections filled with B2B fintech context, data-driven insights, and actionable recommendations"
+    }
+  ],
+  "checklist": [
+    "Copy matches platform format and character limits",
+    "Headlines grab attention in first 3 words",
+    "Value proposition is clear and specific",
+    "CTA is action-oriented and specific",
+    "At least 2 A/B variants created",
+    "Platform compliance requirements met"
+  ],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "finn",
+    "echo"
+  ],
+  "pipelines": [
+    "ad-creative"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "advertising",
+      "copy",
+      "digital-ads",
+      "creative"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

@@ -1,17 +1,55 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "landing-page-copy",
   "name": "Landing Page Copy",
-  "description": "Writing high-converting landing page content",
-  "category": "creative",
+  "description": "Writes high-converting landing page content that guides visitors through a narrative from problem to solution, building trust and driving action.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Write high-converting landing page content."
+    "en": {
+      "trigger": "Use when writing landing page content for product launches, promotions, lead generation, or any dedicated conversion-focused page.",
+      "context": "You are a landing page copywriting specialist who creates pages that convert. You understand the psychology of landing pages and how to structure content that moves visitors from curiosity to conversion.",
+      "instructions": "## Landing Page Copy Workflow\n\n- [ ] 1. Define the offer, goal, and target audience\n- [ ] 2. Map the page structure: above fold → body → CTA\n- [ ] 3. Write above fold: headline, subheadline, visual cue\n- [ ] 4. Write body: problem → solution → features → proof → CTA\n- [ ] 5. Optimize form fields if applicable\n- [ ] 6. Test variations of headlines and CTAs\n\n## Key Inputs\n- Offer: {{offer}}\n- Goal: {{goal}} (sign-up, purchase, lead capture)\n- Audience: {{audience}}\n- Key Benefits: {{key_benefits}}\n- Proof Points: {{proof_points}}",
+      "output_template": "## Landing Page Copy\n\n### Above Fold\n**Headline:**\n**Subheadline:**\n**CTA Button:**\n\n### Body Sections\n| Section | Copy |\n|---------|------|\n| Problem | |\n| Solution | |\n| Features | |\n| Proof | |\n| Final CTA | |\n\n### Form Fields (if applicable)\n- [ ] Field 1\n- [ ] Field 2\n\n### Conversion Tips Applied\n- [ ] Urgency element: \n- [ ] Risk reversal: "
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "offer", "type": "string", "required": true, "description": "Product, service, or promotion on the landing page" },
+    { "name": "goal", "type": "string", "required": true, "description": "Primary conversion goal: sign-up, purchase, lead capture, download" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience and their primary pain point" },
+    { "name": "key_benefits", "type": "string", "required": false, "description": "Key benefits to highlight" },
+    { "name": "proof_points", "type": "string", "required": false, "description": "Testimonials, stats, or social proof available" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define structure", "action": "Map the page layout and narrative flow", "verify": "Structure supports conversion" },
+      { "step": 2, "name": "Write above fold", "action": "Create headline and subheadline that capture attention", "verify": "Hook is strong" },
+      { "step": 3, "name": "Write body", "action": "Build the problem → solution → proof narrative", "verify": "Story flows logically" },
+      { "step": 4, "name": "Optimize CTA", "action": "Make the call to action irresistible", "verify": "CTA is specific and action-oriented" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Offer: Free trial of CRM software. Goal: Free trial sign-ups. Audience: Sales managers at small businesses, frustrated with spreadsheets. Key benefit: Set up in 5 minutes. Proof: 4.8 G2 rating, 2,000+ companies.",
+      "output": "Above fold: 'Finally, a CRM Your Team Will Actually Use' / 'Set up in 5 minutes. No training required.' / 'Start Free Trial' button. Body: Problem (spreadsheets lose deals), Solution (CRM that works in minutes), Features (5-min setup, mobile app, email tracking), Proof (G2 rating, logos, testimonial), Risk reversal (cancel anytime). Result: 34% increase in trial signups vs. previous page."
+    }
+  ],
+  "checklist": [
+    "Headline is specific and benefit-led",
+    "Page has one primary goal and one CTA",
+    "Problem → solution → proof narrative flows logically",
+    "Proof points are specific (numbers, names, logos)",
+    "Form has minimal fields (3 or fewer)",
+    "Risk reversal is included below the CTA"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["landing-page", "copywriting", "conversion", "content"],
+    "lastUpdated": "2026-03-24"
   }
 }

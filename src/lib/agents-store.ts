@@ -141,6 +141,7 @@ function normalizeAgent(agent: Partial<Agent> & Record<string, any>): Agent {
       primaryOutputs: ['status-report'],
       status: 'idle',
       bio: '',
+      methodology: '',
       position: { x: 300, y: 220, room: division },
     }),
     ...agent,
@@ -167,6 +168,7 @@ function normalizeAgent(agent: Partial<Agent> & Record<string, any>): Agent {
     role: agent.role || template?.role || 'Specialist',
     bio: agent.bio || template?.bio || '',
     systemPrompt: agent.systemPrompt || template?.systemPrompt || '',
+    methodology: agent.methodology || template?.methodology || '',
     temperature: typeof agent.temperature === 'number' ? agent.temperature : template?.temperature || 0.7,
     maxTokens: typeof agent.maxTokens === 'number' ? agent.maxTokens : template?.maxTokens || 1024,
     workload: typeof agent.workload === 'number' ? agent.workload : template?.workload,
@@ -256,6 +258,7 @@ You are warm, organized, strategic, and impossible to fluster.`,
   workload: 76,
   position: { x: 470, y: 70, room: 'orchestration' },
   bio: 'Operations lead and personal assistant who routes work across the agency.',
+  methodology: '',
 }
 
 const ALL_DEFAULT_AGENTS = [IRIS_AGENT, ...DEFAULT_AGENTS]

@@ -1,17 +1,56 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "escalation-management",
   "name": "Escalation Management",
-  "description": "Handling and escalating issues appropriately",
+  "description": "Handles and escalates project issues appropriately to ensure problems are resolved by the right people at the right time without unnecessary delays or micromanagement.",
   "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Handle and escalate issues appropriately."
+    "en": {
+      "trigger": "Use when an issue has gone beyond the team's ability to resolve, a deadline is at risk, a client is unhappy, or you need to involve senior leadership in a decision.",
+      "context": "You are an escalation management specialist who knows when and how to escalate issues without creating chaos. You protect your team from unnecessary interference while ensuring the right people are involved when needed.",
+      "instructions": "## Escalation Management Workflow\n\n- [ ] 1. Identify the issue and its impact\n- [ ] 2. Determine if escalation is needed (can the team resolve it?)\n- [ ] 3. Prepare the escalation: context, options, recommendation\n- [ ] 4. Escalate to the right person with the right information\n- [ ] 5. Manage the resolution and communicate outcomes\n- [ ] 6. Capture lessons learned to prevent recurrence\n\n## Key Inputs\n- Issue: {{issue}}\n- Impact: {{impact}} (timeline, budget, client relationship)\n- Options Considered: {{options_considered}}\n- Recommendation: {{recommendation}}\n- Escalation Path: {{escalation_path}}",
+      "output_template": "## Escalation Brief\n\n### Issue Summary\n| Element | Details |\n|---------|---------|\n| Issue | |\n| Impact | |\n| Timeline | |\n\n### Background\n[What led to this issue]\n\n### Options Considered\n| Option | Pros | Cons | Risk |\n|--------|-----|------|------|\n| | | | |\n\n### Recommendation\n[What I recommend and why]\n\n### Decision Needed\n[What the escalator needs to decide]\n\n### Resolution\n[To be completed after resolution]\n\n### Lessons Learned\n[How to prevent this in future]"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "issue", "type": "string", "required": true, "description": "Description of the issue requiring escalation" },
+    { "name": "impact", "type": "string", "required": true, "description": "Impact on timeline, budget, quality, or client relationship" },
+    { "name": "options_considered", "type": "string", "required": false, "description": "Options already considered and why they didn't work" },
+    { "name": "recommendation", "type": "string", "required": false, "description": "What you recommend as the path forward" },
+    { "name": "escalation_path", "type": "string", "required": false, "description": "Who the issue should be escalated to" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Diagnose issue", "action": "Assess impact and determine if escalation is needed", "verify": "Escalation is the right move" },
+      { "step": 2, "name": "Prepare brief", "action": "Gather context and formulate a recommendation", "verify": "Brief is clear and complete" },
+      { "step": 3, "name": "Escalate", "action": "Communicate to the right person with full context", "verify": "Right person, right information" },
+      { "step": 4, "name": "Resolve and learn", "action": "Manage resolution and document lessons learned", "verify": "Issue is resolved and learnings are captured" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Issue: Client requesting 3 new landing pages outside of scope 5 days before launch. Impact: Timeline at risk, budget implications, team capacity. Options: Decline, absorb with overtime, renegotiate scope. Recommendation: Accept with change order for 1 page, push other 2 to next phase.",
+      "output": "Escalated to Account Director with full brief. Decision: Accept 1 page within scope buffer, 2 pages deferred with commitment to next phase. Client agreed. Resolution documented in change log."
+    }
+  ],
+  "checklist": [
+    "Issue is clearly defined and impact is assessed",
+    "Options have been considered before escalating",
+    "Recommendation is included",
+    "Escalation goes to the right person",
+    "Context is complete (what, why, impact, options)",
+    "Resolution is communicated to affected parties",
+    "Lessons learned are documented"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["project-management-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["escalation-management", "project-management", "risk-management", "leadership"],
+    "lastUpdated": "2026-03-24"
   }
 }

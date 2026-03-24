@@ -1,17 +1,112 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "dashboard-creation",
   "name": "Dashboard Creation",
-  "description": "Building performance dashboards",
-  "category": "media",
+  "description": "Builds performance dashboards that consolidate metrics from multiple sources into clear, actionable views — enabling real-time visibility into campaign performance, ROAS, and business KPIs.",
+  "category": "analytics",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Build performance dashboards."
+    "en": {
+      "trigger": "Use when building or refreshing a performance dashboard — to consolidate metrics from multiple sources into a clear, actionable view of campaign and business performance.",
+      "context": "You are a data analyst who designs and builds dashboards that give stakeholders immediate visibility into performance, enabling fast, data-driven decisions.",
+      "instructions": "## Dashboard Creation Workflow\n\n- [ ] 1. Define stakeholders: Who will use this dashboard and why?\n- [ ] 2. Define KPIs: What metrics matter most to each stakeholder?\n- [ ] 3. Map data sources: Where does each metric come from?\n- [ ] 4. Design layout: What goes on the overview vs. detail views?\n- [ ] 5. Build the dashboard: Connect data sources and build visualizations\n- [ ] 6. Add context: Labels, benchmarks, targets, and trend lines\n- [ ] 7. Test with users: Does it answer the questions stakeholders have?\n- [ ] 8. Set refresh cadence: How often is data updated?\n\n## Key Inputs\n- Dashboard purpose: {{dashboard_purpose}}\n- Stakeholders: {{stakeholders}}\n- KPIs needed: {{kpis}}\n- Data sources: {{data_sources}}\n- Tools available: {{tools}}",
+      "output_template": "## Dashboard Design: {{dashboard_name}}\n\n### Dashboard Overview\n| Field | Value |\n|-------|-------|\n| Name | {{dashboard_name}} |\n| Purpose | {{dashboard_purpose}} |\n| Primary stakeholders | {{stakeholders}} |\n| Refresh cadence | |\n| Date | {{date}} |\n\n### KPI Definitions\n| KPI | Definition | Data source | Calculation | Target |\n|-----|-----------|-------------|-------------|--------|\n| | | | | |\n\n### Data Sources\n| Source | Data pulled | Refresh frequency | Connection method |\n|--------|------------|-----------------|-----------------|\n| | | | |\n\n### Dashboard Layout\n\n#### Overview Page (Executive Summary)\n**Key metrics displayed:**\n- \n\n**Visualizations:**\n- \n\n#### Campaign Performance Page\n**Metrics:**\n- \n\n**Visualizations:**\n- \n\n#### Channel Performance Page\n**Metrics:**\n- \n\n**Visualizations:**\n- \n\n### Design Specifications\n| Element | Specification |\n|---------|--------------|\n| Color coding | |\n| Date range default | |\n| Filters available | |\n| Export options | |\n\n### Stakeholder Access\n| Stakeholder | Access level | Pages visible |\n|-----------|-------------|-------------|\n| | | |\n\n### Maintenance\n| Task | Frequency | Owner |\n|------|---------|-------|\n| Data refresh | | |\n| Metric validation | | |\n| Layout update | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "dashboard_name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the dashboard"
+    },
+    {
+      "name": "dashboard_purpose",
+      "type": "string",
+      "required": true,
+      "description": "Purpose of the dashboard"
+    },
+    {
+      "name": "stakeholders",
+      "type": "string",
+      "required": false,
+      "description": "Who will use this dashboard"
+    },
+    {
+      "name": "kpis",
+      "type": "string",
+      "required": false,
+      "description": "Key metrics to include"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Data sources for the dashboard"
+    },
+    {
+      "name": "tools",
+      "type": "string",
+      "required": false,
+      "description": "Dashboard tools available (Tableau, Looker, etc.)"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Stakeholder Definition",
+        "action": "Define who will use the dashboard and why",
+        "verify": "Questions to be answered are clear"
+      },
+      {
+        "step": 2,
+        "name": "KPI Definition",
+        "action": "Define the metrics that answer stakeholder questions",
+        "verify": "KPIs are measurable and available"
+      },
+      {
+        "step": 3,
+        "name": "Data Mapping",
+        "action": "Map each KPI to its data source",
+        "verify": "All data sources are accessible"
+      },
+      {
+        "step": 4,
+        "name": "Layout Design",
+        "action": "Design the dashboard layout and visualizations",
+        "verify": "Layout answers key stakeholder questions"
+      },
+      {
+        "step": 5,
+        "name": "Testing",
+        "action": "Test the dashboard with real users",
+        "verify": "Dashboard answers stakeholder questions"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Build a weekly performance dashboard for TechStart's marketing team. Shows campaign performance (impressions, clicks, CTR, CPA, ROAS) from Google Ads, Meta, LinkedIn, and programmatic.",
+      "output": "Full dashboard design with KPI definitions, layout, data sources, and stakeholder access"
+    }
+  ],
+  "checklist": [
+    "Stakeholder questions are clearly defined",
+    "KPIs are measurable and sourced",
+    "Data sources are connected and reliable",
+    "Layout is clear and actionable",
+    "Context (targets, benchmarks, trends) is included",
+    "Dashboard has been tested with real users"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova"],
+  "pipelines": ["analytics"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["analytics", "dashboard", "reporting", "data"],
+    "lastUpdated": "2026-03-24"
   }
 }

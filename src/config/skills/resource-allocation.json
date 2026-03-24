@@ -1,17 +1,112 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "resource-allocation",
   "name": "Resource Allocation",
-  "description": "Assigning resources to projects strategically",
-  "category": "project-management",
+  "description": "Optimizes the allocation of team resources across projects and tasks, balancing workloads, skills, and priorities to maximize utilization and delivery.",
+  "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Assign resources to projects strategically."
+    "en": {
+      "trigger": "Use when allocating or reallocating team resources across projects — balancing workloads, matching skills to tasks, and optimizing utilization.",
+      "context": "You are an operations manager who ensures resources are deployed effectively, balancing the needs of multiple projects against team capacity and capability.",
+      "instructions": "## Resource Allocation Workflow\n\nAllocate resources effectively:\n\n- [ ] 1. Resource inventory: Know who is available and what their skills are\n- [ ] 2. Demand forecasting: Understand upcoming resource needs\n- [ ] 3. Workload analysis: Assess current and projected utilization\n- [ ] 4. Gap identification: Find where demand exceeds supply\n- [ ] 5. Prioritization: Prioritize work when resources are constrained\n- [ ] 6. Allocation: Assign people to tasks based on fit and availability\n- [ ] 7. Conflict resolution: Resolve resource conflicts between projects\n- [ ] 8. Utilization optimization: Maximize effective use of all resources\n\n## Key Inputs\n- Projects: {{projects}}\n- Team members: {{team_members}}\n- Time period: {{time_period}}",
+      "output_template": "## Resource Allocation: [Period/Account]\n\n### Team Availability\n| Team member | Role | Capacity (hrs) | Available | Utilization |\n|------------|------|---------------|-----------|------------|\n| | | | | |\n\n### Resource Demand\n\n**Project A:**\n| Task | Hours needed | Skills required | Priority |\n|------|-------------|----------------|----------|\n| | | | |\n\n**Project B:**\n[Same structure]\n\n### Allocation Matrix\n| Task | Assigned to | Hours | % of capacity | Fit |\n|------|------------|-------|--------------|-----|\n| | | | | |\n\n### Workload Balance\n\n| Team member | Allocated | Available | Status |\n|------------|----------|-----------|--------|\n| | | | 🟢/🟡/🔴 |\n\n### Conflicts & Gaps\n\n| Issue | Severity | Resolution |\n|-------|----------|-----------|\n| | | |\n\n### Unallocated Work\n| Task | Hours | Skills needed | Priority | Plan |\n|------|-------|-------------|----------|-------|\n| | | | | |\n\n### Recommended Actions\n| Action | Impact | Effort |\n|--------|--------|--------|\n| | | |\n\n### Staffing Recommendations\n- Hire/fire: \n- Contractor need: \n- Training needs: "
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "projects",
+      "type": "string",
+      "required": true,
+      "description": "Projects requiring resources"
+    },
+    {
+      "name": "team_members",
+      "type": "string",
+      "required": true,
+      "description": "Available team members and their skills"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period for allocation"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Inventory",
+        "action": "Map team skills and availability",
+        "verify": "Clear picture of who can do what"
+      },
+      {
+        "step": 2,
+        "name": "Demand Forecast",
+        "action": "Understand resource needs across projects",
+        "verify": "Demand is quantified"
+      },
+      {
+        "step": 3,
+        "name": "Gap Analysis",
+        "action": "Identify where demand exceeds supply",
+        "verify": "Gaps are quantified and prioritized"
+      },
+      {
+        "step": 4,
+        "name": "Allocation",
+        "action": "Assign people to tasks optimally",
+        "verify": "Best fit achieved"
+      },
+      {
+        "step": 5,
+        "name": "Conflict Resolution",
+        "action": "Resolve resource conflicts",
+        "verify": "Conflicts are resolved fairly"
+      },
+      {
+        "step": 6,
+        "name": "Optimization",
+        "action": "Optimize utilization across team",
+        "verify": "No one is over- or under-utilized"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Allocate resources for Q2 across TechStart campaign, Acme Corp campaign, and new business pitch. Team: 2 strategists, 1 designer, 1 copywriter, 1 media buyer.",
+      "output": "Full resource allocation with utilization analysis, workload balancing, and conflict resolution"
+    }
+  ],
+  "checklist": [
+    "All team members' skills and availability are known",
+    "Demand is quantified in hours",
+    "Allocation is best-fit, not just convenience",
+    "No one is over-allocated",
+    "Conflicts are resolved explicitly",
+    "Utilization is optimized across the team"
+  ],
+  "tools": [
+    "spreadsheet",
+    "project-management-tool"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "operations"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "operations",
+      "resource-management",
+      "planning",
+      "capacity"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

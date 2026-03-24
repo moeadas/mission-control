@@ -1,19 +1,55 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "trend-analysis",
   "name": "Trend Analysis",
-  "description": "Identifying and analyzing market and consumer trends",
-  "category": "strategy",
+  "description": "Identifies, monitors, and interprets emerging and declining patterns in advertising performance, consumer behavior, and market dynamics to inform strategic decisions.",
+  "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Identify and analyze market and consumer trends in {{industry}}."
+    "en": {
+      "trigger": "Use when tracking campaign performance over time, identifying seasonal patterns, spotting early signals of market shifts, or needing to explain performance changes to stakeholders.",
+      "context": "You are a trend analysis specialist with expertise in time-series data interpretation for advertising and marketing. You identify meaningful signals amid noise and connect trends to business outcomes.",
+      "instructions": "## Trend Analysis Workflow\n\n- [ ] 1. Gather time-series data for the relevant metric(s)\n- [ ] 2. Visualize the data to identify obvious patterns\n- [ ] 3. Decompose into trend, seasonality, and noise components\n- [ ] 4. Identify key inflection points and anomalies\n- [ ] 5. Cross-reference with known events (campaign launches, seasonal changes, market events)\n- [ ] 6. Interpret the trend direction and magnitude\n- [ ] 7. Formulate implications and recommendations\n\n## Key Inputs\n- Metrics: {{metrics}} (impressions, CTR, ROAS, conversions, etc.)\n- Time Range: {{time_range}} (3 months, 1 year, 5 years)\n- Granularity: {{granularity}} (daily, weekly, monthly)\n- Industry Context: {{industry_context}} (what else is happening in the market)",
+      "output_template": "## Trend Analysis Report\n\n### Overview\n[2-3 sentence summary of the overall trend story]\n\n### Trend Decomposition\n| Component | Description | Significance |\n|-----------|-------------|---------------|\n| Long-term Trend | [Upward/downward/stable] | [Growth rate or decline %] |\n| Seasonality | [Pattern type] | [Repeating cycle] |\n| Noise/Volatility | [Short-term fluctuations] | [Variance measure] |\n\n### Key Inflection Points\n| Date | Event | Impact on Metric |\n|------|-------|-----------------|\n| | | |\n\n### Industry Context\n[How market events correlate with trend changes]\n\n### Forecast\n[Extrapolation of trend into near-term future]\n\n### Recommendations\n- [ ] Strategic recommendation based on trend direction"
+    }
   },
   "variables": [
-    "industry"
+    { "name": "metrics", "type": "string", "required": true, "description": "Key performance metrics to analyze (ROAS, CTR, CPA, impressions, etc.)" },
+    { "name": "time_range", "type": "string", "required": true, "description": "Time period for analysis: last 3 months, past year, 2-year trend" },
+    { "name": "granularity", "type": "string", "required": false, "description": "Data frequency: daily, weekly, monthly (default: monthly)" },
+    { "name": "industry_context", "type": "string", "required": false, "description": "Any known market events, seasonality, or competitive activity during the period" }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Collect data", "action": "Gather time-series data for relevant metrics", "verify": "Data is complete with no unexplained gaps" },
+      { "step": 2, "name": "Visualize", "action": "Plot the data to see overall shape and patterns", "verify": "Visualization reveals clear trend direction" },
+      { "step": 3, "name": "Decompose", "action": "Separate trend, seasonality, and residual noise", "verify": "Components are statistically meaningful" },
+      { "step": 4, "name": "Correlate events", "action": "Match inflection points to known events and campaigns", "verify": "Causal links are plausible" },
+      { "step": 5, "name": "Conclude", "action": "Synthesize findings into business recommendations", "verify": "Recommendations are supported by the data" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Metrics: Monthly ROAS for Google Ads campaigns. Time range: Last 18 months. Industry context: Q4 holiday season, iOS 14.5 impact in Q2 2021.",
+      "output": "Overall trend: ROAS declined 12% from Jan-Jun 2021 (post-iOS 14.5), then recovered with a 23% improvement from Jul-Dec 2021 driven by audience signal rebuild. Seasonal Q4 uplift of +31% observed. Recommendation: Increase Q4 budget allocation by 20% given proven seasonal multiplier."
+    }
+  ],
+  "checklist": [
+    "Time-series data is complete and accurate",
+    "Trend direction and magnitude are clearly stated",
+    "Seasonal patterns are identified and quantified",
+    "Inflection points are cross-referenced with known events",
+    "Noise is distinguished from meaningful signal",
+    "Recommendations are actionable and trend-based"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["analytics-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["trends", "time-series", "analytics", "performance"],
+    "lastUpdated": "2026-03-24"
   }
 }

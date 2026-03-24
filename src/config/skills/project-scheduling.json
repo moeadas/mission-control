@@ -1,17 +1,126 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "project-scheduling",
   "name": "Project Scheduling",
-  "description": "Creating and managing project schedules",
-  "category": "project-management",
+  "description": "Creates and manages project schedules, including task breakdown, dependencies, timelines, resource allocation, and critical path identification.",
+  "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Create and manage project schedules."
+    "en": {
+      "trigger": "Use when creating a project schedule — breaking down work into tasks, establishing dependencies, setting timelines, and identifying the critical path.",
+      "context": "You are a project manager who builds realistic, achievable schedules that account for dependencies, resources, and constraints while meeting project deadlines.",
+      "instructions": "## Project Scheduling Workflow\n\nBuild a comprehensive project schedule:\n\n- [ ] 1. Work breakdown: Decompose project into manageable tasks\n- [ ] 2. Dependency mapping: Identify which tasks depend on others\n- [ ] 3. Duration estimation: Estimate time needed for each task\n- [ ] 4. Resource assignment: Assign team members to tasks\n- [ ] 5. Timeline construction: Build the schedule with start/end dates\n- [ ] 6. Critical path: Identify the critical path and float\n- [ ] 7. Buffer planning: Add buffers for high-risk tasks\n- [ ] 8. Schedule validation: Review with team and stakeholders\n\n## Key Inputs\n- Project: {{project_name}}\n- Deadline: {{end_date}}\n- Milestones: {{milestones}}\n- Team: {{team_members}}",
+      "output_template": "## Project Schedule: {{project_name}}\n\n### Project Overview\n| Field | Details |\n|-------|---------|\n| Start date | {{start_date}} |\n| End date | {{end_date}} |\n| Duration | |\n| Project manager | |\n\n### Key Milestones\n| Milestone | Date | Status |\n|-----------|------|--------|\n| | | |\n\n### Work Breakdown Structure\n\n**Phase 1: [Name]**\n| Task | Owner | Duration | Dependencies | Start | End |\n|------|-------|---------|-------------|-------|-----|\n| | | | | | |\n\n**Phase 2: [Name]**\n[Same structure]\n\n### Gantt Chart\n```\nTask                  | W1 | W2 | W3 | W4 | W5 | W6 |\n----------------------|----|----|----|----|----|----|\n[Task 1]              |████|    |    |    |    |    |\n[Task 2]              |████|████|    |    |    |    |\n[Task 3]              |    |████|████|    |    |    |\n[Task 4]              |    |    |████|████|    |    |    |\n[Task 5]              |    |    |    |████|████|    |\n[Task 6]              |    |    |    |    |████|████|\n```\n\n### Dependency Map\n| Task | Depends on | Blocks |\n|------|-----------|-------|\n| | | |\n\n### Critical Path\n| Task | Duration | Float |\n|------|---------|-------|\n| | | 0 days |\n\n**Total float in project:**\n\n### Resource Allocation\n| Team member | Tasks assigned | Capacity |\n|------------|----------------|----------|\n| | | |\n\n### Buffer Plan\n| Task | Risk | Buffer |\n|------|------|--------|\n| | | |\n\n### Schedule Contingencies\n| Risk | Impact | Contingency |\n|------|--------|-------------|\n| | | |\n\n### Validation\n- [ ] Team has reviewed and committed to schedule\n- [ ] Dependencies are realistic\n- [ ] Resources have capacity\n- [ ] Milestones are achievable\n- [ ] Buffer time is appropriate"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "project_name",
+      "type": "string",
+      "required": true,
+      "description": "Project name"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "description": "Project start date"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "description": "Project end date or deadline"
+    },
+    {
+      "name": "milestones",
+      "type": "string",
+      "required": false,
+      "description": "Key milestones to include"
+    },
+    {
+      "name": "team_members",
+      "type": "string",
+      "required": false,
+      "description": "Team members available"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Work Breakdown",
+        "action": "Decompose project into tasks",
+        "verify": "Tasks are discrete and estimable"
+      },
+      {
+        "step": 2,
+        "name": "Dependency Mapping",
+        "action": "Identify task dependencies",
+        "verify": "Dependencies are logical"
+      },
+      {
+        "step": 3,
+        "name": "Duration Estimation",
+        "action": "Estimate task durations with team",
+        "verify": "Estimates are realistic"
+      },
+      {
+        "step": 4,
+        "name": "Timeline Construction",
+        "action": "Build schedule with dates",
+        "verify": "Schedule is achievable"
+      },
+      {
+        "step": 5,
+        "name": "Critical Path Analysis",
+        "action": "Identify critical path and float",
+        "verify": "Critical path is clear"
+      },
+      {
+        "step": 6,
+        "name": "Validation",
+        "action": "Review with team and stakeholders",
+        "verify": "Schedule is committed"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Create project schedule for TechStart Q2 campaign launch. Deadline: June 30. Team: strategist, 2 designers, copywriter, media buyer. Key milestone: May 15 for creative review.",
+      "output": "Full project schedule with WBS, Gantt chart, dependencies, critical path, and resource allocation"
+    }
+  ],
+  "checklist": [
+    "All work is broken into estimable tasks",
+    "Dependencies are realistic and documented",
+    "Durations are realistic and team-agreed",
+    "Critical path is identified",
+    "Float exists for non-critical tasks",
+    "Resources have capacity for assigned work",
+    "Schedule is reviewed and committed by team"
+  ],
+  "tools": [
+    "spreadsheet",
+    "document",
+    "project-management-tool"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "project-management"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "operations",
+      "project-management",
+      "scheduling",
+      "planning"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

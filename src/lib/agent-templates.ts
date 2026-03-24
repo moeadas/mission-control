@@ -20,6 +20,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     accentColor: 'purple',
     avatar: 'bot-purple',
     bio: 'Leads brand strategy, campaign frameworks, and messaging architecture.',
+    methodology: '',
     systemPrompt: `You are a Brand & Campaign Strategist. Turn client goals into sharp positioning, campaign direction, and executable strategy documents.`,
     provider: 'gemini',
     model: 'gemini-2.5-pro',
@@ -41,6 +42,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     accentColor: 'yellow',
     avatar: 'bot-yellow',
     bio: 'Keeps scopes, schedules, and handoffs on track.',
+    methodology: '',
     systemPrompt: `You are a Project and Traffic Manager. Build timelines, organize dependencies, and keep delivery clean across the agency.`,
     provider: 'ollama',
     model: 'llama3.2:latest',
@@ -62,6 +64,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     accentColor: 'yellow',
     avatar: 'bot-yellow',
     bio: 'Creates campaign copy, platform-native content, and editorial plans.',
+    methodology: '',
     systemPrompt: `You are a Copy & Content Lead. Produce campaign copy, platform-native content, and content calendars with strong hooks and clear CTAs.`,
     provider: 'gemini',
     model: 'gemini-2.5-flash',
@@ -83,6 +86,7 @@ export const AGENT_TEMPLATES: AgentTemplate[] = [
     accentColor: 'orange',
     avatar: 'bot-orange',
     bio: 'Translates campaign ideas into visual output and creative asset systems.',
+    methodology: '',
     systemPrompt: `You are a Design & Visual Production Lead. Create creative asset directions, image prompts, and production-ready visual concepts. When image generation is required, prepare prompts optimized for Nano Banana 2.`,
     provider: 'gemini',
     model: 'gemini-2.5-flash',
@@ -121,6 +125,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 68,
     position: { x: 120, y: 245, room: 'client-services' },
     bio: 'Client lead who keeps relationships confident, clear, and commercially sound.',
+    methodology: '',
   },
   {
     id: 'piper',
@@ -147,6 +152,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 72,
     position: { x: 180, y: 245, room: 'client-services' },
     bio: 'Traffic manager who turns complexity into a clean delivery rhythm.',
+    methodology: '',
   },
   {
     id: 'maya',
@@ -173,6 +179,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 81,
     position: { x: 240, y: 245, room: 'client-services' },
     bio: 'Strategy lead who turns client ambition into a coherent market plan.',
+    methodology: '',
   },
   {
     id: 'finn',
@@ -199,6 +206,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 79,
     position: { x: 430, y: 245, room: 'creative' },
     bio: 'Creative lead who makes campaigns feel distinctive and memorable.',
+    methodology: '',
   },
   {
     id: 'echo',
@@ -225,6 +233,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 87,
     position: { x: 500, y: 245, room: 'creative' },
     bio: 'Content lead focused on persuasive copy and channel-native storytelling.',
+    methodology: '',
   },
   {
     id: 'nova-studio',
@@ -251,6 +260,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 74,
     position: { x: 570, y: 245, room: 'creative' },
     bio: 'Visual production specialist for creative systems and image-generation-ready outputs.',
+    methodology: '',
   },
   {
     id: 'nova',
@@ -277,6 +287,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 76,
     position: { x: 735, y: 245, room: 'media' },
     bio: 'Media planning lead who connects channel choice, budget, and expected return.',
+    methodology: '',
   },
   {
     id: 'dex',
@@ -303,6 +314,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 69,
     position: { x: 805, y: 245, room: 'media' },
     bio: 'Media operations specialist who turns plans into executable budgets and reporting systems.',
+    methodology: '',
   },
   {
     id: 'atlas',
@@ -329,5 +341,6 @@ export const DEFAULT_AGENTS: Agent[] = [
     workload: 64,
     position: { x: 450, y: 430, room: 'research' },
     bio: 'Research and SEO lead who turns raw signals into strategic advantage.',
+    methodology: '',
   },
 ]

@@ -1,17 +1,54 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "seo-audit",
   "name": "SEO Audit",
-  "description": "Comprehensive technical and content SEO audit",
+  "description": "Conducts comprehensive technical and content audits of websites to identify optimization opportunities, technical issues, and competitive positioning for search engines.",
   "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Comprehensive technical and content SEO audit."
+    "en": {
+      "trigger": "Use when assessing a new client's website, diagnosing traffic declines, preparing an SEO strategy, or benchmarking a site against competitors.",
+      "context": "You are an SEO audit specialist with expertise in technical SEO, on-page optimization, and search engine algorithms. You systematically evaluate websites against best practices and identify high-priority improvements.",
+      "instructions": "## SEO Audit Workflow\n\n- [ ] 1. Crawl the website and gather technical data\n- [ ] 2. Audit technical SEO: crawlability, indexability, site speed, mobile-friendliness\n- [ ] 3. Review on-page elements: titles, meta descriptions, headers, content\n- [ ] 4. Assess off-page factors: backlinks, domain authority\n- [ ] 5. Analyze content quality and keyword targeting\n- [ ] 6. Benchmark against competitors\n- [ ] 7. Prioritize findings and create an action plan\n\n## Key Inputs\n- Website URL: {{website_url}}\n- Audit Scope: {{audit_scope}} (full site, subsection, single page)\n- Primary Competitors: {{primary_competitors}}\n- Target Keywords: {{target_keywords}}",
+      "output_template": "## SEO Audit Report\n\n### Technical SEO\n| Issue | Severity | Impact | Recommendation |\n|-------|----------|--------|----------------|\n| | | | |\n\n### On-Page SEO\n| Page | Title | Meta | H1 | Keywords | Issues |\n|------|-------|------|----|----------|--------|\n| | | | | | |\n\n### Content Analysis\n| URL | Word Count | Quality Score | Keyword Targeting | Recommendations |\n|-----|------------|--------------|-------------------|-----------------|\n| | | | | |\n\n### Backlink Profile\n- Domain Authority: \n- Total Backlinks: \n- Toxic Links: \n\n### Priority Action Plan\n| Priority | Issue | Effort | Impact | Action |\n|----------|-------|--------|--------|--------|\n| | | | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "website_url", "type": "string", "required": true, "description": "URL of the website or page to audit" },
+    { "name": "audit_scope", "type": "string", "required": false, "description": "Scope of audit: full site, specific section, or single page" },
+    { "name": "primary_competitors", "type": "string", "required": false, "description": "Key competitor URLs for benchmarking" },
+    { "name": "target_keywords", "type": "string", "required": false, "description": "Primary keywords the site should rank for" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Crawl site", "action": "Run a comprehensive crawl to gather technical data", "verify": "Crawl covers all important pages" },
+      { "step": 2, "name": "Identify issues", "action": "Categorize findings by severity and type", "verify": "No critical issues are missed" },
+      { "step": 3, "name": "Benchmark", "action": "Compare site performance against competitors", "verify": "Benchmarks are relevant and current" },
+      { "step": 4, "name": "Prioritize", "action": "Rank findings by impact and implementation effort", "verify": "Top priorities address biggest opportunities" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Website: example.com. Audit scope: Full site. Competitors: competitor1.com, competitor2.com. Target keywords: digital marketing agency, PPC management.",
+      "output": "Audit identified 47 issues: 3 critical (duplicate meta descriptions on 60% of pages, missing alt tags on product images, 4-second page load on mobile), 12 high, 18 medium, 14 low. Top priorities: fix crawl errors (estimated +15% indexed pages), improve Core Web Vitals (current LCP 4.2s vs. 2.5s target)."
+    }
+  ],
+  "checklist": [
+    "Site crawl covers all pages",
+    "Technical issues are categorized by severity",
+    "On-page elements are reviewed for all key pages",
+    "Competitor comparison is included",
+    "Action plan is prioritized by impact",
+    "Recommendations are specific and implementable"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["seo-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["seo", "technical-seo", "audit", "search-optimization"],
+    "lastUpdated": "2026-03-24"
   }
 }

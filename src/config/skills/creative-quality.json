@@ -1,17 +1,122 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "creative-quality",
   "name": "Creative Quality Assurance",
-  "description": "Reviewing and ensuring creative output quality",
+  "description": "Reviews creative deliverables against the brief, brand guidelines, and quality standards before client delivery, ensuring all work meets agency and client expectations.",
   "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Review and ensure creative output quality."
+    "en": {
+      "trigger": "Use when reviewing creative work before client delivery — checking alignment with brief, brand guidelines, technical specs, and quality standards.",
+      "context": "You are a quality assurance specialist for creative work, ensuring everything delivered meets the brief, brand standards, and agency quality bar before reaching the client.",
+      "instructions": "## Creative Quality Assurance Workflow\n\nReview and approve creative deliverables:\n\n- [ ] 1. Brief alignment: Check deliverable against original brief requirements\n- [ ] 2. Brand compliance: Verify adherence to brand guidelines\n- [ ] 3. Technical specs: Confirm dimensions, formats, file types are correct\n- [ ] 4. Copy quality: Check for typos, factual accuracy, and tone\n- [ ] 5. Legal/compliance: Verify disclaimers, attributions, and policy compliance\n- [ ] 6. Asset completeness: Ensure all required files are included\n- [ ] 7. Sign-off decision: Approve, request revisions, or reject\n\n## Key Inputs\n- Deliverable: {{deliverable_name}}\n- Brief reference: {{brief_version}}\n- Brand guidelines: {{brand_guidelines_version}}",
+      "output_template": "## Creative QA: {{deliverable_name}} v{{version}}\n\n### Deliverable Information\n| Field | Details |\n|-------|---------|\n| Deliverable | {{deliverable_name}} |\n| Version | {{version}} |\n| From brief | {{brief_version}} |\n| Brand guidelines | {{brand_guidelines_version}} |\n| Submitted by | |\n| Submission date | |\n\n### QA Review\n\n#### Brief Alignment\n| Brief Requirement | Deliverable Status | Notes |\n|-------------------|-------------------|-------|\n| | ✅/❌ | |\n\n#### Brand Compliance\n| Brand Element | Status | Notes |\n|--------------|--------|-------|\n| Logo usage | ✅/❌ | |\n| Color palette | ✅/❌ | |\n| Typography | ✅/❌ | |\n| Tone of voice | ✅/❌ | |\n| Imagery style | ✅/❌ | |\n\n#### Technical Specifications\n| Spec | Required | Actual | Status |\n|------|----------|--------|--------|\n| Dimensions | | | ✅/❌ |\n| File format | | | ✅/❌ |\n| Resolution | | | ✅/❌ |\n| File size | | | ✅/❌ |\n\n#### Copy Quality\n| Check | Status | Notes |\n|-------|--------|-------|\n| Spelling | ✅/❌ | |\n| Grammar | ✅/❌ | |\n| Factual accuracy | ✅/❌ | |\n| Tone alignment | ✅/❌ | |\n| CTA clarity | ✅/❌ | |\n\n#### Legal & Compliance\n| Requirement | Status |\n|-------------|--------|\n| Disclaimers | ✅/❌ |\n| Attribution | ✅/❌ |\n| Platform policies | ✅/❌ |\n\n### Decision\n| Option | Decision |\n|--------|----------|\n| ✅ Approved | |\n| 🔄 Minor revisions | |\n| 🔁 Major revisions | |\n| ❌ Rejected | |\n\n### Revision Notes (if applicable)\n1. \n\n### QA Sign-off\n| Role | Name | Date |\n|------|------|------|\n| Creative lead | | |\n| Strategy lead | | |\n| Client services | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "deliverable_name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the deliverable being reviewed"
+    },
+    {
+      "name": "brief_version",
+      "type": "string",
+      "required": true,
+      "description": "Brief version the deliverable was created against"
+    },
+    {
+      "name": "brand_guidelines_version",
+      "type": "string",
+      "required": false,
+      "description": "Brand guidelines version being used"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "required": false,
+      "description": "Version number of the deliverable"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Brief Review",
+        "action": "Pull brief and understand requirements",
+        "verify": "Know what success looks like"
+      },
+      {
+        "step": 2,
+        "name": "Deliverable Review",
+        "action": "Review the actual deliverable in full",
+        "verify": "Seen and understood completely"
+      },
+      {
+        "step": 3,
+        "name": "Compliance Check",
+        "action": "Check brand, technical, and legal compliance",
+        "verify": "All requirements met"
+      },
+      {
+        "step": 4,
+        "name": "Issue Documentation",
+        "action": "Document any issues found clearly",
+        "verify": "Creative team knows exactly what to fix"
+      },
+      {
+        "step": 5,
+        "name": "Sign-off Decision",
+        "action": "Make approval/revision/rejection decision",
+        "verify": "Decision is clear and documented"
+      },
+      {
+        "step": 6,
+        "name": "Notification",
+        "action": "Communicate decision to relevant parties",
+        "verify": "Team and client (if applicable) informed"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "QA review of TechStart hero banner v3 before client presentation. Check against brief v2 and brand guidelines v1.4.",
+      "output": "Full QA report with brief alignment, brand compliance, technical specs, and sign-off decision"
+    }
+  ],
+  "checklist": [
+    "Deliverable reviewed against original brief",
+    "Brand guidelines followed",
+    "Technical specifications correct",
+    "Copy is error-free and accurate",
+    "Legal and compliance requirements met",
+    "All required assets included",
+    "Decision documented with clear reasoning"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "finn",
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "creative-review"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "creative",
+      "qa",
+      "quality",
+      "review",
+      "approval"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

@@ -1,17 +1,53 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "headline-writing",
   "name": "Headline Writing",
-  "description": "Crafting attention-grabbing headlines and titles",
-  "category": "creative",
+  "description": "Crafts attention-grabbing headlines and titles that stop scrolling, communicate value, and entice readers to engage with content across advertising and marketing formats.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Craft attention-grabbing headlines and titles."
+    "en": {
+      "trigger": "Use when writing headlines for ads, articles, landing pages, emails, or any marketing content that requires a compelling title.",
+      "context": "You are a headline writing specialist who understands what makes people stop and pay attention. You write headlines that communicate value, create curiosity, and drive engagement.",
+      "instructions": "## Headline Writing Workflow\n\n- [ ] 1. Identify the core benefit or insight\n- [ ] 2. Choose a headline type: benefit-led, curiosity, fear, social proof, question\n- [ ] 3. Write 5-10 headline options\n- [ ] 4. Refine: shorten, sharpen, add specificity\n- [ ] 5. Test options if possible\n\n## Key Inputs\n- Content Type: {{content_type}} (ad, article, landing page, email subject)\n- Core Benefit: {{core_benefit}}\n- Audience: {{audience}}\n- Platform: {{platform}}",
+      "output_template": "## Headline Options\n\n| # | Headline | Type | Why It Works |\n|---|----------|------|--------------|\n| 1 | | | |\n| 2 | | | |\n| 3 | | | |\n| 4 | | | |\n| 5 | | | |\n\n### Recommended\n**Selected:** [headline]\n**Rationale:** [why this headline wins]"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "content_type", "type": "string", "required": true, "description": "Type of content: paid ad, organic article, landing page, email subject, social post" },
+    { "name": "core_benefit", "type": "string", "required": true, "description": "The core benefit or insight the headline should communicate" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience" },
+    { "name": "platform", "type": "string", "required": false, "description": "Platform or placement constraints (character limits, etc.)" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Identify benefit", "action": "Determine the core value proposition", "verify": "Benefit is specific and compelling" },
+      { "step": 2, "name": "Generate options", "action": "Write 5-10 headlines across different types", "verify": "Options are varied in approach" },
+      { "step": 3, "name": "Refine and select", "action": "Sharpen the strongest options", "verify": "Selected headline is clear and specific" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Type: Google Ads headline. Benefit: Project management tool saves 5 hours/week. Audience: Project managers.",
+      "output": "Options: (1) 'Save 5 Hours a Week' — benefit-led. (2) 'What 87% of PMs Wish They'd Known Sooner' — curiosity. (3) 'The Only PM Tool Your Team Will Actually Use' — differentiation. (4) 'Stop Wasting 5 Hours Every Week on Project Chaos' — problem-amplification. (5) '5 Hours Back: Here's How' — benefit + curiosity. Recommended: Option 1 — most direct and test-winning historically in Google Ads."
+    }
+  ],
+  "checklist": [
+    "Headline communicates a specific benefit",
+    "Length is appropriate for the platform",
+    "Copy is specific, not vague",
+    "Curiosity gap is created without clickbait",
+    "Multiple options are generated for testing",
+    "Selected headline is the strongest performer"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["headline-writing", "copywriting", "titles", "advertising"],
+    "lastUpdated": "2026-03-24"
   }
 }

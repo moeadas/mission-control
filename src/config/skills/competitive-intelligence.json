@@ -1,17 +1,121 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "competitive-intelligence",
   "name": "Competitive Intelligence",
-  "description": "Gathering and analyzing competitor information",
-  "category": "research",
+  "description": "Systematically monitors and analyzes competitor activities, market shifts, and industry developments to keep the agency and clients informed and ahead of competitive threats.",
+  "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Gather and analyze competitor information."
+    "en": {
+      "trigger": "Use when setting up ongoing competitive intelligence monitoring or conducting deep-dive intelligence research on a specific competitor or market development.",
+      "context": "You are a competitive intelligence specialist who systematically gathers, analyzes, and reports on competitor activities to keep stakeholders informed and proactive.",
+      "instructions": "## Competitive Intelligence Workflow\n\nEstablish and execute competitive intelligence:\n\n- [ ] 1. CI program design: Define competitors, sources, and cadence\n- [ ] 2. Source setup: Configure monitoring across platforms and sources\n- [ ] 3. Data collection: Gather signals on competitor activities\n- [ ] 4. Signal analysis: Distinguish meaningful signals from noise\n- [ ] 5. Reporting: Synthesize findings into actionable intelligence reports\n- [ ] 6. Alert protocols: Set up triggers for significant developments\n- [ ] 7. Strategic integration: Connect CI insights to strategy and planning\n\n## Key Inputs\n- Client/brand: {{brand_name}}\n- Competitive set: {{competitors}}\n- Intelligence scope: {{scope}}\n- Report cadence: {{cadence}}",
+      "output_template": "## Competitive Intelligence Report: {{brand_name}}\n\n### Report Period\n{{start_date}} — {{end_date}}\n\n### Competitor Activity Summary\n\n| Competitor | Key Activity | Signal Type | Impact |\n|------------|-------------|-------------|--------|\n| | | |\n\n### Significant Developments\n\n#### 🔴 High Priority\n**[Competitor]: [Development]**\n**What happened:**\n**Source:**\n**Strategic implication for {{brand_name}}:**\n**Recommended response:**\n\n#### 🟡 Medium Priority\n**[Competitor]: [Development]**\n**What happened:**\n**Source:**\n**Implication:**\n\n#### 🟢 Low Priority (Monitor)\n**[Development]**\n\n### Market Signals\n\n**New entrants:**\n\n**Product launches:**\n\n**Pricing changes:**\n\n**Partnerships/acquisitions:**\n\n**Marketing campaigns:**\n\n### Ad Intelligence\n\n| Competitor | Platforms Active | Est. Spend | Creative Themes |\n|------------|-----------------|------------|-----------------|\n| | | | |\n\n### Social & Content Intelligence\n\n| Competitor | Key Content Themes | Engagement | Notable Posts |\n|------------|------------------|------------|---------------|\n| | | | |\n\n### Intelligence Gaps\n| Unknown Area | Priority to Fill | Suggested Approach |\n|-------------|-----------------|-------------------|\n| | | |\n\n### Looking Ahead\n\n**Expected competitor moves:**\n\n**Upcoming events to monitor:**\n\n**Recommendations:**"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Your brand or client name"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": true,
+      "description": "Competitors to monitor"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of intelligence (all channels, specific markets, etc.)"
+    },
+    {
+      "name": "cadence",
+      "type": "string",
+      "required": false,
+      "description": "Reporting frequency"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Program Design",
+        "action": "Define competitors, sources, monitoring tools, and cadence",
+        "verify": "Program is sustainable and targeted"
+      },
+      {
+        "step": 2,
+        "name": "Source Setup",
+        "action": "Configure monitoring across platforms",
+        "verify": "All key sources covered"
+      },
+      {
+        "step": 3,
+        "name": "Data Collection",
+        "action": "Gather competitor signals on an ongoing basis",
+        "verify": "Data is captured consistently"
+      },
+      {
+        "step": 4,
+        "name": "Signal Analysis",
+        "action": "Distinguish meaningful developments from noise",
+        "verify": "Analysis is objective and evidence-based"
+      },
+      {
+        "step": 5,
+        "name": "Reporting",
+        "action": "Deliver clear, actionable intelligence reports",
+        "verify": "Report is timely and decision-relevant"
+      },
+      {
+        "step": 6,
+        "name": "Strategic Integration",
+        "action": "Connect CI insights to planning and decisions",
+        "verify": "Intelligence drives action"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Set up CI monitoring for TechStart vs. Moss, Pleo, and Airbase in the GCC market. Weekly reports. Focus on ad creative, pricing changes, and content strategy.",
+      "output": "CI program design with source list, monitoring setup, and first intelligence report"
+    }
+  ],
+  "checklist": [
+    "All key competitors are covered",
+    "Sources are reliable and current",
+    "Reports are delivered on schedule",
+    "Signals are distinguished from noise",
+    "Reports are actionable, not just informational",
+    "Confidentiality protocols followed",
+    "Intelligence gaps are identified and addressed"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet",
+    "web-search",
+    "social-monitoring"
+  ],
+  "agents": [
+    "nova"
+  ],
+  "pipelines": [
+    "research"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "competitive-intelligence",
+      "monitoring",
+      "strategy",
+      "market-research"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

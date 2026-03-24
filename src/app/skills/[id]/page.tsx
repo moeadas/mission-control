@@ -60,16 +60,20 @@ export default function SkillEditorPage({ skillId, isModal, onClose }: SkillEdit
   }, [skillId])
 
   const updatePrompt = (lang: 'en' | 'ar', field: string, value: string) => {
-    setSkill(prev => ({
-      ...prev,
-      prompts: {
-        ...prev.prompts,
-        [lang]: {
-          ...prev.prompts?.[lang],
-          [field]: value,
+    setSkill(prev => {
+      const currentPrompts = prev.prompts || { en: { trigger: '', context: '', instructions: '', output_template: '' }, ar: { trigger: '', context: '', instructions: '', output_template: '' } }
+      const currentLangPrompt = currentPrompts[lang] || { trigger: '', context: '', instructions: '', output_template: '' }
+      return {
+        ...prev,
+        prompts: {
+          ...currentPrompts,
+          [lang]: {
+            ...currentLangPrompt,
+            [field]: value,
+          }
         }
-      }
-    }))
+      } as Partial<Skill>
+    })
   }
 
   const addVariable = () => {

@@ -1,17 +1,54 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "knowledge-management",
   "name": "Knowledge Management",
-  "description": "Organizing and sharing institutional knowledge",
+  "description": "Organizes and shares institutional knowledge across agency teams to prevent knowledge silos, accelerate onboarding, and ensure best practices are captured and accessible.",
   "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Organize and share institutional knowledge."
+    "en": {
+      "trigger": "Use when organizing agency knowledge, building a knowledge base, improving information flow, accelerating team onboarding, or capturing expertise before team members leave.",
+      "context": "You are a knowledge management specialist who helps agencies capture, organize, and share what they know. You design systems that make it easy to find information and hard to lose it.",
+      "instructions": "## Knowledge Management Workflow\n\n- [ ] 1. Audit current knowledge: what exists, where it lives, gaps\n- [ ] 2. Define knowledge categories and taxonomy\n- [ ] 3. Identify knowledge owners and subject matter experts\n- [ ] 4. Design the knowledge architecture (wiki, database, etc.)\n- [ ] 5. Implement capture processes: templates, review cycles\n- [ ] 6. Monitor usage and iterate\n\n## Key Inputs\n- Knowledge Areas: {{knowledge_areas}}\n- Current Gaps: {{current_gaps}}\n- Team Structure: {{team_structure}}\n- Available Tools: {{available_tools}}",
+      "output_template": "## Knowledge Management Plan\n\n### Knowledge Audit\n| Knowledge Area | Owner | Location | Quality | Gap |\n|--------------|-------|----------|---------|-----|\n| | | | | |\n\n### Taxonomy\n| Category | Subcategory | Content Types |\n|---------|-------------|--------------|\n| | | |\n\n### Knowledge Owners\n| Area | SME | Owner |\n|------|-----|-------|\n| | | |\n\n### Implementation Roadmap\n| Phase | Action | Owner | Timeline |\n|-------|--------|-------|----------|\n| | | | |\n\n### Success Metrics\n- [ ] ..."
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "knowledge_areas", "type": "string", "required": true, "description": "Key knowledge domains in the agency: accounts, creative, media, ops" },
+    { "name": "current_gaps", "type": "string", "required": false, "description": "Known gaps in institutional knowledge" },
+    { "name": "team_structure", "type": "string", "required": false, "description": "Team structure and key individuals" },
+    { "name": "available_tools", "type": "string", "required": false, "description": "Tools available: wiki, Notion, Confluence, shared drives" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Audit knowledge", "action": "Map what knowledge exists and where gaps are", "verify": "Audit is comprehensive" },
+      { "step": 2, "name": "Define taxonomy", "action": "Create clear categories and structure", "verify": "Structure is intuitive and scalable" },
+      { "step": 3, "name": "Assign owners", "action": "Designate knowledge owners for each area", "verify": "Owners are committed" },
+      { "step": 4, "name": "Implement systems", "action": "Build the knowledge infrastructure", "verify": "System is accessible and maintained" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Areas: Google Ads best practices, client onboarding, creative approval workflows. Gaps: no central wiki, knowledge is in people's heads. Team: 15 people across media, creative, accounts. Tools: Confluence available.",
+      "output": "Created 4 knowledge spaces in Confluence: Media, Creative, Accounts, Ops. Assigned 6 knowledge owners. Implemented monthly knowledge review sessions. Added 'knowledge capture' step to project close process. After 6 months: 80% of onboarding questions answered via wiki."
+    }
+  ],
+  "checklist": [
+    "Knowledge audit covers all key areas",
+    "Taxonomy is intuitive and consistently applied",
+    "Knowledge owners are identified and committed",
+    "Capture processes are embedded in workflows",
+    "Knowledge base is searchable and accessible",
+    "Usage is monitored and gaps are filled"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["operations-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["knowledge-management", "wiki", "knowledge-base", "agency-ops"],
+    "lastUpdated": "2026-03-24"
   }
 }

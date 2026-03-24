@@ -1,17 +1,105 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "budget-allocation",
   "name": "Budget Allocation",
-  "description": "Strategically distributing budget across channels",
-  "category": "media",
+  "description": "Strategically distributes marketing and media budgets across channels, campaigns, and time periods to maximize reach, frequency, and ROI goals within given constraints.",
+  "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Strategically distribute budget across channels."
+    "en": {
+      "trigger": "Use when allocating or reallocating a marketing budget across channels, campaigns, or audience segments — to maximize ROI and meet business objectives.",
+      "context": "You are a media strategy specialist who allocates budgets based on historical performance, channel effectiveness, and business objectives to maximize return within constraints.",
+      "instructions": "## Budget Allocation Workflow\n\n- [ ] 1. Define objectives: Reach, frequency, conversions, brand awareness\n- [ ] 2. Audit historical data: What has worked historically and at what cost?\n- [ ] 3. Assess channels: Evaluate expected CPM, CPA, ROAS for each channel\n- [ ] 4. Allocate budget: Distribute across channels based on objectives and data\n- [ ] 5. Set pacing: Ensure even distribution across the campaign period\n- [ ] 6. Build contingency: Set aside reserve budget for optimization\n- [ ] 7. Document rationale: Explain why each channel received its allocation\n\n## Key Inputs\n- Total budget: {{total_budget}}\n- Objectives: {{objectives}}\n- Time period: {{time_period}}\n- Historical data: {{historical_data}}\n- Channels: {{channels}}",
+      "output_template": "## Budget Allocation Plan\n\n### Campaign Brief\n| Field | Value |\n|-------|-------|\n| Total budget | {{total_budget}} |\n| Objectives | {{objectives}} |\n| Period | {{time_period}} |\n| Date | {{date}} |\n\n### Historical Performance\n| Channel | Previous spend | ROAS | CPA | Effectiveness |\n|---------|---------------|------|-----|---------------|\n| | | | | |\n\n### Proposed Allocation\n| Channel | Allocation | % of budget | Expected CPM | Expected CPA | ROAS target |\n|---------|-----------|-------------|-------------|-------------|------------|\n| | | | | | |\n| **Total** | | **100%** | | | |\n\n### Allocation Rationale\n| Channel | Rationale |\n|---------|----------|\n| | |\n\n### Pacing Plan\n| Period | Planned spend | % of budget |\n|--------|--------------|-------------|\n| Week 1 | | |\n| Week 2 | | |\n| Week 3 | | |\n| Week 4 | | |\n\n### Contingency Reserve\n| Amount | Purpose |\n|--------|---------|\n| | |\n\n### Review Points\n| Date | Action |\n|------|--------|\n| | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "total_budget",
+      "type": "string",
+      "required": true,
+      "description": "Total budget to allocate"
+    },
+    {
+      "name": "objectives",
+      "type": "string",
+      "required": true,
+      "description": "Campaign objectives (reach, conversions, brand awareness)"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Campaign time period"
+    },
+    {
+      "name": "historical_data",
+      "type": "string",
+      "required": false,
+      "description": "Historical channel performance data"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": false,
+      "description": "Channels to consider for allocation"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Objective Definition",
+        "action": "Clarify what the budget must achieve",
+        "verify": "Objectives are specific and measurable"
+      },
+      {
+        "step": 2,
+        "name": "Historical Audit",
+        "action": "Review past channel performance",
+        "verify": "Historical data informs allocation decisions"
+      },
+      {
+        "step": 3,
+        "name": "Channel Assessment",
+        "action": "Evaluate expected performance per channel",
+        "verify": "Expectations are realistic and evidenced"
+      },
+      {
+        "step": 4,
+        "name": "Allocation",
+        "action": "Distribute budget across channels",
+        "verify": "Allocation aligns with objectives"
+      },
+      {
+        "step": 5,
+        "name": "Pacing and Reserve",
+        "action": "Set pacing curve and contingency reserve",
+        "verify": "Reserve allows for optimization"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Allocate a $120,000 Q2 budget for TechStart across Google Ads, Meta, LinkedIn, and programmatic. Primary objective: lead generation at $85 CPA target. Secondary: brand awareness.",
+      "output": "Full budget allocation with rationale, pacing plan, and contingency reserve"
+    }
+  ],
+  "checklist": [
+    "Allocation aligns with campaign objectives",
+    "Historical performance is considered",
+    "Pacing is even across the period",
+    "Contingency reserve is set aside",
+    "Rationale is documented for each channel"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova"],
+  "pipelines": ["media-strategy"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["media", "budget", "strategy", "allocation"],
+    "lastUpdated": "2026-03-24"
   }
 }

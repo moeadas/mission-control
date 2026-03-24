@@ -1,17 +1,55 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "email-copy",
   "name": "Email Copywriting",
-  "description": "Writing email sequences and newsletters",
-  "category": "creative",
+  "description": "Writes compelling email sequences, newsletters, and promotional emails that engage audiences, nurture leads, and drive conversions for advertising and marketing campaigns.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Write email sequences and newsletters."
+    "en": {
+      "trigger": "Use when writing email drip campaigns, creating newsletters, drafting promotional emails, or developing email sequences for lead nurturing.",
+      "context": "You are an email copywriting specialist who writes emails that get opened, read, and acted upon. You understand email marketing best practices, personalisation, and how to write for different stages of the funnel.",
+      "instructions": "## Email Copywriting Workflow\n\n- [ ] 1. Define the email goal and audience\n- [ ] 2. Choose the email type (promotional, nurture, newsletter, announcement)\n- [ ] 3. Write a compelling subject line and preview text\n- [ ] 4. Write the body: hook → value → call to action\n- [ ] 5. Optimize for preview, CTAs, and mobile\n- [ ] 6. Proofread for clarity and tone\n\n## Key Inputs\n- Email Goal: {{email_goal}} (nurture, promote, inform, re-engage)\n- Audience: {{audience}}\n- Offer/Message: {{offer_message}}\n- Tone: {{tone}} (formal, casual, urgent, friendly)\n- CTA: {{cta}} (what action to drive)",
+      "output_template": "## Email Copy\n\n### Subject Line\n[Primary subject line]\n[Alternative subject line]\n\n### Preview Text\n[Email preview text — 40-90 characters]\n\n### Body\n[Email copy with hook, value proposition, and CTA]\n\n### CTA Button\n[Button text: e.g., 'Shop Now', 'Learn More']\n\n### Technical Notes\n- Segment: \n- Send time: \n- Personalization tokens:"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "email_goal", "type": "string", "required": true, "description": "Goal of the email: nurture leads, promote offer, deliver news, re-engage inactive subscribers" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience segment and their relationship to the brand" },
+    { "name": "offer_message", "type": "string", "required": true, "description": "The core message, offer, or content of the email" },
+    { "name": "tone", "type": "string", "required": false, "description": "Tone of voice: formal, casual, urgent, warm, professional" },
+    { "name": "cta", "type": "string", "required": false, "description": "Primary call-to-action: what you want the reader to do" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define goal", "action": "Clarify what action the email should drive", "verify": "Goal is specific and measurable" },
+      { "step": 2, "name": "Write subject line", "action": "Draft 2-3 subject line options", "verify": "Subject lines are specific and compelling" },
+      { "step": 3, "name": "Write body", "action": "Write the email with hook, value, and CTA", "verify": "Copy is clear, concise, and actionable" },
+      { "step": 4, "name": "Optimize", "action": "Check for mobile optimization and preview text", "verify": "Email renders well on mobile" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Goal: Re-engage inactive subscribers. Audience: Users who haven't opened in 90 days. Message: Exclusive 20% off for returning customers. Tone: Warm, personal. CTA: 'Come back and shop.'",
+      "output": "Subject: We miss you, [First Name] — here's 20% off to say sorry. Preview: It's been a while. We'd love to have you back. Body: Hey [First Name], it's been a while since we last saw you... [story about new products]... [20% offer with clear CTA button]. A/B test shows 'We miss you' outperforms 'Special offer' by 34% in open rate."
+    }
+  ],
+  "checklist": [
+    "Subject line is specific, not generic",
+    "Preview text complements the subject",
+    "Email has one clear goal and CTA",
+    "Copy is scannable (short paragraphs, bullet points)",
+    "Personalization is used appropriately",
+    "Mobile rendering is considered"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["email-copy", "email-marketing", "drip-campaign", "copywriting"],
+    "lastUpdated": "2026-03-24"
   }
 }

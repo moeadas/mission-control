@@ -1,17 +1,57 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "keyword-research",
   "name": "Keyword Research",
-  "description": "Finding high-value search terms",
+  "description": "Finding the search terms that drive qualified traffic, inform content strategy, and reveal what audiences actually want. From seed keywords to long-tail opportunities — research that fuels SEO and content.",
   "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Find high-value search terms."
+    "en": {
+      "trigger": "Use when conducting keyword research for SEO, content planning, paid search campaigns, or understanding what your audience is searching for. Informs content creation and media targeting.",
+      "context": "You are a keyword research specialist who understands search intent, keyword clustering, competitive keyword analysis, and how to translate research into content and media strategies.",
+      "instructions": "## Keyword Research Workflow\n\n- [ ] 1. Define seed keywords and topics\n- [ ] 2. Generate keyword ideas using tools and logic\n- [ ] 3. Analyze search volume and competition\n- [ ] 4. Categorize by intent (informational, navigational, transactional)\n- [ ] 5. Group into topic clusters\n- [ ] 6. Prioritize by opportunity and fit\n\n## Key Inputs\n- Seed Keywords: {{seed_keywords}}\n- Target Audience: {{audience}}\n- Geographic Focus: {{geo}}\n- Content Type: {{content_type}}\n- Business Objective: {{objective}}",
+      "output_template": "## Keyword Research\n\n### Primary Keywords\n| Keyword | Volume | Difficulty | Intent | Opportunity |\n|---------|--------|------------|--------|-------------|\n| | | | | |\n\n### Long-Tail Opportunities\n| Keyword | Volume | Difficulty | Intent | Gap |\n|---------|--------|------------|--------|-----|\n| | | | | |\n\n### Keyword Clusters\n| Cluster | Primary KW | Supporting KWs |\n|---------|-----------|---------------|\n| | | |\n\n### Content Opportunities\n| Topic | Target KW | Content Type | Priority |\n|-------|-----------|--------------|----------|\n| | | | |\n\n### Competitive Analysis\n| Competitor | Keywords They Rank For | Gap Opportunity |\n|------------|----------------------|-----------------|\n| | | |\n\n### Search Intent Distribution\n| Intent | % of Keywords | Content Type |\n|--------|---------------|--------------|\n| Informational | | |\n| Navigational | | |\n| Transactional | | |\n| Commercial | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "seed_keywords", "type": "string", "required": true, "description": "Starting keywords or topics" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience description" },
+    { "name": "geo", "type": "string", "required": false, "description": "Geographic focus for search" },
+    { "name": "content_type", "type": "string", "required": false, "description": "Type of content being planned" },
+    { "name": "objective", "type": "string", "required": false, "description": "Business objective (awareness, leads, sales)" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Seed research", "action": "Start with core topics and seed keywords", "verify": "Seed keywords are strategic" },
+      { "step": 2, "name": "Expand keywords", "action": "Generate related terms and questions", "verify": "List is comprehensive" },
+      { "step": 3, "name": "Analyze metrics", "action": "Assess volume, difficulty, and CPC", "verify": "Data is current" },
+      { "step": 4, "name": "Classify intent", "action": "Categorize by search intent", "verify": "Intent matches content type" },
+      { "step": 5, "name": "Cluster", "action": "Group related keywords into topics", "verify": "Clusters support pillar strategy" },
+      { "step": 6, "name": "Prioritize", "action": "Rank by opportunity and fit", "verify": "Priorities align with objectives" }
+    ]
+  },
+  "examples": [
+    { "input": "Research keywords for a B2B SaaS project management tool targeting enterprise teams.", "output": "Keyword research with clusters, intent analysis, and content opportunities." },
+    { "input": "Find long-tail keyword opportunities for a D2C sustainable fashion brand.", "output": "Comprehensive keyword list with volume, difficulty, and content recommendations." }
+  ],
+  "checklist": [
+    "Seed keywords are strategically relevant",
+    "Comprehensive keyword list generated",
+    "Search volume and difficulty analyzed",
+    "Intent classification accurate",
+    "Keywords clustered by topic",
+    "Competitive gaps identified",
+    "Content opportunities mapped",
+    "Priorities align with business goals"
+  ],
+  "tools": ["document", "spreadsheet", "seo-tools"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["keyword-research", "seo", "content-strategy", "search", "sem"],
+    "lastUpdated": "2026-03-24"
   }
 }

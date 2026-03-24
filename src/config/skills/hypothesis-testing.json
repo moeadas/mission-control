@@ -1,17 +1,57 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "hypothesis-testing",
   "name": "Hypothesis Testing",
-  "description": "Scientific testing of business assumptions",
+  "description": "Applying the scientific method to marketing and business decisions. Design rigorous tests, analyze results with statistical significance, and make data-driven decisions that eliminate guesswork.",
   "category": "research",
+  "difficulty": "advanced",
+  "freedom": "high",
   "prompts": {
-    "en": "Scientific testing of business assumptions."
+    "en": {
+      "trigger": "Use when designing A/B tests, validating business assumptions, designing experiments, analyzing test results, or making data-driven decisions based on evidence.",
+      "context": "You are a hypothesis testing specialist who understands experimental design, statistical significance, and proper test analysis. You help teams move from opinions to evidence.",
+      "instructions": "## Hypothesis Testing Workflow\n\n- [ ] 1. Identify the business question or assumption\n- [ ] 2. Formulate null and alternative hypotheses\n- [ ] 3. Design the experiment (sample size, duration, variables)\n- [ ] 4. Execute and monitor the test\n- [ ] 5. Analyze results with statistical rigor\n- [ ] 6. Make actionable recommendations\n\n## Key Inputs\n- Business Question: {{question}}\n- Test Variable: {{variable}}\n- Success Metric: {{metric}}\n- Sample Size: {{sample}}\n- Test Duration: {{duration}}",
+      "output_template": "## Hypothesis Test Design\n\n### Business Context\n**Question:**\n\n**Current Baseline:**\n\n### Hypotheses\n| Hypothesis | Statement |\n|------------|-----------|\n| Null (H0) | |\n| Alternative (H1) | |\n\n### Test Design\n| Element | Value |\n|---------|-------|\n| Test Variable | |\n| Control | |\n| Success Metric | |\n| Minimum Detectable Effect | |\n| Statistical Power | |\n| Significance Level (α) | |\n\n### Sample & Duration\n| Element | Value |\n|---------|-------|\n| Required Sample Size | |\n| Daily Traffic | |\n| Test Duration | |\n\n### Results Analysis\n| Metric | Control | Variant | Lift | p-value |\n|-------|---------|---------|------|---------|\n| | | | | |\n\n### Decision\n| Outcome | Recommendation |\n|---------|----------------|\n| ☐ Significant | Implement variant |\n| ☐ Not Significant | Keep control |\n| ☐ Inconclusive | Extend test or redesign |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "question", "type": "string", "required": true, "description": "The business question to answer" },
+    { "name": "variable", "type": "string", "required": true, "description": "Variable being tested" },
+    { "name": "metric", "type": "string", "required": true, "description": "Primary success metric" },
+    { "name": "sample", "type": "string", "required": false, "description": "Expected sample size or traffic" },
+    { "name": "duration", "type": "string", "required": false, "description": "Proposed test duration" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define question", "action": "Clarify the business decision to make", "verify": "Question is specific and actionable" },
+      { "step": 2, "name": "Formulate hypotheses", "action": "Write null and alternative hypotheses", "verify": "Hypotheses are testable" },
+      { "step": 3, "name": "Design experiment", "action": "Calculate sample size and duration", "verify": "Test is statistically valid" },
+      { "step": 4, "name": "Execute test", "action": "Run experiment with proper controls", "verify": "Test runs cleanly" },
+      { "step": 5, "name": "Analyze results", "action": "Apply statistical analysis", "verify": "Results are significant or not" },
+      { "step": 6, "name": "Make recommendation", "action": "Translate findings into action", "verify": "Recommendation is clear" }
+    ]
+  },
+  "examples": [
+    { "input": "Design a hypothesis test to determine if changing the CTA button color from green to orange will increase conversions.", "output": "Complete test design with hypotheses, sample size calculation, and analysis plan." },
+    { "input": "Analyze results from an email subject line test: 50K sent to each variant, Control: 22% open rate, Variant: 24.5% open rate.", "output": "Statistical analysis with p-value, confidence interval, and recommendation." }
+  ],
+  "checklist": [
+    "Business question clearly defined",
+    "Null and alternative hypotheses stated",
+    "Success metric identified",
+    "Sample size calculated",
+    "Test duration determined",
+    "Statistical power adequate",
+    "Results analyzed with proper statistics",
+    "Recommendation is actionable"
+  ],
+  "tools": ["document", "spreadsheet", "statistics"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["hypothesis-testing", "ab-testing", "statistics", "experimentation", "data"],
+    "lastUpdated": "2026-03-24"
   }
 }

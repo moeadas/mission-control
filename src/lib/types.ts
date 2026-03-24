@@ -21,6 +21,7 @@ export type AgentModel =
   | 'gemini-2.5-flash'
   | 'gemini-2.5-pro'
   | 'gemini-2.0-flash'
+  | 'minimax-m2.7:cloud'
 
 export interface ProviderOption {
   id: AgentModel
@@ -57,7 +58,8 @@ export interface Agent {
     room: string
   }
   bio: string
-}
+  methodology: string
+  specialty: AgentSpecialty
 
 export interface ActivityEntry {
   id: string
@@ -92,6 +94,7 @@ export interface AgentTemplate {
   accentColor: string
   avatar: string
   bio: string
+  methodology: string
   systemPrompt: string
   provider: AIProvider
   model: AgentModel

@@ -117,8 +117,8 @@ export interface QualityCheckpoint {
 
 // Config Registry - Single source of truth
 export const ConfigRegistry = {
-  workflows: workflowsData.workflows as Workflow[],
-  agentRoles: agentRolesData.roles as AgentRole[],
+  workflows: workflowsData.workflows as unknown as Workflow[],
+  agentRoles: agentRolesData.roles as unknown as AgentRole[],
   toolCategories: toolsData.toolCategories as ToolCategory[],
   toolConnections: toolsData.toolConnections as Record<string, any>,
   clientTemplates: clientTemplatesData.clientTemplates as ClientTemplate[],

@@ -1,17 +1,58 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "traffic-coordination",
   "name": "Traffic Coordination",
-  "description": "Managing the flow of creative work through production",
+  "description": "Managing the flow of creative work through production — from brief to final delivery. Keep projects moving, resources allocated, and deadlines met without dropping the ball on anything.",
   "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Manage the flow of creative work through production."
+    "en": {
+      "trigger": "Use when coordinating creative work flows, managing creative briefs, scheduling production, or keeping creative projects on track through multiple stages and stakeholders.",
+      "context": "You are a traffic coordination specialist who manages the flow of creative work through agencies or teams. You understand production pipelines, resource allocation, and deadline management.",
+      "instructions": "## Traffic Coordination Workflow\n\n- [ ] 1. Receive and review brief\n- [ ] 2. Assess capacity and assign resources\n- [ ] 3. Schedule production timeline\n- [ ] 4. Monitor progress through stages\n- [ ] 5. Manage bottlenecks and conflicts\n- [ ] 6. Ensure on-time delivery\n\n## Key Inputs\n- Brief: {{brief}}\n- Current Workload: {{workload}}\n- Resources: {{resources}}\n- Deadlines: {{deadlines}}\n- Priorities: {{priorities}}",
+      "output_template": "## Traffic Coordination\n\n### Workload Overview\n| Project | Status | Stage | Owner | Due |\n|---------|--------|-------|-------|-----|\n| | | | | |\n\n### Capacity Assessment\n| Resource | Current Allocation | Available | Utilization % |\n|---------|------------------|-----------|--------------|\n| | | | |\n\n### Scheduling\n| Project | Start | Stages | End | Dependencies |\n|---------|-------|--------|-----|-------------|\n| | | | | |\n\n### Bottlenecks\n| Bottleneck | Impact | Solution | Status |\n|-----------|--------|---------|--------|\n| | | | |\n\n### Priority Matrix\n| Project | Urgency | Importance | Priority Rank |\n|---------|---------|-----------|-------------|\n| | | | |\n\n### Daily Handoff\n| From | To | Item | Deadline | Status |\n|------|---|------|---------|--------|\n| | | | | |\n\n### Alerts\n| Item | Alert Type | Action Needed |\n|------|----------|--------------|\n| | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "brief", "type": "string", "required": true, "description": "Creative brief details" },
+    { "name": "workload", "type": "string", "required": true, "description": "Current project workload" },
+    { "name": "resources", "type": "string", "required": false, "description": "Available resources" },
+    { "name": "deadlines", "type": "string", "required": false, "description": "Key deadlines" },
+    { "name": "priorities", "type": "string", "required": false, "description": "Priority ranking" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Review brief", "action": "Assess requirements and constraints", "verify": "Brief is complete" },
+      { "step": 2, "name": "Assess capacity", "action": "Check resource availability", "verify": "Resources identified" },
+      { "step": 3, "name": "Schedule", "action": "Create production timeline", "verify": "Timeline is realistic" },
+      { "step": 4, "name": "Monitor", "action": "Track progress and flag issues", "verify": "On track" },
+      { "step": 5, "name": "Resolve", "action": "Address bottlenecks quickly", "verify": "Flow restored" },
+      { "step": 6, "name": "Deliver", "action": "Ensure on-time handoff", "verify": "Delivered on time" }
+    ]
+  },
+  "examples": [
+    { "input": "Coordinate production of 5 concurrent campaigns — 2 landing pages, 3 social campaigns — due in 3 weeks with a team of 4 designers.", "output": "Traffic schedule with resource allocation, milestone tracking, and bottleneck management." },
+    { "input": "Manage a creative brief queue for an agency handling 15+ active clients with varying urgency levels.", "output": "Traffic workflow with prioritization framework and capacity management." }
+  ],
+  "checklist": [
+    "Briefs reviewed for completeness",
+    "Resources allocated appropriately",
+    "Production timeline realistic",
+    "Dependencies tracked",
+    "Progress monitored daily",
+    "Bottlenecks identified early",
+    "Conflicts resolved quickly",
+    "Deadlines met",
+    "Stakeholders updated"
+  ],
+  "tools": ["document", "project-management"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["traffic-coordination", "production", "creative-workflow", "scheduling", "project-management"],
+    "lastUpdated": "2026-03-24"
   }
 }

@@ -1,19 +1,121 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "competitive-analysis",
   "name": "Competitive Analysis",
-  "description": "Analyzing competitors' positioning, strengths, and weaknesses",
+  "description": "Analyzes competitors' strategies, positioning, products, pricing, and marketing to inform strategic decisions and identify opportunities for differentiation.",
   "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Analyze competitors' positioning, strengths, and weaknesses in {{industry}}."
+    "en": {
+      "trigger": "Use when conducting a competitive analysis for a brand, product, or market — identifying competitor strategies, strengths, weaknesses, and opportunities.",
+      "context": "You are a strategic analyst who systematically examines competitors to surface actionable insights that inform positioning, messaging, and go-to-market decisions.",
+      "instructions": "## Competitive Analysis Workflow\n\nConduct a thorough competitive analysis:\n\n- [ ] 1. Competitor identification: Define the competitive set (direct, indirect, aspirational)\n- [ ] 2. Information gathering: Collect data on products, pricing, positioning, and marketing\n- [ ] 3. Strategy mapping: Understand each competitor's core strategy\n- [ ] 4. Strengths/weaknesses analysis: Assess each competitor honestly\n- [ ] 5. Messaging audit: Analyze competitor communications and positioning\n- [ ] 6. Digital presence audit: Review competitor's digital footprint and performance\n- [ ] 7. Opportunity identification: Surface gaps and opportunities\n- [ ] 8. Synthesis: Distill findings into strategic recommendations\n\n## Key Inputs\n- Client/brand: {{brand_name}}\n- Market: {{market}}\n- Competitor set: {{competitors}}\n- Objective: {{analysis_objective}}",
+      "output_template": "## Competitive Analysis: {{brand_name}} — {{market}}\n\n### Competitive Set\n\n| Competitor | Type | Relevance |\n|------------|------|----------|\n| | Direct | |\n| | Indirect | |\n| | Aspirational | |\n\n### Competitor Profiles\n\n#### [Competitor A]\n\n**Overview:**\n- Founded:\n- Market share (est.):\n- Key products:\n- Target customers:\n- Geographic focus:\n\n**Strategy:**\n- Positioning:\n- Core value proposition:\n- Pricing model:\n- Distribution:\n\n**Strengths:**\n- \n\n**Weaknesses:**\n- \n\n**Marketing & Messaging:**\n- Brand tagline:\n- Key messages:\n- Content themes:\n- Social presence:\n\n**Digital Performance (est.):**\n- Website traffic rank:\n- Social following:\n- Ad spend visibility:\n\n---\n\n#### [Competitor B]\n[Same structure]\n\n### Messaging Landscape\n\n| Theme | Competitor A | Competitor B | Competitor C | White Space? |\n|-------|--------------|--------------|--------------|--------------|\n| Price/value | | | | |\n| Innovation | | | | |\n| Ease of use | | | | |\n| Trust/reliability | | | | |\n| Support | | | | |\n\n### Competitive Positioning Map\n\n[Y-axis label: ]\n[X-axis label: ]\n[Map competitors visually]\n\n### SWOT Analysis (by competitor)\n\n#### Competitor A\n| | |\n|-|---|\n| **Strengths** | **Weaknesses** |\n| | |\n| **Opportunities** | **Threats** |\n| | |\n\n### Strategic Implications for {{brand_name}}\n\n**Opportunities:**\n1. \n2. \n3. \n\n**Threats to monitor:**\n1. \n2. \n\n**Recommended differentiation angles:**\n1. \n2. \n\n### Key Findings Summary\n1. \n2. \n3. \n\n### Recommended Actions\n| Action | Priority | Timeline |\n|--------|----------|----------|\n| | | |"
+    }
   },
   "variables": [
-    "industry"
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Your brand or client name"
+    },
+    {
+      "name": "market",
+      "type": "string",
+      "required": true,
+      "description": "Market or category being analyzed"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": true,
+      "description": "Competitors to analyze"
+    },
+    {
+      "name": "analysis_objective",
+      "type": "string",
+      "required": false,
+      "description": "Specific objective of this analysis"
+    }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Competitor Identification",
+        "action": "Define the full competitive set",
+        "verify": "Set is comprehensive but focused"
+      },
+      {
+        "step": 2,
+        "name": "Information Gathering",
+        "action": "Collect data across all touchpoints",
+        "verify": "Data is current and reliable"
+      },
+      {
+        "step": 3,
+        "name": "Strategy Analysis",
+        "action": "Map each competitor's core strategy",
+        "verify": "Strategy is understood, not just surface-level"
+      },
+      {
+        "step": 4,
+        "name": "Messaging Audit",
+        "action": "Analyze competitor communications",
+        "verify": "Positioning themes are clear"
+      },
+      {
+        "step": 5,
+        "name": "Gap Analysis",
+        "action": "Identify white space and opportunities",
+        "verify": "Opportunities are real and actionable"
+      },
+      {
+        "step": 6,
+        "name": "Synthesis",
+        "action": "Distill findings into strategic recommendations",
+        "verify": "Recommendations are specific and prioritized"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Competitive analysis for TechStart in the B2B expense management space in UAE. Key competitors: SAP Concur, Moss, Pleo, Airbase. Objective: inform new positioning.",
+      "output": "Full competitive analysis with profiles, positioning map, SWOT, messaging landscape, and strategic recommendations"
+    }
+  ],
+  "checklist": [
+    "Competitive set is comprehensive",
+    "Data is sourced and credible",
+    "Competitor strategies are understood deeply",
+    "Messaging themes are clearly mapped",
+    "White space is identified",
+    "Recommendations are specific and actionable",
+    "Analysis is current (within 3 months)"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet",
+    "web-search"
+  ],
+  "agents": [
+    "nova",
+    "echo"
+  ],
+  "pipelines": [
+    "research"
+  ],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": [
+      "strategy",
+      "competitive-analysis",
+      "market-research",
+      "positioning"
+    ],
+    "lastUpdated": "2026-03-24"
   }
 }

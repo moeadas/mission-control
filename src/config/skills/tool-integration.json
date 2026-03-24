@@ -1,17 +1,58 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "tool-integration",
   "name": "Tool Integration",
-  "description": "Connecting and optimizing tools and platforms",
+  "description": "Connecting and optimizing the tools and platforms that power agency work. From API integrations to workflow automation — make your tools talk to each other and eliminate manual work.",
   "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Connect and optimize tools and platforms."
+    "en": {
+      "trigger": "Use when setting up tool integrations, automating workflows, evaluating new tools, or optimizing how tools and platforms work together.",
+      "context": "You are a tool integration specialist who understands APIs, automation platforms, and how to connect marketing and operational tools into cohesive workflows.",
+      "instructions": "## Tool Integration Workflow\n\n- [ ] 1. Map current tool landscape and gaps\n- [ ] 2. Define integration objectives\n- [ ] 3. Evaluate integration options\n- [ ] 4. Design integration architecture\n- [ ] 5. Implement and test\n- [ ] 6. Monitor and optimize\n\n## Key Inputs\n- Tools: {{tools}}\n- Objectives: {{objectives}}\n- Current Workflows: {{workflows}}\n- Budget: {{budget}}\n- Technical Constraints: {{constraints}}",
+      "output_template": "## Tool Integration\n\n### Current State\n| Tool | Purpose | Usage | Integration |\n|------|---------|-------|------------|\n| | | | |\n\n### Integration Objectives\n| Objective | Priority | Impact |\n|-----------|----------|--------|\n| | | |\n\n### Integration Architecture\n| Connection | Source | Destination | Method |\n|-----------|--------|-------------|--------|\n| | | | |\n\n### Integration Design\n| Integration | Trigger | Action | Data Flow |\n|-----------|---------|--------|----------|\n| | | | |\n\n### Implementation Plan\n| Integration | Effort | Cost | Priority |\n|-----------|-------|-----|----------|\n| | | | |\n\n### Automation Workflows\n| Workflow | Steps | Frequency | Owner |\n|---------|-------|---------|-------|\n| | | | |\n\n### Technical Requirements\n| Item | Details |\n|------|--------|\n| APIs Required | |\n| Auth Methods | |\n| Data Formats | |\n| Rate Limits | |\n\n### Success Metrics\n| Integration | Metric | Target |\n|-----------|--------|--------|\n| | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "tools", "type": "string", "required": true, "description": "Current and target tools" },
+    { "name": "objectives", "type": "string", "required": true, "description": "Integration goals and objectives" },
+    { "name": "workflows", "type": "string", "required": false, "description": "Current workflows to improve" },
+    { "name": "budget", "type": "string", "required": false, "description": "Budget for tools/integration" },
+    { "name": "constraints", "type": "string", "required": false, "description": "Technical constraints" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Map tools", "action": "Document current tool landscape", "verify": "Gaps identified" },
+      { "step": 2, "name": "Define objectives", "action": "Clarify integration goals", "verify": "Priorities set" },
+      { "step": 3, "name": "Evaluate options", "action": "Research integration approaches", "verify": "Options viable" },
+      { "step": 4, "name": "Design architecture", "action": "Plan integration structure", "verify": "Design is sound" },
+      { "step": 5, "name": "Implement", "action": "Build and test integrations", "verify": "Working correctly" },
+      { "step": 6, "name": "Monitor", "action": "Track performance and errors", "verify": "Reliable" }
+    ]
+  },
+  "examples": [
+    { "input": "Design a workflow that automatically creates Asana tasks from Gmail emails and syncs completed tasks back to Gmail.", "output": "Integration design with architecture, implementation steps, and monitoring plan." },
+    { "input": "Evaluate integration options to connect HubSpot, Slack, and Google Analytics for a marketing team.", "output": "Integration strategy with tool evaluation and workflow automation recommendations." }
+  ],
+  "checklist": [
+    "Tool landscape documented",
+    "Integration objectives defined",
+    "Options evaluated",
+    "Architecture designed",
+    "APIs and auth configured",
+    "Integrations tested",
+    "Monitoring set up",
+    "Documentation created",
+    "Team trained"
+  ],
+  "tools": ["document"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["tool-integration", "automation", "workflow", "operations", "api"],
+    "lastUpdated": "2026-03-24"
   }
 }

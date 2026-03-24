@@ -1,12 +1,16 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Activity, Moon, SunMedium, Target, Wifi } from 'lucide-react'
+import { Activity, Menu, Sun, Moon } from 'lucide-react'
 import { useAgentsStore } from '@/lib/agents-store'
+import { clsx } from 'clsx'
 
-export function TopBar() {
+interface TopBarProps {
+  onMobileMenuToggle?: () => void
+}
+
+export function TopBar({ onMobileMenuToggle }: TopBarProps) {
   const [time, setTime] = useState('')
-  const [date, setDate] = useState('')
   const themeMode = useAgentsStore((state) => state.agencySettings.themeMode)
   const setThemeMode = useAgentsStore((state) => state.setThemeMode)
   const missions = useAgentsStore((state) => state.missions)
@@ -15,60 +19,60 @@ export function TopBar() {
     const update = () => {
       const now = new Date()
       setTime(now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }))
-      setDate(now.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' }))
     }
     update()
     const interval = setInterval(update, 1000)
     return () => clearInterval(interval)
   }, [])
 
+  const activeMissionCount = missions.filter((mission) => mission.status !== 'completed').length
+
   return (
-    <header className="h-14 bg-panel/90 backdrop-blur-md border-b border-border flex items-center justify-between px-5 flex-shrink-0">
+    <header className="h-14 bg-[var(--bg-panel)] border-b border-[var(--border)] flex items-center justify-between px-4 md:px-5 flex-shrink-0">
+      {/* Left section */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-accent-purple/20 border border-accent-purple/30 flex items-center justify-center">
-          <Activity size={16} className="text-accent-purple" />
-        </div>
-        <div>
-          <h1 className="text-sm font-heading font-bold text-text-primary tracking-wide">
-            Moe's Mission Control
-          </h1>
-          <p className="text-[10px] font-mono text-text-dim">Virtual creative and digital media agency</p>
+        <button
+          onClick={onMobileMenuToggle}
+          className="flex md:hidden p-2 -ml-2 rounded-xl hover:bg-[var(--bg-card)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center"
+          aria-label="Open navigation menu"
+        >
+          <Menu size={22} />
+        </button>
+
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)] flex items-center justify-center shadow-sm">
+            <Activity size={18} className="text-white" />
+          </div>
+          <div className="hidden xs:block">
+            <h1 className="text-base font-semibold text-[var(--text-primary)] leading-tight">
+              Mission Control
+            </h1>
+            <p className="text-xs text-[var(--text-dim)]">
+              {activeMissionCount} active mission{activeMissionCount !== 1 ? 's' : ''}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-base/70 border border-border">
-          <Target size={12} className="text-accent-orange" />
-          <span className="text-[10px] font-mono text-text-secondary">
-            {missions.filter((mission) => mission.status !== 'completed').length} live missions
-          </span>
-        </div>
-        <div className="relative flex items-center gap-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cyan opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-cyan" />
-          </span>
-          <span className="text-xs font-mono text-accent-cyan">SYSTEMS ONLINE</span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-4">
+      {/* Right section */}
+      <div className="flex items-center gap-3">
+        {/* Theme toggle */}
         <button
           onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
-          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-base/70 text-text-secondary hover:text-text-primary hover:border-border-glow transition-all"
-          title={`Switch to ${themeMode === 'dark' ? 'light' : 'dark'} mode`}
+          className={clsx(
+            'flex items-center justify-center w-10 h-10 rounded-xl',
+            'transition-colors duration-200',
+            'text-[var(--text-secondary)] hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)]',
+            'focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-panel)]'
+          )}
+          aria-label={`Switch to ${themeMode === 'dark' ? 'light' : 'dark'} mode`}
         >
-          {themeMode === 'dark' ? <SunMedium size={14} /> : <Moon size={14} />}
-          <span className="hidden md:inline text-[10px] font-mono uppercase tracking-wide">
-            {themeMode === 'dark' ? 'Light mode' : 'Dark mode'}
-          </span>
+          {themeMode === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
-        <div className="text-right">
-          <p className="text-xs font-mono text-text-primary">{time}</p>
-          <p className="text-[10px] font-mono text-text-dim">{date}</p>
-        </div>
-        <div className="flex items-center gap-1.5 text-accent-cyan">
-          <Wifi size={14} />
+
+        {/* Time */}
+        <div className="hidden sm:block text-right">
+          <p className="text-sm font-medium text-[var(--text-primary)] tabular-nums">{time}</p>
         </div>
       </div>
     </header>

@@ -1,19 +1,106 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "brand-voice",
   "name": "Brand Voice",
-  "description": "Developing and maintaining consistent brand tone and style",
+  "description": "Develops and maintains a consistent brand tone and writing style that differentiates the brand and resonates with its target audience across all channels and content types.",
   "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Develop and maintain consistent brand tone and style for {{brand_name}}."
+    "en": {
+      "trigger": "Use when developing, defining, or auditing brand voice and tone — to ensure copy across all channels sounds consistently like the brand.",
+      "context": "You are a brand copy strategist who defines how a brand sounds — its personality, tone, vocabulary, and style — and ensures all written content reflects it consistently.",
+      "instructions": "## Brand Voice Development Workflow\n\n- [ ] 1. Brand personality: Define the human personality traits of the brand\n- [ ] 2. Voice attributes: Define 3-5 core voice dimensions (e.g., bold vs. subtle, formal vs. casual)\n- [ ] 3. Tone by context: Define how voice shifts by situation (professional, playful, urgent, etc.)\n- [ ] 4. Vocabulary: Define approved words, phrases, and terminology — and what to avoid\n- [ ] 5. Writing rules: Punctuation, capitalization, emoji usage, formatting conventions\n- [ ] 6. Examples: Write before/after examples showing voice in action\n- [ ] 7. Audit existing content: Assess current copy against the voice guide\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Target audience: {{target_audience}}\n- Competitor voices: {{competitor_voices}}\n- Existing copy samples: {{existing_copy_samples}}",
+      "output_template": "## Brand Voice Guide: {{brand_name}}\n\n### Brand Personality\n**Personality traits:**\n- \n\n**How the brand talks (like a person who...):**\n\n### Voice Dimensions\n| Dimension | This brand | Not this brand |\n|-----------|------------|----------------|\n| | | |\n\n### Tone by Context\n| Situation | Tone | Example |\n|-----------|------|---------|\n| Website (hero) | | |\n| Social (general) | | |\n| Customer comms | | |\n| Crisis/issue | | |\n| Sales enablement | | |\n\n### Vocabulary\n**Approved terms:**\n- \n\n**Avoid these terms:**\n- \n\n**Signature phrases:**\n- \n\n### Writing Rules\n- \n\n### Before / After Examples\n| Original copy | Brand voice version |\n|--------------|-------------------|\n| | |\n\n### Voice Audit\n| Content piece | Adheres to voice? | Notes |\n|--------------|------------------|-------|\n| | | |"
+    }
   },
   "variables": [
-    "brand_name"
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being defined"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary target audience"
+    },
+    {
+      "name": "competitor_voices",
+      "type": "string",
+      "required": false,
+      "description": "Competitor brand voices for differentiation context"
+    },
+    {
+      "name": "existing_copy_samples",
+      "type": "string",
+      "required": false,
+      "description": "Samples of existing copy to audit"
+    }
   ],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Personality Definition",
+        "action": "Define the human personality traits of the brand",
+        "verify": "Personality is distinctive and authentic"
+      },
+      {
+        "step": 2,
+        "name": "Voice Dimensions",
+        "action": "Define core voice dimensions with clear boundaries",
+        "verify": "Voice is ownable and differentiable from competitors"
+      },
+      {
+        "step": 3,
+        "name": "Tone Mapping",
+        "action": "Define how tone shifts by context",
+        "verify": "Tone variations are clear and practical"
+      },
+      {
+        "step": 4,
+        "name": "Vocabulary Rules",
+        "action": "Define approved and prohibited terminology",
+        "verify": "Rules are specific enough to be useful"
+      },
+      {
+        "step": 5,
+        "name": "Examples",
+        "action": "Write before/after examples",
+        "verify": "Examples show voice in real copy situations"
+      },
+      {
+        "step": 6,
+        "name": "Audit",
+        "action": "Audit existing content against the guide",
+        "verify": "Audit identifies gaps and inconsistencies"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Define brand voice for TechStart — a B2B fintech platform targeting finance leaders. Voice should feel confident, approachable, and technically credible without being cold or corporate.",
+      "output": "Complete brand voice guide with voice dimensions, tone map, vocabulary rules, and before/after examples"
+    }
+  ],
+  "checklist": [
+    "Brand personality is distinctive and authentic",
+    "Voice dimensions are clearly bounded",
+    "Tone mapping covers all key contexts",
+    "Vocabulary rules are specific and actionable",
+    "Before/after examples are realistic",
+    "Existing content has been audited"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["brand-strategy"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["creative", "brand", "copywriting", "voice"],
+    "lastUpdated": "2026-03-24"
   }
 }

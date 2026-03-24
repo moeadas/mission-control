@@ -1,17 +1,52 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "tone-adaptation",
   "name": "Tone Adaptation",
-  "description": "Adjusting writing style for different contexts",
-  "category": "creative",
+  "description": "Adjusts writing style and tone for different contexts, audiences, and platforms to ensure messaging resonates across all communications.",
+  "category": "content",
+  "difficulty": "beginner",
+  "freedom": "high",
   "prompts": {
-    "en": "Adjust writing style for different contexts."
+    "en": {
+      "trigger": "Use when adapting copy for different audiences, platforms, or contexts — e.g., making formal copy casual for social media, or adjusting B2B copy for B2C.",
+      "context": "You are a tone adaptation specialist who understands how to shift voice and tone across different contexts while maintaining brand consistency. You adapt copy so it sounds right for every channel and audience.",
+      "instructions": "## Tone Adaptation Workflow\n\n- [ ] 1. Identify the source copy and its current tone\n- [ ] 2. Define the target tone and context\n- [ ] 3. Adapt vocabulary, sentence structure, and style\n- [ ] 4. Maintain the core message while shifting delivery\n- [ ] 5. Review for consistency with brand voice\n\n## Key Inputs\n- Source Copy: {{source_copy}}\n- Source Tone: {{source_tone}}\n- Target Tone: {{target_tone}}\n- Target Context: {{target_context}}",
+      "output_template": "## Tone Adaptation\n\n### Original\n**Tone:** [e.g., formal, professional]\n**Copy:** [original text]\n\n### Adapted\n**Tone:** [e.g., casual, conversational]\n**Context:** [where this will be used]\n**Copy:** [adapted text]\n\n### Changes Made\n| Element | Original | Adapted |\n|---------|---------|---------|\n| Vocabulary | | |\n| Sentence Structure | | |\n| Tone Markers | | |\n\n### Preserved\n- [ ] Core message intact\n- [ ] Key benefit communicated"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "source_copy", "type": "string", "required": true, "description": "The original copy to adapt" },
+    { "name": "source_tone", "type": "string", "required": true, "description": "Current tone of the source copy" },
+    { "name": "target_tone", "type": "string", "required": true, "description": "Desired target tone" },
+    { "name": "target_context", "type": "string", "required": false, "description": "Where or how the adapted copy will be used" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Analyze source", "action": "Identify tone markers in source copy", "verify": "Core message is identified" },
+      { "step": 2, "name": "Adapt tone", "action": "Shift vocabulary, structure, and style", "verify": "Tone is consistent throughout" },
+      { "step": 3, "name": "Preserve message", "action": "Ensure core message survives the adaptation", "verify": "Key benefit is intact" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Source: 'Our platform delivers enterprise-grade security with SOC 2 Type II certification, ensuring your data is protected at every layer.' Target: Casual social media post for Instagram. Source tone: Technical, formal.",
+      "output": "Adapted: 'Your data is safer than a vault run by robots 🛡️ We're SOC 2 Type II certified — which basically means enterprise-grade security, no matter what.' Tone shifts from technical to conversational. Core message (security, certification) is preserved."
+    }
+  ],
+  "checklist": [
+    "Core message is preserved through adaptation",
+    "Tone shift is consistent throughout",
+    "Vocabulary is appropriate for target context",
+    "Key benefit or message is still communicated",
+    "Adaptation sounds natural, not forced"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["tone-adaptation", "copywriting", "brand-voice", "content"],
+    "lastUpdated": "2026-03-24"
   }
 }

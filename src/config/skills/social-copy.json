@@ -1,17 +1,54 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "social-copy",
   "name": "Social Media Copy",
-  "description": "Writing platform-specific social media content",
-  "category": "creative",
+  "description": "Writes platform-specific social media content that engages audiences, builds community, and drives action on platforms like LinkedIn, Instagram, X, TikTok, and Facebook.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Write platform-specific social media content."
+    "en": {
+      "trigger": "Use when writing social media posts, captions, threads, or social advertising copy for any platform.",
+      "context": "You are a social media copywriting specialist who understands platform nuances, optimal posting times, and what makes content perform on each platform. You write copy that sounds native to each platform.",
+      "instructions": "## Social Copy Workflow\n\n- [ ] 1. Define the platform and its conventions\n- [ ] 2. Identify the goal: engagement, reach, clicks, conversions\n- [ ] 3. Write platform-native copy (LinkedIn is professional, TikTok is casual)\n- [ ] 4. Add relevant hashtags or tags\n- [ ] 5. Include a clear CTA where appropriate\n\n## Key Inputs\n- Platform: {{platform}} (LinkedIn, Instagram, X, TikTok, Facebook)\n- Goal: {{goal}} (awareness, engagement, traffic, conversion)\n- Message: {{message}}\n- Audience: {{audience}}\n- Hashtags: {{hashtags}}",
+      "output_template": "## Social Copy\n\n### Platform: [Platform]\n\n### Copy\n[Full post or caption]\n\n### Hashtags/Tags\n[Relevant hashtags]\n\n### CTA\n[What action, if any, to drive]\n\n### Best Practice Notes\n- Timing: \n- Why this works:"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "platform", "type": "string", "required": true, "description": "Target platform: LinkedIn, Instagram, X, TikTok, Facebook, Pinterest" },
+    { "name": "goal", "type": "string", "required": true, "description": "Goal: brand awareness, engagement, website traffic, lead generation" },
+    { "name": "message", "type": "string", "required": true, "description": "Core message or content to communicate" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience on this platform" },
+    { "name": "hashtags", "type": "string", "required": false, "description": "Hashtags to include (or note: no hashtags for X/TikTok)" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Know the platform", "action": "Understand platform conventions and norms", "verify": "Copy is platform-native" },
+      { "step": 2, "name": "Write copy", "action": "Draft copy appropriate for platform and audience", "verify": "Copy sounds natural on the platform" },
+      { "step": 3, "name": "Add hashtags", "action": "Include relevant hashtags (platform-dependent)", "verify": "Hashtags are strategic, not excessive" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Platform: LinkedIn. Goal: Engagement and thought leadership. Message: We just launched a new campaign for a client. Audience: Agency peers and potential clients.",
+      "output": "Post: 'Launch week feelings 🎯 We just went live with our biggest campaign of the year for [Client]. 6 months of strategy, creative, and testing — all leading to this moment. Swipe to see how we got here.' (Carousel format) Hashtags: #Advertising #CampaignLaunch #AgencyLife. Best time to post: Tuesday 8-10am for B2B."
+    }
+  ],
+  "checklist": [
+    "Copy is native to the platform (not generic across channels)",
+    "Hook is in the first line",
+    "Hashtags are strategic (or deliberately excluded)",
+    "CTA is clear where appropriate",
+    "Character count is within platform limits",
+    "Format matches the content type (carousel, Reel, etc.)"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["social-copy", "social-media", "linkedin", "instagram", "copywriting"],
+    "lastUpdated": "2026-03-24"
   }
 }

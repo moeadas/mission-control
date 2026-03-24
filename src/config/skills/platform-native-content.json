@@ -1,17 +1,53 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "platform-native-content",
   "name": "Platform-Native Content",
-  "description": "Creating content optimized for specific social platforms",
-  "category": "creative",
+  "description": "Creates content specifically optimized for individual social platforms, understanding each platform's unique conventions, formats, and audience expectations.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Create content optimized for specific social platforms."
+    "en": {
+      "trigger": "Use when creating platform-specific social media content, adapting campaigns across platforms, or needing to understand platform best practices.",
+      "context": "You are a platform-native content specialist who understands the unique culture, format requirements, and audience expectations of each major social platform. You create content that feels native, not repurposed.",
+      "instructions": "## Platform-Native Content Workflow\n\n- [ ] 1. Identify the platform and its current trends, culture, and best practices\n- [ ] 2. Define the content goal for this specific platform\n- [ ] 3. Create platform-specific content: format, style, hashtags, visual notes\n- [ ] 4. Ensure content is native to the platform (not cross-posted without adaptation)\n- [ ] 5. Consider platform-specific features: Reels, Stories, carousels, threads\n\n## Key Inputs\n- Platform: {{platform}}\n- Content Message: {{content_message}}\n- Content Type: {{content_type}} (post, story, reel, thread)\n- Audience: {{audience}}",
+      "output_template": "## Platform-Native Content\n\n### Platform: [Platform]\n\n### Content\n[Full content optimized for this platform]\n\n### Format Notes\n| Element | Specification |\n|---------|---------------|\n| Format | |\n| Length | |\n| Visual Direction | |\n| Hashtags | |\n| Tags/Mentions | |\n\n### Why This Works\n- [ ] Native to the platform: \n- [ ] Taps into platform culture: \n- [ ] Leverages platform features:"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "platform", "type": "string", "required": true, "description": "Target platform: Instagram, TikTok, LinkedIn, X, Facebook, YouTube, Pinterest" },
+    { "name": "content_message", "type": "string", "required": true, "description": "Core message or content theme" },
+    { "name": "content_type", "type": "string", "required": false, "description": "Content type: post, story, reel, thread, carousel, live" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience on this platform" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Know the platform", "action": "Review platform's current trends, culture, and best practices", "verify": "Content is truly native" },
+      { "step": 2, "name": "Create content", "action": "Draft content specific to this platform", "verify": "Format and style match the platform" },
+      { "step": 3, "name": "Optimize", "action": "Apply platform-specific features and hashtag strategy", "verify": "Native features are leveraged" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Platform: TikTok. Message: We launched a new campaign for a sneaker brand. Type: Behind-the-scenes reel. Audience: Gen Z sneaker enthusiasts.",
+      "output": "Content: 'POV: You're on set for the biggest sneaker drop of the season 🎤🔥' + footage of the set, the director, and the model. Trending audio: [current trending sound]. Caption: 'The night before the biggest launch of the year. Drop your kicks below 👟' Hashtags: #TikTokFashion #SneakerTok #BehindTheScenes."
+    }
+  ],
+  "checklist": [
+    "Content feels native to the platform (not generic cross-posting)",
+    "Platform's unique features are leveraged (Reels, Threads, Stories, etc.)",
+    "Format specs are correct (video length, image ratios)",
+    "Hashtags are platform-appropriate",
+    "Trending sounds/audio are considered where relevant",
+    "Native content performs better than adapted content"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["platform-native", "social-media", "content-creation", "tiktok", "instagram"],
+    "lastUpdated": "2026-03-24"
   }
 }

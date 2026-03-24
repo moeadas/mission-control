@@ -1,17 +1,57 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "video-advertising",
   "name": "Video Advertising",
-  "description": "Planning and executing video ad campaigns",
+  "description": "Planning and executing video ad campaigns across streaming, social, and pre-roll placements. Capture attention in seconds and drive measurable results with video that connects.",
   "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Plan and execute video ad campaigns."
+    "en": {
+      "trigger": "Use when planning video ad campaigns, selecting video placements, developing video creative strategy, or optimizing video advertising performance.",
+      "context": "You are a video advertising specialist who understands platform requirements, creative optimization, and measurement for video across CTV, YouTube, social, and pre-roll.",
+      "instructions": "## Video Advertising Workflow\n\n- [ ] 1. Define campaign objectives and video goals\n- [ ] 2. Select platforms and inventory types\n- [ ] 3. Develop video creative strategy\n- [ ] 4. Create video assets with platform specs\n- [ ] 5. Set up targeting and measurement\n- [ ] 6. Optimize based on performance data\n\n## Key Inputs\n- Campaign Objective: {{objective}}\n- Target Audience: {{audience}}\n- Budget: {{budget}}\n- Video Concept: {{concept}}\n- Platforms: {{platforms}}",
+      "output_template": "## Video Campaign Plan\n\n### Campaign Overview\n| Element | Details |\n|---------|---------|\n| Objective | |\n| Budget | |\n| Duration | |\n| Video Count | |\n\n### Platform Strategy\n| Platform | Inventory Type | Targeting | Format |\n|---------|--------------|-----------|--------|\n| YouTube | | | |\n| CTV/Streaming | | | |\n| Facebook/Instagram | | | |\n| TikTok | | | |\n| Twitter | | | |\n\n### Video Creative\n| Video | Duration | Message | CTA |\n|-------|----------|---------|-----|\n| | | | |\n\n### Technical Specifications\n| Platform | Aspect Ratio | Length | File Size |\n|---------|-------------|--------|----------|\n| YouTube | | | |\n| CTV | | | |\n| Social | | | |\n\n### Targeting\n| Dimension | Setting |\n|-----------|---------|\n| Demographics | |\n| Interests | |\n| Behavioral | |\n| Retargeting | |\n\n### Measurement\n| Metric | Platform | Goal |\n|--------|---------|------|\n| View Rate | | |\n| Completion Rate | | |\n| CPV/V | | |\n| Brand Lift | | |\n\n### Optimization Plan\n| Test | Hypothesis | Metric |\n|------|-----------|--------|\n| Creative | | |\n| Targeting | | |\n| Placement | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "objective", "type": "string", "required": true, "description": "Campaign objective: awareness, consideration, conversion" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience" },
+    { "name": "budget", "type": "string", "required": true, "description": "Budget and duration" },
+    { "name": "concept", "type": "string", "required": false, "description": "Video concept and message" },
+    { "name": "platforms", "type": "string", "required": false, "description": "Target platforms" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define objective", "action": "Clarify campaign goals", "verify": "Objective is measurable" },
+      { "step": 2, "name": "Select platforms", "action": "Choose video platforms and inventory", "verify": "Platforms fit audience" },
+      { "step": 3, "name": "Develop creative", "action": "Create video strategy and assets", "verify": "Assets are platform-ready" },
+      { "step": 4, "name": "Set up targeting", "action": "Configure audience and measurement", "verify": "Tracking is in place" },
+      { "step": 5, "name": "Optimize", "action": "Monitor and improve based on data", "verify": "Performance improving" }
+    ]
+  },
+  "examples": [
+    { "input": "Plan a video advertising campaign for a new mobile game targeting 18-34 males across YouTube and CTV.", "output": "Complete video campaign plan with platform strategy, creative approach, and measurement." },
+    { "input": "Develop video creative strategy for a D2C brand's first video campaign with $50K budget.", "output": "Video strategy with creative concepts, platform mix, and optimization approach." }
+  ],
+  "checklist": [
+    "Campaign objective clearly defined",
+    "Platforms selected for audience fit",
+    "Video creative strategy developed",
+    "Assets meet platform specs",
+    "Targeting configured appropriately",
+    "Viewability standards set",
+    "Measurement and tracking in place",
+    "Brand safety measures established",
+    "Optimization plan defined"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["video-advertising", "connected-tv", "youtube", "pre-roll", "video-creative"],
+    "lastUpdated": "2026-03-24"
   }
 }

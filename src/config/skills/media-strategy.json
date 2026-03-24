@@ -1,17 +1,58 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "media-strategy",
   "name": "Media Strategy",
-  "description": "Developing comprehensive media plans and channel strategies",
+  "description": "Developing comprehensive media plans that reach the right audiences with the right messages through the right channels. Connect media choices to business outcomes and maximize return on ad spend.",
   "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Develop comprehensive media plans and channel strategies."
+    "en": {
+      "trigger": "Use when developing media strategies, planning multi-channel campaigns, allocating budgets across channels, or optimizing media mixes for maximum impact and efficiency.",
+      "context": "You are a media strategy specialist who understands channel dynamics, audience media consumption, and how to connect media investments to business outcomes. You optimize for the full funnel.",
+      "instructions": "## Media Strategy Workflow\n\n- [ ] 1. Define campaign objectives and target audiences\n- [ ] 2. Analyze audience media consumption patterns\n- [ ] 3. Select channels and allocate budget\n- [ ] 4. Develop channel-specific strategies\n- [ ] 5. Create integrated timeline and measurement plan\n- [ ] 6. Optimize based on performance data\n\n## Key Inputs\n- Objectives: {{objectives}}\n- Target Audience: {{audience}}\n- Budget: {{budget}}\n- Timeline: {{timeline}}\n- Channels: {{channels}}",
+      "output_template": "## Media Strategy\n\n### Strategic Objectives\n| Objective | Metric | Target |\n|-----------|--------|--------|\n| Awareness | | |\n| Consideration | | |\n| Conversion | | |\n\n### Audience Media Profile\n| Segment | Primary Channels | Time Spent | Purchase Influence |\n|---------|-----------------|------------|-------------------|\n| | | | |\n\n### Channel Strategy\n| Channel | Budget % | Rationale | KPIs |\n|---------|----------|-----------|-----|\n| Paid Search | | | |\n| Paid Social | | | |\n| Programmatic | | | |\n| Display | | | |\n| Video | | | |\n| OOH | | | |\n| TV | | | |\n\n### Budget Allocation\n| Channel | Budget | % | CPM/CPC Target |\n|---------|--------|---|----------------|\n| Total | | 100% | |\n\n### Timeline\n| Phase | Date Range | Activities |\n|-------|------------|-----------|\n| Planning | | |\n| Launch | | |\n| Optimization | | |\n| Wrap | | |\n\n### Measurement Framework\n| Channel | Primary KPI | Attribution Method |\n|---------|-------------|-------------------|\n| | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "objectives", "type": "string", "required": true, "description": "Campaign objectives (awareness, consideration, conversion)" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience segments" },
+    { "name": "budget", "type": "string", "required": true, "description": "Total media budget" },
+    { "name": "timeline", "type": "string", "required": false, "description": "Campaign timeline" },
+    { "name": "channels", "type": "string", "required": false, "description": "Channels under consideration" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define objectives", "action": "Clarify goals and target metrics", "verify": "Objectives are measurable" },
+      { "step": 2, "name": "Profile audience", "action": "Analyze media consumption", "verify": "Channel selection is evidence-based" },
+      { "step": 3, "name": "Allocate budget", "action": "Distribute across channels strategically", "verify": "Allocation supports objectives" },
+      { "step": 4, "name": "Develop strategies", "action": "Create channel-specific approaches", "verify": "Strategies are integrated" },
+      { "step": 5, "name": "Plan measurement", "action": "Define KPIs and attribution", "verify": "Success is measurable" },
+      { "step": 6, "name": "Optimize", "action": "Plan for ongoing optimization", "verify": "Optimization triggers defined" }
+    ]
+  },
+  "examples": [
+    { "input": "Develop a media strategy for a direct-to-consumer brand launching a new protein bar across the US.", "output": "Complete media strategy with audience profiling, channel selection, and budget allocation." },
+    { "input": "Create an integrated media plan for a B2B SaaS company targeting enterprise marketers.", "output": "B2B media strategy with LinkedIn, programmatic, and event focus." }
+  ],
+  "checklist": [
+    "Campaign objectives clearly defined",
+    "Target audiences profiled by media habits",
+    "Channel selection is evidence-based",
+    "Budget allocation supports objectives",
+    "Channel strategies are integrated",
+    "Timeline is realistic",
+    "KPIs are measurable",
+    "Attribution approach defined",
+    "Optimization triggers established"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["media-strategy", "media-planning", "channel-strategy", "budget-allocation", "campaign"],
+    "lastUpdated": "2026-03-24"
   }
 }

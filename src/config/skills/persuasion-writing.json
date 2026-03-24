@@ -1,17 +1,55 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "persuasion-writing",
   "name": "Persuasion Writing",
-  "description": "Applying psychological principles to influence decisions",
-  "category": "creative",
+  "description": "Applies psychological principles and persuasion techniques to write copy that influences decisions and drives action, using frameworks like AIDA, PAS, and emotional drivers.",
+  "category": "content",
+  "difficulty": "advanced",
+  "freedom": "high",
   "prompts": {
-    "en": "Apply psychological principles to influence decisions."
+    "en": {
+      "trigger": "Use when writing copy that needs to overcome objections, influence decisions, or drive conversions — including sales pages, persuasive emails, and conversion-focused content.",
+      "context": "You are a persuasion writing specialist who applies psychological principles to move audiences toward action. You use frameworks like AIDA, PAS, and emotional drivers to craft copy that converts.",
+      "instructions": "## Persuasion Writing Workflow\n\n- [ ] 1. Define the audience and their primary emotional and rational drivers\n- [ ] 2. Choose a persuasion framework (AIDA, PAS, Problem-Agitate-Solve)\n- [ ] 3. Map the emotional journey: attention → desire → action\n- [ ] 4. Write using persuasion principles: reciprocity, social proof, authority, scarcity, consistency, liking\n- [ ] 5. Remove friction at the decision point\n- [ ] 6. Test with real audience segments\n\n## Key Inputs\n- Goal: {{goal}} (purchase, sign-up, click)\n- Audience: {{audience}}\n- Objections: {{objections}} (what stops them from acting)\n- Emotional Drivers: {{emotional_drivers}}\n- Persuasion Framework: {{framework}}",
+      "output_template": "## Persuasion Copy\n\n### Framework: [AIDA / PAS / etc.]\n\n### Attention (Hook)\n[Copy that grabs attention]\n\n### Interest\n[Copy that builds interest and empathy]\n\n### Desire\n[Copy that creates desire through emotional and rational appeal]\n\n### Action (CTA)\n[Clear, specific call to action]\n\n### Persuasion Principles Applied\n| Principle | How Applied |\n|-----------|-------------|\n| Social Proof | |\n| Authority | |\n| Scarcity | |\n| Consistency | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "goal", "type": "string", "required": true, "description": "Desired action: purchase, sign-up, click, download" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience and their current mindset" },
+    { "name": "objections", "type": "string", "required": false, "description": "Primary objections or barriers to action" },
+    { "name": "emotional_drivers", "type": "string", "required": false, "description": "Key emotional drivers: fear, belonging, status, achievement" },
+    { "name": "framework", "type": "string", "required": false, "description": "Persuasion framework: AIDA, PAS, Problem-Agitate-Solve, Hero's Journey" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Know the audience", "action": "Understand emotional and rational drivers", "verify": "Drivers are specific and accurate" },
+      { "step": 2, "name": "Apply framework", "action": "Use AIDA, PAS, or equivalent structure", "verify": "Structure supports persuasion" },
+      { "step": 3, "name": "Use persuasion principles", "action": "Apply social proof, scarcity, authority", "verify": "Principles are credible" },
+      { "step": 4, "name": "Remove friction", "action": "Eliminate barriers at the decision point", "verify": "Decision is easy to make" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Goal: Sign up for project management tool free trial. Audience: Marketing team leads frustrated with chaos. Objections: 'Too complicated,' 'We tried tools before.' Framework: AIDA.",
+      "output": "AIDA structure: Attention — 'Your team meeting should not require a spreadsheet to explain.' Interest — 'Most project tools are built for project managers, not the humans who do the work.' Desire — 'See how [Brand] makes project chaos disappear in 5 minutes flat.' Action — 'Start Free Trial. No credit card. Takes 5 minutes.' Social proof applied: 'Join 50,000+ teams already using it.'"
+    }
+  ],
+  "checklist": [
+    "Framework structure is clearly applied",
+    "Emotional drivers are specific to the audience",
+    "Objections are addressed in the copy",
+    "Persuasion principles are applied (social proof, scarcity, authority)",
+    "CTA is clear and frictionless",
+    "Copy is credible, not manipulative"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["persuasion-writing", "copywriting", "conversion", "psychology"],
+    "lastUpdated": "2026-03-24"
   }
 }

@@ -1,17 +1,99 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "cohort-analysis",
   "name": "Cohort Analysis",
-  "description": "Comparing user groups over time",
-  "category": "media",
+  "description": "Compares user groups (cohorts) over time to understand retention patterns, lifetime value differences, and the long-term impact of acquisition channels and campaigns on customer behavior.",
+  "category": "analytics",
+  "difficulty": "intermediate",
+  "freedom": "medium",
   "prompts": {
-    "en": "Compare user groups over time."
+    "en": {
+      "trigger": "Use when analyzing user behavior over time — to understand how different acquisition cohorts behave differently, where retention drops off, and what drives long-term customer value.",
+      "context": "You are a data analyst who uses cohort analysis to uncover patterns in user behavior that simple conversion metrics miss, revealing the true value of acquisition channels and campaigns.",
+      "instructions": "## Cohort Analysis Workflow\n\n- [ ] 1. Define cohorts: Choose the cohort dimension (acquisition date, source, campaign, etc.)\n- [ ] 2. Choose metrics: DAU, retention, revenue, LTV per cohort\n- [ ] 3. Build cohort table: Plot cohorts over time with the chosen metric\n- [ ] 4. Identify patterns: Where do cohorts diverge? What's driving differences?\n- [ ] 5. Segment: Break cohorts into sub-groups to find root causes\n- [ ] 6. Recommend: Actionable steps to improve underperforming cohorts\n\n## Key Inputs\n- Cohort dimension: {{cohort_dimension}}\n- Metrics to analyze: {{metrics}}\n- Time period: {{time_period}}\n- Data sources: {{data_sources}}",
+      "output_template": "## Cohort Analysis Report\n\n### Analysis Details\n| Field | Value |\n|-------|-------|\n| Cohort dimension | {{cohort_dimension}} |\n| Metrics | {{metrics}} |\n| Period | {{time_period}} |\n| Date | {{date}} |\n\n### Cohort Retention Table\n| Cohort | Size | Week 0 | Week 1 | Week 2 | Week 3 | Week 4 |\n|--------|------|--------|--------|--------|--------|--------|\n| Jan | | | | | | |\n| Feb | | | | | | |\n| Mar | | | | | | |\n\n### Key Patterns\n**Best performing cohort:**\n**Why:**\n\n**Worst performing cohort:**\n**Why:**\n\n### Revenue Cohort Table\n| Cohort | Size | Month 1 | Month 3 | Month 6 | Month 12 | LTV |\n|--------|------|---------|---------|---------|---------|------|\n| | | | | | | |\n\n### Segment Deep-Dive\n| Segment | Behavior | Insight |\n|---------|----------|--------|\n| | | |\n\n### Recommendations\n| Action | Expected impact | Priority |\n|--------|----------------|----------|\n| | | |"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    {
+      "name": "cohort_dimension",
+      "type": "string",
+      "required": true,
+      "description": "Dimension for cohort grouping (e.g., acquisition date, source)"
+    },
+    {
+      "name": "metrics",
+      "type": "string",
+      "required": true,
+      "description": "Metrics to analyze per cohort (e.g., retention, revenue)"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period for analysis"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Data sources available for analysis"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Cohort Definition",
+        "action": "Choose the cohort dimension",
+        "verify": "Dimension is meaningful for the business question"
+      },
+      {
+        "step": 2,
+        "name": "Metric Selection",
+        "action": "Choose metrics that answer the business question",
+        "verify": "Metrics are measurable and comparable"
+      },
+      {
+        "step": 3,
+        "name": "Table Building",
+        "action": "Build cohort retention or revenue tables",
+        "verify": "Tables are accurate and comparable"
+      },
+      {
+        "step": 4,
+        "name": "Pattern Analysis",
+        "action": "Identify what drives cohort differences",
+        "verify": "Insights are evidenced"
+      },
+      {
+        "step": 5,
+        "name": "Recommendations",
+        "action": "Derive actionable steps from findings",
+        "verify": "Recommendations are specific and prioritized"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Analyze cohorts by acquisition month for TechStart's SaaS platform. Compare retention and LTV across cohorts from Jan–Jun. Data from CRM and analytics platform.",
+      "output": "Cohort analysis with retention tables, LTV comparison, and recommendations to improve underperforming cohorts"
+    }
+  ],
+  "checklist": [
+    "Cohort dimension is meaningful",
+    "Retention/revenue tables are accurate",
+    "Patterns are evidenced, not assumed",
+    "Differences between cohorts are explained",
+    "Recommendations are specific and prioritized"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova"],
+  "pipelines": ["analytics"],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["analytics", "cohort-analysis", "retention", "lTV"],
+    "lastUpdated": "2026-03-24"
   }
 }

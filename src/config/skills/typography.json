@@ -1,17 +1,57 @@
 {
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "typography",
   "name": "Typography",
-  "description": "Expert typography selection and usage",
+  "description": "Expert typography selection and usage that elevates design and enhances readability. Choose the right typefaces, pairings, and treatments that communicate brand personality and serve the reader.",
   "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "high",
   "prompts": {
-    "en": "Expert typography selection and usage."
+    "en": {
+      "trigger": "Use when selecting typography for brand identity, designing layouts, choosing fonts for campaigns, or ensuring typographic consistency across materials.",
+      "context": "You are a typography specialist who understands typeface selection, pairing principles, hierarchy, and how type communicates brand personality. You know that great typography is invisible — it just works.",
+      "instructions": "## Typography Workflow\n\n- [ ] 1. Define communication goals and brand context\n- [ ] 2. Select primary typeface(s) for hierarchy\n- [ ] 3. Define type scale and sizing\n- [ ] 4. Establish spacing and alignment rules\n- [ ] 5. Document in style guide\n- [ ] 6. Apply consistently\n\n## Key Inputs\n- Brand/Context: {{brand}}\n- Medium: {{medium}}\n- Audience: {{audience}}\n- Existing Fonts: {{existing}}\n- Style Direction: {{direction}}",
+      "output_template": "## Typography System\n\n### Brand Context\n| Element | Details |\n|---------|---------|\n| Brand Personality | |\n| Target Audience | |\n| Medium/Use | |\n\n### Typeface Selection\n| Role | Typeface | Classification | Rationale |\n|------|---------|---------------|----------|\n| Primary | | | |\n| Secondary | | | |\n| Accent | | | |\n| Monospace | | | |\n\n### Type Scale\n| Level | Size | Leading | Weight | Usage |\n|-------|------|--------|--------|-------|\n| H1 | | | | |\n| H2 | | | | |\n| H3 | | | | |\n| Body | | | | |\n| Caption | | | | |\n| Label | | | | |\n\n### Pairing Guidelines\n| Combination | Why It Works |\n|------------|-------------|\n| | |\n\n### Spacing & Layout\n| Element | Value |\n|---------|-------|\n| Base unit | |\n| Paragraph spacing | |\n| Line length (ch) | |\n\n### Do's and Don'ts\n| Do | Don't |\n|----|-------|\n| | |\n\n### Style Guide Entry\n[Typography section content for brand guidelines]"
+    }
   },
-  "variables": [],
-  "inputs": [],
-  "outputs": [],
-  "checklist": [],
+  "variables": [
+    { "name": "brand", "type": "string", "required": true, "description": "Brand or project context" },
+    { "name": "medium", "type": "string", "required": true, "description": "Where typography will be used" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience" },
+    { "name": "existing", "type": "string", "required": false, "description": "Existing fonts or brand typefaces" },
+    { "name": "direction", "type": "string", "required": false, "description": "Style direction or preference" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define goals", "action": "Understand communication needs", "verify": "Context clear" },
+      { "step": 2, "name": "Select typefaces", "action": "Choose fonts for hierarchy", "verify": "Pairing works" },
+      { "step": 3, "name": "Define scale", "action": "Set type sizes and spacing", "verify": "System is logical" },
+      { "step": 4, "name": "Document rules", "action": "Create typography guidelines", "verify": "Guidelines are clear" },
+      { "step": 5, "name": "Apply", "action": "Use typography system consistently", "verify": "Consistent application" }
+    ]
+  },
+  "examples": [
+    { "input": "Select typography for a premium skincare brand targeting millennial women — needs to feel luxurious but accessible.", "output": "Complete typography system with typeface selection, scale, and usage guidelines." },
+    { "input": "Design a type scale for a mobile app with 6 levels of hierarchy for various content types.", "output": "Typography system optimized for screen readability and mobile constraints." }
+  ],
+  "checklist": [
+    "Typefaces selected with rationale",
+    "Hierarchy is clear and logical",
+    "Scale is consistent and readable",
+    "Pairing principles explained",
+    "Spacing and alignment defined",
+    "Accessibility considered (contrast, size)",
+    "Style guide documented",
+    "Usage rules clear",
+    "Consistent application verified"
+  ],
+  "tools": ["document"],
+  "agents": ["nova"],
+  "pipelines": [],
   "metadata": {
     "version": "1.0",
-    "difficulty": "intermediate"
+    "author": "agency",
+    "tags": ["typography", "fonts", "type", "design-systems", "brand"],
+    "lastUpdated": "2026-03-24"
   }
 }

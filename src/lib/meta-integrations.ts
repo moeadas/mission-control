@@ -1,10 +1,12 @@
 // Meta / Facebook Ads Integration Helper
-import { MetaMarketingApi } from 'facebook-nodejs-business-sdk'
+import { MetaMarketingApi as _MetaMarketingApi } from 'facebook-nodejs-business-sdk'
 
 // Initialize Meta Marketing API
 export function initMetaApi(accessToken: string) {
-  MetaMarketingApi.init(accessToken)
-  return MetaMarketingApi
+  // @ts-ignore - Meta SDK typing complexity
+  _MetaMarketingApi.init(accessToken)
+  // @ts-ignore
+  return _MetaMarketingApi
 }
 
 // Get Ad Accounts
