@@ -1,0 +1,187 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e6]
+      - generic [ref=e8]:
+        - heading "Moe's Mission Control" [level=1] [ref=e9]
+        - paragraph [ref=e10]: Virtual creative and digital media agency
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - generic [ref=e17]: 3 live missions
+      - generic [ref=e18]: SYSTEMS ONLINE
+    - generic [ref=e19]:
+      - button "Light mode" [ref=e20]:
+        - img [ref=e21]
+        - text: Light mode
+      - generic:
+        - paragraph
+        - paragraph
+      - img [ref=e28]
+  - generic [ref=e32]:
+    - navigation [ref=e33]:
+      - generic [ref=e34]:
+        - link "DashboardAgency overview" [ref=e35] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e37]
+          - generic [ref=e42]: DashboardAgency overview
+          - img [ref=e43]
+        - link "Virtual OfficeBot workstations" [ref=e45] [cursor=pointer]:
+          - /url: /office
+          - img [ref=e47]
+          - generic [ref=e51]: Virtual OfficeBot workstations
+        - link "AgentsManage your team" [ref=e52] [cursor=pointer]:
+          - /url: /agents
+          - img [ref=e54]
+          - generic [ref=e57]: AgentsManage your team
+        - link "ClientsClient profiles" [ref=e58] [cursor=pointer]:
+          - /url: /clients
+          - img [ref=e60]
+          - generic [ref=e65]: ClientsClient profiles
+        - link "CampaignsActive projects" [ref=e66] [cursor=pointer]:
+          - /url: /campaigns
+          - img [ref=e68]
+          - generic [ref=e71]: CampaignsActive projects
+        - link "SettingsConfiguration" [ref=e72] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e74]
+          - generic [ref=e77]: SettingsConfiguration
+      - generic [ref=e79]:
+        - generic [ref=e80]: MC
+        - generic [ref=e81]:
+          - paragraph [ref=e82]: AGENCY MODE
+          - paragraph [ref=e83]: Iris Orchestration
+    - main [ref=e84]:
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - heading "Command Center" [level=1] [ref=e89]
+            - paragraph [ref=e90]: Welcome back — your agency is running at full speed.
+          - generic [ref=e92]:
+            - img [ref=e97]
+            - img [ref=e107]
+            - img [ref=e117]
+            - img [ref=e127]
+            - img [ref=e137]
+        - generic [ref=e143]:
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - paragraph [ref=e147]: Active Agents
+              - generic [ref=e148]:
+                - text: "10"
+                - generic [ref=e149]: /10
+            - img [ref=e151]
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - paragraph [ref=e157]: Running Campaigns
+              - generic [ref=e158]:
+                - text: "1"
+                - generic [ref=e159]: /2
+            - img [ref=e161]
+          - generic [ref=e165]:
+            - generic [ref=e166]:
+              - paragraph [ref=e167]: Completed
+              - generic [ref=e168]: "0"
+            - img [ref=e170]
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - paragraph [ref=e176]: Active Tasks
+              - generic [ref=e177]: "10"
+            - img [ref=e179]
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - paragraph [ref=e185]: Open Missions
+              - generic [ref=e186]:
+                - text: "3"
+                - generic [ref=e187]: /3
+            - img [ref=e189]
+        - generic [ref=e193]:
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - heading "Active Team" [level=3] [ref=e197]
+                - button "View all →" [ref=e198]
+              - generic [ref=e199]:
+                - button "Iris" [ref=e200]:
+                  - img [ref=e204]
+                  - text: Iris
+                - button "Sage" [ref=e210]:
+                  - img [ref=e214]
+                  - text: Sage
+                - button "Piper" [ref=e220]:
+                  - img [ref=e224]
+                  - text: Piper
+                - button "Maya" [ref=e230]:
+                  - img [ref=e234]
+                  - text: Maya
+                - button "Finn" [ref=e240]:
+                  - img [ref=e244]
+                  - text: Finn
+                - button "Echo" [ref=e250]:
+                  - img [ref=e254]
+                  - text: Echo
+            - generic [ref=e260]:
+              - heading "Live Activity" [level=3] [ref=e262]
+              - generic [ref=e263]:
+                - generic [ref=e264]:
+                  - img [ref=e268]
+                  - generic [ref=e274]:
+                    - generic [ref=e275]: Irisrouted launch narrative mission
+                    - paragraph [ref=e276]: Assigned Sage and Maya to shape Victory Genomics messaging.
+                  - generic [ref=e277]: 1m ago
+                - generic [ref=e278]:
+                  - img [ref=e282]
+                  - generic [ref=e288]:
+                    - generic [ref=e289]: Atlassurfaced competitor intelligence
+                    - paragraph [ref=e290]: Found recurring weak spots in panel-testing competitors versus whole-genome positioning.
+                  - generic [ref=e291]:
+                    - img [ref=e292]
+                    - text: 1m ago
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - heading "Quick Actions" [level=3] [ref=e299]
+              - generic [ref=e300]:
+                - button "Add New Agent" [ref=e301]:
+                  - img [ref=e302]
+                  - text: Add New Agent
+                - button "Open Virtual Office" [ref=e303]:
+                  - img [ref=e304]
+                  - text: Open Virtual Office
+                - button "Spin Up Mission" [ref=e308]:
+                  - img [ref=e309]
+                  - text: Spin Up Mission
+            - generic [ref=e313]:
+              - generic [ref=e314]:
+                - heading "Mission Queue" [level=3] [ref=e315]
+                - generic [ref=e316]: 3 tracked
+              - generic [ref=e317]:
+                - button "Victory strategic messaging brief Victory Genomics · Strategy Brief in progress" [ref=e318]:
+                  - generic [ref=e319]:
+                    - generic [ref=e320]:
+                      - paragraph [ref=e321]: Victory strategic messaging brief
+                      - paragraph [ref=e322]: Victory Genomics · Strategy Brief
+                    - text: in progress
+                - button "Founder-proof content calendar Victory Genomics · Content Calendar in progress" [ref=e323]:
+                  - generic [ref=e324]:
+                    - generic [ref=e325]:
+                      - paragraph [ref=e326]: Founder-proof content calendar
+                      - paragraph [ref=e327]: Victory Genomics · Content Calendar
+                    - text: in progress
+                - button "Competitive comparison sheet Victory Genomics · Research Brief queued" [ref=e328]:
+                  - generic [ref=e329]:
+                    - generic [ref=e330]:
+                      - paragraph [ref=e331]: Competitive comparison sheet
+                      - paragraph [ref=e332]: Victory Genomics · Research Brief
+                    - text: queued
+            - generic [ref=e333]:
+              - generic [ref=e334]:
+                - heading "Active Campaigns" [level=3] [ref=e335]
+                - button "View all →" [ref=e336]
+              - generic [ref=e338]:
+                - generic [ref=e340]:
+                  - paragraph [ref=e341]: Victory Genomics Brand Foundation
+                  - paragraph [ref=e342]: Victory Genomics
+                - generic [ref=e343]: 36%
+  - button "Chat with Iris" [ref=e344]:
+    - img [ref=e345]
+    - text: Chat with Iris
