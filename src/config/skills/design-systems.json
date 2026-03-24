@@ -1,0 +1,17 @@
+{
+  "id": "design-systems",
+  "name": "Design Systems",
+  "description": "Building scalable design systems and component libraries",
+  "category": "creative",
+  "prompts": {
+    "en": "Build scalable design systems and component libraries."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

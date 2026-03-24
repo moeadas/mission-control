@@ -1,0 +1,17 @@
+{
+  "id": "critical-path-analysis",
+  "name": "Critical Path Analysis",
+  "description": "Identifying the longest dependency chain in projects",
+  "category": "project-management",
+  "prompts": {
+    "en": "Identify the longest dependency chain in projects."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

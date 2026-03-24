@@ -1,0 +1,17 @@
+{
+  "id": "composition",
+  "name": "Composition",
+  "description": "Arranging visual elements for maximum impact",
+  "category": "creative",
+  "prompts": {
+    "en": "Arrange visual elements for maximum impact."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

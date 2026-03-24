@@ -1,0 +1,17 @@
+{
+  "id": "direct-response-copy",
+  "name": "Direct Response Copy",
+  "description": "Writing copy designed to generate immediate action",
+  "category": "creative",
+  "prompts": {
+    "en": "Write copy designed to generate immediate action."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

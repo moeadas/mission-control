@@ -1,0 +1,17 @@
+{
+  "id": "process-improvement",
+  "name": "Process Improvement",
+  "description": "Continuously improving operational processes",
+  "category": "operations",
+  "prompts": {
+    "en": "Continuously improve operational processes."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

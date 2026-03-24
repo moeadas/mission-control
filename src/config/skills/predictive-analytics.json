@@ -1,0 +1,17 @@
+{
+  "id": "predictive-analytics",
+  "name": "Predictive Analytics",
+  "description": "Forecasting future performance",
+  "category": "media",
+  "prompts": {
+    "en": "Forecast future performance."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

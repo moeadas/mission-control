@@ -1,0 +1,20 @@
+{
+  "id": "go-to-market-strategy",
+  "name": "Go-to-Market Strategy",
+  "description": "Planning market entry and expansion strategies",
+  "category": "strategy",
+  "prompts": {
+    "en": "Plan market entry and expansion strategies for {{product_service}} in {{industry}}."
+  },
+  "variables": [
+    "product_service",
+    "industry"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

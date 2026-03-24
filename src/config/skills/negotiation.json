@@ -1,0 +1,17 @@
+{
+  "id": "negotiation",
+  "name": "Negotiation",
+  "description": "Reaching mutually beneficial agreements",
+  "category": "client-services",
+  "prompts": {
+    "en": "Reach mutually beneficial agreements."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

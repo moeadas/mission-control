@@ -1,0 +1,17 @@
+{
+  "id": "account-management-framework",
+  "name": "Account Management Framework",
+  "description": "Miller's account management approach",
+  "category": "operations",
+  "prompts": {
+    "en": "Miller's account management approach."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "programmatic",
+  "name": "Programmatic Advertising",
+  "description": "Automated media buying and optimization",
+  "category": "media",
+  "prompts": {
+    "en": "Automated media buying and optimization."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

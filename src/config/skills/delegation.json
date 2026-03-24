@@ -1,0 +1,17 @@
+{
+  "id": "delegation",
+  "name": "Delegation",
+  "description": "Assigning work appropriately to team members",
+  "category": "project-management",
+  "prompts": {
+    "en": "Assign work appropriately to team members."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

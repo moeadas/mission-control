@@ -1,0 +1,17 @@
+{
+  "id": "trend-identification",
+  "name": "Trend Identification",
+  "description": "Spotting performance trends early",
+  "category": "media",
+  "prompts": {
+    "en": "Spot performance trends early."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

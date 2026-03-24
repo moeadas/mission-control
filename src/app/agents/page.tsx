@@ -113,7 +113,7 @@ export default function AgentsPage() {
         </div>
       </div>
 
-      <AgentEditor agentId={editingAgentId} isOpen={isEditorOpen} onClose={closeEditor} />
+      <AgentEditor agentId={editingAgentId}  onClose={closeEditor} />
     </ClientShell>
   )
 }

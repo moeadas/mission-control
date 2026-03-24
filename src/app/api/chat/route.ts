@@ -6,6 +6,7 @@ import {
   inferDeliverableType,
   inferRoutingContext,
   ProviderError,
+  inferPipeline,
 } from '@/lib/server/ai'
 
 function enforceArtifactTruth(responseText: string, artifacts: any[]) {
@@ -44,6 +45,26 @@ function enforceDeliverableDraft(responseText: string, deliverableType: string) 
   return 'I have not drafted the deliverable yet. I should respond with the actual draft content and save it as an internal output artifact instead of only returning routing/status language.'
 }
 
+// Load pipelines server-side
+async function loadPipelines() {
+  try {
+    const modules = await import('@/config/pipelines/pipelines.json')
+    return modules.default.pipelines
+  } catch {
+    return []
+  }
+}
+
+// Load skills server-side
+async function loadSkills() {
+  try {
+    const modules = await import('@/config/skills/skills-library.json')
+    return modules.default.skillCategories
+  } catch {
+    return []
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const {
@@ -67,17 +88,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'messages required' }, { status: 400 })
     }
 
+    // Load pipeline and skill context
+    const [pipelines, skillCategories] = await Promise.all([loadPipelines(), loadSkills()])
+
     const latestUser = [...messages].reverse().find((message) => message.role === 'user')
+    const userContent = latestUser?.content || ''
+
     const routing = inferRoutingContext({
-      content: latestUser?.content || '',
+      content: userContent,
       clientHints: clients,
       agents,
     })
-    const deliverableType = inferDeliverableType(latestUser?.content || '')
+
+    // Infer which pipeline matches this request
+    const pipelineHint = inferPipeline(userContent, pipelines)
+    const deliverableType = inferDeliverableType(userContent)
     const routedAgent = agents.find((agent: any) => agent.id === routing.routedAgentId)
     const scopedClient =
       clients.find((client: any) => client.id === routing.clientId || client.id === currentClientId) ||
-      clients.find((client: any) => (latestUser?.content || '').toLowerCase().includes(client.name.toLowerCase()))
+      clients.find((client: any) => userContent.toLowerCase().includes(client.name.toLowerCase()))
+
     const clientContext = scopedClient
       ? [
           `Name: ${scopedClient.name}`,
@@ -98,21 +128,68 @@ export async function POST(req: NextRequest) {
       : ''
 
     const executionPrompt = buildExecutionPrompt({
-      userRequest: latestUser?.content || '',
+      userRequest: userContent,
       deliverableType,
       routedAgentName: routedAgent?.name,
       clientName: scopedClient?.name,
       clientContext,
     })
 
+    // Build pipeline context for Iris
+    const pipelineContext = pipelineHint
+      ? [
+          '',
+          `--- PIPELINE ROUTING ---`,
+          `This request matches the "${pipelineHint.name}" pipeline (confidence: ${pipelineHint.confidence}).`,
+          `Pipeline phases: ${pipelineHint.phases.map((p: string) => `"${p}"`).join(' → ')}.`,
+          `Estimated duration: ${pipelineHint.estimatedDuration}.`,
+          `Client profile fields needed: ${pipelineHint.clientProfileFields.map((f: any) => f.label).join(', ') || 'none'}.`,
+          ``,
+          `To execute this pipeline, Iris should:`,
+          `1. Confirm the client and collect any missing profile data`,
+          `2. Route to the pipeline via /app/pipeline/${pipelineHint.id}`,
+          `3. Assign agents to phases based on their roles (client-services → intake, copy → drafting, etc.)`,
+        ].join('\n')
+      : ''
+
+    // Build skills context
+    const skillsContext = skillCategories.length
+      ? [
+          '',
+          `--- AVAILABLE SKILLS ---`,
+          `The agency has ${skillCategories.reduce((sum: number, cat: any) => sum + cat.skills.length, 0)} skills across ${skillCategories.length} categories:`,
+          ...skillCategories.map((cat: any) =>
+            `  [${cat.name}]: ${cat.skills.map((s: any) => s.name).join(', ')}`
+          ),
+          ``,
+          `When routing work, Iris can reference these skills by ID (e.g., "brand-strategy", "campaign-copywriting").`,
+          `Skills assigned to agents are stored in the agent's "skills" array.`,
+        ].join('\n')
+      : ''
+
+    // Build pipelines summary for Iris to pick from
+    const pipelinesSummary = pipelines.length
+      ? [
+          '',
+          `--- PIPELINE LIBRARY ---`,
+          `Available pipelines (use inferPipeline above to match):`,
+          ...pipelines.map((p: any) =>
+            `  - ${p.id}: "${p.name}" — ${p.phases.length} phases (${p.phases.map((ph: any) => ph.name).join(', ')})`
+          ),
+        ].join('\n')
+      : ''
+
     const contextBits = [
       systemPrompt || '',
       `Agency mode: Mission Control is a virtual creative and digital media agency where Iris coordinates specialist units.`,
       `Default response style: keep answers short, precise, and momentum-focused unless the user explicitly asks for depth.`,
-      `Real agency roster:\n${agents.map((agent: any) => `- ${agent.name} (${agent.role})`).join('\n')}`,
+      `Real agency roster:\n${agents.map((agent: any) => `- ${agent.name} (${agent.role}, skills: ${(agent.skills || []).join(', ') || 'none'})`).join('\n')}`,
       `Truthfulness rule: never claim a task is completed, delivered, uploaded, emailed, exported, or saved to a file path unless that exact artifact is listed in the known artifacts section below.`,
       `If no matching artifact exists, explicitly say the work is not yet produced in the app and offer to draft it.`,
       routing.routingReason,
+      pipelineContext,
+      pipelinesSummary,
+      skillsContext,
       `Execution prompt:\n${executionPrompt}`,
       agentMemories?.iris?.roleSummary ? `Iris memory:\n${agentMemories.iris.roleSummary}` : '',
       Array.isArray(agentMemories?.iris?.userPreferences) && agentMemories.iris.userPreferences.length
@@ -194,6 +271,8 @@ export async function POST(req: NextRequest) {
         clientId: routing.clientId || currentClientId || null,
         campaignId: currentCampaignId || null,
         deliverableType,
+        pipelineId: pipelineHint?.id || null,
+        pipelineName: pipelineHint?.name || null,
         executionPrompt,
         provider: actualProvider,
         model: actualModel,

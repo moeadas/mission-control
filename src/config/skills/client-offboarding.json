@@ -1,0 +1,17 @@
+{
+  "id": "client-offboarding",
+  "name": "Client Offboarding",
+  "description": "Professional closure of client relationships",
+  "category": "client-services",
+  "prompts": {
+    "en": "Professional closure of client relationships."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

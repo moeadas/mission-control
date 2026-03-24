@@ -1,0 +1,17 @@
+{
+  "id": "category-analysis",
+  "name": "Category Analysis",
+  "description": "Analyzing product and service categories",
+  "category": "research",
+  "prompts": {
+    "en": "Analyze product and service categories."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

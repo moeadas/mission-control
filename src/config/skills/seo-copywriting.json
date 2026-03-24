@@ -1,0 +1,17 @@
+{
+  "id": "seo-copywriting",
+  "name": "SEO Copywriting",
+  "description": "Writing search-optimized content without sacrificing quality",
+  "category": "creative",
+  "prompts": {
+    "en": "Write search-optimized content without sacrificing quality."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

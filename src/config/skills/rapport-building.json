@@ -1,0 +1,17 @@
+{
+  "id": "rapport-building",
+  "name": "Rapport Building",
+  "description": "Creating strong personal connections",
+  "category": "client-services",
+  "prompts": {
+    "en": "Create strong personal connections."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

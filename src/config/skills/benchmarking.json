@@ -1,0 +1,17 @@
+{
+  "id": "benchmarking",
+  "name": "Benchmarking",
+  "description": "Comparing performance against industry standards",
+  "category": "research",
+  "prompts": {
+    "en": "Compare performance against industry standards."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

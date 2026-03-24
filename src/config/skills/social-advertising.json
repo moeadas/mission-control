@@ -1,0 +1,17 @@
+{
+  "id": "social-advertising",
+  "name": "Social Advertising",
+  "description": "Running ads on social platforms",
+  "category": "media",
+  "prompts": {
+    "en": "Run ads on social platforms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

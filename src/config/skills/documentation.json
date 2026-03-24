@@ -1,0 +1,17 @@
+{
+  "id": "documentation",
+  "name": "Documentation",
+  "description": "Creating and maintaining process documentation",
+  "category": "operations",
+  "prompts": {
+    "en": "Create and maintain process documentation."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

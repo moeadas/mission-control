@@ -1,0 +1,19 @@
+{
+  "id": "brand-consistency",
+  "name": "Brand Consistency",
+  "description": "Ensuring all creative maintains brand standards",
+  "category": "creative",
+  "prompts": {
+    "en": "Ensure all creative maintains brand standards for {{brand_name}}."
+  },
+  "variables": [
+    "brand_name"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

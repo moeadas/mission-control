@@ -1,0 +1,17 @@
+{
+  "id": "cross-channel",
+  "name": "Cross-Channel Planning",
+  "description": "Coordinating messaging across multiple channels",
+  "category": "media",
+  "prompts": {
+    "en": "Coordinate messaging across multiple channels."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

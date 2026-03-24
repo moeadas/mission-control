@@ -1,0 +1,17 @@
+{
+  "id": "report-writing",
+  "name": "Research Report Writing",
+  "description": "Communicating research findings clearly",
+  "category": "research",
+  "prompts": {
+    "en": "Communicate research findings clearly."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

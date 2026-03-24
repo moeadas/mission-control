@@ -1,0 +1,17 @@
+{
+  "id": "workflow-design",
+  "name": "Workflow Design",
+  "description": "Creating efficient workflows and process designs",
+  "category": "project-management",
+  "prompts": {
+    "en": "Create efficient workflows and process designs."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

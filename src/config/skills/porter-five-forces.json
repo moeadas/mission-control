@@ -1,0 +1,19 @@
+{
+  "id": "porter-five-forces",
+  "name": "Porter's Five Forces",
+  "description": "Analyzing industry structure and competitive intensity",
+  "category": "strategy",
+  "prompts": {
+    "en": "Analyze industry structure and competitive intensity in {{industry}}."
+  },
+  "variables": [
+    "industry"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

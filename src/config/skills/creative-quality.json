@@ -1,0 +1,17 @@
+{
+  "id": "creative-quality",
+  "name": "Creative Quality Assurance",
+  "description": "Reviewing and ensuring creative output quality",
+  "category": "creative",
+  "prompts": {
+    "en": "Review and ensure creative output quality."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "platform-native-content",
+  "name": "Platform-Native Content",
+  "description": "Creating content optimized for specific social platforms",
+  "category": "creative",
+  "prompts": {
+    "en": "Create content optimized for specific social platforms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

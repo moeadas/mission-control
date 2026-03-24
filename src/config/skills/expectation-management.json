@@ -1,0 +1,17 @@
+{
+  "id": "expectation-management",
+  "name": "Expectation Management",
+  "description": "Setting and managing client expectations",
+  "category": "client-services",
+  "prompts": {
+    "en": "Set and manage client expectations."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

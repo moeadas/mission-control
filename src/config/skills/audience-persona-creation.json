@@ -1,0 +1,19 @@
+{
+  "id": "audience-persona-creation",
+  "name": "Audience Persona Creation",
+  "description": "Developing detailed buyer personas with demographics, psychographics, and behaviors",
+  "category": "strategy",
+  "prompts": {
+    "en": "Develop detailed buyer personas with demographics, psychographics, and behaviors for {{target_audience}}."
+  },
+  "variables": [
+    "target_audience"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

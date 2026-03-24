@@ -1,0 +1,17 @@
+{
+  "id": "data-synthesis",
+  "name": "Data Synthesis",
+  "description": "Combining multiple data sources into insights",
+  "category": "research",
+  "prompts": {
+    "en": "Combine multiple data sources into insights."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "audience-targeting",
+  "name": "Audience Targeting",
+  "description": "Defining and targeting specific audience segments",
+  "category": "media",
+  "prompts": {
+    "en": "Define and target specific audience segments."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

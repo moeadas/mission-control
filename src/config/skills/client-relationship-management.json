@@ -1,0 +1,17 @@
+{
+  "id": "client-relationship-management",
+  "name": "Client Relationship Management",
+  "description": "Building and maintaining client relationships",
+  "category": "client-services",
+  "prompts": {
+    "en": "Build and maintain client relationships."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

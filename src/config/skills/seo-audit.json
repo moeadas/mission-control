@@ -1,0 +1,17 @@
+{
+  "id": "seo-audit",
+  "name": "SEO Audit",
+  "description": "Comprehensive technical and content SEO audit",
+  "category": "research",
+  "prompts": {
+    "en": "Comprehensive technical and content SEO audit."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

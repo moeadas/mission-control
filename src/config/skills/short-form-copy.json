@@ -1,0 +1,17 @@
+{
+  "id": "short-form-copy",
+  "name": "Short-Form Copy",
+  "description": "Writing concise copy for ads, social posts, etc.",
+  "category": "creative",
+  "prompts": {
+    "en": "Write concise copy for ads, social posts, etc."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "typography",
+  "name": "Typography",
+  "description": "Expert typography selection and usage",
+  "category": "creative",
+  "prompts": {
+    "en": "Expert typography selection and usage."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

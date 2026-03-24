@@ -1,0 +1,17 @@
+{
+  "id": "competitive-intelligence",
+  "name": "Competitive Intelligence",
+  "description": "Gathering and analyzing competitor information",
+  "category": "research",
+  "prompts": {
+    "en": "Gather and analyze competitor information."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

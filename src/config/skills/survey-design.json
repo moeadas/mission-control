@@ -1,0 +1,17 @@
+{
+  "id": "survey-design",
+  "name": "Survey Design",
+  "description": "Creating effective surveys and questionnaires",
+  "category": "research",
+  "prompts": {
+    "en": "Create effective surveys and questionnaires."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

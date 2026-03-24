@@ -1,0 +1,17 @@
+{
+  "id": "brief-synthesis",
+  "name": "Brief Synthesis",
+  "description": "Turning vague requests into clear, actionable briefs",
+  "category": "project-management",
+  "prompts": {
+    "en": "Turn vague requests into clear, actionable briefs."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

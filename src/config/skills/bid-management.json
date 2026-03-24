@@ -1,0 +1,17 @@
+{
+  "id": "bid-management",
+  "name": "Bid Management",
+  "description": "Managing bids for paid search and display",
+  "category": "media",
+  "prompts": {
+    "en": "Manage bids for paid search and display."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

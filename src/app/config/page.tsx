@@ -1,263 +1,157 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ClientShell } from '@/components/ClientShell'
+import { BookOpen, Layers, Wrench, FileText, Shield, ExternalLink, ArrowRight } from 'lucide-react'
 
-// Config sections that can be edited
 const CONFIG_SECTIONS = [
-  { id: 'pipelines', name: 'Pipelines', description: 'Predefined workflow pipelines', file: 'src/config/pipelines/pipelines.json', category: 'workflows' },
-  { id: 'skills', name: 'Skills Library', description: 'All available agent skills', file: 'src/config/skills/skills-library.json', category: 'workflows' },
-  { id: 'agent-roles', name: 'Agent Roles', description: 'Configure agent methodologies and tools', file: 'src/config/agents/*.json', category: 'agents' },
-  { id: 'tools', name: 'Tools', description: 'Manage tool integrations', file: 'src/config/tools/tools-config.json', category: 'agents' },
-  { id: 'client-templates', name: 'Client Templates', description: 'Edit client onboarding templates', file: 'src/config/client-templates/client-templates.json', category: 'templates' },
-  { id: 'checkpoints', name: 'Quality Gates', description: 'Configure phase approval checkpoints', file: 'src/config/checkpoints/quality-checkpoints.json', category: 'templates' },
+  {
+    id: 'skills',
+    name: 'Skills Library',
+    description: 'Browse, create, and edit individual skills. Each skill has prompts (en/ar), variables, inputs/outputs, and checklists.',
+    href: '/skills',
+    icon: BookOpen,
+    color: '#a78bfa',
+    badge: 'Card-based editor',
+    category: 'Workflows',
+  },
+  {
+    id: 'pipelines',
+    name: 'Pipeline Library',
+    description: 'Browse, create, and edit individual pipelines. Each pipeline has phases, activities, client profile fields, and execution prompts.',
+    href: '/pipeline',
+    icon: Layers,
+    color: '#4f8ef7',
+    badge: 'Card-based editor',
+    category: 'Workflows',
+  },
+  {
+    id: 'agent-roles',
+    name: 'Agent Roles',
+    description: 'Configure agent methodologies, tools, and responsibilities. Edit agent prompts and assign skills.',
+    file: 'src/config/agents/*.json',
+    icon: Wrench,
+    color: '#00d4aa',
+    badge: 'JSON editor',
+    category: 'Agents & Tools',
+  },
+  {
+    id: 'tools',
+    name: 'Tool Integrations',
+    description: 'Manage external tool integrations and API connections.',
+    file: 'src/config/tools/tools-config.json',
+    icon: Wrench,
+    color: '#f97316',
+    badge: 'JSON editor',
+    category: 'Agents & Tools',
+  },
+  {
+    id: 'client-templates',
+    name: 'Client Templates',
+    description: 'Edit client onboarding and brief templates.',
+    file: 'src/config/client-templates/client-templates.json',
+    icon: FileText,
+    color: '#38bdf8',
+    badge: 'JSON editor',
+    category: 'Templates',
+  },
+  {
+    id: 'checkpoints',
+    name: 'Quality Gates',
+    description: 'Configure phase approval checkpoints and quality standards.',
+    file: 'src/config/checkpoints/quality-checkpoints.json',
+    icon: Shield,
+    color: '#ffd166',
+    badge: 'JSON editor',
+    category: 'Templates',
+  },
 ]
 
 const CATEGORIES = [
-  { id: 'workflows', name: 'Workflows & Skills', color: '#9b6dff' },
-  { id: 'agents', name: 'Agents & Tools', color: '#4f8ef7' },
-  { id: 'templates', name: 'Templates', color: '#00d4aa' },
+  { id: 'Workflows', color: '#9b6dff' },
+  { id: 'Agents & Tools', color: '#4f8ef7' },
+  { id: 'Templates', color: '#00d4aa' },
 ]
 
 export default function ConfigEditorPage() {
-  const [selectedSection, setSelectedSection] = useState(CONFIG_SECTIONS[0].id)
-  const [jsonContent, setJsonContent] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  
-  const currentSection = CONFIG_SECTIONS.find(s => s.id === selectedSection)!
-  
-  const loadConfig = async (sectionId: string) => {
-    setLoading(true)
-    setError(null)
-    setSuccess(false)
-    
-    try {
-      let content: any = null
-      
-      if (sectionId === 'pipelines') {
-        const module = await import('@/config/pipelines/pipelines.json')
-        content = module.default
-      } else if (sectionId === 'skills') {
-        const module = await import('@/config/skills/skills-library.json')
-        content = module.default
-      } else if (sectionId === 'agent-roles') {
-        // Load all agent configs as a summary
-        const agents = await import('@/lib/agents-from-config')
-        content = { agents: agents.CONFIG_AGENTS.map(a => ({
-          id: a.id,
-          name: a.name,
-          role: a.role,
-          division: a.division,
-          skills: a.skills,
-          tools: a.tools,
-          methodology: a.methodology,
-        }))}
-      } else if (sectionId === 'tools') {
-        const module = await import('@/config/tools/tools-config.json')
-        content = module.default
-      } else if (sectionId === 'client-templates') {
-        const module = await import('@/config/client-templates/client-templates.json')
-        content = module.default
-      } else if (sectionId === 'checkpoints') {
-        const module = await import('@/config/checkpoints/quality-checkpoints.json')
-        content = module.default
-      }
-      
-      setJsonContent(JSON.stringify(content, null, 2))
-    } catch (err) {
-      setError(`Failed to load: ${err}`)
-    }
-    
-    setLoading(false)
-  }
-  
-  // Load initial config
-  React.useEffect(() => {
-    loadConfig(selectedSection)
-  }, [selectedSection])
-  
-  const validateJson = () => {
-    try {
-      JSON.parse(jsonContent)
-      return true
-    } catch {
-      return false
-    }
-  }
-  
-  const handleSave = () => {
-    if (!validateJson()) {
-      setError('Invalid JSON format')
-      return
-    }
-    
-    // In a real app, this would write to the file system
-    // For now, we just show success (the file would need to be updated manually)
-    setSuccess(true)
-    setError(null)
-    
-    // Copy to clipboard as backup
-    navigator.clipboard.writeText(jsonContent)
-  }
-  
-  const formatJson = () => {
-    try {
-      setJsonContent(JSON.stringify(JSON.parse(jsonContent), null, 2))
-      setError(null)
-    } catch {
-      setError('Cannot format: Invalid JSON')
-    }
-  }
-  
+  const router = useRouter()
+
+  const grouped = CATEGORIES.map(cat => ({
+    ...cat,
+    items: CONFIG_SECTIONS.filter(s => s.category === cat.id),
+  }))
+
   return (
     <ClientShell>
-      <div className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="p-6 border-b border-base-200">
-          <h1 className="text-2xl font-heading font-bold text-text-primary">
-            Config Editor
-          </h1>
-          <p className="text-sm text-text-secondary mt-1">
-            Edit agency configurations — pipelines, skills, agents, tools, and templates
+        <div className="px-6 py-5 border-b border-[#2a2d38] flex-shrink-0">
+          <h1 className="text-xl font-bold text-white">Agency Configuration</h1>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Manage skills, pipelines, agents, tools, and templates
           </p>
         </div>
-        
-        <div className="flex-1 flex overflow-hidden">
-          {/* Sidebar with Categories */}
-          <div className="w-72 border-r border-base-200 flex flex-col overflow-hidden">
-            {/* Category Headers */}
-            <div className="p-4 pb-2">
-              <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wide mb-3">
-                Workflows & Skills
-              </h3>
-              <div className="space-y-1">
-                {CONFIG_SECTIONS.filter(s => s.category === 'workflows').map(section => (
-                  <button
-                    key={section.id}
-                    onClick={() => setSelectedSection(section.id)}
-                    className={`w-full p-3 rounded-lg text-left transition-colors ${
-                      selectedSection === section.id
-                        ? 'bg-accent-purple/20 ring-2 ring-accent-purple'
-                        : 'bg-base-200 hover:bg-base-300'
-                    }`}
-                  >
-                    <p className="font-medium text-sm">{section.name}</p>
-                    <p className="text-xs text-text-secondary mt-0.5">{section.description}</p>
-                  </button>
-                ))}
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+          {grouped.map(cat => (
+            <div key={cat.id}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
+                <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">{cat.id}</h2>
+                <div className="flex-1 h-px bg-[#2a2d38]" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {cat.items.map(section => {
+                  const Icon = section.icon
+                  return (
+                    <button
+                      key={section.id}
+                      onClick={() => section.href ? router.push(section.href) : null}
+                      disabled={!section.href}
+                      className="p-5 bg-[#1a1d26] rounded-xl border border-[#2a2d38] hover:border-[#3a3d48] text-left transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                          style={{ backgroundColor: section.color + '20' }}
+                        >
+                          <Icon size={18} style={{ color: section.color }} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-sm font-semibold text-white group-hover:text-white transition-colors">
+                              {section.name}
+                            </h3>
+                            {section.href && (
+                              <ArrowRight size={14} className="text-gray-600 group-hover:text-accent-purple transition-colors" />
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                            {section.description}
+                          </p>
+                          <div className="flex items-center gap-2 mt-3">
+                            <span
+                              className="px-2 py-0.5 rounded text-[10px] font-mono"
+                              style={{ backgroundColor: section.color + '15', color: section.color }}
+                            >
+                              {section.badge}
+                            </span>
+                            {section.file && (
+                              <span className="text-[10px] text-gray-600 font-mono truncate">
+                                {section.file}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
-            
-            <div className="p-4 pt-2 pb-2">
-              <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wide mb-3">
-                Agents & Tools
-              </h3>
-              <div className="space-y-1">
-                {CONFIG_SECTIONS.filter(s => s.category === 'agents').map(section => (
-                  <button
-                    key={section.id}
-                    onClick={() => setSelectedSection(section.id)}
-                    className={`w-full p-3 rounded-lg text-left transition-colors ${
-                      selectedSection === section.id
-                        ? 'bg-accent-purple/20 ring-2 ring-accent-purple'
-                        : 'bg-base-200 hover:bg-base-300'
-                    }`}
-                  >
-                    <p className="font-medium text-sm">{section.name}</p>
-                    <p className="text-xs text-text-secondary mt-0.5">{section.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <div className="p-4 pt-2 flex-1 overflow-y-auto">
-              <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wide mb-3">
-                Templates
-              </h3>
-              <div className="space-y-1">
-                {CONFIG_SECTIONS.filter(s => s.category === 'templates').map(section => (
-                  <button
-                    key={section.id}
-                    onClick={() => setSelectedSection(section.id)}
-                    className={`w-full p-3 rounded-lg text-left transition-colors ${
-                      selectedSection === section.id
-                        ? 'bg-accent-purple/20 ring-2 ring-accent-purple'
-                        : 'bg-base-200 hover:bg-base-300'
-                    }`}
-                  >
-                    <p className="font-medium text-sm">{section.name}</p>
-                    <p className="text-xs text-text-secondary mt-0.5">{section.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          {/* Editor */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Toolbar */}
-            <div className="p-4 border-b border-base-200 flex items-center justify-between">
-              <div>
-                <p className="font-medium">{currentSection.name}</p>
-                <p className="text-xs text-text-secondary">{currentSection.file}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={formatJson}
-                  className="px-3 py-1.5 bg-base-200 text-sm rounded hover:bg-base-300 transition-colors"
-                >
-                  Format
-                </button>
-                <button
-                  onClick={handleSave}
-                  className="px-3 py-1.5 bg-accent-purple text-white text-sm rounded hover:bg-accent-purple/80 transition-colors"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </div>
-            
-            {/* Status */}
-            {error && (
-              <div className="px-4 py-2 bg-red-500/20 text-red-500 text-sm">
-                {error}
-              </div>
-            )}
-            {success && (
-              <div className="px-4 py-2 bg-green-500/20 text-green-500 text-sm">
-                Saved! (Also copied to clipboard)
-              </div>
-            )}
-            
-            {/* JSON Editor */}
-            <div className="flex-1 overflow-hidden p-4">
-              <textarea
-                value={jsonContent}
-                onChange={(e) => setJsonContent(e.target.value)}
-                className="w-full h-full bg-base-200 text-text-primary font-mono text-sm p-4 rounded-lg resize-none outline-none"
-                spellCheck={false}
-                placeholder="Loading..."
-              />
-            </div>
-            
-            {/* Help */}
-            <div className="p-4 border-t border-base-200 bg-base-200/50">
-              <p className="text-xs text-text-secondary">
-                <strong>Tip:</strong> Changes are saved to the JSON file. After saving, restart the app or click "Reload Configs" to apply changes.
-                {' '}
-                <a 
-                  href={`https://github.com/moeadas/mission-control/blob/main/${currentSection.file}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent-purple underline"
-                >
-                  View on GitHub
-                </a>
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </ClientShell>

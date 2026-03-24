@@ -1,0 +1,19 @@
+{
+  "id": "trend-analysis",
+  "name": "Trend Analysis",
+  "description": "Identifying and analyzing market and consumer trends",
+  "category": "strategy",
+  "prompts": {
+    "en": "Identify and analyze market and consumer trends in {{industry}}."
+  },
+  "variables": [
+    "industry"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

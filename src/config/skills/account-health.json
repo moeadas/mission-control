@@ -1,0 +1,17 @@
+{
+  "id": "account-health",
+  "name": "Account Health Monitoring",
+  "description": "Tracking relationship health indicators",
+  "category": "client-services",
+  "prompts": {
+    "en": "Track relationship health indicators."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

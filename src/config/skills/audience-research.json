@@ -1,0 +1,17 @@
+{
+  "id": "audience-research",
+  "name": "Audience Research",
+  "description": "Deep understanding of target audiences",
+  "category": "research",
+  "prompts": {
+    "en": "Deep understanding of target audiences."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

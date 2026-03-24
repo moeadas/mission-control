@@ -1,0 +1,17 @@
+{
+  "id": "client-onboarding",
+  "name": "Client Onboarding",
+  "description": "Smooth transition of new clients",
+  "category": "client-services",
+  "prompts": {
+    "en": "Smooth transition of new clients."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

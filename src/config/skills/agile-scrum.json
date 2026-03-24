@@ -1,0 +1,17 @@
+{
+  "id": "agile-scrum",
+  "name": "Agile/Scrum",
+  "description": "Running agile projects with sprints and standups",
+  "category": "project-management",
+  "prompts": {
+    "en": "Run agile projects with sprints and standups."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

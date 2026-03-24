@@ -1,0 +1,17 @@
+{
+  "id": "dashboard-creation",
+  "name": "Dashboard Creation",
+  "description": "Building performance dashboards",
+  "category": "media",
+  "prompts": {
+    "en": "Build performance dashboards."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

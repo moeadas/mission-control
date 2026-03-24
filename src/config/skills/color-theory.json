@@ -1,0 +1,17 @@
+{
+  "id": "color-theory",
+  "name": "Color Theory",
+  "description": "Applying color psychology and theory in design",
+  "category": "creative",
+  "prompts": {
+    "en": "Apply color psychology and theory in design."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

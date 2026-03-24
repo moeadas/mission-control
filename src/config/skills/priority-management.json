@@ -1,0 +1,17 @@
+{
+  "id": "priority-management",
+  "name": "Priority Management",
+  "description": "Effectively prioritizing competing demands",
+  "category": "project-management",
+  "prompts": {
+    "en": "Effectively prioritize competing demands."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

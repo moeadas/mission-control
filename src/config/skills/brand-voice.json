@@ -1,0 +1,19 @@
+{
+  "id": "brand-voice",
+  "name": "Brand Voice",
+  "description": "Developing and maintaining consistent brand tone and style",
+  "category": "creative",
+  "prompts": {
+    "en": "Develop and maintain consistent brand tone and style for {{brand_name}}."
+  },
+  "variables": [
+    "brand_name"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

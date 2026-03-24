@@ -1,0 +1,17 @@
+{
+  "id": "stakeholder-mapping",
+  "name": "Stakeholder Mapping",
+  "description": "Identifying and analyzing key stakeholders",
+  "category": "client-services",
+  "prompts": {
+    "en": "Identify and analyze key stakeholders."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

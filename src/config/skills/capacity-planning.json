@@ -1,0 +1,17 @@
+{
+  "id": "capacity-planning",
+  "name": "Capacity Planning",
+  "description": "Forecasting and planning resource needs",
+  "category": "project-management",
+  "prompts": {
+    "en": "Forecast and plan resource needs."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

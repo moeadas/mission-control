@@ -1,0 +1,21 @@
+{
+  "id": "brand-strategy",
+  "name": "Brand Strategy",
+  "description": "Developing brand positioning, architecture, and long-term strategic direction",
+  "category": "strategy",
+  "prompts": {
+    "en": "Develop brand positioning, architecture, and long-term strategic direction for {{brand_name}}. Industry: {{industry}}. Target audience: {{target_audience}}."
+  },
+  "variables": [
+    "brand_name",
+    "industry",
+    "target_audience"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

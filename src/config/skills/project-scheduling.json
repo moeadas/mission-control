@@ -1,0 +1,17 @@
+{
+  "id": "project-scheduling",
+  "name": "Project Scheduling",
+  "description": "Creating and managing project schedules",
+  "category": "project-management",
+  "prompts": {
+    "en": "Create and manage project schedules."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

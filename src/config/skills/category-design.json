@@ -1,0 +1,19 @@
+{
+  "id": "category-design",
+  "name": "Category Design",
+  "description": "Creating or reshaping product categories for market leadership",
+  "category": "strategy",
+  "prompts": {
+    "en": "Create or reshape product categories for market leadership for {{brand_name}}."
+  },
+  "variables": [
+    "brand_name"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

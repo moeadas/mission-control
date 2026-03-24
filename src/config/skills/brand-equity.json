@@ -1,0 +1,17 @@
+{
+  "id": "brand-equity",
+  "name": "Brand Equity Measurement",
+  "description": "Measuring and managing brand strength",
+  "category": "research",
+  "prompts": {
+    "en": "Measure and manage brand strength."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

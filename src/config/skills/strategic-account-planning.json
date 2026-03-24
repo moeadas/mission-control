@@ -1,0 +1,17 @@
+{
+  "id": "strategic-account-planning",
+  "name": "Strategic Account Planning",
+  "description": "Developing long-term account strategies",
+  "category": "client-services",
+  "prompts": {
+    "en": "Develop long-term account strategies."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

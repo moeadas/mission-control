@@ -1,0 +1,17 @@
+{
+  "id": "timeline-planning",
+  "name": "Timeline Planning",
+  "description": "Creating realistic project timelines and schedules",
+  "category": "project-management",
+  "prompts": {
+    "en": "Create realistic project timelines and schedules."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

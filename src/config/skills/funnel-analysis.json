@@ -1,0 +1,17 @@
+{
+  "id": "funnel-analysis",
+  "name": "Funnel Analysis",
+  "description": "Analyzing user behavior through conversion funnel",
+  "category": "media",
+  "prompts": {
+    "en": "Analyze user behavior through conversion funnel."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

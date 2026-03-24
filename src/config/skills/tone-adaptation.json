@@ -1,0 +1,17 @@
+{
+  "id": "tone-adaptation",
+  "name": "Tone Adaptation",
+  "description": "Adjusting writing style for different contexts",
+  "category": "creative",
+  "prompts": {
+    "en": "Adjust writing style for different contexts."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

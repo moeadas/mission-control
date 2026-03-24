@@ -1,0 +1,17 @@
+{
+  "id": "cta-optimization",
+  "name": "CTA Optimization",
+  "description": "Creating and testing calls-to-action",
+  "category": "creative",
+  "prompts": {
+    "en": "Create and test calls-to-action."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "roas-optimization",
+  "name": "ROAS Optimization",
+  "description": "Maximizing return on ad spend",
+  "category": "media",
+  "prompts": {
+    "en": "Maximize return on ad spend."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

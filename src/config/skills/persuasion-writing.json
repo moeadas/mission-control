@@ -1,0 +1,17 @@
+{
+  "id": "persuasion-writing",
+  "name": "Persuasion Writing",
+  "description": "Applying psychological principles to influence decisions",
+  "category": "creative",
+  "prompts": {
+    "en": "Apply psychological principles to influence decisions."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

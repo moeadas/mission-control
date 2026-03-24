@@ -1,0 +1,17 @@
+{
+  "id": "pacing-optimization",
+  "name": "Pacing Optimization",
+  "description": "Ensuring consistent ad spend over time",
+  "category": "media",
+  "prompts": {
+    "en": "Ensure consistent ad spend over time."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

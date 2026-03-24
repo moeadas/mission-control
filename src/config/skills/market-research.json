@@ -1,0 +1,17 @@
+{
+  "id": "market-research",
+  "name": "Market Research",
+  "description": "Conducting systematic market investigations",
+  "category": "research",
+  "prompts": {
+    "en": "Conduct systematic market investigations."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

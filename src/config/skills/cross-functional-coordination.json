@@ -1,0 +1,17 @@
+{
+  "id": "cross-functional-coordination",
+  "name": "Cross-Functional Coordination",
+  "description": "Managing work across different teams and departments",
+  "category": "project-management",
+  "prompts": {
+    "en": "Manage work across different teams and departments."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

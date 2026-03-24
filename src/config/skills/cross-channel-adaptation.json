@@ -1,0 +1,17 @@
+{
+  "id": "cross-channel-adaptation",
+  "name": "Cross-Channel Adaptation",
+  "description": "Adapting creative across different platforms and formats",
+  "category": "creative",
+  "prompts": {
+    "en": "Adapt creative across different platforms and formats."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "ab-test-design",
+  "name": "A/B Test Design",
+  "description": "Designing rigorous split tests",
+  "category": "media",
+  "prompts": {
+    "en": "Design rigorous split tests."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "workflow-optimization",
+  "name": "Workflow Optimization",
+  "description": "Continuously improving work processes",
+  "category": "project-management",
+  "prompts": {
+    "en": "Continuously improve work processes."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

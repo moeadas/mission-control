@@ -1,0 +1,17 @@
+{
+  "id": "deadline-management",
+  "name": "Deadline Management",
+  "description": "Ensuring timely delivery of all work",
+  "category": "project-management",
+  "prompts": {
+    "en": "Ensure timely delivery of all work."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

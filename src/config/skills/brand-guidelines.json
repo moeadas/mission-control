@@ -1,0 +1,17 @@
+{
+  "id": "brand-guidelines",
+  "name": "Brand Guidelines",
+  "description": "Creating and maintaining comprehensive brand standards",
+  "category": "creative",
+  "prompts": {
+    "en": "Create and maintain comprehensive brand standards."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

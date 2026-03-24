@@ -1,0 +1,17 @@
+{
+  "id": "channel-selection",
+  "name": "Channel Selection",
+  "description": "Choosing optimal channels for target audiences",
+  "category": "media",
+  "prompts": {
+    "en": "Choose optimal channels for target audiences."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

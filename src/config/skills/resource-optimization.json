@@ -1,0 +1,17 @@
+{
+  "id": "resource-optimization",
+  "name": "Resource Optimization",
+  "description": "Maximizing efficient use of available resources",
+  "category": "project-management",
+  "prompts": {
+    "en": "Maximize efficient use of available resources."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

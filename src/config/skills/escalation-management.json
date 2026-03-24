@@ -1,0 +1,17 @@
+{
+  "id": "escalation-management",
+  "name": "Escalation Management",
+  "description": "Handling and escalating issues appropriately",
+  "category": "project-management",
+  "prompts": {
+    "en": "Handle and escalate issues appropriately."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

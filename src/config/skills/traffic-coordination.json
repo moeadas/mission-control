@@ -1,0 +1,17 @@
+{
+  "id": "traffic-coordination",
+  "name": "Traffic Coordination",
+  "description": "Managing the flow of creative work through production",
+  "category": "project-management",
+  "prompts": {
+    "en": "Manage the flow of creative work through production."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

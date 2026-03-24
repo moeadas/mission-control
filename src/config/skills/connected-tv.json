@@ -1,0 +1,17 @@
+{
+  "id": "connected-tv",
+  "name": "Connected TV",
+  "description": "Advertising on streaming platforms",
+  "category": "media",
+  "prompts": {
+    "en": "Advertising on streaming platforms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

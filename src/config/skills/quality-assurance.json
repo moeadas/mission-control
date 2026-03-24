@@ -1,0 +1,17 @@
+{
+  "id": "quality-assurance",
+  "name": "Quality Assurance",
+  "description": "Implementing processes to maintain quality standards",
+  "category": "project-management",
+  "prompts": {
+    "en": "Implement processes to maintain quality standards."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

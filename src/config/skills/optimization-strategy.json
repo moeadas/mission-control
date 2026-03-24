@@ -1,0 +1,17 @@
+{
+  "id": "optimization-strategy",
+  "name": "Optimization Strategy",
+  "description": "Developing systematic optimization approaches",
+  "category": "media",
+  "prompts": {
+    "en": "Develop systematic optimization approaches."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

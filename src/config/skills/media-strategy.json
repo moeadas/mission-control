@@ -1,0 +1,17 @@
+{
+  "id": "media-strategy",
+  "name": "Media Strategy",
+  "description": "Developing comprehensive media plans and channel strategies",
+  "category": "media",
+  "prompts": {
+    "en": "Develop comprehensive media plans and channel strategies."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

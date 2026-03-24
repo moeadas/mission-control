@@ -1,0 +1,17 @@
+{
+  "id": "status-reporting",
+  "name": "Status Reporting",
+  "description": "Creating clear progress reports for stakeholders",
+  "category": "project-management",
+  "prompts": {
+    "en": "Create clear progress reports for stakeholders."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

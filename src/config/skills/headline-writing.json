@@ -1,0 +1,17 @@
+{
+  "id": "headline-writing",
+  "name": "Headline Writing",
+  "description": "Crafting attention-grabbing headlines and titles",
+  "category": "creative",
+  "prompts": {
+    "en": "Craft attention-grabbing headlines and titles."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

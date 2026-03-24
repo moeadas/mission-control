@@ -1,0 +1,17 @@
+{
+  "id": "display-advertising",
+  "name": "Display Advertising",
+  "description": "Managing banner and display ad campaigns",
+  "category": "media",
+  "prompts": {
+    "en": "Manage banner and display ad campaigns."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "industry-landscape",
+  "name": "Industry Landscape Mapping",
+  "description": "Mapping complete industry ecosystems",
+  "category": "research",
+  "prompts": {
+    "en": "Map complete industry ecosystems."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

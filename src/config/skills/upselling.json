@@ -1,0 +1,17 @@
+{
+  "id": "upselling",
+  "name": "Upselling",
+  "description": "Identifying and pursuing growth opportunities",
+  "category": "client-services",
+  "prompts": {
+    "en": "Identify and pursue growth opportunities."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

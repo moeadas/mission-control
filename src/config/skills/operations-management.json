@@ -1,0 +1,17 @@
+{
+  "id": "operations-management",
+  "name": "Operations Management",
+  "description": "Managing agency operations efficiently",
+  "category": "operations",
+  "prompts": {
+    "en": "Manage agency operations efficiently."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "risk-assessment",
+  "name": "Risk Assessment",
+  "description": "Identifying and evaluating project risks",
+  "category": "project-management",
+  "prompts": {
+    "en": "Identify and evaluate project risks."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

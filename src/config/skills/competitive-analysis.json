@@ -1,0 +1,19 @@
+{
+  "id": "competitive-analysis",
+  "name": "Competitive Analysis",
+  "description": "Analyzing competitors' positioning, strengths, and weaknesses",
+  "category": "strategy",
+  "prompts": {
+    "en": "Analyze competitors' positioning, strengths, and weaknesses in {{industry}}."
+  },
+  "variables": [
+    "industry"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

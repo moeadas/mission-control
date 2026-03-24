@@ -1,0 +1,19 @@
+{
+  "id": "market-segmentation",
+  "name": "Market Segmentation",
+  "description": "Dividing markets into distinct audience groups",
+  "category": "strategy",
+  "prompts": {
+    "en": "Divide the {{industry}} market into distinct audience groups."
+  },
+  "variables": [
+    "industry"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

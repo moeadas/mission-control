@@ -1,0 +1,17 @@
+{
+  "id": "agenda-setting",
+  "name": "Agenda Setting",
+  "description": "Planning effective meetings and discussions",
+  "category": "project-management",
+  "prompts": {
+    "en": "Plan effective meetings and discussions."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

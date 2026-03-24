@@ -1,0 +1,17 @@
+{
+  "id": "scope-management",
+  "name": "Scope Management",
+  "description": "Controlling project scope and change requests",
+  "category": "client-services",
+  "prompts": {
+    "en": "Control project scope and change requests."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "strategic-planning",
+  "name": "Strategic Planning",
+  "description": "Long-term business and marketing strategy development",
+  "category": "strategy",
+  "prompts": {
+    "en": "Long-term business and marketing strategy development for {{brand_name}}."
+  },
+  "variables": [
+    "brand_name"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

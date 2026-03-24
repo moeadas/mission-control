@@ -1,0 +1,17 @@
+{
+  "id": "concept-testing",
+  "name": "Concept Testing",
+  "description": "Testing creative concepts with target audiences",
+  "category": "creative",
+  "prompts": {
+    "en": "Test creative concepts with target audiences."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

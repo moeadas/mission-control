@@ -1,0 +1,17 @@
+{
+  "id": "email-copy",
+  "name": "Email Copywriting",
+  "description": "Writing email sequences and newsletters",
+  "category": "creative",
+  "prompts": {
+    "en": "Write email sequences and newsletters."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

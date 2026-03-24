@@ -1,0 +1,17 @@
+{
+  "id": "task-triaging",
+  "name": "Task Triaging",
+  "description": "Prioritizing and categorizing tasks by urgency and importance",
+  "category": "project-management",
+  "prompts": {
+    "en": "Prioritize and categorize tasks by urgency and importance."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

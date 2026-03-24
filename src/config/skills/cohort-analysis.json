@@ -1,0 +1,17 @@
+{
+  "id": "cohort-analysis",
+  "name": "Cohort Analysis",
+  "description": "Comparing user groups over time",
+  "category": "media",
+  "prompts": {
+    "en": "Compare user groups over time."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

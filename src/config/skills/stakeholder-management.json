@@ -1,0 +1,17 @@
+{
+  "id": "stakeholder-management",
+  "name": "Stakeholder Management",
+  "description": "Managing expectations and communications with all stakeholders",
+  "category": "project-management",
+  "prompts": {
+    "en": "Manage expectations and communications with all stakeholders."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

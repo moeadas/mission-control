@@ -1,0 +1,17 @@
+{
+  "id": "bottleneck-identification",
+  "name": "Bottleneck Identification",
+  "description": "Finding and resolving workflow blockages",
+  "category": "project-management",
+  "prompts": {
+    "en": "Find and resolve workflow blockages."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

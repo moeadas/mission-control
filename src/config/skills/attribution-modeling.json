@@ -1,0 +1,17 @@
+{
+  "id": "attribution-modeling",
+  "name": "Attribution Modeling",
+  "description": "Determining which channels drive conversions",
+  "category": "media",
+  "prompts": {
+    "en": "Determine which channels drive conversions."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "presentation-design",
+  "name": "Presentation Design",
+  "description": "Creating compelling presentations",
+  "category": "client-services",
+  "prompts": {
+    "en": "Create compelling presentations."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

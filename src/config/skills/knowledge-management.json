@@ -1,0 +1,17 @@
+{
+  "id": "knowledge-management",
+  "name": "Knowledge Management",
+  "description": "Organizing and sharing institutional knowledge",
+  "category": "operations",
+  "prompts": {
+    "en": "Organize and share institutional knowledge."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

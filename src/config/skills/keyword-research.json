@@ -1,0 +1,17 @@
+{
+  "id": "keyword-research",
+  "name": "Keyword Research",
+  "description": "Finding high-value search terms",
+  "category": "research",
+  "prompts": {
+    "en": "Find high-value search terms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

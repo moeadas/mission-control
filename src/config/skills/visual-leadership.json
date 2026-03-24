@@ -1,0 +1,19 @@
+{
+  "id": "visual-leadership",
+  "name": "Visual Leadership",
+  "description": "Guiding creative teams on visual standards and aesthetics",
+  "category": "creative",
+  "prompts": {
+    "en": "Guide creative teams on visual standards and aesthetics for {{brand_name}}."
+  },
+  "variables": [
+    "brand_name"
+  ],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

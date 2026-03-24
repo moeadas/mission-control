@@ -1,0 +1,17 @@
+{
+  "id": "waterfall-planning",
+  "name": "Waterfall Planning",
+  "description": "Managing sequential project phases",
+  "category": "project-management",
+  "prompts": {
+    "en": "Manage sequential project phases."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

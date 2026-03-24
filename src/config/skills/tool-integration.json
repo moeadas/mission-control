@@ -1,0 +1,17 @@
+{
+  "id": "tool-integration",
+  "name": "Tool Integration",
+  "description": "Connecting and optimizing tools and platforms",
+  "category": "operations",
+  "prompts": {
+    "en": "Connect and optimize tools and platforms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

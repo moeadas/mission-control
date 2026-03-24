@@ -1,0 +1,17 @@
+{
+  "id": "stakeholder-communication",
+  "name": "Stakeholder Communication",
+  "description": "Managing communication with project stakeholders",
+  "category": "project-management",
+  "prompts": {
+    "en": "Manage communication with project stakeholders."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

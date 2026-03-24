@@ -1,0 +1,17 @@
+{
+  "id": "campaign-setup",
+  "name": "Campaign Setup",
+  "description": "Launching campaigns on advertising platforms",
+  "category": "media",
+  "prompts": {
+    "en": "Launch campaigns on advertising platforms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

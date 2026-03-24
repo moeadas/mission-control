@@ -1,0 +1,17 @@
+{
+  "id": "performance-analysis",
+  "name": "Performance Analysis",
+  "description": "Analyzing campaign and channel performance",
+  "category": "media",
+  "prompts": {
+    "en": "Analyze campaign and channel performance."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

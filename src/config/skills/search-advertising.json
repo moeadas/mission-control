@@ -1,0 +1,17 @@
+{
+  "id": "search-advertising",
+  "name": "Search Advertising",
+  "description": "Managing paid search campaigns (Google Ads)",
+  "category": "media",
+  "prompts": {
+    "en": "Manage paid search campaigns (Google Ads)."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

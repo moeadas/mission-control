@@ -1,0 +1,17 @@
+{
+  "id": "creative-briefing",
+  "name": "Creative Briefing",
+  "description": "Writing comprehensive creative briefs that align teams",
+  "category": "creative",
+  "prompts": {
+    "en": "Write comprehensive creative briefs that align teams."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

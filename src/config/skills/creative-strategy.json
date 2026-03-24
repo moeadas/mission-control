@@ -1,0 +1,17 @@
+{
+  "id": "creative-strategy",
+  "name": "Creative Strategy",
+  "description": "Linking creative output to business objectives",
+  "category": "creative",
+  "prompts": {
+    "en": "Link creative output to business objectives."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

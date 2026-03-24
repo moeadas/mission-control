@@ -1,0 +1,17 @@
+{
+  "id": "feedback-synthesis",
+  "name": "Feedback Synthesis",
+  "description": "Turning client feedback into actionable items",
+  "category": "client-services",
+  "prompts": {
+    "en": "Turn client feedback into actionable items."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "visual-storytelling",
+  "name": "Visual Storytelling",
+  "description": "Using imagery to communicate narratives and emotions",
+  "category": "creative",
+  "prompts": {
+    "en": "Use imagery to communicate narratives and emotions."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

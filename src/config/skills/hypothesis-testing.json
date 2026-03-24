@@ -1,0 +1,17 @@
+{
+  "id": "hypothesis-testing",
+  "name": "Hypothesis Testing",
+  "description": "Scientific testing of business assumptions",
+  "category": "research",
+  "prompts": {
+    "en": "Scientific testing of business assumptions."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

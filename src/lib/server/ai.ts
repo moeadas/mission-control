@@ -196,6 +196,73 @@ export function inferDeliverableType(content: string): DeliverableType {
   return rules.find((rule) => rule.keywords.some((keyword) => lower.includes(keyword)))?.type || 'status-report'
 }
 
+export interface PipelineHint {
+  id: string
+  name: string
+  description: string
+  confidence: 'high' | 'medium' | 'low'
+  phases: string[]
+  estimatedDuration: string
+  clientProfileFields: Array<{ id: string; label: string; type: string; required: boolean }>
+}
+
+export function inferPipeline(content: string, pipelines: any[]): PipelineHint | null {
+  const lower = content.toLowerCase()
+
+  const pipelineKeywords: Record<string, { keywords: string[]; confidence: 'high' | 'medium' | 'low' }> = {
+    'content-calendar': {
+      keywords: ['content calendar', 'social media content', 'content ideas', 'post copy', 'caption', 'hashtag', 'hook', 'instagram', 'linkedin', 'tiktok', 'facebook', 'twitter', 'social post', '30 day', 'visual brief'],
+      confidence: 'high',
+    },
+    'campaign-brief': {
+      keywords: ['campaign brief', 'campaign strategy', 'marketing campaign', 'campaign plan', 'campaign concept', 'positioning', 'messaging strategy'],
+      confidence: 'high',
+    },
+    'ad-creative': {
+      keywords: ['ad creative', 'advertising creative', 'ad copy', 'ad assets', 'banner ads', 'facebook ads', 'google ads', 'instagram ads', 'ad campaign', 'a/b test'],
+      confidence: 'high',
+    },
+    'seo-audit': {
+      keywords: ['seo audit', 'seo analysis', 'search engine optimization', 'keyword research', 'technical seo', 'seo report', 'seo strategy'],
+      confidence: 'high',
+    },
+    'competitor-research': {
+      keywords: ['competitor research', 'competitive analysis', 'competitor report', 'market research', 'competitor intelligence', 'competitor audit'],
+      confidence: 'high',
+    },
+    'media-plan': {
+      keywords: ['media plan', 'media strategy', 'channel strategy', 'budget allocation', 'media buying', 'ad spend', 'channel mix', 'media schedule'],
+      confidence: 'high',
+    },
+  }
+
+  let bestMatch: { pipelineId: string; matchCount: number; confidence: 'high' | 'medium' | 'low' } | null = null
+
+  for (const [pipelineId, { keywords, confidence }] of Object.entries(pipelineKeywords)) {
+    const matchCount = keywords.filter(kw => lower.includes(kw)).length
+    if (matchCount > 0) {
+      if (!bestMatch || matchCount > bestMatch.matchCount || (matchCount === bestMatch.matchCount && confidence === 'high')) {
+        bestMatch = { pipelineId, matchCount, confidence }
+      }
+    }
+  }
+
+  if (!bestMatch) return null
+
+  const pipeline = pipelines.find((p: any) => p.id === bestMatch!.pipelineId)
+  if (!pipeline) return null
+
+  return {
+    id: pipeline.id,
+    name: pipeline.name,
+    description: pipeline.description,
+    confidence: bestMatch.confidence,
+    phases: pipeline.phases.map((p: any) => p.name),
+    estimatedDuration: pipeline.estimatedDuration,
+    clientProfileFields: pipeline.clientProfileFields || [],
+  }
+}
+
 export function buildExecutionPrompt(input: {
   userRequest: string
   deliverableType: DeliverableType

@@ -1,0 +1,17 @@
+{
+  "id": "meeting-facilitation",
+  "name": "Meeting Facilitation",
+  "description": "Leading productive meetings",
+  "category": "project-management",
+  "prompts": {
+    "en": "Lead productive meetings."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

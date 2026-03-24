@@ -1,0 +1,17 @@
+{
+  "id": "burndown-tracking",
+  "name": "Burndown Tracking",
+  "description": "Monitoring sprint progress with burndown charts",
+  "category": "project-management",
+  "prompts": {
+    "en": "Monitor sprint progress with burndown charts."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

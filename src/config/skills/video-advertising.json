@@ -1,0 +1,17 @@
+{
+  "id": "video-advertising",
+  "name": "Video Advertising",
+  "description": "Planning and executing video ad campaigns",
+  "category": "media",
+  "prompts": {
+    "en": "Plan and execute video ad campaigns."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "seo-research",
+  "name": "SEO Research",
+  "description": "Research for search engine optimization",
+  "category": "research",
+  "prompts": {
+    "en": "Research for search engine optimization."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

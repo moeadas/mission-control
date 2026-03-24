@@ -1,0 +1,17 @@
+{
+  "id": "resource-allocation",
+  "name": "Resource Allocation",
+  "description": "Assigning resources to projects strategically",
+  "category": "project-management",
+  "prompts": {
+    "en": "Assign resources to projects strategically."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "consumer-insights",
+  "name": "Consumer Insights",
+  "description": "Discovering meaningful patterns in consumer behavior",
+  "category": "research",
+  "prompts": {
+    "en": "Discover meaningful patterns in consumer behavior."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

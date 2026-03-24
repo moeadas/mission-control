@@ -1,0 +1,17 @@
+{
+  "id": "budget-allocation",
+  "name": "Budget Allocation",
+  "description": "Strategically distributing budget across channels",
+  "category": "media",
+  "prompts": {
+    "en": "Strategically distribute budget across channels."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

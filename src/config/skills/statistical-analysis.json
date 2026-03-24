@@ -1,0 +1,17 @@
+{
+  "id": "statistical-analysis",
+  "name": "Statistical Analysis",
+  "description": "Applying statistics to marketing data",
+  "category": "media",
+  "prompts": {
+    "en": "Apply statistics to marketing data."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

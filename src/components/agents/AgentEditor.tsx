@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { useAgentsStore } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { SkillPicker } from '@/components/ui/SkillPicker'
-import skillsLibrary from '@/config/skills/skills-library.json'
 import { X, Save } from 'lucide-react'
 
 interface AgentEditorProps {
@@ -20,11 +19,6 @@ const DIVISION_COLORS: Record<string, string> = {
   media: '#ff5fa0',
   research: '#38bdf8',
 }
-
-// Flatten skills from library for the picker
-const AVAILABLE_SKILLS = skillsLibrary.skillCategories.flatMap(cat =>
-  cat.skills.map(s => ({ ...s, category: cat.name }))
-)
 
 export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   const agents = useAgentsStore(state => state.agents)
@@ -198,7 +192,6 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
             <p className="text-xs text-gray-500 mb-3">Select from the skills library. Each skill includes detailed prompts and instructions.</p>
             <SkillPicker
               selectedSkillIds={formData.skills}
-              availableSkills={AVAILABLE_SKILLS}
               onAddSkill={addSkill}
               onRemoveSkill={removeSkill}
             />

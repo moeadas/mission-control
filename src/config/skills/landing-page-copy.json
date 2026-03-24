@@ -1,0 +1,17 @@
+{
+  "id": "landing-page-copy",
+  "name": "Landing Page Copy",
+  "description": "Writing high-converting landing page content",
+  "category": "creative",
+  "prompts": {
+    "en": "Write high-converting landing page content."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

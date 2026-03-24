@@ -1,0 +1,17 @@
+{
+  "id": "long-form-copy",
+  "name": "Long-Form Copy",
+  "description": "Writing extended copy for landing pages, articles, etc.",
+  "category": "creative",
+  "prompts": {
+    "en": "Write extended copy for landing pages, articles, etc."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

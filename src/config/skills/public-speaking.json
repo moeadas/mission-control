@@ -1,0 +1,17 @@
+{
+  "id": "public-speaking",
+  "name": "Public Speaking",
+  "description": "Presenting confidently to audiences",
+  "category": "client-services",
+  "prompts": {
+    "en": "Present confidently to audiences."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "ad-copy",
+  "name": "Ad Copywriting",
+  "description": "Creating advertising copy for various formats",
+  "category": "creative",
+  "prompts": {
+    "en": "Create advertising copy for various formats."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

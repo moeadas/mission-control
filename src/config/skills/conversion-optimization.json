@@ -1,0 +1,17 @@
+{
+  "id": "conversion-optimization",
+  "name": "Conversion Optimization",
+  "description": "Improving conversion rates across funnel",
+  "category": "media",
+  "prompts": {
+    "en": "Improve conversion rates across funnel."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

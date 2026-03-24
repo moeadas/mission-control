@@ -1,0 +1,17 @@
+{
+  "id": "change-control",
+  "name": "Change Control",
+  "description": "Managing changes to project scope and requirements",
+  "category": "project-management",
+  "prompts": {
+    "en": "Manage changes to project scope and requirements."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

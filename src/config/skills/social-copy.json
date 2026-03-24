@@ -1,0 +1,17 @@
+{
+  "id": "social-copy",
+  "name": "Social Media Copy",
+  "description": "Writing platform-specific social media content",
+  "category": "creative",
+  "prompts": {
+    "en": "Write platform-specific social media content."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}

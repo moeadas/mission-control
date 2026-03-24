@@ -1,0 +1,17 @@
+{
+  "id": "contract-discussion",
+  "name": "Contract Discussion",
+  "description": "Negotiating contracts and terms",
+  "category": "client-services",
+  "prompts": {
+    "en": "Negotiate contracts and terms."
+  },
+  "variables": [],
+  "inputs": [],
+  "outputs": [],
+  "checklist": [],
+  "metadata": {
+    "version": "1.0",
+    "difficulty": "intermediate"
+  }
+}
