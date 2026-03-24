@@ -130,7 +130,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="text"
                 value={formData.name}
                 onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
               />
             </div>
             <div>
@@ -139,7 +139,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="text"
                 value={formData.role}
                 onChange={e => setFormData(prev => ({ ...prev, role: e.target.value }))}
-                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
               />
             </div>
           </div>
@@ -150,7 +150,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               value={formData.bio}
               onChange={e => setFormData(prev => ({ ...prev, bio: e.target.value }))}
               rows={2}
-              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple resize-none"
+              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple resize-none text-white"
               placeholder="Brief description of the agent..."
             />
           </div>
@@ -161,7 +161,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               type="text"
               value={formData.methodology}
               onChange={e => setFormData(prev => ({ ...prev, methodology: e.target.value }))}
-              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
               placeholder="e.g., Agile/Scrum + Design Thinking"
             />
           </div>
@@ -210,10 +210,10 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 value={newSkill}
                 onChange={e => setNewSkill(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addSkill()}
-                className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+                className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
                 placeholder="Add a skill..."
               />
-              <button onClick={addSkill} className="px-3 py-2 bg-accent-purple/20 text-accent-purple rounded-lg text-sm hover:bg-accent-purple/30">
+              <button onClick={addSkill} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
                 <Plus size={16} />
               </button>
             </div>
@@ -241,10 +241,10 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 value={newResponsibility}
                 onChange={e => setNewResponsibility(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addResponsibility()}
-                className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+                className="flex-1 px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
                 placeholder="Add a responsibility..."
               />
-              <button onClick={addResponsibility} className="px-3 py-2 bg-accent-purple/20 text-accent-purple rounded-lg text-sm hover:bg-accent-purple/30">
+              <button onClick={addResponsibility} className="px-3 py-2 bg-accent-purple text-white rounded-lg text-sm hover:bg-accent-purple/80 flex items-center justify-center">
                 <Plus size={16} />
               </button>
             </div>
@@ -287,7 +287,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 step={0.1}
                 min={0}
                 max={1}
-                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
               />
             </div>
             <div>
@@ -296,7 +296,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
                 type="number"
                 value={formData.maxTokens}
                 onChange={e => setFormData(prev => ({ ...prev, maxTokens: parseInt(e.target.value) || 1536 }))}
-                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple"
+                className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple text-white placeholder-gray-500"
               />
             </div>
             <div>
@@ -317,7 +317,7 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               value={formData.systemPrompt}
               onChange={e => setFormData(prev => ({ ...prev, systemPrompt: e.target.value }))}
               rows={6}
-              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple font-mono resize-none"
+              className="w-full px-3 py-2 bg-[#1a1d26] rounded-lg text-sm outline-none focus:ring-2 focus:ring-accent-purple font-mono resize-none text-white"
               placeholder="Agent system prompt..."
             />
           </div>
