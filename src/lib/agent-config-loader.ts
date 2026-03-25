@@ -11,7 +11,7 @@ const AGENT_CONFIG_FILES: Record<string, string> = {
   finn: '@/config/agents/finn.json',
   echo: '@/config/agents/echo.json',
   lyra: '@/config/agents/lyra.json',
-  nova: '@/config/agents/nova.json',
+  
   atlas: '@/config/agents/atlas.json',
   dex: '@/config/agents/dex.json',
 }

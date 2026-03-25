@@ -9,7 +9,7 @@ import MayaConfig from '@/config/agents/maya.json'
 import FinnConfig from '@/config/agents/finn.json'
 import EchoConfig from '@/config/agents/echo.json'
 import LyraConfig from '@/config/agents/lyra.json'
-import NovaConfig from '@/config/agents/nova.json'
+
 import AtlasConfig from '@/config/agents/atlas.json'
 import DexConfig from '@/config/agents/dex.json'
 
@@ -39,7 +39,7 @@ const configs: AgentConfig[] = [
   FinnConfig as AgentConfig,
   EchoConfig as AgentConfig,
   LyraConfig as AgentConfig,
-  NovaConfig as AgentConfig,
+  
   AtlasConfig as AgentConfig,
   DexConfig as AgentConfig,
 ]
