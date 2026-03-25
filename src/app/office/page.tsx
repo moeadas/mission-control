@@ -9,35 +9,63 @@ import { Bot, Users, Zap } from 'lucide-react'
 export default function OfficePage() {
   const agents = useAgentsStore((state) => state.agents)
   const activeCount = agents.filter((a) => a.status === 'active').length
+  const idleCount = agents.filter((a) => a.status === 'idle').length
 
   return (
     <ClientShell>
       <div className="flex flex-col h-full">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
-          <div>
-            <h1 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
-              <Bot size={20} className="text-accent-cyan" />
-              Virtual Office
-            </h1>
-            <p className="text-xs text-text-secondary mt-0.5">
-              Live view — {activeCount} agent{activeCount !== 1 ? 's' : ''} active
-            </p>
-          </div>
+        {/* Sleek header */}
+        <div
+          className="flex items-center justify-between px-6 py-4 flex-shrink-0"
+          style={{ borderBottom: '1px solid var(--border)' }}
+        >
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-xs font-mono text-text-secondary">
-              <Zap size={12} className="text-accent-yellow" />
-              <span>{activeCount} active</span>
-              <span className="text-border">|</span>
-              <Users size={12} />
-              <span>{agents.length} total</span>
+            <div>
+              <h1 className="text-xl font-heading font-bold text-[var(--text-primary)] flex items-center gap-3">
+                <div
+                  className="w-8 h-8 rounded-xl flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #9b6dff20, #4f8ef720)',
+                    border: '1px solid #9b6dff40',
+                  }}
+                >
+                  <Bot size={16} style={{ color: '#00d4aa' }} />
+                </div>
+                Virtual Office
+              </h1>
+              <p className="text-xs text-[var(--text-dim)] mt-0.5 font-mono">
+                Click any zone to explore the team
+              </p>
+            </div>
+          </div>
+
+          {/* Status pills */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(0,212,170,0.1)', border: '1px solid rgba(0,212,170,0.2)' }}>
+              <div className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" style={{ boxShadow: '0 0 6px #00d4aa' }} />
+              <span className="text-[11px] font-mono text-[#00d4aa]">{activeCount} active</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,209,102,0.1)', border: '1px solid rgba(255,209,102,0.2)' }}>
+              <div className="w-2 h-2 rounded-full bg-[#ffd166]" />
+              <span className="text-[11px] font-mono text-[#ffd166]">{idleCount} idle</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
+              <Users size={12} className="text-[var(--text-dim)]" />
+              <span className="text-[11px] font-mono text-[var(--text-secondary)]">{agents.length} total</span>
             </div>
           </div>
         </div>
 
         {/* Office floor */}
-        <div className="flex-1 overflow-hidden p-6">
-          <div className="h-full bg-panel rounded-card border border-border p-4 overflow-hidden">
+        <div className="flex-1 overflow-hidden p-4 md:p-6">
+          <div
+            className="h-full rounded-2xl overflow-hidden"
+            style={{
+              background: 'var(--bg-panel)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            }}
+          >
             <OfficeFloor />
           </div>
         </div>

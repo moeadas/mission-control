@@ -4,65 +4,97 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ClientShell } from '@/components/ClientShell'
 import { usePipelinesStore } from '@/lib/stores/pipelines-store'
-import { Plus, Search, ArrowLeft, Play, Pencil, Clock, Layers } from 'lucide-react'
+import { Plus, Search, ArrowLeft, Play, Clock, Layers, GitBranch, ChevronRight } from 'lucide-react'
 import { clsx } from 'clsx'
 
 export default function PipelinesPage() {
   const router = useRouter()
-  const pipelines = usePipelinesStore(s => s.pipelines)
-  const isLoaded = usePipelinesStore(s => s.isLoaded)
-  const loadPipelines = usePipelinesStore(s => s.loadPipelines)
+  const pipelines = usePipelinesStore((s) => s.pipelines)
+  const isLoaded = usePipelinesStore((s) => s.isLoaded)
+  const loadPipelines = usePipelinesStore((s) => s.loadPipelines)
   const [search, setSearch] = useState('')
 
-  useEffect(() => { loadPipelines() }, [loadPipelines])
+  useEffect(() => {
+    loadPipelines()
+  }, [loadPipelines])
 
-  const filtered = pipelines.filter(p =>
-    !search ||
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.description.toLowerCase().includes(search.toLowerCase())
+  const filtered = pipelines.filter(
+    (p) =>
+      !search ||
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.description.toLowerCase().includes(search.toLowerCase())
   )
 
   return (
     <ClientShell>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2d38] flex-shrink-0">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/config')}
-              className="p-2 rounded-lg hover:bg-[#1a1d26] text-gray-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={18} />
-            </button>
-            <div>
-              <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                <Layers size={20} className="text-accent-purple" />
-                Pipeline Library
-              </h1>
-              <p className="text-xs text-gray-400 mt-0.5">
-                {pipelines.length} pipelines — each a multi-phase workflow
-              </p>
+        <div
+          className="px-6 py-4 flex-shrink-0"
+          style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-panel)' }}
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push('/config')}
+                className="p-2 rounded-xl hover:bg-[var(--bg-elevated)] text-[var(--text-dim)] hover:text-[var(--text-primary)] transition-colors"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <div>
+                <h1 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(0,212,170,0.2), rgba(79,142,247,0.1))',
+                      border: '1px solid rgba(0,212,170,0.3)',
+                    }}
+                  >
+                    <Layers size={18} style={{ color: '#00d4aa' }} />
+                  </div>
+                  Pipeline Library
+                </h1>
+                <p className="text-xs text-[var(--text-dim)] mt-0.5 font-mono">
+                  {pipelines.length} pipelines · Multi-phase workflows
+                </p>
+              </div>
             </div>
+            <button
+              onClick={() => router.push('/pipeline/new')}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:opacity-90 active:scale-95"
+              style={{
+                background: 'linear-gradient(135deg, #00d4aa, #4f8ef7)',
+                boxShadow: '0 4px 12px rgba(0,212,170,0.3)',
+              }}
+            >
+              <Plus size={16} />
+              New Pipeline
+            </button>
           </div>
-          <button
-            onClick={() => router.push('/pipeline/new')}
-            className="flex items-center gap-2 px-4 py-2 bg-accent-purple text-white rounded-lg text-sm font-medium hover:bg-accent-purple/80 transition-colors"
-          >
-            <Plus size={16} />
-            New Pipeline
-          </button>
         </div>
 
         {/* Search */}
-        <div className="px-6 py-4 border-b border-[#2a2d38] bg-[#12141a]/50">
+        <div
+          className="px-6 py-4 flex-shrink-0"
+          style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-panel)' }}
+        >
           <div className="relative max-w-md">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+            <Search
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-dim)]"
+            />
             <input
               type="text"
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search pipelines..."
-              className="w-full pl-10 pr-4 py-2 bg-[#1a1d26] border border-[#2a2d38] rounded-lg text-sm text-white placeholder-gray-500 outline-none focus:border-accent-purple"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-[var(--text-primary)] placeholder-[var(--text-dim)] outline-none transition-all"
+              style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+              }}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--accent-cyan)')}
+              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
             />
           </div>
         </div>
@@ -71,87 +103,128 @@ export default function PipelinesPage() {
         <div className="flex-1 overflow-y-auto p-6">
           {!isLoaded ? (
             <div className="flex items-center justify-center h-32">
-              <div className="w-8 h-8 border-2 border-accent-purple border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-2 border-[#00d4aa] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 text-center">
-              <Layers size={48} className="text-gray-600 mb-4" />
-              <p className="text-gray-400">No pipelines found</p>
+              <div className="w-20 h-20 rounded-3xl flex items-center justify-center mb-4" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
+                <GitBranch size={36} style={{ color: 'var(--text-dim)' }} />
+              </div>
+              <p className="text-lg font-medium text-[var(--text-primary)] mb-2">
+                {search ? 'No pipelines found' : 'No pipelines yet'}
+              </p>
+              <p className="text-sm text-[var(--text-dim)]">
+                {search ? 'Try a different search term' : 'Create your first pipeline to get started'}
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filtered.map(pipeline => (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {filtered.map((pipeline, i) => (
                 <div
                   key={pipeline.id}
-                  className="bg-[#1a1d26] rounded-xl border border-[#2a2d38] hover:border-[#3a3d48] transition-all group"
+                  className="card-surface hover-lift group cursor-pointer overflow-hidden"
+                  style={{ animationDelay: `${i * 40}ms` }}
+                  onClick={() => router.push(`/pipeline/${pipeline.id}`)}
                 >
-                  {/* Header */}
+                  {/* Phase color bar */}
+                  <div className="flex h-1">
+                    {pipeline.phases.slice(0, 8).map((phase, idx) => (
+                      <div
+                        key={phase.id}
+                        className="flex-1"
+                        style={{ background: phase.color }}
+                      />
+                    ))}
+                    {pipeline.phases.length < 8 &&
+                      Array.from({ length: 8 - pipeline.phases.length }).map((_, idx) => (
+                        <div
+                          key={`empty-${idx}`}
+                          className="flex-1"
+                          style={{ background: 'var(--border)' }}
+                        />
+                      ))}
+                  </div>
+
                   <div className="p-5">
+                    {/* Header */}
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold text-white group-hover:text-accent-purple transition-colors">
+                        <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
                           {pipeline.name}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[10px] font-mono text-gray-500">v{pipeline.version}</span>
+                          <span className="text-[10px] font-mono text-[var(--text-dim)]">
+                            v{pipeline.version}
+                          </span>
                           {pipeline.isDefault && (
-                            <span className="px-1.5 py-0.5 bg-accent-purple/10 text-accent-purple rounded text-[10px]">default</span>
+                            <span
+                              className="badge"
+                              style={{ background: 'rgba(0,212,170,0.1)', color: '#00d4aa' }}
+                            >
+                              default
+                            </span>
                           )}
                         </div>
                       </div>
-                      <Pencil
-                        size={14}
-                        className="text-gray-600 group-hover:text-accent-purple transition-colors cursor-pointer flex-shrink-0"
-                        onClick={() => router.push(`/pipeline/${pipeline.id}`)}
+                      <ChevronRight
+                        size={16}
+                        className="text-[var(--text-dim)] flex-shrink-0 opacity-0 group-hover:opacity-100 transition-all translate-x-0 group-hover:translate-x-1"
                       />
                     </div>
-                    <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+
+                    {/* Description */}
+                    <p className="text-xs text-[var(--text-secondary)] line-clamp-2 leading-relaxed mb-4">
                       {pipeline.description}
                     </p>
-                  </div>
 
-                  {/* Phase Preview */}
-                  <div className="px-5 pb-4">
-                    <div className="flex gap-1 mb-3">
-                      {pipeline.phases.slice(0, 6).map((phase, i) => (
-                        <div
-                          key={phase.id}
-                          className="h-1.5 flex-1 rounded-full"
-                          style={{ backgroundColor: phase.color + '60' }}
-                          title={phase.name}
-                        />
-                      ))}
-                      {pipeline.phases.length > 6 && (
-                        <div className="h-1.5 w-4 rounded-full bg-[#2a2d38]" />
-                      )}
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {pipeline.phases.slice(0, 4).map(phase => (
+                    {/* Phase tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {pipeline.phases.slice(0, 4).map((phase) => (
                         <span
                           key={phase.id}
-                          className="px-2 py-0.5 rounded text-[10px] font-medium"
-                          style={{ backgroundColor: phase.color + '15', color: phase.color }}
+                          className="badge text-[10px]"
+                          style={{
+                            background: phase.color + '15',
+                            color: phase.color,
+                          }}
                         >
                           {phase.name}
                         </span>
                       ))}
                       {pipeline.phases.length > 4 && (
-                        <span className="px-2 py-0.5 rounded text-[10px] text-gray-500">
+                        <span className="badge text-[10px]" style={{ background: 'var(--bg-elevated)', color: 'var(--text-dim)' }}>
                           +{pipeline.phases.length - 4}
                         </span>
                       )}
                     </div>
+
+                    {/* Phase progress bar */}
+                    <div className="flex gap-1 mb-4">
+                      {pipeline.phases.slice(0, 8).map((phase) => (
+                        <div
+                          key={phase.id}
+                          className="h-1.5 flex-1 rounded-full"
+                          style={{ background: phase.color + '60' }}
+                          title={phase.name}
+                        />
+                      ))}
+                    </div>
                   </div>
 
                   {/* Footer */}
-                  <div className="px-5 py-3 border-t border-[#2a2d38] flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-[10px] text-gray-500">
+                  <div
+                    className="px-5 py-3 flex items-center justify-between"
+                    style={{ borderTop: '1px solid var(--border-subtle)', background: 'var(--bg-elevated)' }}
+                  >
+                    <div className="flex items-center gap-1 text-[10px] text-[var(--text-dim)] font-mono">
                       <Clock size={11} />
                       <span>{pipeline.estimatedDuration}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-gray-500">
-                        {pipeline.phases.length} phases · {pipeline.phases.reduce((sum, p) => sum + p.activities.length, 0)} activities
+                    <div className="flex items-center gap-1 text-[10px] text-[var(--text-dim)] font-mono">
+                      <GitBranch size={11} />
+                      <span>
+                        {pipeline.phases.length} phases ·{' '}
+                        {pipeline.phases.reduce((sum, p) => sum + p.activities.length, 0)} tasks
                       </span>
                     </div>
                   </div>
