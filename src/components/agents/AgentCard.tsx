@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Pause, Play, Trash2, Copy } from 'lucide-react'
 import { Agent } from '@/lib/types'
 import { Card } from '@/components/ui/Card'
@@ -29,17 +29,20 @@ export function AgentCard({ agent, onEdit }: AgentCardProps) {
   const skills = Array.isArray(agent.skills) ? agent.skills : []
   const primaryOutputs = Array.isArray(agent.primaryOutputs) ? agent.primaryOutputs : []
 
+  // Fix hydration mismatch: compute timeAgo client-side only
+  const [timeAgo, setTimeAgo] = useState('')
+  useEffect(() => {
+    if (agent.lastActive) {
+      setTimeAgo(formatTimestamp(agent.lastActive))
+    }
+  }, [agent.lastActive])
+
   return (
     <Card
       className="relative overflow-hidden group"
       hover
       onClick={onEdit}
     >
-      {/* Subtle left border accent */}
-      <div
-        className="absolute top-3 bottom-3 left-0 w-0.5 rounded-full opacity-60"
-        style={{ background: agent.color }}
-      />
 
       <div className="flex items-start gap-4 pt-2">
         {/* Avatar */}
@@ -119,10 +122,10 @@ export function AgentCard({ agent, onEdit }: AgentCardProps) {
         </button>
       </div>
 
-      {/* Last active */}
+      {/* Last active - client-side only to prevent hydration mismatch */}
       {agent.lastActive && (
         <p className="text-[10px] text-text-dim mt-2 font-mono">
-          Last active {formatTimestamp(agent.lastActive)}
+          Last active {timeAgo || '...'}
         </p>
       )}
       {skills.length > 0 && (

@@ -30,7 +30,7 @@ const MOCK_CAMPAIGNS = [
 
 const MOCK_AGENTS = [
   { id: 'iris', name: 'Iris', tasksCompleted: 47, avgDuration: 45, quality: 92 },
-  { id: 'riley', name: 'Riley', tasksCompleted: 38, avgDuration: 52, quality: 88 },
+  { id: 'sage', name: 'Sage', tasksCompleted: 38, avgDuration: 52, quality: 88 },
   { id: 'nova', name: 'Nova', tasksCompleted: 52, avgDuration: 38, quality: 95 },
   { id: 'dex', name: 'Dex', tasksCompleted: 41, avgDuration: 61, quality: 90 },
 ]
