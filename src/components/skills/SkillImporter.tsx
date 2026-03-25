@@ -200,15 +200,15 @@ export function SkillImporter() {
 
       {/* Import Log */}
       {importLog.length > 0 && (
-        <div className="bg-base-200 rounded-lg p-4">
+        <div className="bg-[var(--bg-elevated)] rounded-lg p-4">
           <h4 className="text-sm font-medium mb-2">Import Log</h4>
           <div className="space-y-1 max-h-32 overflow-y-auto">
             {importLog.map((log, i) => (
               <p key={i} className={clsx(
                 'text-xs font-mono',
-                log.startsWith('✓') ? 'text-accent-green' :
-                log.startsWith('✗') ? 'text-accent-red' :
-                'text-accent-blue'
+                log.startsWith('✓') ? 'text-[var(--accent-cyan)]' :
+                log.startsWith('✗') ? 'text-accent-pink' :
+                'text-[var(--accent-blue)]'
               )}>
                 {log}
               </p>
@@ -237,15 +237,15 @@ export function SkillImporter() {
                 <div
                   key={pkg.skill.id}
                   className={clsx(
-                    'bg-base-200 rounded-lg p-4 border',
-                    validation?.valid === false ? 'border-accent-red' : 'border-border'
+                    'bg-[var(--bg-elevated)] rounded-lg p-4 border',
+                    validation?.valid === false ? 'border-accent-pink' : 'border-border'
                   )}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <h4 className="font-medium">{pkg.skill.name}</h4>
-                        <span className="px-2 py-0.5 bg-base-300 rounded text-xs">
+                        <span className="px-2 py-0.5 bg-[var(--bg-base)] rounded text-xs">
                           {pkg.skill.category}
                         </span>
                         {pkg.assets && pkg.assets.length > 0 && (
@@ -262,7 +262,7 @@ export function SkillImporter() {
                       {validation?.errors.length && (
                         <div className="mt-2 space-y-1">
                           {validation.errors.map((err, i) => (
-                            <p key={i} className="text-xs text-accent-red flex items-center gap-1">
+                            <p key={i} className="text-xs text-accent-pink flex items-center gap-1">
                               <XCircle size={12} /> {err}
                             </p>
                           ))}
@@ -275,7 +275,7 @@ export function SkillImporter() {
                           <summary className="text-xs text-text-dim cursor-pointer">
                             Preview EN prompt ({pkg.skill.prompts.en.length} chars)
                           </summary>
-                          <pre className="mt-1 p-2 bg-base-300 rounded text-xs overflow-x-auto">
+                          <pre className="mt-1 p-2 bg-[var(--bg-base)] rounded text-xs overflow-x-auto">
                             {pkg.skill.prompts.en.slice(0, 300)}...
                           </pre>
                         </details>
@@ -295,7 +295,7 @@ export function SkillImporter() {
                     
                     <button
                       onClick={() => removeSkill(pkg.skill.id)}
-                      className="p-1 hover:bg-base-300 rounded"
+                      className="p-1 hover:bg-[var(--bg-base)] rounded"
                     >
                       <Trash2 size={16} className="text-text-dim" />
                     </button>
@@ -308,12 +308,12 @@ export function SkillImporter() {
       )}
 
       {/* Skill Format Reference */}
-      <details className="bg-base-200 rounded-lg p-4">
+      <details className="bg-[var(--bg-elevated)] rounded-lg p-4">
         <summary className="font-medium cursor-pointer">Standard Skill Format (.md)</summary>
         <div className="mt-4 space-y-4">
           <div>
             <h4 className="text-sm font-medium mb-2">Frontmatter</h4>
-            <pre className="p-3 bg-base-300 rounded text-xs overflow-x-auto">
+            <pre className="p-3 bg-[var(--bg-base)] rounded text-xs overflow-x-auto">
 {`---
 id: my-new-skill
 name: My New Skill
@@ -350,7 +350,7 @@ Your prompt here with {{variable}} injection...
           
           <div>
             <h4 className="text-sm font-medium mb-2">Zip Package Structure</h4>
-            <pre className="p-3 bg-base-300 rounded text-xs">
+            <pre className="p-3 bg-[var(--bg-base)] rounded text-xs">
 {`skill-package.zip
 ├── skill.md          # Main skill definition
 ├── examples/
