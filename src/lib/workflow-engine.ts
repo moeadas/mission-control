@@ -142,7 +142,7 @@ export function createPhaseGate(phase: WorkflowPhase): PhaseGate {
     phaseName: phase.name,
     checkpoints: checkpoints.map(cp => ({
       ...cp,
-      status: Object.fromEntries(cp.items.map(item => [item, false])),
+      status: Object.fromEntries(cp.items.map((item: string) => [item, false])),
       passed: false,
     })),
     status: 'pending',

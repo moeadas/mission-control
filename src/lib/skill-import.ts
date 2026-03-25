@@ -65,7 +65,7 @@ export function parseSkillFromMarkdown(content: string): SkillPackage | null {
         author: frontmatter.author,
         version: frontmatter.version,
         tags: frontmatter.tags ? frontmatter.tags.split(',').map(t => t.trim()) : [],
-        difficulty: frontmatter.difficulty,
+        difficulty: frontmatter.difficulty as 'beginner' | 'intermediate' | 'advanced' | undefined,
       },
     }
     
@@ -103,7 +103,7 @@ function extractSections(content: string): Record<string, string> {
   
   // Fallback: extract first paragraph as description
   if (!sections.description) {
-    const firstPara = withoutFrontmatter.match(/^#\s+.+?\n\n(.+?)(?=\n\n##|$)/s)
+    const firstPara = withoutFrontmatter.match(/^#\s+.+?\n\n([\s\S]+?)(?=\n\n##|$)/)
     if (firstPara) {
       sections.description = firstPara[1].trim()
     }
@@ -154,7 +154,7 @@ export function validateSkill(skill: SkillDefinition): { valid: boolean; errors:
 
 // Merge skill into skills library
 export function mergeSkillIntoLibrary(
-  library: { skillCategories: Array<{ id: string; skills: SkillDefinition[] }> },
+  library: { skillCategories: Array<{ id: string; name?: string; skills: SkillDefinition[] }> },
   newSkill: SkillDefinition
 ): { success: boolean; message: string } {
   // Find or create category
@@ -162,7 +162,7 @@ export function mergeSkillIntoLibrary(
   if (!category) {
     // Try to find by category name
     category = library.skillCategories.find(c => 
-      c.name.toLowerCase() === newSkill.category.toLowerCase()
+      (c.name || c.id).toLowerCase() === newSkill.category.toLowerCase()
     )
   }
   

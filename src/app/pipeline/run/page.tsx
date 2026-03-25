@@ -22,14 +22,7 @@ import {
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { routeTask, createPipelineInstance, type PipelineInstance, type PipelineTask } from '@/lib/pipeline-execution'
-
-interface Pipeline {
-  id: string
-  name: string
-  description: string
-  version: string
-  phases: { id: string; name: string; color: string; activities: { id: string; name: string }[] }[]
-}
+import type { Pipeline } from '@/lib/stores/pipelines-store'
 
 export default function PipelineRunPage() {
   const agents = useAgentsStore(state => state.agents)

@@ -2,7 +2,7 @@
 // Handles task routing, pipeline execution, and agent coordination
 
 import { useAgentsStore } from './agents-store'
-import type { Pipeline, PipelinePhase, Activity } from '@/config/pipelines/pipelines'
+import type { Pipeline, Phase, Activity } from '@/lib/stores/pipelines-store'
 
 export interface PipelineInstance {
   id: string
@@ -211,7 +211,13 @@ export interface TaskResponse {
   instanceId?: string
   taskId?: string
   message: string
-  availablePipelines?: Pipeline[]
+  availablePipelines?: Array<{
+    id: string
+    name: string
+    description: string
+    version: string
+    phases: Array<{ id: string; name: string }>
+  }>
 }
 
 export async function routeTask(
