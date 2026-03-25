@@ -236,8 +236,8 @@ export const DEFAULT_AGENTS: Agent[] = [
     methodology: '',
   },
   {
-    id: 'nova-studio',
-    name: 'Nova Studio',
+    id: 'lyra',
+    name: 'Lyra',
     role: 'Design & Visual Production Lead',
     division: 'creative',
     specialty: 'design',

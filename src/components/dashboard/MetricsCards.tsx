@@ -267,7 +267,7 @@ export function MissionQueue() {
                   Complete
                 </button>
               </div>
-            </button>
+            </div>
           )
         })}
       </div>
