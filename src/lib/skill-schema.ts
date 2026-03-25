@@ -22,6 +22,7 @@ export interface SkillExample {
 
 export interface Skill {
   $schema?: string
+  id: string            // unique identifier (kebab-case, matches filename)
   name: string          // kebab-case, max 64 chars
   description: string   // max 1024 chars, third person, what + when
   category: string
