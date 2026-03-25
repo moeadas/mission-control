@@ -2,33 +2,77 @@
 
 ## Overview
 
-Mission Control is a Next.js-based agency management application designed to orchestrate virtual AI agents through configurable workflows. The system follows a config-first philosophy where all business logic is stored as editable JSON.
+Mission Control is a Next.js 16.2.1-based agency management application designed to orchestrate virtual AI agents through configurable workflows. The system follows a config-first philosophy where all business logic is stored as editable JSON.
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.2.1 (App Router)
+- **Framework**: Next.js 16.2.1 (App Router, Turbopack)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Animation**: Framer Motion
+- **Styling**: Tailwind CSS with custom design system
+- **Animation**: CSS animations, Framer Motion patterns
 - **State**: Zustand (localStorage persistence)
 - **Icons**: Lucide React
 - **AI Providers**: Ollama (local), Google Gemini
+
+## Design System
+
+### Visual Direction: "Command Center Meets Gaming HQ"
+- Inspired by Apple Intelligence, Linear, Discord, Notion
+- Dark theme with glass morphism effects
+- Clean, spacious layouts with personality
+- Smooth micro-animations throughout
+
+### Color Palette
+```
+Background Base:    #09090b (zinc-950)
+Background Card:    #18181b (zinc-900)
+Background Panel:   #27272a (zinc-800)
+Border:            #3f3f46 (zinc-700)
+Text Primary:      #fafafa (zinc-50)
+Text Secondary:    #a1a1aa (zinc-400)
+Text Dim:          #71717a (zinc-500)
+
+Accent Purple:     #9b6dff (violet-400)
+Accent Blue:       #4f8ef7 (blue-500)
+Accent Cyan:       #22d3ee (cyan-400)
+Accent Green:      #10b981 (emerald-500)
+Accent Yellow:     #fbbf24 (amber-400)
+Accent Orange:     #f97316 (orange-500)
+Accent Pink:       #ec4899 (pink-500)
+```
+
+### Typography
+- **Headings**: Space Grotesk (bold, 700)
+- **Body**: DM Sans (regular, 400)
+- **Mono**: JetBrains Mono (code, logs)
+
+### Spacing Scale
+- xs: 4px | sm: 8px | md: 16px | lg: 24px | xl: 32px | 2xl: 48px
+
+### Border Radius
+- sm: 6px | md: 8px | lg: 12px | xl: 16px | card: 12px
+
+### Animation Timings
+- Micro (hover, focus): 150ms ease
+- Standard transitions: 200ms ease
+- Page transitions: 300ms ease-out
+- Staggered reveals: 400ms ease-out
 
 ## Architecture Layers
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        UI Layer                            │
+│                        UI Layer                             │
 │  (Pages, Components, Layouts)                             │
 ├─────────────────────────────────────────────────────────────┤
 │                      State Layer                           │
-│  (Zustand Stores: agents-store, analytics-store)           │
+│  (Zustand Stores: agents-store, analytics-store)          │
 ├─────────────────────────────────────────────────────────────┤
 │                      Config Layer                          │
 │  (JSON configs: agents, pipelines, skills)                │
 ├─────────────────────────────────────────────────────────────┤
 │                    Integration Layer                        │
-│  (OAuth: Google Docs/Sheets/Ads, Meta Ads)                │
+│  (OAuth: Google Docs/Sheets/Ads, Meta Ads)                 │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -40,53 +84,117 @@ Mission Control is a Next.js-based agency management application designed to orc
 |----------------|---------|
 | `src/config/agents/*.json` | Individual agent configs (10 agents) |
 | `src/config/pipelines/*.json` | Individual pipeline configs (6 pipelines) |
-| `src/config/skills/*.json` | Individual skill files (140+ skills) |
+| `src/config/skills/*.json` | Individual skill files (141 skills) |
 | `src/config/tools/tools-config.json` | Tool registry |
-| `src/config/client-templates/client-templates.json` | Client templates |
 
-### Individual Pipeline Files
+## Agent Roster
 
-Each pipeline now has its own JSON file:
-- `src/config/pipelines/content-calendar.json`
-- `src/config/pipelines/campaign-brief.json`
-- `src/config/pipelines/ad-creative.json`
-- `src/config/pipelines/seo-audit.json`
-- `src/config/pipelines/competitor-research.json`
-- `src/config/pipelines/media-plan.json`
+| Agent | Role | Division | Status |
+|-------|------|----------|--------|
+| **Iris** | Agency Operations Lead | Orchestration | 🟢 Active |
+| **Lyra** | Visual Production Lead | Creative | 🟢 Active |
+| **Piper** | Project & Traffic Manager | Client Services | 🟢 Active |
+| **Sage** | Client Services Director | Client Services | 🟢 Active |
+| **Echo** | Copy & Content Lead | Creative | 🟢 Active |
+| **Maya** | Brand & Campaign Strategist | Creative | 🟢 Active |
+| **Nova** | Media Planning Lead | Media | 🟢 Active |
+| **Finn** | Creative Director | Creative | 🟢 Active |
+| **Atlas** | Research & Insights Lead | Research | 🟢 Active |
+| **Dex** | Performance & Analytics Lead | Media | 🟢 Active |
 
-### Individual Skill Files
+> **Note**: "Nova Studio" was renamed to **"Lyra"** to avoid duplicate agent names.
 
-Each skill has its own JSON file in `src/config/skills/`, following the skill-schema format:
-- `brand-strategy.json`
-- `campaign-planning.json`
-- `seo-audit.json`
-- etc.
+## Page Structure
 
-## Skill Schema
+| Route | Purpose |
+|-------|---------|
+| `/dashboard` | Main command center with agency stats, agent strip, activity feed |
+| `/office` | 2D virtual office floor plan with agent positions |
+| `/agents` | Agent roster with editor modal |
+| `/clients` | Client management |
+| `/tasks` | Task list and mission tracking |
+| `/pipeline` | Pipeline templates browser |
+| `/pipeline/[id]` | Pipeline editor |
+| `/pipeline/run` | Pipeline execution runner |
+| `/skills` | Skills library browser (141 skills) |
+| `/skills/[id]` | Individual skill editor |
+| `/analytics` | Analytics dashboards |
+| `/outputs` | Saved deliverables |
+| `/settings` | App settings |
+| `/settings/integrations` | OAuth integrations (Google, Meta) |
+| `/config` | JSON config editor |
 
-Skills follow a structured format inspired by Claude best practices:
+## Virtual Office
 
+The `/office` page features a 2D top-down floor plan:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    MISSION CONTROL                          │
+│                    (Orchestration)                          │
+│                      [Iris 🟢]                             │
+└─────────────────────────────────────────────────────────────┘
+         │                    │                    │
+    ┌────┴────┐        ┌────┴────┐        ┌────┴────┐
+    │ CLIENT  │        │CREATIVE │        │  MEDIA  │
+    │SERVICES │        │DIVISION │        │DIVISION │
+    │[Piper]  │        │[Lyra]   │        │[Nova]   │
+    │[Sage]   │        │[Echo]   │        │[Dex]    │
+    └─────────┘        │[Maya]   │        └─────────┘
+                      │[Finn]   │
+                      └─────────┘
+                           │
+                    ┌──────┴──────┐
+                    │  RESEARCH   │
+                    │  DIVISION   │
+                    │  [Atlas]    │
+                    └─────────────┘
+```
+
+### Room Configuration
+Each room has:
+- Position coordinates (x, y, width, height)
+- Division color for visual identification
+- Agent avatars placed within
+- Click interaction for agent details
+
+## State Management
+
+### Agents Store (`agents-store.ts`)
+Manages:
+- `agents[]` - All agency agents
+- `missions[]` - Active tasks/projects
+- `clients[]` - Client profiles
+- `conversations[]` - Chat history
+- `providerSettings` - Ollama/Gemini configuration
+- `agencySettings` - Theme, defaults
+
+### Analytics Store (`analytics-store.ts`)
+Manages:
+- Campaign metrics
+- Agent performance
+- Learned patterns
+- A/B tests
+
+## Skills System
+
+### Skill Schema
+Each skill in `src/config/skills/*.json` follows:
 ```typescript
 interface Skill {
-  name: string           // kebab-case, max 64 chars
-  description: string    // third person, max 1024 chars
-  category: string
+  id: string           // kebab-case unique ID
+  name: string         // Display name
+  description: string  // Third-person description
+  category: string     // strategy|creative|media|research|operations|client-services|content
   difficulty: 'beginner' | 'intermediate' | 'advanced'
-  freedom: 'high' | 'medium' | 'low'  // How much guidance to give
-  
+  freedom: 'high' | 'medium' | 'low'
   prompts: {
-    en: {
-      trigger: string      // When to use this skill
-      context: string      // Agent persona and context
-      instructions: string  // Step-by-step workflow with checklist
-      output_template: string
-    }
-    ar?: { ... }           // Arabic version
+    en: { trigger, context, instructions, output_template }
+    ar?: { ... }
   }
-  
-  variables: SkillVariable[]
-  workflow?: { steps: WorkflowStep[] }
-  examples?: { input: string, output: string }[]
+  variables: Array<{ name, type, required, description }>
+  workflow?: { steps: Array<{ step, name, action, verify }> }
+  examples?: Array<{ input, output }>
   checklist: string[]
   tools?: string[]
   agents?: string[]
@@ -95,186 +203,122 @@ interface Skill {
 }
 ```
 
-### Skill Categories
+### Categories
+1. **Strategy & Planning** - Brand strategy, campaign planning
+2. **Creative & Copy** - Visual production, copywriting
+3. **Media & Advertising** - Media planning, ad creative
+4. **Research & Analytics** - SEO, competitive analysis
+5. **Operations & Workflow** - Project management, coordination
+6. **Client Services** - Account management, briefings
+7. **Content Production** - Content calendars, social media
 
-- **Strategy & Planning**: Brand strategy, campaign planning, competitive analysis
-- **Creative & Copy**: Creative concepts, copywriting, visual direction
-- **Media & Advertising**: Media planning, campaign setup, optimization
-- **Research & Analytics**: Market research, SEO, competitive intelligence
-- **Operations & Workflow**: Task triage, workflow design, coordination
-- **Client Services**: Relationship management, account planning
-- **Content Production**: Content calendars, social media, video
+## Pipeline System
 
-## Agent Config Structure
+### 6 Core Pipelines
+1. **Content Calendar** - 30-day social content planning
+2. **Campaign Brief** - Full campaign strategy
+3. **Ad Creative** - Advertising production
+4. **SEO Audit** - Technical SEO analysis
+5. **Competitor Research** - Market intelligence
+6. **Media Plan** - Media strategy
 
-```json
-{
-  "id": "unique-id",
-  "name": "Agent Name",
-  "role": "Job Title",
-  "division": "orchestration|client-services|creative|media|research",
-  "skills": ["skill-id", "skill-id"],
-  "responsibilities": ["Responsibility 1", "Responsibility 2"],
-  "tools": ["tool-id", "tool-id"],
-  "ai": {
-    "provider": "ollama|gemini",
-    "model": "model-name",
-    "temperature": 0.7,
-    "maxTokens": 1536
-  },
-  "color": "#hex",
-  "status": "active|idle|paused"
+### Pipeline Structure
+```typescript
+interface Pipeline {
+  id: string
+  name: string
+  description: string
+  phases: Phase[]
+  isDefault: boolean
+  estimatedDuration: string
+  clientProfileFields: Field[]
 }
 ```
 
-## Pipeline Structure
+## OAuth Integrations
 
-```json
-{
-  "id": "pipeline-id",
-  "name": "Pipeline Name",
-  "description": "What this pipeline does",
-  "clientProfileFields": ["field1", "field2"],
-  "phases": [
-    {
-      "id": "phase-id",
-      "name": "Phase Name",
-      "color": "#hex",
-      "activities": [
-        {
-          "id": "activity-id",
-          "name": "Activity Name",
-          "assignedRole": "role-id",
-          "checklist": ["Item 1", "Item 2"],
-          "prompt": { "en": "...", "ar": "..." }
-        }
-      ]
-    }
-  ]
-}
-```
+### Google (Docs, Sheets, Ads)
+- Route: `/api/auth/google`
+- Scopes: documents, spreadsheets, drive, adwords
 
-## State Management
+### Meta (Facebook/Instagram Ads)
+- Route: `/api/auth/meta`
+- Scopes: ads_management, ads_read, pages_read_engagement
 
-### Agents Store (`agents-store.ts`)
+## AI Integration
 
-Manages agents, missions, clients, conversations, and provider settings.
+### Providers
+- **Ollama** - Local AI (default: `minimax-m2.7:cloud`)
+- **Gemini** - Google Cloud AI
 
-### Analytics Store (`analytics-store.ts`)
+### Chat API
+- Endpoint: `POST /api/chat`
+- Features: Streaming, context injection, pipeline routing
+- Iris is the default chat interface
 
-Manages campaign metrics, agent metrics, ROI analysis, learned patterns, and A/B tests.
+## Component Library
 
-### Skills Store (`src/lib/stores/skills-store.ts`)
+### Core Components
+- `AgentBot` - Agent avatar with status indicator
+- `Badge` - Status/category badges
+- `Button` - Primary/secondary/ghost variants
+- `Card` - Container with glass effect
+- `Input` / `Select` / `Textarea` - Form controls
+- `Modal` - Overlay dialogs
+- `Toast` - Notifications
 
-Loads and manages individual skill files from `src/config/skills/`.
+### Layout Components
+- `ClientShell` - Main app wrapper
+- `Sidebar` - Navigation sidebar (collapsible)
+- `TopBar` - Header with actions
+- `IrisChat` - Floating chat widget
 
-### Pipelines Store (`src/lib/stores/pipelines-store.ts`)
+### Dashboard Components
+- `MetricsCards` - Stats display
+- `AgentStrip` - Horizontal agent list
+- `ActivityFeed` - Recent activity
+- `MissionQueue` - Active tasks
 
-Loads and manages individual pipeline files from `src/config/pipelines/`.
+### Office Components
+- `OfficeFloor` - 2D floor plan renderer
 
 ## Key Libraries
 
 | Library | Purpose |
 |---------|---------|
-| `skill-schema.ts` | TypeScript interfaces for skill structure |
-| `pipeline-execution.ts` | Pipeline routing and execution engine |
-| `skill-import.ts` | Import skills from .md or .zip files |
-| `google-integrations.ts` | Google Docs, Sheets, Ads API |
-| `meta-integrations.ts` | Meta/Facebook Ads API |
-| `server/ai.ts` | AI text generation with Ollama/Gemini |
+| `skill-schema.ts` | Skill TypeScript interfaces |
+| `pipeline-execution.ts` | Pipeline routing engine |
+| `skill-import.ts` | Import skills from markdown |
+| `server/ai.ts` | AI text generation |
+| `providers.ts` | AI model definitions |
 
-## Pages
+## Design Patterns
 
-| Route | Purpose |
-|-------|---------|
-| `/dashboard` | Main agency dashboard |
-| `/agents` | Agent roster and management |
-| `/pipeline` | Pipeline cards browser |
-| `/pipeline/[id]` | Individual pipeline editor |
-| `/pipeline/run` | Pipeline execution runner |
-| `/skills` | Skills library browser |
-| `/skills/[id]` | Individual skill editor |
-| `/config` | In-app JSON config editor |
-| `/analytics` | Analytics & AI intelligence dashboards |
-| `/settings` | App settings |
-| `/settings/integrations` | Google & Meta OAuth integrations |
-
-## OAuth Integrations
-
-### Google (Docs, Sheets, Ads)
-- OAuth routes: `/api/auth/google`
-- Scopes: documents, spreadsheets, drive, adwords
-
-### Meta (Facebook/Instagram Ads)
-- OAuth routes: `/api/auth/meta`
-- Scopes: ads_management, ads_read, pages_read_engagement
-
-## Iris Chat Interface
-
-The Iris chat widget (`IrisChat.tsx`) provides:
-- Modern message UI with file attachments
-- Support for images, PDFs, Excel, Word files
-- Context extraction from attached files
-- Real-time streaming responses
-- Conversation history
-
-Iris routes tasks to the appropriate pipelines and agents based on user input.
-
-## Division Structure
-
-| Division | Color | Agents |
-|----------|-------|--------|
-| Orchestration | Purple (#a78bfa) | Iris |
-| Client Services | Blue (#4f8ef7) | Piper |
-| Creative | Teal (#00d4aa) | Nova, Maya, Echo |
-| Media | Pink (#ff5fa0) | Finn, Atlas |
-| Research | Sky Blue (#38bdf8) | Sage, Dex |
-
-## Workflow Engine
-
-The workflow engine (`pipeline-execution.ts`) handles:
-
-1. **Task Routing**: `routeTask()` matches user requests to pipelines
-2. **Pipeline Execution**: `createPipelineInstance()` and `executeTask()`
-3. **Agent Assignment**: Maps roles to agents based on division
-4. **Context Building**: Injects client data and variables into prompts
-
-## Phase Flow (Campaign Brief Example)
-
-```
-Discovery → Strategy → Creative → Review → Delivery
-    ↓          ↓          ↓         ↓         ↓
-   Client    Brief     Content    Client    Report
-  Intake   Approved   Approved   Sign-off  Delivered
+### Glass Morphism
+```css
+background: rgba(24, 24, 27, 0.8);
+backdrop-filter: blur(12px);
+border: 1px solid rgba(63, 63, 70, 0.5);
 ```
 
-## Quality Checkpoints
+### Glow Effects
+```css
+box-shadow: 0 0 20px rgba(155, 109, 255, 0.3);
+```
 
-Quality checkpoints enforce phase transitions:
+### Staggered Animations
+```css
+animation: fadeInUp 400ms ease-out forwards;
+animation-delay: calc(var(--i) * 100ms);
+```
 
-- **Q1: Intake Complete** — All client info collected
-- **Q2: Strategy Approved** — Strategy approved by client
-- **Q3: Creative Approved** — Creative work signed off
-- **Q4: Pre-Launch** — Final QA before launch
-- **Q5: Launch Verified** — Campaign live and verified
+## Mobile Responsiveness
 
-## Analytics & Intelligence
-
-The analytics system tracks:
-
-- **Campaign Metrics**: Spend, impressions, conversions, ROAS
-- **Agent Metrics**: Tasks completed, avg duration, quality scores
-- **Pipeline Metrics**: Success rate, completion time, runs
-- **Learned Patterns**: AI-identified patterns with confidence scores
-- **A/B Tests**: Test results with statistical significance
-- **Predictions**: Estimated completion timelines
-
-## Adding New Configs
-
-1. Create JSON file in appropriate `src/config/` directory
-2. Add TypeScript interface in relevant schema file
-3. Create API route for CRUD operations if needed
-4. Update this ARCHITECTURE.md
+- Bottom tab bar on mobile (< 768px)
+- Collapsible sidebar becomes hamburger menu
+- Cards stack vertically
+- Touch-friendly targets (min 44px)
+- Swipe gestures for navigation
 
 ## Constraints
 
@@ -282,4 +326,15 @@ The analytics system tracks:
 - No hardcoded values — everything editable
 - Opaque identifiers preserved exactly as written
 - Config changes don't require code changes
-- Skills follow Claude best practices: concise, progressive disclosure, verification checklists
+- Skills follow Claude best practices format
+- Build must pass before commits (`npm run build`)
+
+## Getting Started
+
+```bash
+cd /Users/mooe/Desktop/Mission\ Control\ App
+npm run dev  # Start development server
+npm run build  # Production build
+```
+
+Access at: http://localhost:3000
