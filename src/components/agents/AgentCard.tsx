@@ -34,12 +34,11 @@ export function AgentCard({ agent, onEdit }: AgentCardProps) {
       className="relative overflow-hidden group"
       hover
       onClick={onEdit}
-      glow={agent.color}
     >
-      {/* Accent stripe */}
+      {/* Subtle left border accent */}
       <div
-        className="absolute top-0 left-0 right-0 h-0.5 opacity-80"
-        style={{ background: `linear-gradient(90deg, ${agent.color}, transparent)` }}
+        className="absolute top-3 bottom-3 left-0 w-0.5 rounded-full opacity-60"
+        style={{ background: agent.color }}
       />
 
       <div className="flex items-start gap-4 pt-2">

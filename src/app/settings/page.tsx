@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { ClientShell } from '@/components/ClientShell'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
@@ -36,6 +36,19 @@ export default function SettingsPage() {
     meta_facebook: false,
     meta_instagram: false,
   })
+
+  // Handle OAuth callback on page load
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const oauthSuccess = params.get('oauth')
+    const oauthScope = params.get('scope')
+    if (oauthSuccess === 'success' && oauthScope) {
+      setOauthConnections(prev => ({ ...prev, [oauthScope]: true }))
+      toast.success(`Successfully connected ${oauthScope.replace('_', ' ')}`)
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [])
 
   const modelOptions = useMemo(
     () => getProviderModels(agencySettings.defaultProvider).map((option) => ({ value: option.id, label: option.label })),
