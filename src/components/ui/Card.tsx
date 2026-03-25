@@ -29,9 +29,9 @@ export function Card({
     <div
       onClick={onClick}
       className={clsx(
-        'bg-[var(--bg-card)] border border-[var(--border)] rounded-xl',
+        'bg-[var(--bg-card)] border border-[var(--border)] rounded-xl shadow-[var(--shadow-card)]',
         paddingClass,
-        hover && 'cursor-pointer transition-colors duration-150 hover:border-[var(--border-glow)] hover:bg-[var(--bg-elevated)]',
+        hover && 'cursor-pointer transition-all duration-200 hover:border-[var(--border-glow)] hover:bg-[var(--bg-elevated)] hover:shadow-[var(--shadow-elevated)] hover:-translate-y-0.5',
         onClick && 'cursor-pointer',
         className
       )}

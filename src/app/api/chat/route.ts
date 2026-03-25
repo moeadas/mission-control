@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
     const requestBody = await req.json()
     const {
       provider = 'ollama',
-      model = 'llama3.2:latest',
+      model = 'minimax-m2.7:cloud',
       temperature = 0.7,
       maxTokens = 1024,
       messages,
@@ -268,9 +268,9 @@ export async function POST(req: NextRequest) {
 
       actualProvider = 'ollama'
       actualModel =
-        providerSettings?.ollama?.availableModels?.[0] ||
+        providerSettings?.ollama?.availableModels?.find((m: string) => m.includes('minimax')) || providerSettings?.ollama?.availableModels?.[0] ||
         providerSettings?.ollama?.model ||
-        'llama3.2:latest'
+        'minimax-m2.7:cloud'
       fallbackUsed = true
 
       responseText = await generateText({

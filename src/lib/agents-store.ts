@@ -295,7 +295,7 @@ const INITIAL_ARTIFACTS: Artifact[] = []
 const INITIAL_AGENCY_SETTINGS: AgencySettings = {
   agencyName: "Moe's Mission Control",
   defaultProvider: 'ollama',
-  defaultModel: 'llama3.2:latest',
+  defaultModel: 'minimax-m2.7:cloud',
   themeMode: 'dark',
 }
 
