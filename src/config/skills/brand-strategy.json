@@ -13,26 +13,76 @@
       "output_template": "## Brand Strategy: {{client_name}}\n\n### Executive Summary\n[2-3 paragraph overview of strategic direction]\n\n### 1. Market Position\n[Current position analysis and competitive landscape]\n\n### 2. Brand Positioning\n[Unique value proposition and positioning statement]\n\n### 3. Brand Architecture\n[Architecture recommendation with rationale]\n\n### 4. Brand Personality\n[Voice, tone, and personality guidelines]\n\n### 5. Strategic Roadmap\n| Phase | Timeline | Objectives | Key Milestones |\n|-------|----------|------------|----------------|\n| Foundation | 0-6 months | | |\n| Growth | 6-18 months | | |\n| Scale | 18-36 months | | |\n\n### 6. Success Metrics\n[KPI framework for measuring brand health]"
     },
     "ar": {
-      "trigger": "متى تستخدم هذه المهارة",
-      "context": "أنت خبير في العلامة التجارية تعمل على {{client_name}} في مجال {{industry}}.",
-      "instructions": "## تطوير استراتيجية العلامة التجارية\n\nاتبع هذا سير العمل:\n\n- [ ] 1. الاكتشاف: حلل وضع {{brand_name}} الحالي والمنافسين ({{competitors}})\n- [ ] 2. المواقع: حدد القيمة الفريدة وإطار المواقع\n- [ ] 3. الهيكل: صمم هيكل العلامة التجارية\n- [ ] 4. الشخصية: حدد شخصية العلامة التجارية ونبرة الصوت\n- [ ] 5. خارطة الطريق: أنشئ استراتيجية للعلامية التجارية لـ 3-5 سنوات",
-      "output_template": "## استراتيجية العلامة التجارية: {{client_name}}\n\n### الملخص التنفيذي\n[نظرة عامة على الاتجاه الاستراتيجي]\n\n### 1. الموقع في السوق\n[تحليل الموقع الحالي والمنافسين]\n\n### 2. موقع العلامة التجارية\n[ proposition القيمة الفريدة]"
+      "trigger": "\u0645\u062a\u0649 \u062a\u0633\u062a\u062e\u062f\u0645 \u0647\u0630\u0647 \u0627\u0644\u0645\u0647\u0627\u0631\u0629",
+      "context": "\u0623\u0646\u062a \u062e\u0628\u064a\u0631 \u0641\u064a \u0627\u0644\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629 \u062a\u0639\u0645\u0644 \u0639\u0644\u0649 {{client_name}} \u0641\u064a \u0645\u062c\u0627\u0644 {{industry}}.",
+      "instructions": "## \u062a\u0637\u0648\u064a\u0631 \u0627\u0633\u062a\u0631\u0627\u062a\u064a\u062c\u064a\u0629 \u0627\u0644\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629\n\n\u0627\u062a\u0628\u0639 \u0647\u0630\u0627 \u0633\u064a\u0631 \u0627\u0644\u0639\u0645\u0644:\n\n- [ ] 1. \u0627\u0644\u0627\u0643\u062a\u0634\u0627\u0641: \u062d\u0644\u0644 \u0648\u0636\u0639 {{brand_name}} \u0627\u0644\u062d\u0627\u0644\u064a \u0648\u0627\u0644\u0645\u0646\u0627\u0641\u0633\u064a\u0646 ({{competitors}})\n- [ ] 2. \u0627\u0644\u0645\u0648\u0627\u0642\u0639: \u062d\u062f\u062f \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0641\u0631\u064a\u062f\u0629 \u0648\u0625\u0637\u0627\u0631 \u0627\u0644\u0645\u0648\u0627\u0642\u0639\n- [ ] 3. \u0627\u0644\u0647\u064a\u0643\u0644: \u0635\u0645\u0645 \u0647\u064a\u0643\u0644 \u0627\u0644\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629\n- [ ] 4. \u0627\u0644\u0634\u062e\u0635\u064a\u0629: \u062d\u062f\u062f \u0634\u062e\u0635\u064a\u0629 \u0627\u0644\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629 \u0648\u0646\u0628\u0631\u0629 \u0627\u0644\u0635\u0648\u062a\n- [ ] 5. \u062e\u0627\u0631\u0637\u0629 \u0627\u0644\u0637\u0631\u064a\u0642: \u0623\u0646\u0634\u0626 \u0627\u0633\u062a\u0631\u0627\u062a\u064a\u062c\u064a\u0629 \u0644\u0644\u0639\u0644\u0627\u0645\u064a\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629 \u0644\u0640 3-5 \u0633\u0646\u0648\u0627\u062a",
+      "output_template": "## \u0627\u0633\u062a\u0631\u0627\u062a\u064a\u062c\u064a\u0629 \u0627\u0644\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629: {{client_name}}\n\n### \u0627\u0644\u0645\u0644\u062e\u0635 \u0627\u0644\u062a\u0646\u0641\u064a\u0630\u064a\n[\u0646\u0638\u0631\u0629 \u0639\u0627\u0645\u0629 \u0639\u0644\u0649 \u0627\u0644\u0627\u062a\u062c\u0627\u0647 \u0627\u0644\u0627\u0633\u062a\u0631\u0627\u062a\u064a\u062c\u064a]\n\n### 1. \u0627\u0644\u0645\u0648\u0642\u0639 \u0641\u064a \u0627\u0644\u0633\u0648\u0642\n[\u062a\u062d\u0644\u064a\u0644 \u0627\u0644\u0645\u0648\u0642\u0639 \u0627\u0644\u062d\u0627\u0644\u064a \u0648\u0627\u0644\u0645\u0646\u0627\u0641\u0633\u064a\u0646]\n\n### 2. \u0645\u0648\u0642\u0639 \u0627\u0644\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629\n[ proposition \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0641\u0631\u064a\u062f\u0629]"
     }
   },
   "variables": [
-    { "name": "client_name", "type": "string", "required": true, "description": "Client or brand name" },
-    { "name": "industry", "type": "string", "required": true, "description": "Industry sector" },
-    { "name": "target_audience", "type": "string", "required": true, "description": "Primary target audience" },
-    { "name": "competitors", "type": "string", "required": false, "description": "Main competitors (comma separated)" },
-    { "name": "current_perception", "type": "string", "required": false, "description": "How brand is currently perceived" }
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Industry sector"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary target audience"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Main competitors (comma separated)"
+    },
+    {
+      "name": "current_perception",
+      "type": "string",
+      "required": false,
+      "description": "How brand is currently perceived"
+    }
   ],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Discovery", "action": "Analyze current brand position and competitive landscape", "verify": "Understand the market context and client's starting point" },
-      { "step": 2, "name": "Positioning", "action": "Define unique value proposition and brand positioning", "verify": "Positioning is distinct and defensible" },
-      { "step": 3, "name": "Architecture", "action": "Design brand architecture model", "verify": "Architecture supports business structure" },
-      { "step": 4, "name": "Personality", "action": "Define brand personality and voice guidelines", "verify": "Personality is consistent and appropriate" },
-      { "step": 5, "name": "Roadmap", "action": "Create strategic roadmap with milestones", "verify": "Roadmap is realistic and measurable" }
+      {
+        "step": 1,
+        "name": "Discovery",
+        "action": "Analyze current brand position and competitive landscape",
+        "verify": "Understand the market context and client's starting point"
+      },
+      {
+        "step": 2,
+        "name": "Positioning",
+        "action": "Define unique value proposition and brand positioning",
+        "verify": "Positioning is distinct and defensible"
+      },
+      {
+        "step": 3,
+        "name": "Architecture",
+        "action": "Design brand architecture model",
+        "verify": "Architecture supports business structure"
+      },
+      {
+        "step": 4,
+        "name": "Personality",
+        "action": "Define brand personality and voice guidelines",
+        "verify": "Personality is consistent and appropriate"
+      },
+      {
+        "step": 5,
+        "name": "Roadmap",
+        "action": "Create strategic roadmap with milestones",
+        "verify": "Roadmap is realistic and measurable"
+      }
     ]
   },
   "examples": [
@@ -48,13 +98,27 @@
     "Strategic roadmap has measurable milestones",
     "Success metrics are defined and trackable"
   ],
-  "tools": ["web-search", "document", "presentation"],
-  "agents": ["maya", "sage"],
-  "pipelines": ["campaign-brief"],
+  "tools": [
+    "web-search",
+    "document",
+    "presentation"
+  ],
+  "agents": [
+    "maya",
+    "sage"
+  ],
+  "pipelines": [
+    "campaign-brief"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["strategy", "positioning", "branding"],
+    "tags": [
+      "strategy",
+      "positioning",
+      "branding"
+    ],
     "lastUpdated": "2026-03-24"
-  }
+  },
+  "id": "brand-strategy"
 }

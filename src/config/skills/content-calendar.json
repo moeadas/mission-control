@@ -14,19 +14,69 @@
     }
   },
   "variables": [
-    { "name": "client_name", "type": "string", "required": true, "description": "Client or brand name" },
-    { "name": "platforms", "type": "string", "required": true, "description": "Social platforms (Instagram, LinkedIn, Twitter, etc)" },
-    { "name": "frequency", "type": "string", "required": true, "description": "Posts per week per platform" },
-    { "name": "objectives", "type": "string", "required": true, "description": "Content goals (awareness, engagement, leads)" },
-    { "name": "target_audience", "type": "string", "required": true, "description": "Primary audience" }
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "platforms",
+      "type": "string",
+      "required": true,
+      "description": "Social platforms (Instagram, LinkedIn, Twitter, etc)"
+    },
+    {
+      "name": "frequency",
+      "type": "string",
+      "required": true,
+      "description": "Posts per week per platform"
+    },
+    {
+      "name": "objectives",
+      "type": "string",
+      "required": true,
+      "description": "Content goals (awareness, engagement, leads)"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary audience"
+    }
   ],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Define Pillars", "action": "Establish content themes based on brand and objectives", "verify": "Pillars are distinct and cover key brand messages" },
-      { "step": 2, "name": "Platform Selection", "action": "Match platforms to audience and objectives", "verify": "Platform choice is strategic, not scattered" },
-      { "step": 3, "name": "Set Cadence", "action": "Determine realistic posting frequency", "verify": "Frequency is sustainable for team capacity" },
-      { "step": 4, "name": "Plan Content Mix", "action": "Balance content types across pillars", "verify": "Mix serves different objectives (awareness, engagement, conversion)" },
-      { "step": 5, "name": "Build Calendar", "action": "Map content to specific dates", "verify": "Calendar is actionable and includes key dates" }
+      {
+        "step": 1,
+        "name": "Define Pillars",
+        "action": "Establish content themes based on brand and objectives",
+        "verify": "Pillars are distinct and cover key brand messages"
+      },
+      {
+        "step": 2,
+        "name": "Platform Selection",
+        "action": "Match platforms to audience and objectives",
+        "verify": "Platform choice is strategic, not scattered"
+      },
+      {
+        "step": 3,
+        "name": "Set Cadence",
+        "action": "Determine realistic posting frequency",
+        "verify": "Frequency is sustainable for team capacity"
+      },
+      {
+        "step": 4,
+        "name": "Plan Content Mix",
+        "action": "Balance content types across pillars",
+        "verify": "Mix serves different objectives (awareness, engagement, conversion)"
+      },
+      {
+        "step": 5,
+        "name": "Build Calendar",
+        "action": "Map content to specific dates",
+        "verify": "Calendar is actionable and includes key dates"
+      }
     ]
   },
   "examples": [
@@ -43,13 +93,28 @@
     "Calendar includes key brand/cultural dates",
     "Each post has clear purpose and CTA"
   ],
-  "tools": ["spreadsheet", "document", "presentation"],
-  "agents": ["echo", "piper"],
-  "pipelines": ["content-calendar"],
+  "tools": [
+    "spreadsheet",
+    "document",
+    "presentation"
+  ],
+  "agents": [
+    "echo",
+    "piper"
+  ],
+  "pipelines": [
+    "content-calendar"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["content", "social media", "planning", "editorial"],
+    "tags": [
+      "content",
+      "social media",
+      "planning",
+      "editorial"
+    ],
     "lastUpdated": "2026-03-24"
-  }
+  },
+  "id": "content-calendar"
 }
