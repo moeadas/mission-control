@@ -120,10 +120,9 @@ export default function SkillEditorPage({ skillId, isModal, onClose }: SkillEdit
 
   const handleSave = async () => {
     setSaving(true)
-    // Save to API or filesystem
     try {
-      const response = await fetch('/api/skills', {
-        method: 'POST',
+      const response = await fetch(skillId ? `/api/skills/${skillId}` : '/api/skills', {
+        method: skillId ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(skill),
       })
