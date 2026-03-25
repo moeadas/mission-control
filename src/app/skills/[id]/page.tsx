@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { useAgentsStore } from '@/lib/agents-store'
 import { SKILL_CATEGORIES, DIFFICULTY_LEVELS, FREEDOM_LEVELS, type Skill } from '@/lib/skill-schema'
 import { ClientShell } from '@/components/ClientShell'
@@ -8,7 +9,6 @@ import { Save, Plus, Trash2, X, ChevronDown, ChevronRight, BookOpen, Workflow, L
 import { clsx } from 'clsx'
 
 interface SkillEditorProps {
-  skillId?: string
   isModal?: boolean
   onClose?: () => void
 }
@@ -36,7 +36,9 @@ const EMPTY_SKILL = (): Partial<Skill> => ({
   },
 })
 
-export default function SkillEditorPage({ skillId, isModal, onClose }: SkillEditorProps & { onSave?: (skill: Skill) => void }) {
+export default function SkillEditorPage({ isModal, onClose }: SkillEditorProps & { onSave?: (skill: Skill) => void }) {
+  const params = useParams()
+  const skillId = params.id as string | undefined
   const skillsDir = useAgentsStore((state: any) => state.skillsDir)
   const [skill, setSkill] = useState<Partial<Skill>>(EMPTY_SKILL())
   const [activeTab, setActiveTab] = useState<'main' | 'workflow' | 'examples' | 'advanced'>('main')
