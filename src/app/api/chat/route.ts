@@ -9,6 +9,13 @@ import {
   inferPipeline,
 } from '@/lib/server/ai'
 
+// DEBUG: Log incoming requests
+function debugLog(label: string, data: any) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[CHAT DEBUG] ${label}:`, JSON.stringify(data, null, 2).slice(0, 500))
+  }
+}
+
 function enforceArtifactTruth(responseText: string, artifacts: any[]) {
   const lower = responseText.toLowerCase()
   const claimsDelivery =
@@ -83,6 +90,10 @@ export async function POST(req: NextRequest) {
       currentClientId,
       currentCampaignId,
     } = await req.json()
+
+    // Comprehensive debug logging
+    debugLog('Full request body keys', Object.keys(req.headers).length > 0 ? 'headers present' : 'no headers')
+    console.log('[CHAT DEBUG] Full payload:', JSON.stringify({ provider, model, providerSettings: providerSettings ? JSON.stringify(providerSettings) : 'null' }, null, 2).slice(0, 1000))
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: 'messages required' }, { status: 400 })
@@ -223,6 +234,14 @@ export async function POST(req: NextRequest) {
     let actualModel = model
     let fallbackUsed = false
 
+    debugLog('Calling generateText', { provider, model, ollamaBaseUrl: providerSettings?.ollama?.baseUrl })
+
+    // Check if Ollama is enabled before attempting
+    if (provider === 'ollama' && providerSettings?.ollama?.enabled === false) {
+      console.log('[CHAT ERROR] Ollama is disabled in providerSettings')
+      return NextResponse.json({ error: 'Ollama is unavailable right now. Make sure your local Ollama server is running.' }, { status: 503 })
+    }
+
     try {
       responseText = await generateText({
         provider,
@@ -234,6 +253,7 @@ export async function POST(req: NextRequest) {
         geminiApiKey: providerSettings?.gemini?.apiKey,
       })
     } catch (error) {
+      console.log('[CHAT ERROR]', error instanceof Error ? error.message : String(error), 'Provider:', provider)
       const shouldFallbackToOllama =
         error instanceof ProviderError &&
         error.provider === 'gemini' &&

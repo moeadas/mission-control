@@ -221,13 +221,13 @@ export function MissionQueue() {
         {missions.slice(0, 4).map((mission) => {
           const client = clients.find((item) => item.id === mission.clientId)
           return (
-            <button
+            <div
               key={mission.id}
               onClick={() => {
                 setActiveMission(mission.id)
                 router.push(`/tasks/${mission.id}`)
               }}
-              className={`w-full text-left p-3 rounded-xl border transition-all ${
+              className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer ${
                 activeMissionId === mission.id ? 'bg-base border-border-glow' : 'bg-base/60 border-border hover:border-border-glow'
               }`}
             >
