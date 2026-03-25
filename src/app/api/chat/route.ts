@@ -92,23 +92,6 @@ export async function POST(req: NextRequest) {
       currentCampaignId,
     } = requestBody
 
-    // ISSUE #12: Debug logging at start of POST handler
-    console.log('[CHAT]', { provider, model, hasSettings: !!providerSettings, bodyKeys: Object.keys(requestBody) })
-      provider = 'ollama',
-      model = 'llama3.2:latest',
-      temperature = 0.7,
-      maxTokens = 1024,
-      messages,
-      systemPrompt,
-      providerSettings,
-      agentMemories = {},
-      artifacts = [],
-      agents = [],
-      clients = [],
-      missions = [],
-      currentClientId,
-      currentCampaignId,
-    } = await req.json()
 
     // Comprehensive debug logging
     debugLog('Full request body keys', Object.keys(req.headers).length > 0 ? 'headers present' : 'no headers')
