@@ -196,7 +196,7 @@ export function QuickActions() {
                 <Icon size={16} style={{ color: action.color }} />
               </div>
               <div>
-                <span className="text-sm font-medium text-[var(--text-primary)] block group-hover:text-white transition-colors">
+                <span className="text-sm font-medium block transition-colors duration-150" style={{ color: 'var(--text-primary)' }}>
                   {action.label}
                 </span>
                 <span className="text-[11px] text-[var(--text-dim)]">{action.sub}</span>
@@ -360,7 +360,7 @@ export function MissionQueue() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
+                  <p className="text-sm font-medium truncate transition-colors duration-150" style={{ color: 'var(--text-primary)' }}>
                     {mission.title}
                   </p>
                   <p className="text-[11px] text-[var(--text-dim)] mt-1">

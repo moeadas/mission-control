@@ -86,9 +86,9 @@ export default function ConfigEditorPage() {
     <ClientShell>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-[#2a2d38] flex-shrink-0">
-          <h1 className="text-xl font-bold text-white">Agency Configuration</h1>
-          <p className="text-xs text-gray-400 mt-0.5">
+        <div className="px-6 py-5 border-b flex-shrink-0" style={{ borderColor: 'var(--border)' }}>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Agency Configuration</h1>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--text-dim)' }}>
             Manage skills, pipelines, agents, tools, and templates
           </p>
         </div>
@@ -121,7 +121,7 @@ export default function ConfigEditorPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-sm font-semibold text-white group-hover:text-white transition-colors">
+                            <h3 className="text-sm font-semibold transition-colors" style={{ color: 'var(--text-primary)' }}>
                               {section.name}
                             </h3>
                             {section.href && (

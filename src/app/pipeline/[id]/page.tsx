@@ -187,16 +187,16 @@ export default function PipelineEditPage() {
     <ClientShell>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#2a2d38] flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0" style={{ borderColor: 'var(--border)' }}>
           <div className="flex items-center gap-4">
-            <button onClick={() => router.push('/pipeline')} className="p-2 rounded-lg hover:bg-[#1a1d26] text-gray-400 hover:text-white transition-colors">
+            <button onClick={() => router.push('/pipeline')} className="p-2 rounded-lg border border-[var(--border)] hover:border-[var(--border-glow)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
               <ArrowLeft size={18} />
             </button>
             <div>
-              <h1 className="text-xl font-bold text-white">
+              <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
                 {isNew ? 'New Pipeline' : `Edit: ${form.name || pipelineId}`}
               </h1>
-              <p className="text-xs text-gray-400 mt-0.5">
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-dim)' }}>
                 {isNew ? 'Create a new multi-phase workflow pipeline' : `Pipeline · ${activityCount} activities across ${(form.phases || []).length} phases`}
               </p>
             </div>

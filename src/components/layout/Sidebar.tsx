@@ -16,22 +16,21 @@ import {
   BarChart3,
   BookOpen,
   X,
-  ChevronLeft,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard', color: '#4f8ef7' },
-  { id: 'office', label: 'Virtual Office', icon: Building2, href: '/office', color: '#00d4aa' },
-  { id: 'agents', label: 'Agents', icon: Bot, href: '/agents', color: '#9b6dff' },
-  { id: 'clients', label: 'Clients', icon: Users, href: '/clients', color: '#ffd166' },
-  { id: 'tasks', label: 'Tasks', icon: ListTodo, href: '/tasks', color: '#ff7c42' },
-  { id: 'pipeline', label: 'Pipeline', icon: GitBranch, href: '/pipeline', color: '#00d4aa' },
-  { id: 'skills', label: 'Skills', icon: BookOpen, href: '/skills', color: '#f59e0b' },
-  { id: 'runner', label: 'Runner', icon: Zap, href: '/pipeline/run', color: '#ff5fa0' },
-  { id: 'analytics', label: 'Analytics', icon: BarChart3, href: '/analytics', color: '#9b6dff' },
-  { id: 'outputs', label: 'Outputs', icon: FileText, href: '/outputs', color: '#38bdf8' },
-  { id: 'settings', label: 'Settings', icon: Settings, href: '/settings', color: '#8b92a8' },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard', color: '#60a5fa' },
+  { id: 'office', label: 'Virtual Office', icon: Building2, href: '/office', color: '#2dd4bf' },
+  { id: 'agents', label: 'Agents', icon: Bot, href: '/agents', color: '#a78bfa' },
+  { id: 'clients', label: 'Clients', icon: Users, href: '/clients', color: '#fbbf24' },
+  { id: 'tasks', label: 'Tasks', icon: ListTodo, href: '/tasks', color: '#fb923c' },
+  { id: 'pipeline', label: 'Pipeline', icon: GitBranch, href: '/pipeline', color: '#2dd4bf' },
+  { id: 'skills', label: 'Skills', icon: BookOpen, href: '/skills', color: '#fbbf24' },
+  { id: 'runner', label: 'Runner', icon: Zap, href: '/pipeline/run', color: '#f472b6' },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3, href: '/analytics', color: '#a78bfa' },
+  { id: 'outputs', label: 'Outputs', icon: FileText, href: '/outputs', color: '#60a5fa' },
+  { id: 'settings', label: 'Settings', icon: Settings, href: '/settings', color: '#71717a' },
 ]
 
 interface SidebarProps {
@@ -59,39 +58,30 @@ function NavItem({
       href={item.href}
       onClick={onClick}
       className={clsx(
-        'group relative flex items-center gap-3 rounded-xl transition-all duration-200 min-h-[44px]',
+        'group relative flex items-center gap-3 rounded-lg transition-all duration-150 min-h-[40px]',
         isActive
-          ? 'bg-gradient-to-r from-[var(--bg-elevated)] to-[var(--bg-card)] border border-[var(--border-glow)]'
-          : 'text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] border border-transparent',
+          ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
+          : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]',
         collapsed ? 'justify-center px-2' : 'px-3'
       )}
       aria-current={isActive ? 'page' : undefined}
     >
-      {/* Active indicator */}
+      {/* Active left bar */}
       {isActive && (
-        <>
-          <div
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-full"
-            style={{ background: item.color, boxShadow: `0 0 8px ${item.color}` }}
-          />
-          <div
-            className="absolute inset-0 rounded-xl opacity-10"
-            style={{ background: `radial-gradient(ellipse at left, ${item.color}40, transparent 70%)` }}
-          />
-        </>
+        <div
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full"
+          style={{ background: item.color }}
+        />
       )}
 
       <div
-        className={clsx(
-          'flex items-center justify-center w-9 h-9 rounded-lg flex-shrink-0 transition-all',
-          isActive ? '' : 'group-hover:scale-105'
-        )}
+        className="flex items-center justify-center w-7 h-7 rounded-md flex-shrink-0"
         style={{
-          background: isActive ? item.color + '20' : 'transparent',
+          background: isActive ? item.color + '18' : 'transparent',
         }}
       >
         <Icon
-          size={18}
+          size={16}
           style={{ color: isActive ? item.color : 'var(--text-dim)' }}
           className="transition-colors"
         />
@@ -99,21 +89,11 @@ function NavItem({
 
       {!collapsed && (
         <span
-          className={clsx(
-            'text-sm font-medium transition-colors',
-            isActive ? 'text-[var(--text-primary)]' : ''
-          )}
+          className="text-[13px] font-medium transition-colors"
           style={isActive ? { color: item.color } : {}}
         >
           {item.label}
         </span>
-      )}
-
-      {/* Hover glow effect */}
-      {!isActive && (
-        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-5 transition-opacity pointer-events-none"
-          style={{ background: item.color }}
-        />
       )}
     </Link>
   )
@@ -127,7 +107,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
       {/* Mobile backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
           onClick={onMobileClose}
           aria-hidden="true"
         />
@@ -137,33 +117,33 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
       <nav
         className={clsx(
           'fixed left-0 top-0 h-full z-50 flex flex-col bg-[var(--bg-panel)] border-r border-[var(--border)] md:hidden',
-          'w-72 transition-transform duration-300',
+          'w-64 transition-transform duration-300',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
         aria-label="Main navigation"
       >
         {/* Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-[var(--border)] flex-shrink-0">
+        <div className="flex items-center justify-between h-14 px-4 border-b border-[var(--border)] flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)] flex items-center justify-center">
-              <span className="text-[11px] font-bold text-white">MC</span>
+            <div className="w-8 h-8 rounded-lg bg-[var(--accent-purple)] flex items-center justify-center">
+              <span className="text-[10px] font-bold text-white">MC</span>
             </div>
             <div>
               <p className="text-sm font-semibold text-[var(--text-primary)]">Mission Control</p>
-              <p className="text-[10px] text-[var(--text-dim)] font-mono">Agency HQ</p>
+              <p className="text-[10px] text-[var(--text-dim)]">Agency HQ</p>
             </div>
           </div>
           <button
             onClick={onMobileClose}
-            className="p-2 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
+            className="p-2 rounded-lg hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
             aria-label="Close menu"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
         {/* Nav items */}
-        <div className="flex-1 overflow-y-auto py-3 px-2 space-y-1">
+        <div className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
           {NAV_ITEMS.map((item) => (
             <NavItem
               key={item.id}
@@ -175,16 +155,16 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-[var(--border)] flex-shrink-0">
-          <div className="flex items-center gap-3 p-2 rounded-xl bg-[var(--bg-elevated)]">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)] flex items-center justify-center flex-shrink-0">
+        <div className="p-3 border-t border-[var(--border)] flex-shrink-0">
+          <div className="flex items-center gap-3 p-2.5 rounded-xl bg-[var(--bg-elevated)]">
+            <div className="w-7 h-7 rounded-lg bg-[var(--accent-purple)] flex items-center justify-center flex-shrink-0">
               <span className="text-[10px] font-bold text-white">MC</span>
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-[var(--text-primary)] truncate">Agency Mode</p>
-              <p className="text-[10px] text-[var(--text-dim)] font-mono truncate">Iris · Online</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-medium text-[var(--text-primary)]">Agency Mode</p>
+              <p className="text-[10px] text-[var(--text-dim)]">Iris · Online</p>
             </div>
-            <div className="ml-auto w-2 h-2 rounded-full bg-[#00d4aa] shadow-[0_0_6px_#00d4aa] flex-shrink-0 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-[#2dd4bf] shadow-[0_0_4px_#2dd4bf] flex-shrink-0 animate-pulse" />
           </div>
         </div>
       </nav>
@@ -193,31 +173,31 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
       <nav
         className={clsx(
           'hidden md:flex flex-col bg-[var(--bg-panel)] border-r border-[var(--border)]',
-          'flex-shrink-0 transition-all duration-300',
-          collapsed ? 'w-16' : 'w-64'
+          'flex-shrink-0 transition-all duration-200',
+          collapsed ? 'w-16' : 'w-56'
         )}
         aria-label="Main navigation"
       >
         {/* Logo */}
         <div className={clsx(
           'flex items-center border-b border-[var(--border)] flex-shrink-0',
-          collapsed ? 'h-16 justify-center px-2' : 'h-16 px-4'
+          collapsed ? 'h-14 justify-center' : 'h-14 px-4'
         )}>
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)] flex items-center justify-center flex-shrink-0 shadow-[0_0_12px_rgba(155,109,255,0.3)]">
-              <span className="text-[11px] font-bold text-white">MC</span>
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[var(--accent-purple)] flex items-center justify-center flex-shrink-0">
+              <span className="text-[10px] font-bold text-white">MC</span>
             </div>
             {!collapsed && (
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-[var(--text-primary)] leading-tight">Mission Control</p>
-                <p className="text-[10px] text-[var(--text-dim)] font-mono">Agency HQ</p>
+                <p className="text-[10px] text-[var(--text-dim)]">Agency HQ</p>
               </div>
             )}
           </div>
         </div>
 
         {/* Nav items */}
-        <div className="flex-1 overflow-y-auto py-3 px-2 space-y-1">
+        <div className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
           {NAV_ITEMS.map((item) => (
             <NavItem
               key={item.id}
@@ -231,22 +211,22 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
         {/* Footer */}
         <div className={clsx(
           'border-t border-[var(--border)] flex-shrink-0',
-          collapsed ? 'p-2' : 'p-4'
+          collapsed ? 'p-2' : 'p-3'
         )}>
           <div className={clsx(
-            'flex items-center gap-3 p-2 rounded-xl bg-[var(--bg-elevated)]',
+            'flex items-center gap-2.5 p-2.5 rounded-xl bg-[var(--bg-elevated)]',
             collapsed ? 'justify-center' : ''
           )}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)] flex items-center justify-center flex-shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-[var(--accent-purple)] flex items-center justify-center flex-shrink-0">
               <span className="text-[10px] font-bold text-white">MC</span>
             </div>
             {!collapsed && (
               <>
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-medium text-[var(--text-primary)] truncate">Agency Mode</p>
-                  <p className="text-[10px] text-[var(--text-dim)] font-mono truncate">Iris · Online</p>
+                  <p className="text-[10px] text-[var(--text-dim)]">Iris · Online</p>
                 </div>
-                <div className="w-2 h-2 rounded-full bg-[#00d4aa] shadow-[0_0_6px_#00d4aa] flex-shrink-0 animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-[#2dd4bf] shadow-[0_0_4px_#2dd4bf] flex-shrink-0 animate-pulse" />
               </>
             )}
           </div>

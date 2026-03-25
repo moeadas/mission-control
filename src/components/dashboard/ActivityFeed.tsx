@@ -9,27 +9,27 @@ import { Clock, CheckCircle2, AlertCircle, Loader2, Zap } from 'lucide-react'
 
 const ACTION_CONFIG = {
   started: {
-    icon: <div className="w-2 h-2 rounded-full bg-[#00d4aa] shadow-[0_0_6px_#00d4aa]" />,
-    color: '#00d4aa',
+    icon: <div className="w-2 h-2 rounded-full shadow-[0_0_6px_var(--color-started)]" style={{ background: 'var(--color-started)' }} />,
+    color: 'var(--color-started)',
     label: 'started',
   },
   completed: {
-    icon: <CheckCircle2 size={12} className="text-[#00d4aa]" />,
-    color: '#00d4aa',
+    icon: <CheckCircle2 size={12} style={{ color: 'var(--color-completed)' }} />,
+    color: 'var(--color-completed)',
     label: 'completed',
   },
   thinking: {
-    icon: <Loader2 size={12} className="text-[#9b6dff] animate-spin" />,
-    color: '#9b6dff',
+    icon: <Loader2 size={12} className="animate-spin" style={{ color: 'var(--color-thinking)' }} />,
+    color: 'var(--color-thinking)',
     label: 'thinking',
   },
   error: {
-    icon: <AlertCircle size={12} className="text-[#ff5fa0]" />,
-    color: '#ff5fa0',
+    icon: <AlertCircle size={12} style={{ color: 'var(--color-error)' }} />,
+    color: 'var(--color-error)',
     label: 'error',
   },
   idle: {
-    icon: <div className="w-2 h-2 rounded-full bg-[var(--text-dim)]" />,
+    icon: <div className="w-2 h-2 rounded-full" style={{ background: 'var(--text-dim)' }} />,
     color: 'var(--text-dim)',
     label: 'idle',
   },
@@ -60,7 +60,7 @@ export function ActivityFeed() {
       <div className="px-5 py-4 border-b border-[var(--border-subtle)] flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse shadow-[0_0_6px_#00d4aa]" />
+            <div className="w-2 h-2 rounded-full animate-pulse shadow-[0_0_6px_var(--color-started)]" style={{ background: 'var(--color-started)' }} />
             <h3 className="text-xs font-mono text-[var(--text-secondary)] uppercase tracking-wider">
               Live Activity
             </h3>

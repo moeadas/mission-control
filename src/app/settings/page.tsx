@@ -5,7 +5,7 @@ import { ClientShell } from '@/components/ClientShell'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input, Select } from '@/components/ui/Input'
-import { Download, KeyRound, RefreshCcw, Settings, Sparkles, SunMedium, Upload } from 'lucide-react'
+import { Download, KeyRound, RefreshCcw, Settings, Sparkles, SunMedium, Upload, ExternalLink, Check } from 'lucide-react'
 import { toast } from '@/components/ui/Toast'
 import { useAgentsStore } from '@/lib/agents-store'
 import { getProviderModels, MODEL_OPTIONS, PROVIDER_OPTIONS } from '@/lib/providers'
@@ -28,6 +28,13 @@ export default function SettingsPage() {
   const [geminiKeyInput, setGeminiKeyInput] = useState('')
   const [isVerifyingGemini, setIsVerifyingGemini] = useState(false)
   const [isVerifyingOllama, setIsVerifyingOllama] = useState(false)
+  const [oauthConnections, setOauthConnections] = useState<Record<string, boolean>>({
+    google_docs: false,
+    google_sheets: false,
+    google_ads: false,
+    meta_facebook: false,
+    meta_instagram: false,
+  })
 
   const modelOptions = useMemo(
     () => getProviderModels(agencySettings.defaultProvider).map((option) => ({ value: option.id, label: option.label })),

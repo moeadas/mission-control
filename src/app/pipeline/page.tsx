@@ -149,7 +149,7 @@ export default function PipelinesPage() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
+                        <h3 className="text-sm font-semibold transition-colors truncate" style={{ color: 'var(--text-primary)' }}>
                           {pipeline.name}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">

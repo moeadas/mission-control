@@ -157,7 +157,7 @@ export function inferRoutingContext(input: {
     { keywords: ['timeline', 'schedule', 'handoff', 'traffic', 'resourcing'], agentId: 'piper' },
     { keywords: ['creative concept', 'creative direction', 'campaign concept', 'concept'], agentId: 'finn' },
     { keywords: ['content calendar', 'caption', 'script', 'copy', 'content'], agentId: 'echo' },
-    { keywords: ['visual', 'design', 'asset', 'image', 'nano banana'], agentId: 'nova-studio' },
+    { keywords: ['visual', 'design', 'asset', 'image', 'nano banana'], agentId: 'lyra' },
     { keywords: ['media plan', 'budget', 'channel', 'ads', 'forecast'], agentId: 'nova' },
     { keywords: ['excel', 'spreadsheet', 'kpi', 'pacing', 'budget sheet'], agentId: 'dex' },
     { keywords: ['research', 'competitor', 'trend', 'seo', 'audit'], agentId: 'atlas' },

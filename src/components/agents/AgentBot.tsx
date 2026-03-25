@@ -4,73 +4,6 @@ import React from 'react'
 import { clsx } from 'clsx'
 import { BotAnimation } from '@/lib/types'
 
-const BOT_FACES: Record<string, React.ReactNode> = {
-  'bot-purple': (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="32" height="26" rx="8" fill="#9b6dff" />
-      <rect x="8" y="12" width="24" height="18" rx="5" fill="#0d0f14" />
-      <circle cx="15" cy="20" r="3" fill="#9b6dff" className="animate-pulse" />
-      <circle cx="25" cy="20" r="3" fill="#9b6dff" className="animate-pulse" />
-      <rect x="14" y="26" width="12" height="2" rx="1" fill="#9b6dff" opacity="0.6" />
-    </svg>
-  ),
-  'bot-cyan': (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="32" height="26" rx="8" fill="#00d4aa" />
-      <rect x="8" y="12" width="24" height="18" rx="5" fill="#0d0f14" />
-      <circle cx="15" cy="20" r="3" fill="#00d4aa" className="animate-pulse" />
-      <circle cx="25" cy="20" r="3" fill="#00d4aa" className="animate-pulse" />
-      <path d="M13 26 Q20 30 27 26" stroke="#00d4aa" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-    </svg>
-  ),
-  'bot-orange': (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="32" height="26" rx="8" fill="#ff7c42" />
-      <rect x="8" y="12" width="24" height="18" rx="5" fill="#0d0f14" />
-      <rect x="12" y="18" width="6" height="4" rx="1" fill="#ff7c42" />
-      <rect x="22" y="18" width="6" height="4" rx="1" fill="#ff7c42" />
-      <rect x="15" y="26" width="10" height="2" rx="1" fill="#ff7c42" opacity="0.6" />
-    </svg>
-  ),
-  'bot-pink': (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="32" height="26" rx="8" fill="#ff5fa0" />
-      <rect x="8" y="12" width="24" height="18" rx="5" fill="#0d0f14" />
-      <circle cx="15" cy="19" r="2.5" fill="#ff5fa0" />
-      <circle cx="25" cy="19" r="2.5" fill="#ff5fa0" />
-      <circle cx="15" cy="19" r="4" fill="none" stroke="#ff5fa0" strokeWidth="0.5" opacity="0.5" className="animate-ping" />
-      <circle cx="25" cy="19" r="4" fill="none" stroke="#ff5fa0" strokeWidth="0.5" opacity="0.5" className="animate-ping" />
-      <rect x="14" y="26" width="12" height="2" rx="1" fill="#ff5fa0" opacity="0.6" />
-    </svg>
-  ),
-  'bot-yellow': (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="32" height="26" rx="8" fill="#ffd166" />
-      <rect x="8" y="12" width="24" height="18" rx="5" fill="#0d0f14" />
-      <rect x="12" y="17" width="5" height="5" rx="1" fill="#ffd166" />
-      <rect x="23" y="17" width="5" height="5" rx="1" fill="#ffd166" />
-      <rect x="14" y="26" width="12" height="2" rx="1" fill="#ffd166" opacity="0.6" />
-    </svg>
-  ),
-  'bot-blue': (
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="32" height="26" rx="8" fill="#4f8ef7" />
-      <rect x="8" y="12" width="24" height="18" rx="5" fill="#0d0f14" />
-      <circle cx="15" cy="20" r="3" fill="#4f8ef7" className="animate-pulse" />
-      <circle cx="25" cy="20" r="3" fill="#4f8ef7" className="animate-pulse" />
-      <path d="M14 26 Q20 29 26 26" stroke="#4f8ef7" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-    </svg>
-  ),
-}
-
-const ANIMATION_CLASSES: Record<BotAnimation, string> = {
-  idle: 'animate-bot-idle',
-  working: 'animate-bot-working',
-  thinking: 'animate-bot-thinking',
-  resting: 'animate-bot-resting',
-  alert: 'animate-bot-alert',
-}
-
 interface AgentBotProps {
   name: string
   avatar: string
@@ -81,6 +14,178 @@ interface AgentBotProps {
   showLabel?: boolean
   className?: string
   onClick?: () => void
+}
+
+// Cute robot face generator using the agent's unique color
+function RobotFace({ color, size, animation }: { color: string; size: number; animation: BotAnimation }) {
+  const headSize = size * 0.85
+  const eyeY = headSize * 0.38
+  const eyeSize = Math.max(3, headSize * 0.1)
+  const mouthY = headSize * 0.62
+  const antennaY = headSize * 0.08
+  const earSize = headSize * 0.08
+  const earY = headSize * 0.35
+
+  // Determine expression based on animation
+  const isWorking = animation === 'working'
+  const isThinking = animation === 'thinking'
+  const isAlert = animation === 'alert'
+
+  // Eye style
+  const eyeRadius = eyeSize
+  const eyeYOffset = isThinking ? -1 : 0
+
+  // Mouth style
+  const mouthPath = isAlert
+    ? `M ${headSize * 0.35} ${mouthY + 2} Q ${headSize * 0.5} ${mouthY - 2} ${headSize * 0.65} ${mouthY + 2}`
+    : isWorking
+    ? `M ${headSize * 0.35} ${mouthY + 1} Q ${headSize * 0.5} ${mouthY + 4} ${headSize * 0.65} ${mouthY + 1}`
+    : `M ${headSize * 0.35} ${mouthY} Q ${headSize * 0.5} ${mouthY + 3} ${headSize * 0.65} ${mouthY}`
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ overflow: 'visible' }}
+    >
+      {/* Shadow */}
+      <ellipse
+        cx={size / 2}
+        cy={size - 2}
+        rx={headSize * 0.35}
+        ry={3}
+        fill={color}
+        opacity={0.15}
+      />
+
+      {/* Ears */}
+      <rect
+        x={size * 0.08}
+        y={earY - earSize / 2}
+        width={earSize * 0.8}
+        height={earSize}
+        rx={earSize * 0.3}
+        fill={color}
+        opacity={0.7}
+      />
+      <rect
+        x={size - size * 0.08 - earSize * 0.8}
+        y={earY - earSize / 2}
+        width={earSize * 0.8}
+        height={earSize}
+        rx={earSize * 0.3}
+        fill={color}
+        opacity={0.7}
+      />
+
+      {/* Head */}
+      <rect
+        x={(size - headSize) / 2}
+        y={(size - headSize) / 2}
+        width={headSize}
+        height={headSize * 0.8}
+        rx={headSize * 0.25}
+        fill={color}
+      />
+
+      {/* Face screen */}
+      <rect
+        x={(size - headSize) * 0.5 + headSize * 0.12}
+        y={size * 0.22}
+        width={headSize * 0.76}
+        height={headSize * 0.5}
+        rx={headSize * 0.1}
+        fill="#09090b"
+      />
+
+      {/* Eyes */}
+      <circle
+        cx={size * 0.38}
+        cy={eyeY + eyeYOffset}
+        r={eyeRadius}
+        fill={color}
+        className={isWorking || isThinking ? 'animate-bot-working' : ''}
+      />
+      <circle
+        cx={size * 0.62}
+        cy={eyeY + eyeYOffset}
+        r={eyeRadius}
+        fill={color}
+        className={isWorking || isThinking ? 'animate-bot-working' : ''}
+      />
+
+      {/* Eye shine */}
+      <circle
+        cx={size * 0.38 - eyeRadius * 0.3}
+        cy={eyeY + eyeYOffset - eyeRadius * 0.3}
+        r={eyeRadius * 0.35}
+        fill="white"
+        opacity={0.5}
+      />
+      <circle
+        cx={size * 0.62 - eyeRadius * 0.3}
+        cy={eyeY + eyeYOffset - eyeRadius * 0.3}
+        r={eyeRadius * 0.35}
+        fill="white"
+        opacity={0.5}
+      />
+
+      {/* Mouth */}
+      <path
+        d={mouthPath}
+        stroke={color}
+        strokeWidth={Math.max(1.5, headSize * 0.04)}
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Antenna */}
+      <line
+        x1={size / 2}
+        y1={(size - headSize) / 2}
+        x2={size / 2}
+        y2={antennaY}
+        stroke={color}
+        strokeWidth={Math.max(1.5, headSize * 0.04)}
+        strokeLinecap="round"
+        opacity={0.6}
+      />
+      <circle
+        cx={size / 2}
+        cy={antennaY}
+        r={Math.max(2, headSize * 0.05)}
+        fill={color}
+        className={isAlert ? 'animate-bot-alert' : ''}
+      />
+
+      {/* Cheek blush for friendly look */}
+      <circle
+        cx={size * 0.24}
+        cy={mouthY - headSize * 0.05}
+        r={headSize * 0.04}
+        fill={color}
+        opacity={0.2}
+      />
+      <circle
+        cx={size * 0.76}
+        cy={mouthY - headSize * 0.05}
+        r={headSize * 0.04}
+        fill={color}
+        opacity={0.2}
+      />
+    </svg>
+  )
+}
+
+const ANIMATION_CLASSES: Record<BotAnimation, string> = {
+  idle: 'animate-bot-idle',
+  working: 'animate-bot-working',
+  thinking: 'animate-bot-thinking',
+  resting: 'animate-bot-idle',
+  alert: 'animate-bot-alert',
 }
 
 export function AgentBot({
@@ -94,7 +199,13 @@ export function AgentBot({
   className,
   onClick,
 }: AgentBotProps) {
-  const face = BOT_FACES[avatar] || BOT_FACES['bot-blue']
+  const statusColor =
+    status === 'active' ? '#2dd4bf' :
+    status === 'idle' ? '#fbbf24' : '#52525b'
+
+  const glowOpacity =
+    status === 'active' ? 0.25 :
+    status === 'idle' ? 0.12 : 0
 
   return (
     <div
@@ -105,37 +216,45 @@ export function AgentBot({
       {/* Bot container */}
       <div
         className={clsx(
-          'relative rounded-xl p-1 transition-all duration-300',
+          'relative flex items-center justify-center transition-all duration-200',
           ANIMATION_CLASSES[animation],
           status === 'paused' && 'opacity-40 grayscale',
           status === 'idle' && 'opacity-80',
           onClick && 'hover:scale-110'
         )}
         style={{
-          width: size,
-          height: size,
-          background: `radial-gradient(circle at 50% 30%, ${color}30, ${color}10)`,
-          boxShadow: `0 0 12px ${color}40, 0 0 24px ${color}15`,
+          width: size + 4,
+          height: size + 4,
+          borderRadius: (size + 4) * 0.25,
+          background: `radial-gradient(circle at 50% 40%, ${color}${Math.round(glowOpacity * 255).toString(16).padStart(2, '0')}, transparent 70%)`,
+          boxShadow: status !== 'paused' ? `0 0 ${size * 0.3}px ${color}30` : undefined,
         }}
       >
         {/* Status dot */}
         <div
-          className={clsx(
-            'absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-panel',
-            status === 'active' && 'bg-accent-cyan',
-            status === 'idle' && 'bg-yellow-400',
-            status === 'paused' && 'bg-text-dim'
-          )}
+          className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-[var(--bg-card)]"
+          style={{
+            background: statusColor,
+            boxShadow: status === 'active' ? `0 0 6px ${statusColor}` : 'none',
+          }}
         />
-        {/* Bot face */}
-        <div className="w-full h-full">{face}</div>
 
-        {/* Working indicator */}
+        {/* Robot face */}
+        <RobotFace color={color} size={size} animation={animation} />
+
+        {/* Working dots */}
         {animation === 'working' && (
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
-            <span className="w-1 h-1 rounded-full bg-accent-cyan animate-typing-dot" style={{ animationDelay: '0ms' }} />
-            <span className="w-1 h-1 rounded-full bg-accent-cyan animate-typing-dot" style={{ animationDelay: '200ms' }} />
-            <span className="w-1 h-1 rounded-full bg-accent-cyan animate-typing-dot" style={{ animationDelay: '400ms' }} />
+            {[0, 200, 400].map((delay, i) => (
+              <span
+                key={i}
+                className="w-1 h-1 rounded-full animate-typing-dot"
+                style={{
+                  background: color,
+                  animationDelay: `${delay}ms`,
+                }}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -143,7 +262,7 @@ export function AgentBot({
       {/* Label */}
       {showLabel && (
         <span
-          className="text-[10px] font-mono font-medium text-text-secondary text-center"
+          className="text-[10px] font-medium text-[var(--text-secondary)] text-center max-w-full truncate"
           style={{ color: `${color}cc` }}
         >
           {name}
@@ -151,20 +270,4 @@ export function AgentBot({
       )}
     </div>
   )
-}
-
-// Typing dot animation
-const style = `
-@keyframes typing-dot {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
-  30% { transform: translateY(-3px); opacity: 1; }
-}
-.animate-typing-dot {
-  animation: typing-dot 1.4s infinite;
-}
-`
-if (typeof document !== 'undefined') {
-  const el = document.createElement('style')
-  el.textContent = style
-  document.head.appendChild(el)
 }
