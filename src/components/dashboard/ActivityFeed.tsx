@@ -4,15 +4,35 @@ import React from 'react'
 import { useAgentsStore } from '@/lib/agents-store'
 import { Card } from '@/components/ui/Card'
 import { AgentBot } from '@/components/agents/AgentBot'
-import { SPECIALTY_LABELS, formatTimestamp } from '@/lib/bot-animations'
-import { Clock, CheckCircle2, AlertCircle, Loader } from 'lucide-react'
+import { formatTimestamp } from '@/lib/bot-animations'
+import { Clock, CheckCircle2, AlertCircle, Loader2, Zap } from 'lucide-react'
 
-const ACTION_ICONS = {
-  started: <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />,
-  completed: <CheckCircle2 size={12} className="text-accent-cyan" />,
-  thinking: <Loader size={12} className="text-accent-purple animate-spin" />,
-  error: <AlertCircle size={12} className="text-red-400" />,
-  idle: <div className="w-1.5 h-1.5 rounded-full bg-text-dim" />,
+const ACTION_CONFIG = {
+  started: {
+    icon: <div className="w-2 h-2 rounded-full bg-[#00d4aa] shadow-[0_0_6px_#00d4aa]" />,
+    color: '#00d4aa',
+    label: 'started',
+  },
+  completed: {
+    icon: <CheckCircle2 size={12} className="text-[#00d4aa]" />,
+    color: '#00d4aa',
+    label: 'completed',
+  },
+  thinking: {
+    icon: <Loader2 size={12} className="text-[#9b6dff] animate-spin" />,
+    color: '#9b6dff',
+    label: 'thinking',
+  },
+  error: {
+    icon: <AlertCircle size={12} className="text-[#ff5fa0]" />,
+    color: '#ff5fa0',
+    label: 'error',
+  },
+  idle: {
+    icon: <div className="w-2 h-2 rounded-full bg-[var(--text-dim)]" />,
+    color: 'var(--text-dim)',
+    label: 'idle',
+  },
 }
 
 export function ActivityFeed() {
@@ -20,11 +40,16 @@ export function ActivityFeed() {
 
   if (activities.length === 0) {
     return (
-      <Card className="h-full flex items-center justify-center">
-        <div className="text-center py-8">
-          <Clock size={32} className="text-text-dim mx-auto mb-3" />
-          <p className="text-sm text-text-secondary">No activity yet</p>
-          <p className="text-xs text-text-dim mt-1">Agent actions will appear here</p>
+      <Card className="h-full">
+        <div className="flex flex-col items-center justify-center h-full py-12">
+          <div className="relative mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border)] flex items-center justify-center">
+              <Zap size={28} className="text-[var(--text-dim)]" />
+            </div>
+            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[var(--accent-yellow)] opacity-60 animate-pulse" />
+          </div>
+          <p className="text-sm font-medium text-[var(--text-secondary)] mb-1">No activity yet</p>
+          <p className="text-xs text-[var(--text-dim)]">Agent actions will appear here in real time</p>
         </div>
       </Card>
     )
@@ -32,48 +57,87 @@ export function ActivityFeed() {
 
   return (
     <Card className="h-full flex flex-col p-0 overflow-hidden">
-      <div className="px-5 py-4 border-b border-border flex-shrink-0">
-        <h3 className="text-xs font-mono text-text-secondary uppercase tracking-wider">
-          Live Activity
-        </h3>
+      <div className="px-5 py-4 border-b border-[var(--border-subtle)] flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse shadow-[0_0_6px_#00d4aa]" />
+            <h3 className="text-xs font-mono text-[var(--text-secondary)] uppercase tracking-wider">
+              Live Activity
+            </h3>
+          </div>
+          <span className="text-[10px] font-mono text-[var(--text-dim)]">
+            {activities.length} events
+          </span>
+        </div>
       </div>
-      <div className="flex-1 overflow-y-auto">
-        {activities.map((entry, i) => (
-          <div
-            key={entry.id}
-            className="flex items-start gap-3 px-5 py-3 border-b border-border/50 hover:bg-card/50 transition-colors"
-            style={{ animationDelay: `${i * 30}ms` }}
-          >
-            <AgentBot
-              name={entry.agentName}
-              avatar="bot-blue"
-              color={entry.agentColor}
-              status="active"
-              size={28}
-            />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-text-primary">{entry.agentName}</span>
-                <span
-                  className="text-[10px] font-mono"
-                  style={{ color: entry.agentColor }}
-                >
-                  {entry.action}
+
+      <div className="flex-1 overflow-y-auto divide-y divide-[var(--border-subtle)]">
+        {activities.slice(0, 20).map((entry, i) => {
+          const config = ACTION_CONFIG[entry.type] || ACTION_CONFIG.idle
+          return (
+            <div
+              key={entry.id}
+              className="flex items-start gap-3 px-5 py-3 hover:bg-[var(--bg-elevated)]/50 transition-colors"
+              style={{ animationDelay: `${i * 30}ms` }}
+            >
+              {/* Avatar */}
+              <div className="flex-shrink-0 mt-0.5">
+                <AgentBot
+                  name={entry.agentName}
+                  avatar="bot-blue"
+                  color={entry.agentColor}
+                  status="active"
+                  size={30}
+                />
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-semibold text-[var(--text-primary)]">
+                    {entry.agentName}
+                  </span>
+                  <span
+                    className="text-[10px] font-mono px-1.5 py-0.5 rounded-full"
+                    style={{
+                      background: config.color + '20',
+                      color: config.color,
+                    }}
+                  >
+                    {config.label}
+                  </span>
+                  {entry.action && (
+                    <span className="text-[11px] text-[var(--text-secondary)]">
+                      — {entry.action}
+                    </span>
+                  )}
+                </div>
+                {entry.detail && (
+                  <p className="text-[11px] text-[var(--text-dim)] mt-0.5 truncate">
+                    {entry.detail}
+                  </p>
+                )}
+              </div>
+
+              {/* Time + icon */}
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                {config.icon}
+                <span className="text-[10px] font-mono text-[var(--text-dim)]">
+                  {formatTimestamp(entry.timestamp)}
                 </span>
               </div>
-              {entry.detail && (
-                <p className="text-[11px] text-text-secondary mt-0.5 truncate">{entry.detail}</p>
-              )}
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0">
-              {ACTION_ICONS[entry.type]}
-              <span className="text-[10px] font-mono text-text-dim">
-                {formatTimestamp(entry.timestamp)}
-              </span>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
+
+      {activities.length > 20 && (
+        <div className="px-5 py-2 border-t border-[var(--border-subtle)] flex-shrink-0">
+          <p className="text-[10px] font-mono text-[var(--text-dim)] text-center">
+            Showing 20 of {activities.length} events
+          </p>
+        </div>
+      )}
     </Card>
   )
 }
