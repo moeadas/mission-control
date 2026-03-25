@@ -289,6 +289,55 @@ export default function SettingsPage() {
                 </label>
               </div>
             </Card>
+
+            <Card>
+              <h2 className="text-sm font-heading font-semibold text-text-primary mb-4">Integrations</h2>
+              <p className="text-xs text-text-secondary mb-4">Connect your external accounts to enable seamless data sync and reporting.</p>
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-3">Google</h3>
+                  <div className="space-y-2">
+                    {[
+                      { label: 'Google Docs', service: 'google-docs' },
+                      { label: 'Google Sheets', service: 'google-sheets' },
+                      { label: 'Google Ads', service: 'google-ads' },
+                    ].map(({ label, service }) => (
+                      <div key={service} className="flex items-center justify-between py-2 px-3 rounded-lg bg-base/60 border border-border">
+                        <span className="text-sm text-text-primary">{label}</span>
+                        <div className="flex items-center gap-3">
+                          <Badge color="#6b7280" variant="outline">Disconnected</Badge>
+                          <Button
+                            variant="secondary"
+                            onClick={() => window.location.href = `/api/auth/google?service=${service}`}
+                          >
+                            Connect
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wider mb-3">Meta</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-base/60 border border-border">
+                      <span className="text-sm text-text-primary">Meta Ads</span>
+                      <div className="flex items-center gap-3">
+                        <Badge color="#6b7280" variant="outline">Disconnected</Badge>
+                        <Button
+                          variant="secondary"
+                          onClick={() => window.location.href = '/api/auth/meta'}
+                        >
+                          Connect
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       </div>

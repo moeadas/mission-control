@@ -374,8 +374,8 @@ export function IrisChat() {
 
         {/* Input */}
         <div className="p-4 border-t border-[#2a2d38]">
-          <div className="flex items-end gap-3">
-            <div className="flex-1 flex items-end bg-[#1a1d26] border border-[#2a2d38] rounded-xl focus-within:border-[#9b6dff] transition-colors">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 flex bg-[#1a1d26] border border-[#2a2d38] rounded-xl focus-within:border-[#9b6dff] transition-colors overflow-hidden">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -383,7 +383,7 @@ export function IrisChat() {
                 onKeyDown={handleKeyDown}
                 placeholder="Message Iris..."
                 rows={1}
-                className="flex-1 bg-transparent px-4 py-3 text-sm text-white placeholder-gray-500 outline-none resize-none max-h-32"
+                className="flex-1 bg-transparent px-4 py-3 text-sm text-white placeholder-gray-500 outline-none resize-y max-h-32"
                 style={{ minHeight: '44px' }}
               />
               <input
@@ -394,9 +394,9 @@ export function IrisChat() {
                 onChange={handleFileAttach}
                 className="hidden"
               />
-              <button 
-                onClick={() => fileInputRef.current?.click()} 
-                className="p-3 text-gray-500 hover:text-white transition-colors"
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="p-3 text-gray-500 hover:text-white transition-colors flex-shrink-0"
                 title="Attach files"
               >
                 <Paperclip size={18} />
@@ -406,7 +406,7 @@ export function IrisChat() {
               onClick={handleSend}
               disabled={(!input.trim() && attachments.length === 0 && !attachedText) || chatStatus !== 'idle'}
               className={clsx(
-                'w-11 h-11 rounded-xl flex items-center justify-center transition-all',
+                'w-11 h-11 rounded-xl flex items-center justify-center transition-all flex-shrink-0',
                 (input.trim() || attachments.length > 0 || attachedText) && chatStatus === 'idle'
                   ? 'bg-[#9b6dff] text-white hover:bg-[#9b6dff]/80'
                   : 'bg-[#1a1d26] text-gray-500 cursor-not-allowed'

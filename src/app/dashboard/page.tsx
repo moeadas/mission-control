@@ -16,34 +16,33 @@ export default function DashboardPage() {
   const activeTasks = missions.filter((task) => !['completed', 'cancelled'].includes(task.status))
 
   const statusColors: Record<string, string> = {
-    queued: '#ffd166',
-    in_progress: '#00d4aa',
-    blocked: '#ff7c42',
-    review: '#9b6dff',
-    completed: '#4f8ef7',
-    paused: '#555b73',
-    cancelled: '#555b73',
+    queued: '#fbbf24',
+    in_progress: '#2dd4bf',
+    blocked: '#fb923c',
+    review: '#a78bfa',
+    completed: '#60a5fa',
+    paused: '#52525b',
+    cancelled: '#52525b',
   }
 
   return (
     <ClientShell>
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-6 p-6">
+        <div className="max-w-7xl mx-auto space-y-5 p-6">
           
-          {/* Hero Header */}
-          <div className="relative overflow-hidden rounded-xl p-6 bg-gradient-to-br from-[var(--bg-card)] via-[var(--bg-panel)] to-[var(--bg-card)] border border-[var(--border)]">
-            {/* Ambient glow blobs */}
-            <div className="absolute -top-20 -left-20 w-64 h-64 bg-[var(--accent-purple)] opacity-5 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[var(--accent-blue)] opacity-5 rounded-full blur-3xl pointer-events-none" />
-            
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          {/* Hero Header — clean, minimal */}
+          <div className="relative overflow-hidden rounded-2xl p-6 bg-[var(--bg-card)] border border-[var(--border)]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-heading font-bold text-[var(--text-primary)] flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 rounded-full bg-[var(--accent-cyan)] animate-pulse" />
+                <h1 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
                   Command Center
                 </h1>
                 <p className="text-sm text-[var(--text-secondary)] mt-1">
-                  Your agency is running — {agents.filter(a => a.status === 'active').length} agents active across {clients.length} clients.
+                  {agents.filter(a => a.status === 'active').length} agents active
+                  <span className="mx-2 text-[var(--text-dim)]">·</span>
+                  {clients.length} clients
+                  <span className="mx-2 text-[var(--text-dim)]">·</span>
+                  {activeTasks.length} tasks running
                 </p>
               </div>
               
@@ -53,7 +52,7 @@ export default function DashboardPage() {
                   {agents.slice(0, 6).map((agent) => (
                     <div 
                       key={agent.id} 
-                      className="ring-2 ring-[var(--bg-card)] rounded-full hover:ring-[var(--accent-blue)] transition-all hover:scale-110 hover:z-10"
+                      className="ring-2 ring-[var(--bg-card)] rounded-full transition-all hover:ring-[var(--accent-blue)] hover:scale-105 hover:z-10"
                       title={`${agent.name} — ${agent.status}`}
                     >
                       <AgentBot
@@ -69,7 +68,7 @@ export default function DashboardPage() {
                 <div className="h-8 w-px bg-[var(--border)]" />
                 <button 
                   onClick={() => router.push('/agents')}
-                  className="text-xs font-mono text-[var(--accent-blue)] hover:text-[var(--accent-purple)] transition-colors"
+                  className="text-xs text-[var(--accent-blue)] hover:opacity-80 transition-opacity"
                 >
                   All agents →
                 </button>
@@ -81,38 +80,38 @@ export default function DashboardPage() {
           <MetricsCards />
 
           {/* Main Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="lg:col-span-2 space-y-5">
               <AgentStrip />
               <ActivityFeed />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-5">
               <QuickActions />
               <MissionQueue />
 
               {/* Active Tasks Preview */}
-              <div className="card-surface p-5 border-top-accent overflow-hidden">
+              <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-5 overflow-hidden">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xs font-mono text-[var(--text-secondary)] uppercase tracking-wider">
+                  <h3 className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">
                     In Progress
                   </h3>
                   <button
                     onClick={() => router.push('/tasks')}
-                    className="text-[11px] font-mono text-[var(--accent-blue)] hover:underline"
+                    className="text-[11px] text-[var(--accent-blue)] hover:opacity-80 transition-opacity"
                   >
                     View all →
                   </button>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {activeTasks.slice(0, 3).map((task) => (
                     <div
                       key={task.id}
-                      className="flex items-center justify-between p-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border)] hover:border-[var(--border-glow)] transition-all"
+                      className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)] hover:border-[var(--border-glow)] transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <div
                           className="w-2 h-2 rounded-full flex-shrink-0"
-                          style={{ background: statusColors[task.status] || '#4f8ef7' }}
+                          style={{ background: statusColors[task.status] || '#60a5fa' }}
                         />
                         <div className="min-w-0">
                           <p className="text-xs font-medium text-[var(--text-primary)] truncate">{task.title}</p>
@@ -121,14 +120,13 @@ export default function DashboardPage() {
                           </p>
                         </div>
                       </div>
-                      <span className="text-[11px] font-mono text-[var(--text-secondary)] ml-2">
+                      <span className="text-[11px] text-[var(--text-secondary)] ml-2 tabular-nums">
                         {task.progress}%
                       </span>
                     </div>
                   ))}
                   {activeTasks.length === 0 && (
                     <div className="text-center py-6">
-                      <div className="text-3xl mb-2">🎯</div>
                       <p className="text-xs text-[var(--text-dim)]">All quiet — no active tasks</p>
                     </div>
                   )}

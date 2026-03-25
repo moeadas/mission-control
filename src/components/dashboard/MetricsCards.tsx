@@ -74,17 +74,24 @@ export function MetricsCards() {
         return (
           <div
             key={m.label}
-            className="card-surface p-5 hover-lift relative overflow-hidden"
-            style={{ animationDelay: `${i * 60}ms` }}
+            className="card-surface p-5 hover-lift relative overflow-hidden transition-shadow duration-200"
+            style={{
+              animationDelay: `${i * 60}ms`,
+              boxShadow: 'none',
+              transition: 'box-shadow 0.2s ease, border-color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${m.color}18, 0 0 0 1px ${m.color}30`
+              ;(e.currentTarget as HTMLElement).style.borderColor = `${m.color}50`
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.boxShadow = 'none'
+              ;(e.currentTarget as HTMLElement).style.borderColor = ''
+            }}
           >
-            {/* Top accent line */}
+            {/* Subtle ambient glow */}
             <div
-              className="absolute top-0 left-0 right-0 h-0.5"
-              style={{ background: m.color }}
-            />
-            {/* Ambient glow */}
-            <div
-              className="absolute -top-8 -right-8 w-24 h-24 rounded-full opacity-10 blur-xl pointer-events-none"
+              className="absolute -top-8 -right-8 w-24 h-24 rounded-full opacity-0 transition-opacity duration-200 pointer-events-none group-hover:opacity-10"
               style={{ background: m.color }}
             />
 

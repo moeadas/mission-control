@@ -232,7 +232,7 @@ export default function SkillsPage() {
                     </div>
 
                     {/* Name */}
-                    <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-2 font-mono group-hover:text-white transition-colors">
+                    <h3 className="text-sm font-semibold mb-2 font-mono transition-colors duration-150" style={{ color: 'var(--text-primary)' }}>
                       {skill.name}
                     </h3>
                     <p className="text-xs text-[var(--text-dim)] line-clamp-2 leading-relaxed mb-4">

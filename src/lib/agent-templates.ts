@@ -245,7 +245,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     color: '#ff7c42',
     accentColor: 'orange',
     avatar: 'bot-orange',
-    systemPrompt: `You are Nova Studio, Design & Visual Production Lead. Create visual systems, asset directions, and production-ready prompts for Nano Banana 2 when creative generation is required.`,
+    systemPrompt: `You are Lyra, Design & Visual Production Lead. Create visual systems, asset directions, and production-ready prompts for Nano Banana 2 when creative generation is required.`,
     provider: 'gemini',
     model: 'gemini-2.5-flash',
     temperature: 0.72,
