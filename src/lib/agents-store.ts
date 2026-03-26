@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import {
   ActivityEntry,
   Artifact,
+  ArtifactExecutionStep,
   AgencySettings,
   Agent,
   AIProvider,
@@ -16,6 +17,7 @@ import {
 import { DEFAULT_AGENTS } from './agent-templates'
 import { Client, DEFAULT_CLIENTS } from './client-data'
 import { maskApiKey } from './providers'
+import { DEFAULT_PROVIDER_SETTINGS, normalizeProviderSettings } from './provider-settings'
 import { AgentMemory, appendAgentMemoryNote, buildDefaultAgentMemories, mergeAgentMemories } from './agent-memory'
 import { buildTaskTitleFromRequest } from './task-output'
 
@@ -27,12 +29,21 @@ export interface ChatMessage {
   agentId?: string
   meta?: {
     routedAgentId?: string
+    leadAgentId?: string
+    assignedAgentIds?: string[]
+    collaboratorAgentIds?: string[]
     clientId?: string
     campaignId?: string
     missionId?: string
     deliverableType?: string
     artifactId?: string
     executionPrompt?: string
+    pipelineId?: string | null
+    pipelineName?: string | null
+    qualityChecklist?: string[]
+    handoffNotes?: string
+    executionSteps?: ArtifactExecutionStep[]
+    renderedHtml?: string
     provider?: AIProvider
     model?: string
     fallbackUsed?: boolean
@@ -41,10 +52,30 @@ export interface ChatMessage {
 
 export interface Conversation {
   id: string
+  ownerUserId?: string
   title: string
   messages: ChatMessage[]
   createdAt: string
   updatedAt: string
+}
+
+export interface AuthenticatedUser {
+  id: string
+  email: string
+  role: 'super_admin' | 'member'
+}
+
+export interface AppPersistenceSnapshot {
+  agents: Agent[]
+  activities: ActivityEntry[]
+  campaigns: Campaign[]
+  clients: Client[]
+  missions: Mission[]
+  artifacts: Artifact[]
+  conversations: Conversation[]
+  agencySettings: AgencySettings
+  providerSettings: ProviderSettings
+  agentMemories: Record<string, AgentMemory>
 }
 
 const nowIso = () => new Date().toISOString()
@@ -71,6 +102,37 @@ const VALID_PROVIDERS = new Set<AIProvider>(['ollama', 'gemini'])
 const SEEDED_CAMPAIGN_IDS = new Set(['campaign-1', 'campaign-2'])
 const SEEDED_MISSION_IDS = new Set(['mission-1', 'mission-2', 'mission-3'])
 const SEEDED_ARTIFACT_IDS = new Set(['artifact-1'])
+const VALID_MISSION_STATUSES = new Set<Mission['status']>(['queued', 'in_progress', 'blocked', 'review', 'paused', 'cancelled', 'completed'])
+const VALID_MISSION_PRIORITIES = new Set<Mission['priority']>(['low', 'medium', 'high'])
+
+export function createAppPersistenceSnapshot(
+  state: Pick<
+    AgentsState,
+    | 'agents'
+    | 'activities'
+    | 'campaigns'
+    | 'clients'
+    | 'missions'
+    | 'artifacts'
+    | 'conversations'
+    | 'agencySettings'
+    | 'providerSettings'
+    | 'agentMemories'
+  >
+): AppPersistenceSnapshot {
+  return {
+    agents: state.agents,
+    activities: state.activities,
+    campaigns: state.campaigns,
+    clients: state.clients,
+    missions: state.missions,
+    artifacts: state.artifacts,
+    conversations: state.conversations,
+    agencySettings: state.agencySettings,
+    providerSettings: state.providerSettings,
+    agentMemories: state.agentMemories,
+  }
+}
 
 function inferMissionDeliverableType(prompt: string): Mission['deliverableType'] {
   const lower = prompt.toLowerCase()
@@ -124,6 +186,7 @@ function normalizeAgent(agent: Partial<Agent> & Record<string, any>): Agent {
       id: agent.id || uuidv4(),
       name: 'New Agent',
       role: 'Specialist',
+      photoUrl: undefined,
       division,
       specialty: 'creative',
       unit: division,
@@ -162,6 +225,7 @@ function normalizeAgent(agent: Partial<Agent> & Record<string, any>): Agent {
       ? agent.primaryOutputs
       : template?.primaryOutputs || ['status-report'],
     color: agent.color || template?.color || '#4f8ef7',
+    photoUrl: typeof agent.photoUrl === 'string' ? agent.photoUrl : template?.photoUrl,
     accentColor: agent.accentColor || template?.accentColor || 'blue',
     avatar: agent.avatar || template?.avatar || 'bot-blue',
     name: agent.name || template?.name || 'New Agent',
@@ -183,32 +247,63 @@ function normalizeAgent(agent: Partial<Agent> & Record<string, any>): Agent {
 function normalizePersistedState(persistedState: any) {
   if (!persistedState) return persistedState
   const agents = Array.isArray(persistedState.agents) ? persistedState.agents.map(normalizeAgent) : ALL_DEFAULT_AGENTS
+  const missions = Array.isArray(persistedState.missions)
+    ? persistedState.missions.map((mission: Mission & { assignedAgentId?: string }) => {
+        const leadAgentId = mission.leadAgentId || mission.assignedAgentId || mission.assignedAgentIds?.[0] || 'iris'
+        const collaboratorAgentIds = Array.isArray(mission.collaboratorAgentIds) ? mission.collaboratorAgentIds.filter(Boolean) : []
+        const assignedAgentIds = Array.isArray(mission.assignedAgentIds) && mission.assignedAgentIds.length
+          ? mission.assignedAgentIds.filter(Boolean)
+          : [leadAgentId, ...collaboratorAgentIds].filter(Boolean)
+
+        return {
+          ...mission,
+          title: mission.title || 'Untitled Task',
+          summary: mission.summary || '',
+          deliverableType: mission.deliverableType || 'status-report',
+          status: VALID_MISSION_STATUSES.has(mission.status as Mission['status']) ? mission.status : 'queued',
+          priority: VALID_MISSION_PRIORITIES.has(mission.priority as Mission['priority']) ? mission.priority : 'medium',
+          assignedAgentIds,
+          leadAgentId,
+          collaboratorAgentIds,
+          assignedBy: mission.assignedBy || 'iris',
+          progress: typeof mission.progress === 'number' ? mission.progress : mission.status === 'completed' ? 100 : 0,
+          createdAt: mission.createdAt || nowIso(),
+          updatedAt: mission.updatedAt || mission.createdAt || nowIso(),
+        }
+      })
+    : INITIAL_MISSIONS
   const artifacts = Array.isArray(persistedState.artifacts)
     ? persistedState.artifacts.map((artifact: Artifact) => ({
         ...artifact,
+        title: artifact.title || 'Untitled Output',
+        deliverableType: artifact.deliverableType || 'client-brief',
+        status: artifact.status || 'draft',
+        format: artifact.format || 'html',
+        sourcePrompt:
+          typeof artifact.sourcePrompt === 'string'
+            ? artifact.sourcePrompt
+            : typeof (artifact as Artifact & { executionPrompt?: string }).executionPrompt === 'string'
+              ? (artifact as Artifact & { executionPrompt?: string }).executionPrompt
+              : undefined,
         exports: Array.isArray(artifact.exports) ? artifact.exports : [],
+        executionSteps: Array.isArray(artifact.executionSteps) ? artifact.executionSteps : [],
+        renderedHtml: typeof artifact.renderedHtml === 'string' ? artifact.renderedHtml : undefined,
+        createdAt: artifact.createdAt || nowIso(),
+        updatedAt: artifact.updatedAt || artifact.createdAt || nowIso(),
       }))
     : INITIAL_ARTIFACTS
 
   return {
     ...persistedState,
     agents,
+    missions,
     artifacts,
     conversations: Array.isArray(persistedState.conversations) ? persistedState.conversations : [],
     agencySettings: {
       ...INITIAL_AGENCY_SETTINGS,
       ...persistedState.agencySettings,
     },
-    providerSettings: {
-      ollama: {
-        ...INITIAL_PROVIDER_SETTINGS.ollama,
-        ...persistedState.providerSettings?.ollama,
-      },
-      gemini: {
-        ...INITIAL_PROVIDER_SETTINGS.gemini,
-        ...persistedState.providerSettings?.gemini,
-      },
-    },
+    providerSettings: normalizeProviderSettings(persistedState.providerSettings),
     agentMemories: mergeAgentMemories(persistedState.agentMemories, agents),
   }
 }
@@ -343,21 +438,7 @@ const INITIAL_AGENCY_SETTINGS: AgencySettings = {
   themeMode: 'dark',
 }
 
-const INITIAL_PROVIDER_SETTINGS: ProviderSettings = {
-  ollama: {
-    enabled: true,
-    verified: false,
-    baseUrl: 'http://localhost:11434',
-    availableModels: ['llama3.2:latest'],
-  },
-  gemini: {
-    enabled: false,
-    verified: false,
-    apiKey: '',
-    maskedKey: '',
-    availableModels: ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'],
-  },
-}
+const INITIAL_PROVIDER_SETTINGS: ProviderSettings = DEFAULT_PROVIDER_SETTINGS
 
 interface AgentsState {
   agents: Agent[]
@@ -378,6 +459,8 @@ interface AgentsState {
   activeConversationId: string | null
   isIrisOpen: boolean
   chatStatus: 'idle' | 'thinking' | 'streaming' | 'error'
+  appStateReady: boolean
+  currentUser: AuthenticatedUser | null
 
   selectAgent: (id: string | null) => void
   openEditor: (id: string | null) => void
@@ -402,6 +485,7 @@ interface AgentsState {
 
   addMission: (mission: Omit<Mission, 'id' | 'createdAt' | 'updatedAt'>) => void
   updateMission: (id: string, updates: Partial<Mission>) => void
+  deleteMission: (id: string) => void
   setActiveMission: (id: string | null) => void
   createMissionFromPrompt: (prompt: string, options?: { clientId?: string; campaignId?: string; assignedAgentIds?: string[] }) => string
   addArtifact: (artifact: Omit<Artifact, 'id' | 'createdAt' | 'updatedAt'>) => string
@@ -414,6 +498,7 @@ interface AgentsState {
   hydrateAppState: (
     payload: Partial<Pick<AgentsState, 'agents' | 'campaigns' | 'clients' | 'missions' | 'artifacts' | 'agencySettings' | 'providerSettings' | 'agentMemories'>>
   ) => void
+  hydrateAgentPhotos: (photos: Record<string, string>) => void
   rememberAgentWork: (
     agentId: string,
     note: {
@@ -429,6 +514,8 @@ interface AgentsState {
   openIris: () => void
   closeIris: () => void
   setChatStatus: (status: AgentsState['chatStatus']) => void
+  setAppStateReady: (ready: boolean) => void
+  setAuthenticatedUser: (user: AuthenticatedUser | null) => void
   sendMessage: (conversationId: string, content: string, role?: 'user' | 'assistant', agentId?: string, meta?: ChatMessage['meta']) => void
   upsertAssistantDraft: (conversationId: string, content: string, agentId?: string, meta?: ChatMessage['meta']) => void
   createConversation: (title?: string) => string
@@ -460,6 +547,8 @@ export const useAgentsStore = create<AgentsState>()(
       activeConversationId: null,
       isIrisOpen: false,
       chatStatus: 'idle',
+      appStateReady: false,
+      currentUser: null,
 
       selectAgent: (id) => set({ selectedAgentId: id }),
       openEditor: (id) => set({ editingAgentId: id, isEditorOpen: true }),
@@ -548,7 +637,13 @@ export const useAgentsStore = create<AgentsState>()(
 
       addClient: (clientData) => {
         const now = nowIso()
-        const client: Client = { ...clientData, id: uuidv4(), createdAt: now, updatedAt: now }
+        const client: Client = {
+          ...clientData,
+          ownerUserId: clientData.ownerUserId || get().currentUser?.id,
+          id: uuidv4(),
+          createdAt: now,
+          updatedAt: now,
+        }
         set((state) => ({ clients: [...state.clients, client] }))
       },
 
@@ -567,7 +662,13 @@ export const useAgentsStore = create<AgentsState>()(
         })),
 
       addMission: (missionData) => {
-        const mission: Mission = { ...missionData, id: uuidv4(), createdAt: nowIso(), updatedAt: nowIso() }
+        const mission: Mission = {
+          ...missionData,
+          ownerUserId: missionData.ownerUserId || get().currentUser?.id,
+          id: uuidv4(),
+          createdAt: nowIso(),
+          updatedAt: nowIso(),
+        }
         set((state) => ({ missions: [mission, ...state.missions], activeMissionId: mission.id }))
       },
 
@@ -576,6 +677,13 @@ export const useAgentsStore = create<AgentsState>()(
           missions: state.missions.map((mission) =>
             mission.id === id ? { ...mission, ...updates, updatedAt: nowIso() } : mission
           ),
+        })),
+
+      deleteMission: (id) =>
+        set((state) => ({
+          missions: state.missions.filter((mission) => mission.id !== id),
+          artifacts: state.artifacts.filter((artifact) => artifact.missionId !== id),
+          activeMissionId: state.activeMissionId === id ? null : state.activeMissionId,
         })),
 
       setActiveMission: (id) => set({ activeMissionId: id }),
@@ -587,6 +695,7 @@ export const useAgentsStore = create<AgentsState>()(
         const assignedAgentIds = options?.assignedAgentIds?.length ? options.assignedAgentIds : ['iris']
         const mission: Mission = {
           id: missionId,
+          ownerUserId: get().currentUser?.id,
           title,
           summary: prompt,
           deliverableType,
@@ -622,7 +731,13 @@ export const useAgentsStore = create<AgentsState>()(
 
       addArtifact: (artifactData) => {
         const id = uuidv4()
-        const artifact: Artifact = { ...artifactData, id, createdAt: nowIso(), updatedAt: nowIso() }
+        const artifact: Artifact = {
+          ...artifactData,
+          ownerUserId: artifactData.ownerUserId || get().currentUser?.id,
+          id,
+          createdAt: nowIso(),
+          updatedAt: nowIso(),
+        }
         set((state) => ({ artifacts: [artifact, ...state.artifacts] }))
         return id
       },
@@ -661,22 +776,41 @@ export const useAgentsStore = create<AgentsState>()(
         })),
 
       hydrateAppState: (payload) =>
+        set((state) => {
+          const normalized = normalizePersistedState({
+            ...createAppPersistenceSnapshot(state),
+            ...payload,
+          })
+
+          return {
+            agents: normalized.agents || state.agents,
+            campaigns: normalized.campaigns || state.campaigns,
+            clients: normalized.clients || state.clients,
+            missions: normalized.missions || state.missions,
+            artifacts: normalized.artifacts || state.artifacts,
+            conversations: normalized.conversations || state.conversations,
+            agencySettings: normalized.agencySettings ? { ...state.agencySettings, ...normalized.agencySettings } : state.agencySettings,
+            providerSettings: normalized.providerSettings
+              ? normalizeProviderSettings({
+                  ...state.providerSettings,
+                  ...normalized.providerSettings,
+                  routing: { ...state.providerSettings.routing, ...normalized.providerSettings.routing },
+                  ollama: { ...state.providerSettings.ollama, ...normalized.providerSettings.ollama },
+                  gemini: { ...state.providerSettings.gemini, ...normalized.providerSettings.gemini },
+                })
+              : state.providerSettings,
+            agentMemories: normalized.agentMemories
+              ? mergeAgentMemories(normalized.agentMemories, normalized.agents || state.agents)
+              : state.agentMemories,
+            appStateReady: true,
+          }
+        }),
+
+      hydrateAgentPhotos: (photos) =>
         set((state) => ({
-          agents: payload.agents || state.agents,
-          campaigns: payload.campaigns || state.campaigns,
-          clients: payload.clients || state.clients,
-          missions: payload.missions || state.missions,
-          artifacts: payload.artifacts || state.artifacts,
-          agencySettings: payload.agencySettings ? { ...state.agencySettings, ...payload.agencySettings } : state.agencySettings,
-          providerSettings: payload.providerSettings
-            ? {
-                ollama: { ...state.providerSettings.ollama, ...payload.providerSettings.ollama },
-                gemini: { ...state.providerSettings.gemini, ...payload.providerSettings.gemini },
-              }
-            : state.providerSettings,
-          agentMemories: payload.agentMemories
-            ? mergeAgentMemories(payload.agentMemories, payload.agents || state.agents)
-            : state.agentMemories,
+          agents: state.agents.map((agent) =>
+            ({ ...agent, photoUrl: photos[agent.id] || undefined })
+          ),
         })),
 
       rememberAgentWork: (agentId, note) =>
@@ -692,10 +826,19 @@ export const useAgentsStore = create<AgentsState>()(
 
       closeIris: () => set({ isIrisOpen: false }),
       setChatStatus: (status) => set({ chatStatus: status }),
+      setAppStateReady: (ready) => set({ appStateReady: ready }),
+      setAuthenticatedUser: (user) => set({ currentUser: user }),
 
       createConversation: (title = 'New Chat') => {
         const id = uuidv4()
-        const conversation: Conversation = { id, title, messages: [], createdAt: nowIso(), updatedAt: nowIso() }
+        const conversation: Conversation = {
+          id,
+          ownerUserId: get().currentUser?.id,
+          title,
+          messages: [],
+          createdAt: nowIso(),
+          updatedAt: nowIso(),
+        }
         set((state) => ({ conversations: [conversation, ...state.conversations], activeConversationId: id }))
         return id
       },
@@ -793,16 +936,7 @@ export const useAgentsStore = create<AgentsState>()(
         return normalizePersistedState(persistedState)
       },
       partialize: (state) => ({
-        agents: state.agents,
-        activities: state.activities,
-        campaigns: state.campaigns,
-        clients: state.clients,
-        missions: state.missions,
-        artifacts: state.artifacts,
-        conversations: state.conversations,
-        agencySettings: state.agencySettings,
-        providerSettings: state.providerSettings,
-        agentMemories: state.agentMemories,
+        ...createAppPersistenceSnapshot(state),
       }),
     }
   )

@@ -4,7 +4,7 @@ import React from 'react'
 import { ClientShell } from '@/components/ClientShell'
 import { OfficeFloor } from '@/components/office/OfficeFloor'
 import { useAgentsStore } from '@/lib/agents-store'
-import { Bot, Users, Zap } from 'lucide-react'
+import { Building2, Users } from 'lucide-react'
 
 export default function OfficePage() {
   const agents = useAgentsStore((state) => state.agents)
@@ -14,58 +14,37 @@ export default function OfficePage() {
   return (
     <ClientShell>
       <div className="flex flex-col h-full">
-        {/* Sleek header */}
-        <div
-          className="flex items-center justify-between px-6 py-4 flex-shrink-0"
-          style={{ borderBottom: '1px solid var(--border)' }}
-        >
-          <div className="flex items-center gap-4">
-            <div>
-              <h1 className="text-xl font-heading font-bold text-[var(--text-primary)] flex items-center gap-3">
-                <div
-                  className="w-8 h-8 rounded-xl flex items-center justify-center"
-                  style={{
-                    background: 'linear-gradient(135deg, #9b6dff20, #4f8ef720)',
-                    border: '1px solid #9b6dff40',
-                  }}
-                >
-                  <Bot size={16} style={{ color: '#00d4aa' }} />
-                </div>
-                Virtual Office
-              </h1>
-              <p className="text-xs text-[var(--text-dim)] mt-0.5 font-mono">
-                Click any zone to explore the team
-              </p>
-            </div>
+        <div className="flex items-center justify-between px-6 py-5 flex-shrink-0 border-b border-border bg-base/30">
+          <div>
+            <h1 className="text-xl font-heading font-bold text-text-primary flex items-center gap-3">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-border bg-card">
+                <Building2 size={17} className="text-accent-blue" />
+              </span>
+              Virtual Office
+            </h1>
+            <p className="text-sm text-text-secondary mt-1">
+              Minimal shared workspace view with live desk occupancy and roaming idle agents.
+            </p>
           </div>
 
-          {/* Status pills */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(0,212,170,0.1)', border: '1px solid rgba(0,212,170,0.2)' }}>
-              <div className="w-2 h-2 rounded-full bg-[#00d4aa] animate-pulse" style={{ boxShadow: '0 0 6px #00d4aa' }} />
-              <span className="text-[11px] font-mono text-[#00d4aa]">{activeCount} active</span>
+            <div className="rounded-full border border-border bg-card px-3 py-1.5 text-[11px] text-text-secondary">
+              <span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              {activeCount} active
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,209,102,0.1)', border: '1px solid rgba(255,209,102,0.2)' }}>
-              <div className="w-2 h-2 rounded-full bg-[#ffd166]" />
-              <span className="text-[11px] font-mono text-[#ffd166]">{idleCount} idle</span>
+            <div className="rounded-full border border-border bg-card px-3 py-1.5 text-[11px] text-text-secondary">
+              <span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-amber-400" />
+              {idleCount} idle
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
-              <Users size={12} className="text-[var(--text-dim)]" />
-              <span className="text-[11px] font-mono text-[var(--text-secondary)]">{agents.length} total</span>
+            <div className="rounded-full border border-border bg-card px-3 py-1.5 text-[11px] text-text-secondary flex items-center gap-2">
+              <Users size={12} />
+              {agents.length} total
             </div>
           </div>
         </div>
 
-        {/* Office floor */}
         <div className="flex-1 overflow-hidden p-4 md:p-6">
-          <div
-            className="h-full rounded-2xl overflow-hidden"
-            style={{
-              background: 'var(--bg-panel)',
-              border: '1px solid var(--border)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-            }}
-          >
+          <div className="h-full rounded-[2rem] overflow-hidden border border-border bg-card shadow-[0_24px_80px_rgba(15,23,42,0.08)]">
             <OfficeFloor />
           </div>
         </div>

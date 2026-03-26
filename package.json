@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
     "@types/jszip": "^3.4.0",
     "clsx": "^2.1.1",
     "docx": "^9.6.1",

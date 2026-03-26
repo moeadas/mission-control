@@ -10,7 +10,8 @@ import { Download, KeyRound, RefreshCcw, Settings, Sparkles, SunMedium, Upload, 
 import { toast } from '@/components/ui/Toast'
 import { useAgentsStore } from '@/lib/agents-store'
 import { getProviderModels, MODEL_OPTIONS, PROVIDER_OPTIONS } from '@/lib/providers'
-import { ThemeMode } from '@/lib/types'
+import { ProviderFallback, ThemeMode } from '@/lib/types'
+import { getSupabaseAccessToken } from '@/lib/supabase/browser'
 
 export default function SettingsPage() {
   const agents = useAgentsStore((state) => state.agents)
@@ -21,6 +22,7 @@ export default function SettingsPage() {
   const agencySettings = useAgentsStore((state) => state.agencySettings)
   const providerSettings = useAgentsStore((state) => state.providerSettings)
   const agentMemories = useAgentsStore((state) => state.agentMemories)
+  const currentUser = useAgentsStore((state) => state.currentUser)
   const updateAgencySettings = useAgentsStore((state) => state.updateAgencySettings)
   const updateProviderSettings = useAgentsStore((state) => state.updateProviderSettings)
   const saveGeminiKey = useAgentsStore((state) => state.saveGeminiKey)
@@ -29,6 +31,8 @@ export default function SettingsPage() {
   const [geminiKeyInput, setGeminiKeyInput] = useState('')
   const [isVerifyingGemini, setIsVerifyingGemini] = useState(false)
   const [isVerifyingOllama, setIsVerifyingOllama] = useState(false)
+  const [supabaseStatus, setSupabaseStatus] = useState<'checking' | 'connected' | 'client-only' | 'not-configured' | 'error'>('checking')
+  const [supabaseUpdatedAt, setSupabaseUpdatedAt] = useState<string | null>(null)
   const [oauthConnections, setOauthConnections] = useState<Record<string, boolean>>({
     google_docs: false,
     google_sheets: false,
@@ -50,6 +54,32 @@ export default function SettingsPage() {
     }
   }, [])
 
+  useEffect(() => {
+    const loadStatus = async () => {
+      const token = await getSupabaseAccessToken()
+      const response = await fetch('/api/state', {
+        cache: 'no-store',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      })
+      return response.ok ? response.json() : null
+    }
+
+    loadStatus()
+      .then((payload) => {
+        if (payload?.connected) {
+          setSupabaseStatus('connected')
+          setSupabaseUpdatedAt(payload.updatedAt || null)
+        } else if (payload?.browserConfigured) {
+          setSupabaseStatus('client-only')
+        } else {
+          setSupabaseStatus('not-configured')
+        }
+      })
+      .catch(() => {
+        setSupabaseStatus('error')
+      })
+  }, [])
+
   const modelOptions = useMemo(
     () => getProviderModels(agencySettings.defaultProvider).map((option) => ({ value: option.id, label: option.label })),
     [agencySettings.defaultProvider]
@@ -65,7 +95,13 @@ export default function SettingsPage() {
       })
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Verification failed')
-      updateProviderSettings('ollama', { verified: true, verifiedAt: new Date().toISOString(), enabled: true, availableModels: data.models || [] })
+      updateProviderSettings('ollama', {
+        verified: true,
+        verifiedAt: new Date().toISOString(),
+        enabled: true,
+        availableModels: data.models || [],
+        model: data.models?.[0] || providerSettings.ollama.model,
+      })
       toast.success(`Ollama connected${data.models?.length ? ` · ${data.models.length} model(s)` : ''}`)
     } catch (error: any) {
       updateProviderSettings('ollama', { verified: false })
@@ -95,9 +131,10 @@ export default function SettingsPage() {
         verified: true,
         verifiedAt: new Date().toISOString(),
         availableModels: data.models || [],
+        model: data.models?.find((item: string) => item.includes('2.5-flash')) || data.models?.[0] || providerSettings.gemini.model,
       })
       setGeminiKeyInput('')
-      toast.success('Gemini verified and saved locally')
+      toast.success('Gemini verified and saved to your user profile')
     } catch (error: any) {
       updateProviderSettings('gemini', { verified: false })
       toast.error(error.message || 'Could not verify Gemini')
@@ -161,6 +198,53 @@ export default function SettingsPage() {
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl space-y-6">
             <Card>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-sm font-heading font-semibold text-text-primary">Shared Persistence</h2>
+                  <p className="text-xs text-text-secondary mt-1">Supabase sync makes tasks, outputs, and clients available across browsers.</p>
+                </div>
+                <span className={`text-[11px] font-mono ${
+                  supabaseStatus === 'connected'
+                    ? 'text-accent-cyan'
+                    : supabaseStatus === 'client-only'
+                    ? 'text-amber-400'
+                    : supabaseStatus === 'not-configured'
+                    ? 'text-text-dim'
+                    : 'text-red-400'
+                }`}>
+                  {supabaseStatus === 'checking'
+                    ? 'Checking…'
+                    : supabaseStatus === 'connected'
+                    ? 'Connected'
+                    : supabaseStatus === 'client-only'
+                    ? 'Client Only'
+                    : supabaseStatus === 'not-configured'
+                    ? 'Not Configured'
+                    : 'Error'}
+                </span>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-border bg-base p-4">
+                  <p className="text-xs font-mono text-text-dim uppercase mb-1">Backend status</p>
+                  <p className="text-sm text-text-primary">
+                    {supabaseStatus === 'connected'
+                      ? 'Shared state sync is available.'
+                      : supabaseStatus === 'client-only'
+                      ? 'Supabase URL and publishable key are configured, but server sync still needs a rotated secret key.'
+                      : 'The app is still using browser-local persistence until Supabase env vars are configured.'}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border bg-base p-4">
+                  <p className="text-xs font-mono text-text-dim uppercase mb-1">Last remote update</p>
+                  <p className="text-sm text-text-primary">{supabaseUpdatedAt ? new Date(supabaseUpdatedAt).toLocaleString() : 'No remote state yet'}</p>
+                </div>
+              </div>
+              <p className="mt-4 text-[11px] text-text-dim">
+                Required env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>, and <code>SUPABASE_SECRET_KEY</code>.
+              </p>
+            </Card>
+
+            <Card>
               <h2 className="text-sm font-heading font-semibold text-text-primary mb-4">Agency Profile</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <Input
@@ -201,11 +285,68 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h2 className="text-sm font-heading font-semibold text-text-primary">Provider Connections</h2>
-                  <p className="text-xs text-text-secondary mt-1">Verify local Ollama or add Gemini with a valid API key.</p>
+                  <p className="text-xs text-text-secondary mt-1">Each user keeps their own Ollama and Gemini runtime settings.</p>
                 </div>
                 <span className="text-[11px] font-mono text-text-dim">
-                  {Object.values(providerSettings).filter((setting) => setting.verified).length} verified
+                  {[providerSettings.ollama, providerSettings.gemini].filter((setting) => setting.verified).length} verified
                 </span>
+              </div>
+
+              <div className="mb-4 grid md:grid-cols-3 gap-4">
+                <Select
+                  label="Primary Runtime"
+                  options={PROVIDER_OPTIONS}
+                  value={providerSettings.routing.primaryProvider}
+                  onChange={(e) =>
+                    updateProviderSettings('routing', {
+                      primaryProvider: e.target.value as typeof providerSettings.routing.primaryProvider,
+                    })
+                  }
+                />
+                <Select
+                  label="Fallback Runtime"
+                  options={[
+                    { value: 'gemini', label: 'Google Gemini' },
+                    { value: 'ollama', label: 'Ollama' },
+                    { value: 'none', label: 'No fallback' },
+                  ]}
+                  value={providerSettings.routing.fallbackProvider}
+                  onChange={(e) =>
+                    updateProviderSettings('routing', {
+                      fallbackProvider: e.target.value as ProviderFallback,
+                    })
+                  }
+                />
+                <label className="rounded-2xl border border-border bg-base/60 px-4 py-3 flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={providerSettings.routing.useGeminiForThinking}
+                    onChange={(e) =>
+                      updateProviderSettings('routing', {
+                        useGeminiForThinking: e.target.checked,
+                      })
+                    }
+                  />
+                  <div>
+                    <p className="text-sm text-text-primary">Use Gemini for thinking tasks</p>
+                    <p className="text-[11px] text-text-secondary">Strategy, research, SEO, and heavier reasoning can prefer Gemini automatically.</p>
+                  </div>
+                </label>
+              </div>
+
+              <div className="mb-4 rounded-xl border border-border bg-base p-4">
+                <p className="text-xs font-mono text-text-dim uppercase mb-1">User Runtime Profile</p>
+                <p className="text-sm text-text-primary">
+                  {currentUser?.email || 'Current user'} uses <strong>{providerSettings.routing.primaryProvider}</strong> as the main runtime
+                  {providerSettings.routing.fallbackProvider !== 'none' ? (
+                    <> with <strong>{providerSettings.routing.fallbackProvider}</strong> as fallback.</>
+                  ) : (
+                    <> with no fallback enabled.</>
+                  )}
+                </p>
+                <p className="text-[11px] text-text-secondary mt-1">
+                  Ollama should run locally on each user computer. Gemini only becomes active after a valid key is saved and verified.
+                </p>
               </div>
 
               <div className="grid lg:grid-cols-2 gap-4">
@@ -213,7 +354,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium text-text-primary">Ollama</h3>
-                      <p className="text-xs text-text-secondary">Local-first models for mission control on this machine.</p>
+                      <p className="text-xs text-text-secondary">Primary local runtime on this machine. Each user can point to their own local Ollama app.</p>
                     </div>
                     <span className={`text-[11px] font-mono ${providerSettings.ollama.verified ? 'text-accent-cyan' : 'text-text-dim'}`}>
                       {providerSettings.ollama.verified ? 'Verified' : 'Unverified'}
@@ -224,6 +365,9 @@ export default function SettingsPage() {
                     value={providerSettings.ollama.baseUrl}
                     onChange={(e) => updateProviderSettings('ollama', { baseUrl: e.target.value })}
                   />
+                  {providerSettings.ollama.model ? (
+                    <p className="text-[11px] text-text-secondary">Preferred model: {providerSettings.ollama.model}</p>
+                  ) : null}
                   <Button variant="secondary" onClick={verifyOllama} disabled={isVerifyingOllama}>
                     <RefreshCcw size={14} />
                     {isVerifyingOllama ? 'Checking...' : 'Verify Ollama'}
@@ -234,7 +378,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium text-text-primary">Gemini</h3>
-                      <p className="text-xs text-text-secondary">Cloud model option for higher-end strategic and creative tasks.</p>
+                      <p className="text-xs text-text-secondary">Fallback and thinking runtime for strategy, research, and heavier reasoning tasks.</p>
                     </div>
                     <span className={`text-[11px] font-mono ${providerSettings.gemini.verified ? 'text-accent-cyan' : 'text-text-dim'}`}>
                       {providerSettings.gemini.verified ? 'Verified' : 'Unverified'}
@@ -250,12 +394,15 @@ export default function SettingsPage() {
                   {providerSettings.gemini.maskedKey && (
                     <p className="text-[11px] font-mono text-text-dim flex items-center gap-1.5">
                       <KeyRound size={12} />
-                      Saved locally as {providerSettings.gemini.maskedKey}
+                      Saved to your user profile as {providerSettings.gemini.maskedKey}
                     </p>
                   )}
+                  {providerSettings.gemini.model ? (
+                    <p className="text-[11px] text-text-secondary">Preferred model: {providerSettings.gemini.model}</p>
+                  ) : null}
                   <Button variant="secondary" onClick={verifyGemini} disabled={isVerifyingGemini}>
                     <Sparkles size={14} />
-                    {isVerifyingGemini ? 'Checking...' : 'Verify Gemini'}
+                    {isVerifyingGemini ? 'Checking...' : 'Save & Verify Gemini'}
                   </Button>
                 </div>
               </div>

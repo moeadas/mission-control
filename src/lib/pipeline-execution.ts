@@ -256,6 +256,14 @@ export async function routeTask(
       'media plan', 'media strategy', 'channel strategy', 'budget allocation',
       'media buying', 'ad spend'
     ],
+    'strategy-brief': [
+      'strategy brief', 'brand strategy', 'messaging strategy', 'positioning',
+      'strategic brief', 'brand platform'
+    ],
+    'client-brief': [
+      'client brief', 'briefing document', 'intake brief', 'onboarding brief',
+      'client onboarding'
+    ],
   }
   
   // Find matching pipeline

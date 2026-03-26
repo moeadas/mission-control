@@ -5,7 +5,8 @@ import { TopBar } from '@/components/layout/TopBar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastContainer } from '@/components/ui/Toast'
 import { IrisChat } from '@/components/agents/IrisChat'
-import { useAgentsStore } from '@/lib/agents-store'
+import { createAppPersistenceSnapshot, useAgentsStore } from '@/lib/agents-store'
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
 import { MessageCircle, LayoutDashboard, Building2, Bot, ListTodo, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -21,12 +22,127 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
   const openIris = useAgentsStore((state) => state.openIris)
   const isIrisOpen = useAgentsStore((state) => state.isIrisOpen)
   const themeMode = useAgentsStore((state) => state.agencySettings.themeMode)
+  const hydrateAgentPhotos = useAgentsStore((state) => state.hydrateAgentPhotos)
+  const hydrateAppState = useAgentsStore((state) => state.hydrateAppState)
+  const setAppStateReady = useAgentsStore((state) => state.setAppStateReady)
+  const setAuthenticatedUser = useAgentsStore((state) => state.setAuthenticatedUser)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const supabase = getSupabaseBrowserClient()
 
   useEffect(() => {
     document.documentElement.dataset.theme = themeMode
   }, [themeMode])
+
+  useEffect(() => {
+    let isMounted = true
+
+    let latestPhotos: Record<string, string> | null = null
+
+    fetch('/api/agent-photos')
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        latestPhotos = payload?.photos || null
+        if (isMounted && latestPhotos) {
+          hydrateAgentPhotos(latestPhotos)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [hydrateAgentPhotos])
+
+  useEffect(() => {
+    let isMounted = true
+    let saveTimer: ReturnType<typeof setTimeout> | null = null
+    let canSync = false
+    let authHeaders: HeadersInit = {}
+
+    let latestPhotos: Record<string, string> | null = null
+
+    const photosPromise = fetch('/api/agent-photos')
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload) => {
+        latestPhotos = payload?.photos || null
+        return latestPhotos
+      })
+      .catch(() => null)
+
+    supabase.auth.getSession()
+      .then(({ data }) => {
+        authHeaders = data.session?.access_token
+          ? { Authorization: `Bearer ${data.session.access_token}` }
+          : {}
+        if (data.session?.access_token) {
+          fetch('/api/auth/session', { headers: authHeaders })
+            .then((response) => (response.ok ? response.json() : null))
+            .then((payload) => {
+              if (payload?.authenticated && isMounted) {
+                setAuthenticatedUser(payload.user)
+              }
+            })
+            .catch(() => {})
+        } else if (isMounted) {
+          setAuthenticatedUser(null)
+        }
+        return fetch('/api/state', { cache: 'no-store', headers: authHeaders })
+      })
+      .then((response) => (response?.ok ? response.json() : null))
+      .then(async (payload) => {
+        if (!isMounted) return
+        if (payload?.state) {
+          hydrateAppState(payload.state)
+        }
+        const photoMap = latestPhotos || (await photosPromise)
+        if (photoMap && isMounted) {
+          hydrateAgentPhotos(photoMap)
+        }
+        canSync = payload?.connected === true
+        if (payload?.connected === true && payload?.state) {
+          fetch('/api/state', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', ...authHeaders },
+            body: JSON.stringify({ state: payload.state }),
+          }).catch(() => {})
+        }
+        setAppStateReady(true)
+      })
+      .catch(() => {
+        if (isMounted) {
+          setAuthenticatedUser(null)
+          setAppStateReady(true)
+        }
+      })
+
+    const unsubscribe = useAgentsStore.subscribe((state) => {
+      if (!canSync) return
+
+      if (saveTimer) clearTimeout(saveTimer)
+
+      saveTimer = setTimeout(async () => {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        const snapshot = createAppPersistenceSnapshot(state)
+        fetch('/api/state', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+          },
+          body: JSON.stringify({ state: snapshot }),
+        }).catch(() => {})
+      }, 700)
+    })
+
+    return () => {
+      isMounted = false
+      if (saveTimer) clearTimeout(saveTimer)
+      unsubscribe()
+    }
+  }, [hydrateAgentPhotos, hydrateAppState, setAppStateReady, setAuthenticatedUser, supabase])
 
   // Close mobile menu on resize to desktop
   useEffect(() => {

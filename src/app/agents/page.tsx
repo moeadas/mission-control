@@ -72,15 +72,15 @@ export default function AgentsPage() {
               className="w-full bg-base border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-text-primary placeholder:text-text-dim focus:outline-none focus:border-accent-blue transition-colors"
             />
           </div>
-          <div className="flex items-center gap-1 overflow-x-auto">
+          <div className="flex items-center gap-1 overflow-x-auto rounded-full border border-border bg-card/80 px-2 py-1 shadow-[0_6px_18px_rgba(15,23,42,0.05)]">
             {filters.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
                 className={`px-3 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap transition-all ${
                   filter === f.value
-                    ? 'bg-accent-purple/20 text-accent-purple border border-accent-purple/30'
-                    : 'bg-base border border-border text-text-secondary hover:text-text-primary hover:border-border-glow'
+                    ? 'bg-accent-purple/18 text-accent-purple border border-accent-purple/30 shadow-[0_6px_18px_rgba(139,92,246,0.14)]'
+                    : 'bg-transparent border border-transparent text-text-secondary hover:text-text-primary hover:border-border hover:bg-base'
                 }`}
               >
                 {f.label}

@@ -1,62 +1,130 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
 
-const SKILLS_DIR = join(process.cwd(), 'src/config/skills')
+import { getSupabaseServerClient } from '@/lib/supabase/server'
+import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+function getBearerToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || ''
+  if (!authHeader.toLowerCase().startsWith('bearer ')) return null
+  return authHeader.slice(7).trim()
+}
+
+async function getAgencyId() {
+  const supabase = getSupabaseServerClient()
+  if (!supabase) return null
+  const { data, error } = await supabase.from('agencies').select('id').eq('slug', 'default-agency').single()
+  if (error) throw error
+  return data.id as string
+}
+
+function mapSkill(row: any) {
+  return {
+    id: row.id,
+    name: row.name,
+    description: row.description || '',
+    category: row.category,
+    difficulty: row.metadata?.difficulty || 'intermediate',
+    freedom: row.metadata?.freedom || 'medium',
+    prompts: row.prompts || {
+      en: {
+        trigger: '',
+        context: '',
+        instructions: '',
+        output_template: '',
+      },
+    },
+    variables: row.metadata?.variables || [],
+    inputs: row.metadata?.inputs || [],
+    outputs: row.metadata?.outputs || [],
+    workflow: row.metadata?.workflow || { steps: [] },
+    tools: row.metadata?.tools || [],
+    agents: row.metadata?.agents || [],
+    pipelines: row.metadata?.pipelines || [],
+    checklist: Array.isArray(row.checklist) ? row.checklist : [],
+    examples: Array.isArray(row.examples) ? row.examples : [],
+    metadata: row.metadata || {},
+  }
+}
+
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const auth = await resolveAuthContextFromToken(getBearerToken(request))
+    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
     const { id } = await params
-    // Try exact match first
-    let filepath = join(SKILLS_DIR, `${id}.json`)
-    
-    try {
-      const content = await readFile(filepath, 'utf-8')
-      const skill = JSON.parse(content)
-      return NextResponse.json(skill)
-    } catch {
-      // Try without .json extension in case id already has it
-      if (id.endsWith('.json')) {
-        filepath = join(SKILLS_DIR, id)
-        const content = await readFile(filepath, 'utf-8')
-        const skill = JSON.parse(content)
-        return NextResponse.json(skill)
-      }
-    }
-    
-    return NextResponse.json({ error: 'Skill not found' }, { status: 404 })
+    const supabase = getSupabaseServerClient()
+    const agencyId = await getAgencyId()
+    if (!supabase || !agencyId) return NextResponse.json({ error: 'Supabase not available' }, { status: 503 })
+
+    const { data, error } = await supabase.from('skills').select('*').eq('agency_id', agencyId).eq('id', id).single()
+    if (error) throw error
+    return NextResponse.json(mapSkill(data))
   } catch (error) {
     console.error('Failed to load skill:', error)
     return NextResponse.json({ error: 'Failed to load skill' }, { status: 500 })
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const auth = await resolveAuthContextFromToken(getBearerToken(request))
+    if (!auth || auth.role !== 'super_admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+
     const { id } = await params
-    const skill = await req.json()
-    
-    // Use the id from params, or from skill.name
-    const filename = `${id}.json`
-    const filepath = join(SKILLS_DIR, filename)
-    
-    // Update metadata
-    skill.metadata = {
-      ...skill.metadata,
-      lastUpdated: new Date().toISOString().split('T')[0],
+    const skill = await request.json()
+    const supabase = getSupabaseServerClient()
+    const agencyId = await getAgencyId()
+    if (!supabase || !agencyId) return NextResponse.json({ error: 'Supabase not available' }, { status: 503 })
+
+    const payload = {
+      id,
+      agency_id: agencyId,
+      name: skill.name,
+      category: skill.category,
+      description: skill.description || '',
+      prompts: skill.prompts || { en: '' },
+      checklist: skill.checklist || [],
+      examples: skill.examples || [],
+      metadata: {
+        ...(skill.metadata || {}),
+        difficulty: skill.difficulty || 'intermediate',
+        freedom: skill.freedom || 'medium',
+        variables: skill.variables || [],
+        inputs: skill.inputs || [],
+        outputs: skill.outputs || [],
+        workflow: skill.workflow || { steps: [] },
+        tools: skill.tools || [],
+        agents: skill.agents || [],
+        pipelines: skill.pipelines || [],
+      },
+      source: 'app',
     }
-    
-    await writeFile(filepath, JSON.stringify(skill, null, 2), 'utf-8')
-    
+
+    const { error } = await supabase.from('skills').upsert(payload, { onConflict: 'id' })
+    if (error) throw error
     return NextResponse.json({ success: true, skill })
   } catch (error) {
     console.error('Failed to save skill:', error)
     return NextResponse.json({ error: 'Failed to save skill' }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const auth = await resolveAuthContextFromToken(getBearerToken(request))
+    if (!auth || auth.role !== 'super_admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+
+    const { id } = await params
+    const supabase = getSupabaseServerClient()
+    const agencyId = await getAgencyId()
+    if (!supabase || !agencyId) return NextResponse.json({ error: 'Supabase not available' }, { status: 503 })
+
+    const { error } = await supabase.from('skills').delete().eq('agency_id', agencyId).eq('id', id)
+    if (error) throw error
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Failed to delete skill:', error)
+    return NextResponse.json({ error: 'Failed to delete skill' }, { status: 500 })
   }
 }

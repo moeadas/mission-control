@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
 
 export interface ClientProfileField {
   id: string
@@ -49,11 +50,11 @@ export interface Pipeline {
 interface PipelinesState {
   pipelines: Pipeline[]
   isLoaded: boolean
-  loadPipelines: () => Promise<void>
+  loadPipelines: (force?: boolean) => Promise<void>
   getPipeline: (id: string) => Pipeline | undefined
-  addPipeline: (pipeline: Pipeline) => void
-  updatePipeline: (id: string, updates: Partial<Pipeline>) => void
-  deletePipeline: (id: string) => void
+  addPipeline: (pipeline: Pipeline) => Promise<boolean>
+  updatePipeline: (id: string, updates: Partial<Pipeline>) => Promise<boolean>
+  deletePipeline: (id: string) => Promise<boolean>
 }
 
 export const usePipelinesStore = create<PipelinesState>()(
@@ -62,11 +63,17 @@ export const usePipelinesStore = create<PipelinesState>()(
       pipelines: [],
       isLoaded: false,
 
-      loadPipelines: async () => {
-        if (get().isLoaded) return
+      loadPipelines: async (force = false) => {
+        if (get().isLoaded && !force) return
         try {
-          const modules = await import('@/config/pipelines/pipelines.json')
-          set({ pipelines: modules.default.pipelines, isLoaded: true })
+          const {
+            data: { session },
+          } = await getSupabaseBrowserClient().auth.getSession()
+          const response = await fetch('/api/pipelines', {
+            headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
+          })
+          const pipelines = response.ok ? await response.json() : []
+          set({ pipelines: Array.isArray(pipelines) ? pipelines : [], isLoaded: true })
         } catch (error) {
           console.error('Failed to load pipelines:', error)
           set({ isLoaded: true })
@@ -75,18 +82,54 @@ export const usePipelinesStore = create<PipelinesState>()(
 
       getPipeline: (id) => get().pipelines.find(p => p.id === id),
 
-      addPipeline: (pipeline) => {
-        set(state => ({ pipelines: [...state.pipelines, pipeline] }))
+      addPipeline: async (pipeline) => {
+        const {
+          data: { session },
+        } = await getSupabaseBrowserClient().auth.getSession()
+        const response = await fetch('/api/pipelines', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+          },
+          body: JSON.stringify(pipeline),
+        })
+        if (!response.ok) return false
+        await get().loadPipelines(true)
+        return true
       },
 
-      updatePipeline: (id, updates) => {
-        set(state => ({
-          pipelines: state.pipelines.map(p => p.id === id ? { ...p, ...updates } : p)
-        }))
+      updatePipeline: async (id, updates) => {
+        const current = get().pipelines.find(p => p.id === id)
+        if (!current) return false
+        const nextPipeline = { ...current, ...updates }
+        const {
+          data: { session },
+        } = await getSupabaseBrowserClient().auth.getSession()
+        const response = await fetch(`/api/pipelines/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+          },
+          body: JSON.stringify(nextPipeline),
+        })
+        if (!response.ok) return false
+        await get().loadPipelines(true)
+        return true
       },
 
-      deletePipeline: (id) => {
-        set(state => ({ pipelines: state.pipelines.filter(p => p.id !== id) }))
+      deletePipeline: async (id) => {
+        const {
+          data: { session },
+        } = await getSupabaseBrowserClient().auth.getSession()
+        const response = await fetch(`/api/pipelines/${id}`, {
+          method: 'DELETE',
+          headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
+        })
+        if (!response.ok) return false
+        await get().loadPipelines(true)
+        return true
       },
     }),
     {

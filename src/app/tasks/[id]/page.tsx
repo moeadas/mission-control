@@ -2,8 +2,8 @@
 
 import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { ArrowLeft, Download, ExternalLink, FileText, Sheet, Target } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
+import { ArrowLeft, Download, ExternalLink, FileText, Sheet, Target, Trash2 } from 'lucide-react'
 
 import { ClientShell } from '@/components/ClientShell'
 import { Badge } from '@/components/ui/Badge'
@@ -13,6 +13,7 @@ import { getSupportedExportFormats } from '@/lib/artifacts'
 import { DELIVERABLE_LABELS } from '@/lib/bot-animations'
 import { useAgentsStore } from '@/lib/agents-store'
 import { Artifact, ArtifactExport } from '@/lib/types'
+import { ArtifactOutputView } from '@/components/outputs/ArtifactOutputView'
 
 const STATUS_COLORS: Record<string, string> = {
   queued: '#ffd166',
@@ -26,12 +27,15 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function TaskDetailPage() {
   const params = useParams<{ id: string }>()
+  const router = useRouter()
   const missions = useAgentsStore((state) => state.missions)
   const artifacts = useAgentsStore((state) => state.artifacts)
   const clients = useAgentsStore((state) => state.clients)
   const agents = useAgentsStore((state) => state.agents)
+  const appStateReady = useAgentsStore((state) => state.appStateReady)
   const updateArtifact = useAgentsStore((state) => state.updateArtifact)
   const updateMission = useAgentsStore((state) => state.updateMission)
+  const deleteMission = useAgentsStore((state) => state.deleteMission)
 
   const [exportingKey, setExportingKey] = useState<string | null>(null)
   const [feedback, setFeedback] = useState<string | null>(null)
@@ -44,6 +48,18 @@ export default function TaskDetailPage() {
         .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()),
     [artifacts, params.id]
   )
+
+  if (!appStateReady && !mission) {
+    return (
+      <ClientShell>
+        <div className="p-6">
+          <Card>
+            <p className="text-sm text-text-primary">Loading task…</p>
+          </Card>
+        </div>
+      </ClientShell>
+    )
+  }
 
   if (!mission) {
     return (
@@ -62,7 +78,8 @@ export default function TaskDetailPage() {
   }
 
   const client = clients.find((item) => item.id === mission.clientId)
-  const assignedAgents = agents.filter((agent) => mission.assignedAgentIds.includes(agent.id))
+  const assignedAgentIds = Array.isArray(mission.assignedAgentIds) ? mission.assignedAgentIds : []
+  const assignedAgents = agents.filter((agent) => assignedAgentIds.includes(agent.id))
 
   async function handleExport(artifact: Artifact, format: ArtifactExport['format']) {
     const exportKey = `${artifact.id}:${format}`
@@ -134,6 +151,19 @@ export default function TaskDetailPage() {
             <Button size="sm" variant="ghost" onClick={() => updateMission(mission.id, { status: 'completed', progress: 100 })}>
               Complete
             </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => {
+                if (confirm(`Delete "${mission.title}"? This also removes its saved outputs.`)) {
+                  deleteMission(mission.id)
+                  router.replace('/tasks')
+                }
+              }}
+            >
+              <Trash2 size={14} />
+              Delete
+            </Button>
           </div>
         </div>
 
@@ -155,7 +185,7 @@ export default function TaskDetailPage() {
                       <div>
                         <h2 className="text-sm font-heading font-semibold text-text-primary">{artifact.title}</h2>
                         <p className="text-[11px] text-text-secondary mt-1">
-                          {DELIVERABLE_LABELS[artifact.deliverableType] || artifact.deliverableType} · {artifact.format.toUpperCase()}
+                          {DELIVERABLE_LABELS[artifact.deliverableType] || artifact.deliverableType} · {(artifact.format || 'html').toUpperCase()}
                         </p>
                       </div>
                       <Badge color={artifact.status === 'delivered' ? '#00d4aa' : artifact.status === 'ready' ? '#4f8ef7' : '#ffd166'} size="sm">
@@ -186,7 +216,7 @@ export default function TaskDetailPage() {
 
                     {artifact.content ? (
                       <div className="p-4 rounded-xl border border-border bg-base/60">
-                        <p className="text-[12px] text-text-primary whitespace-pre-wrap leading-relaxed">{artifact.content}</p>
+                        <ArtifactOutputView artifact={artifact} />
                       </div>
                     ) : (
                       <div className="p-4 rounded-xl border border-border bg-base/40">
@@ -223,6 +253,20 @@ export default function TaskDetailPage() {
                         </div>
                       </div>
                     ) : null}
+
+                    {artifact.executionSteps?.length ? (
+                      <div className="p-4 rounded-xl border border-border bg-base/30">
+                        <p className="text-[10px] font-mono uppercase text-text-dim mb-3">Autonomous Execution</p>
+                        <div className="space-y-2">
+                          {artifact.executionSteps.map((step) => (
+                            <div key={step.id} className="p-3 rounded-lg border border-border bg-base/40">
+                              <p className="text-sm text-text-primary">{step.agentName} · {step.title}</p>
+                              <p className="text-[11px] text-text-secondary mt-1">{step.summary}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
                   </Card>
                 ))
               ) : (
@@ -239,6 +283,8 @@ export default function TaskDetailPage() {
                 <div className="space-y-2 text-sm text-text-secondary">
                   <p><span className="text-text-primary">Client:</span> {client?.name || 'General Ops'}</p>
                   <p><span className="text-text-primary">Type:</span> {DELIVERABLE_LABELS[mission.deliverableType] || mission.deliverableType}</p>
+                  <p><span className="text-text-primary">Lead:</span> {agents.find((item) => item.id === mission.leadAgentId)?.name || 'Iris'}</p>
+                  {mission.pipelineName ? <p><span className="text-text-primary">Pipeline:</span> {mission.pipelineName}</p> : null}
                   <p><span className="text-text-primary">Progress:</span> {mission.progress}%</p>
                   <p><span className="text-text-primary">Created:</span> {new Date(mission.createdAt).toLocaleString()}</p>
                   <p><span className="text-text-primary">Updated:</span> {new Date(mission.updatedAt).toLocaleString()}</p>
@@ -263,6 +309,24 @@ export default function TaskDetailPage() {
                   )}
                 </div>
               </Card>
+
+              {(mission.qualityChecklist?.length || mission.handoffNotes) ? (
+                <Card>
+                  <h3 className="text-xs font-mono text-text-dim uppercase mb-3">Execution Plan</h3>
+                  {mission.handoffNotes ? (
+                    <p className="text-sm text-text-secondary leading-relaxed mb-3">{mission.handoffNotes}</p>
+                  ) : null}
+                  {mission.qualityChecklist?.length ? (
+                    <div className="space-y-2">
+                      {mission.qualityChecklist.map((step, index) => (
+                        <div key={`${mission.id}-qc-${index}`} className="p-3 rounded-lg border border-border bg-base/40">
+                          <p className="text-sm text-text-primary">{step}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </Card>
+              ) : null}
 
               {feedback ? (
                 <Card>

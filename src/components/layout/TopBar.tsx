@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Activity, Menu, Sun, Moon } from 'lucide-react'
+import { Activity, Menu, Sun, Moon, RefreshCcw, LogOut } from 'lucide-react'
 import { useAgentsStore } from '@/lib/agents-store'
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
 import { clsx } from 'clsx'
 
 interface TopBarProps {
@@ -11,6 +12,7 @@ interface TopBarProps {
 
 export function TopBar({ onMobileMenuToggle }: TopBarProps) {
   const [time, setTime] = useState('')
+  const supabase = getSupabaseBrowserClient()
   const themeMode = useAgentsStore((state) => state.agencySettings.themeMode)
   const setThemeMode = useAgentsStore((state) => state.setThemeMode)
   const missions = useAgentsStore((state) => state.missions)
@@ -26,6 +28,21 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
   }, [])
 
   const activeMissionCount = missions.filter((mission) => mission.status !== 'completed').length
+
+  const hardRefreshApp = async () => {
+    if (typeof window === 'undefined') return
+
+    try {
+      if ('caches' in window) {
+        const keys = await window.caches.keys()
+        await Promise.all(keys.map((key) => window.caches.delete(key)))
+      }
+    } catch {}
+
+    const url = new URL(window.location.href)
+    url.searchParams.set('refresh', String(Date.now()))
+    window.location.replace(url.toString())
+  }
 
   return (
     <header className="h-14 bg-[var(--bg-panel)] border-b border-[var(--border)] flex items-center justify-between px-4 md:px-5 flex-shrink-0">
@@ -59,6 +76,19 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
 
       {/* Right section */}
       <div className="flex items-center gap-3">
+        <button
+          onClick={hardRefreshApp}
+          className={clsx(
+            'hidden md:flex items-center justify-center w-10 h-10 rounded-xl',
+            'transition-colors duration-200',
+            'text-[var(--text-secondary)] hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)]'
+          )}
+          aria-label="Refresh latest app version"
+          title="Refresh latest app version"
+        >
+          <RefreshCcw size={16} />
+        </button>
+
         {/* Theme toggle */}
         <button
           onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
@@ -71,6 +101,22 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
           aria-label={`Switch to ${themeMode === 'dark' ? 'light' : 'dark'} mode`}
         >
           {themeMode === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+
+        <button
+          onClick={async () => {
+            await supabase.auth.signOut()
+            window.location.href = '/login'
+          }}
+          className={clsx(
+            'flex items-center justify-center w-10 h-10 rounded-xl',
+            'transition-colors duration-200',
+            'text-[var(--text-secondary)] hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)]'
+          )}
+          aria-label="Sign out"
+          title="Sign out"
+        >
+          <LogOut size={16} />
         </button>
 
         {/* Time */}

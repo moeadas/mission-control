@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/Card'
 import { getArtifactFamily, getDefaultCreativeSpec, getSupportedExportFormats } from '@/lib/artifacts'
 import { useAgentsStore } from '@/lib/agents-store'
 import { Artifact, ArtifactExport, CreativeArtifactSpec } from '@/lib/types'
+import { ArtifactOutputView } from '@/components/outputs/ArtifactOutputView'
 
 const STATUS_COLORS = {
   draft: '#ffd166',
@@ -167,6 +168,7 @@ export default function OutputsPage() {
   const missions = useAgentsStore((state) => state.missions)
   const agents = useAgentsStore((state) => state.agents)
   const updateArtifact = useAgentsStore((state) => state.updateArtifact)
+  const appStateReady = useAgentsStore((state) => state.appStateReady)
 
   const [clientFilter, setClientFilter] = useState('all')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -275,13 +277,24 @@ export default function OutputsPage() {
 
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-6xl space-y-4">
-            {filteredArtifacts.length > 0 ? (
+            {!appStateReady ? (
+              <Card>
+                <p className="text-sm text-text-primary">Loading outputs…</p>
+              </Card>
+            ) : filteredArtifacts.length > 0 ? (
               filteredArtifacts.map((artifact) => {
                 const client = clients.find((item) => item.id === artifact.clientId)
                 const mission = missions.find((item) => item.id === artifact.missionId)
                 const agent = agents.find((item) => item.id === artifact.agentId)
-                const family = getArtifactFamily(artifact.deliverableType)
-                const supportedFormats = getSupportedExportFormats(artifact)
+                const deliverableType = artifact.deliverableType || 'client-brief'
+                const artifactFormat = artifact.format || 'html'
+                const artifactStatus = artifact.status === 'ready' || artifact.status === 'delivered' ? artifact.status : 'draft'
+                const family = getArtifactFamily(deliverableType)
+                const supportedFormats = getSupportedExportFormats({
+                  ...artifact,
+                  deliverableType,
+                  format: artifactFormat,
+                })
 
                 return (
                   <Card key={artifact.id} className="space-y-4">
@@ -289,11 +302,11 @@ export default function OutputsPage() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
                           <h3 className="text-sm font-heading font-semibold text-text-primary">{artifact.title}</h3>
-                          <Badge color={STATUS_COLORS[artifact.status]} size="sm">
-                            {artifact.status}
+                          <Badge color={STATUS_COLORS[artifactStatus]} size="sm">
+                            {artifactStatus}
                           </Badge>
                           <Badge color="#8b92a8" size="sm">
-                            {artifact.deliverableType}
+                            {deliverableType}
                           </Badge>
                           <Badge color={family === 'media' ? '#4f8ef7' : family === 'creative' ? '#ff7b72' : '#7c879c'} size="sm">
                             {family}
@@ -317,7 +330,7 @@ export default function OutputsPage() {
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
-                      {supportedFormats.map((format) => (
+                        {supportedFormats.map((format) => (
                         <Button
                           key={format}
                           size="sm"
@@ -333,11 +346,11 @@ export default function OutputsPage() {
 
                     {artifact.content ? (
                       <div className="p-4 rounded-xl border border-border bg-base/60">
-                        <p className="text-[12px] text-text-primary whitespace-pre-wrap leading-relaxed">{artifact.content}</p>
+                        <ArtifactOutputView artifact={artifact} />
                       </div>
                     ) : null}
 
-                    {artifact.deliverableType === 'creative-asset' ? (
+                    {deliverableType === 'creative-asset' ? (
                       <CreativePackEditor
                         artifact={artifact}
                         onSave={(creative) =>
@@ -362,7 +375,7 @@ export default function OutputsPage() {
                       <div className="p-4 rounded-xl border border-border bg-base/40 space-y-3">
                         <div>
                           <p className="text-[10px] font-mono uppercase text-text-dim mb-2">Output Metadata</p>
-                          <p className="text-[11px] text-text-secondary">Primary format: {artifact.format.toUpperCase()}</p>
+                          <p className="text-[11px] text-text-secondary">Primary format: {artifactFormat.toUpperCase()}</p>
                           {artifact.path ? <p className="text-[11px] font-mono text-text-dim break-all mt-2">{artifact.path}</p> : null}
                           {artifact.link ? (
                             <a
@@ -397,6 +410,20 @@ export default function OutputsPage() {
                               >
                                 Download <ExternalLink size={12} />
                               </a>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {artifact.executionSteps?.length ? (
+                      <div className="p-4 rounded-xl border border-border bg-base/30">
+                        <p className="text-[10px] font-mono uppercase text-text-dim mb-3">Autonomous Execution</p>
+                        <div className="space-y-2">
+                          {artifact.executionSteps.map((step) => (
+                            <div key={step.id} className="p-3 rounded-lg border border-border bg-base/40">
+                              <p className="text-sm text-text-primary">{step.agentName} · {step.title}</p>
+                              <p className="text-[11px] text-text-secondary mt-1">{step.summary}</p>
                             </div>
                           ))}
                         </div>

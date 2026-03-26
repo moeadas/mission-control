@@ -252,6 +252,7 @@ export function AgentStrip() {
                 name={agent.name}
                 avatar={agent.avatar}
                 color={agent.color}
+                photoUrl={agent.photoUrl}
                 status={agent.status}
                 animation={agent.currentTask ? 'working' : 'idle'}
                 size={44}
@@ -295,6 +296,7 @@ export function AgentStrip() {
                   name={agent.name}
                   avatar={agent.avatar}
                   color={agent.color}
+                  photoUrl={agent.photoUrl}
                   status={agent.status}
                   animation="idle"
                   size={44}

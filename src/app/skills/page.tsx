@@ -6,6 +6,7 @@ import { SKILL_CATEGORIES, type Skill } from '@/lib/skill-schema'
 import Link from 'next/link'
 import { Plus, Search, BookOpen, Star, Edit, ListChecks, Workflow, Zap } from 'lucide-react'
 import { clsx } from 'clsx'
+import { getSupabaseAccessToken } from '@/lib/supabase/browser'
 
 export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([])
@@ -14,8 +15,15 @@ export default function SkillsPage() {
   const [category, setCategory] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('/api/skills')
-      .then((r) => r.json())
+    const loadSkills = async () => {
+      const token = await getSupabaseAccessToken()
+      const response = await fetch('/api/skills', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      })
+      return response.ok ? response.json() : []
+    }
+
+    loadSkills()
       .then((data) => {
         if (Array.isArray(data)) setSkills(data)
         else setSkills([])

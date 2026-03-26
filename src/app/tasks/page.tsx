@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react'
 import Link from 'next/link'
-import { ListTodo, ArrowRight, Clock3 } from 'lucide-react'
+import { ListTodo, ArrowRight, Clock3, Trash2 } from 'lucide-react'
 
 import { ClientShell } from '@/components/ClientShell'
 import { Badge } from '@/components/ui/Badge'
@@ -24,6 +24,8 @@ export default function TasksPage() {
   const missions = useAgentsStore((state) => state.missions)
   const clients = useAgentsStore((state) => state.clients)
   const artifacts = useAgentsStore((state) => state.artifacts)
+  const deleteMission = useAgentsStore((state) => state.deleteMission)
+  const appStateReady = useAgentsStore((state) => state.appStateReady)
 
   const sortedTasks = useMemo(
     () => [...missions].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()),
@@ -48,15 +50,35 @@ export default function TasksPage() {
 
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {sortedTasks.length ? (
+            {!appStateReady ? (
+              <Card>
+                <p className="text-sm text-text-primary">Loading tasks…</p>
+              </Card>
+            ) : sortedTasks.length ? (
               sortedTasks.map((mission) => {
                 const client = clients.find((item) => item.id === mission.clientId)
                 const missionArtifacts = artifacts.filter((artifact) => artifact.missionId === mission.id)
                 const latestArtifact = missionArtifacts[0]
 
                 return (
-                  <Link key={mission.id} href={`/tasks/${mission.id}`}>
-                    <Card hover className="h-full space-y-4">
+                  <Card key={mission.id} hover className="h-full space-y-4 relative">
+                    <div className="absolute right-4 top-4 z-10">
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault()
+                          event.stopPropagation()
+                          if (confirm(`Delete "${mission.title}"? This also removes its saved outputs.`)) {
+                            deleteMission(mission.id)
+                          }
+                        }}
+                        className="inline-flex items-center justify-center rounded-lg border border-red-500/20 bg-red-500/10 p-2 text-red-400 transition-all hover:bg-red-500/20"
+                        aria-label={`Delete ${mission.title}`}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                    <Link href={`/tasks/${mission.id}`} className="block space-y-4">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
                           <h3 className="text-sm font-heading font-semibold text-text-primary">{mission.title}</h3>
@@ -93,8 +115,8 @@ export default function TasksPage() {
                           Open task <ArrowRight size={12} />
                         </span>
                       </div>
-                    </Card>
-                  </Link>
+                    </Link>
+                  </Card>
                 )
               })
             ) : (

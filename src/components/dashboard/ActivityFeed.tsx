@@ -37,6 +37,7 @@ const ACTION_CONFIG = {
 
 export function ActivityFeed() {
   const activities = useAgentsStore((state) => state.activities)
+  const agents = useAgentsStore((state) => state.agents)
 
   if (activities.length === 0) {
     return (
@@ -74,6 +75,7 @@ export function ActivityFeed() {
       <div className="flex-1 overflow-y-auto divide-y divide-[var(--border-subtle)]">
         {activities.slice(0, 20).map((entry, i) => {
           const config = ACTION_CONFIG[entry.type] || ACTION_CONFIG.idle
+          const agent = agents.find((item) => item.id === entry.agentId)
           return (
             <div
               key={entry.id}
@@ -86,6 +88,7 @@ export function ActivityFeed() {
                   name={entry.agentName}
                   avatar="bot-blue"
                   color={entry.agentColor}
+                  photoUrl={agent?.photoUrl}
                   status="active"
                   size={30}
                 />

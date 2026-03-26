@@ -59,6 +59,7 @@ export default function DashboardPage() {
                         name={agent.name}
                         avatar={agent.avatar}
                         color={agent.color}
+                        photoUrl={agent.photoUrl}
                         status={agent.status}
                         size={36}
                       />

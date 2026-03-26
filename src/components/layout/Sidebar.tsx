@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -15,9 +15,11 @@ import {
   Zap,
   BarChart3,
   BookOpen,
+  Shield,
   X,
 } from 'lucide-react'
 import { clsx } from 'clsx'
+import { getSupabaseAccessToken } from '@/lib/supabase/browser'
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/dashboard', color: '#60a5fa' },
@@ -30,8 +32,11 @@ const NAV_ITEMS = [
   { id: 'runner', label: 'Runner', icon: Zap, href: '/pipeline/run', color: '#f472b6' },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, href: '/analytics', color: '#a78bfa' },
   { id: 'outputs', label: 'Outputs', icon: FileText, href: '/outputs', color: '#60a5fa' },
+  { id: 'users', label: 'Users', icon: Shield, href: '/users', color: '#f472b6' },
   { id: 'settings', label: 'Settings', icon: Settings, href: '/settings', color: '#71717a' },
 ]
+
+const ADMIN_ONLY_IDS = new Set(['pipeline', 'skills', 'runner', 'users', 'settings'])
 
 interface SidebarProps {
   collapsed?: boolean
@@ -101,6 +106,44 @@ function NavItem({
 
 export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname()
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false)
+
+  useEffect(() => {
+    let active = true
+
+    const loadRole = async () => {
+      const token = await getSupabaseAccessToken()
+      if (!token) {
+        if (active) setIsSuperAdmin(false)
+        return
+      }
+
+      const response = await fetch('/api/auth/session', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (!active) return
+
+      if (!response.ok) {
+        setIsSuperAdmin(false)
+        return
+      }
+
+      const payload = await response.json()
+      setIsSuperAdmin(payload?.user?.role === 'super_admin')
+    }
+
+    loadRole()
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const visibleNavItems = useMemo(
+    () => NAV_ITEMS.filter((item) => isSuperAdmin || !ADMIN_ONLY_IDS.has(item.id)),
+    [isSuperAdmin]
+  )
 
   return (
     <>
@@ -144,7 +187,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
 
         {/* Nav items */}
         <div className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-          {NAV_ITEMS.map((item) => (
+          {visibleNavItems.map((item) => (
             <NavItem
               key={item.id}
               item={item}
@@ -198,7 +241,7 @@ export function Sidebar({ collapsed = false, mobileOpen = false, onMobileClose }
 
         {/* Nav items */}
         <div className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-          {NAV_ITEMS.map((item) => (
+          {visibleNavItems.map((item) => (
             <NavItem
               key={item.id}
               item={item}

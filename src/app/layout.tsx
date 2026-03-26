@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { DM_Sans, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
+import { SessionGate } from '@/components/auth/SessionGate'
 import '@/styles/globals.css'
 
 const heading = Space_Grotesk({ subsets: ['latin'], variable: '--font-heading' })
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${heading.variable} ${body.variable} ${mono.variable} bg-base text-text-primary font-body antialiased`}>
-        {children}
+        <SessionGate>{children}</SessionGate>
       </body>
     </html>
   )

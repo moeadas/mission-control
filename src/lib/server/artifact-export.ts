@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 import { slugifyFilePart } from '@/lib/artifacts'
+import { htmlToPlainText } from '@/lib/output-html'
 import { Artifact, ArtifactExport } from '@/lib/types'
 
 interface ExportArtifactInput {
@@ -37,14 +38,14 @@ function buildMetaLines(input: ExportArtifactInput) {
 }
 
 function getContentParagraphs(content?: string) {
-  return (content || 'No content was stored for this artifact.')
+  return htmlToPlainText(content || 'No content was stored for this artifact.')
     .split(/\n\s*\n/)
     .map((chunk) => chunk.replace(/\r/g, '').trim())
     .filter(Boolean)
 }
 
 function getBulletLines(content?: string) {
-  return (content || '')
+  return htmlToPlainText(content || '')
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean)
@@ -94,7 +95,7 @@ async function createXlsxBuffer(input: ExportArtifactInput) {
   })
 
   overview.mergeCells('A10:H18')
-  overview.getCell('A10').value = input.artifact.content || 'No content was stored for this artifact.'
+  overview.getCell('A10').value = htmlToPlainText(input.artifact.content) || 'No content was stored for this artifact.'
   overview.getCell('A10').alignment = { wrapText: true, vertical: 'top' }
   overview.getCell('A10').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFFFF' } }
   overview.getCell('A10').border = {

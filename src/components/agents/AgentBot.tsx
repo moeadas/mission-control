@@ -8,6 +8,8 @@ interface AgentBotProps {
   name: string
   avatar: string
   color: string
+  photoUrl?: string
+  variant?: 'default' | 'office'
   animation?: BotAnimation
   status?: 'active' | 'idle' | 'paused'
   size?: number
@@ -192,6 +194,8 @@ export function AgentBot({
   name,
   avatar,
   color,
+  photoUrl,
+  variant = 'default',
   animation = 'idle',
   status = 'active',
   size = 48,
@@ -199,6 +203,11 @@ export function AgentBot({
   className,
   onClick,
 }: AgentBotProps) {
+  const [imageFailed, setImageFailed] = React.useState(false)
+  React.useEffect(() => {
+    setImageFailed(false)
+  }, [photoUrl])
+
   const statusColor =
     status === 'active' ? '#2dd4bf' :
     status === 'idle' ? '#fbbf24' : '#52525b'
@@ -206,6 +215,8 @@ export function AgentBot({
   const glowOpacity =
     status === 'active' ? 0.25 :
     status === 'idle' ? 0.12 : 0
+
+  const isOfficeVariant = variant === 'office'
 
   return (
     <div
@@ -223,11 +234,13 @@ export function AgentBot({
           onClick && 'hover:scale-110'
         )}
         style={{
-          width: size + 4,
-          height: size + 4,
-          borderRadius: (size + 4) * 0.25,
-          background: `radial-gradient(circle at 50% 40%, ${color}${Math.round(glowOpacity * 255).toString(16).padStart(2, '0')}, transparent 70%)`,
-          boxShadow: status !== 'paused' ? `0 0 ${size * 0.3}px ${color}30` : undefined,
+          width: isOfficeVariant ? size : size + 4,
+          height: isOfficeVariant ? size : size + 4,
+          borderRadius: isOfficeVariant ? 0 : (size + 4) * 0.25,
+          background: isOfficeVariant
+            ? 'transparent'
+            : `radial-gradient(circle at 50% 40%, ${color}${Math.round(glowOpacity * 255).toString(16).padStart(2, '0')}, transparent 70%)`,
+          boxShadow: isOfficeVariant || status === 'paused' ? undefined : `0 0 ${size * 0.3}px ${color}30`,
         }}
       >
         {/* Status dot */}
@@ -239,8 +252,35 @@ export function AgentBot({
           }}
         />
 
-        {/* Robot face */}
-        <RobotFace color={color} size={size} animation={animation} />
+        {/* Portrait or default robot face */}
+        {photoUrl && !imageFailed ? (
+          <div
+            style={{
+              width: size,
+              height: size,
+              borderRadius: isOfficeVariant ? 0 : size * 0.24,
+              overflow: 'hidden',
+              border: isOfficeVariant ? 'none' : `1px solid ${color}35`,
+              background: isOfficeVariant ? 'transparent' : `linear-gradient(180deg, ${color}18, transparent)`,
+              filter: isOfficeVariant ? 'drop-shadow(0 8px 12px rgba(15, 23, 42, 0.22))' : undefined,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={photoUrl}
+              alt={name}
+              onError={() => setImageFailed(true)}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: isOfficeVariant ? 'contain' : 'cover',
+                display: 'block',
+              }}
+            />
+          </div>
+        ) : (
+          <RobotFace color={color} size={size} animation={animation} />
+        )}
 
         {/* Working dots */}
         {animation === 'working' && (

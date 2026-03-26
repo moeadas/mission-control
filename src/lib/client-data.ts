@@ -11,6 +11,7 @@ export interface KnowledgeAsset {
 
 export interface Client {
   id: string
+  ownerUserId?: string
   name: string
   industry: string
   website?: string

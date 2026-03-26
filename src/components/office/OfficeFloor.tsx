@@ -1,655 +1,512 @@
 'use client'
 
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { useAgentsStore } from '@/lib/agents-store'
-import { AgentBot } from '@/components/agents/AgentBot'
-import { Card } from '@/components/ui/Card'
-import { X, MapPin, Zap, Clock, ChevronDown, ChevronUp } from 'lucide-react'
-import { OFFICE_ROOMS } from '@/lib/agent-templates'
-import { DIVISION_LABELS, formatTimestamp } from '@/lib/bot-animations'
-import { getModelLabel, getProviderLabel } from '@/lib/providers'
-import { Agent } from '@/lib/types'
+import React, { useMemo, useState } from 'react'
+import { Building2, Clock3, MapPin, Users } from 'lucide-react'
 import { clsx } from 'clsx'
 
-const FLOOR_W = 960
-const FLOOR_H = 560
+import { AgentBot } from '@/components/agents/AgentBot'
+import { useAgentsStore } from '@/lib/agents-store'
+import { Agent } from '@/lib/types'
 
-// Enhanced zone room definitions with game-like styling
-const ZONES = [
-  {
-    id: 'mission-control',
-    name: 'Mission Control',
-    color: '#9b6dff',
-    x: 360, y: 20, w: 240, h: 130,
-    icon: '🎯',
-    desc: 'Orchestration hub — Iris commands from here',
-  },
+const ROOMS = [
   {
     id: 'client-services',
-    name: 'Client Suite',
-    color: '#4f8ef7',
-    x: 40, y: 180, w: 260, h: 180,
-    icon: '👔',
-    desc: 'Client relationships and briefing',
+    name: 'Client Services',
+    accent: '#5b8def',
+    frame: { left: '7%', top: '13%', width: '23%', height: '21%' },
+    seats: [
+      { left: '28%', top: '69%' },
+      { left: '50%', top: '69%' },
+      { left: '72%', top: '69%' },
+    ],
+  },
+  {
+    id: 'orchestration',
+    name: 'Mission Control',
+    accent: '#8b6af7',
+    frame: { left: '40%', top: '9%', width: '17%', height: '17%' },
+    seats: [
+      { left: '36%', top: '67%' },
+      { left: '64%', top: '67%' },
+    ],
   },
   {
     id: 'creative',
-    name: 'Creative Lab',
-    color: '#00d4aa',
-    x: 340, y: 180, w: 280, h: 180,
-    icon: '🎨',
-    desc: 'Design, copy, and visual production',
-  },
-  {
-    id: 'media',
-    name: 'Media Room',
-    color: '#ff5fa0',
-    x: 660, y: 180, w: 260, h: 180,
-    icon: '📊',
-    desc: 'Media planning and performance',
+    name: 'Creative Studio',
+    accent: '#16c7aa',
+    frame: { left: '65%', top: '13%', width: '23%', height: '21%' },
+    seats: [
+      { left: '26%', top: '69%' },
+      { left: '50%', top: '69%' },
+      { left: '74%', top: '69%' },
+    ],
   },
   {
     id: 'research',
-    name: 'Research Hub',
-    color: '#38bdf8',
-    x: 200, y: 390, w: 560, h: 110,
-    icon: '🔬',
-    desc: 'Insights, SEO, and competitive intelligence',
+    name: 'Research Lab',
+    accent: '#42b6f5',
+    frame: { left: '10%', top: '58%', width: '23%', height: '20%' },
+    seats: [{ left: '50%', top: '71%' }],
   },
-]
+  {
+    id: 'media',
+    name: 'Media Planning',
+    accent: '#ff8a6a',
+    frame: { left: '65%', top: '58%', width: '23%', height: '20%' },
+    seats: [
+      { left: '38%', top: '71%' },
+      { left: '62%', top: '71%' },
+    ],
+  },
+] as const
 
-// Floating particle component
-function FloatingParticle({ color, index }: { color: string; index: number }) {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [opacity, setOpacity] = useState(0)
-  
-  useEffect(() => {
-    // Random initial position
-    setPosition({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-    })
-    
-    // Animate opacity
-    const opacityTimer = setTimeout(() => setOpacity(0.4 + Math.random() * 0.3), index * 100)
-    
-    return () => clearTimeout(opacityTimer)
-  }, [index])
+const ROAM_PATHS = [
+  { left: '48%', top: '31%', animation: 'office-route-a 18s ease-in-out infinite' },
+  { left: '48%', top: '45%', animation: 'office-route-b 22s ease-in-out infinite' },
+  { left: '48%', top: '59%', animation: 'office-route-c 20s ease-in-out infinite' },
+  { left: '37%', top: '45%', animation: 'office-route-d 21s ease-in-out infinite' },
+] as const
 
-  const duration = 4 + Math.random() * 4
-  const delay = Math.random() * 3
+function Plant({ className }: { className: string }) {
+  return (
+    <div className={clsx('absolute', className)}>
+      <div className="relative mx-auto h-5 w-5">
+        <div className="absolute inset-x-[30%] top-0 h-3 rounded-full bg-[#78c7a0]" />
+        <div className="absolute left-0 top-[24%] h-3 w-3 rounded-full bg-[#68b68f]" />
+        <div className="absolute right-0 top-[24%] h-3 w-3 rounded-full bg-[#5da97f]" />
+      </div>
+      <div className="mx-auto h-2 w-1.5 rounded-b bg-[#846049]" />
+      <div className="mx-auto h-2.5 w-5 rounded-[6px] bg-[#5d6471]" />
+    </div>
+  )
+}
 
+function Desk({ className }: { className: string }) {
   return (
     <div
-      className="absolute rounded-full"
-      style={{
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        width: 2 + Math.random() * 2,
-        height: 2 + Math.random() * 2,
-        background: color,
-        boxShadow: `0 0 ${4 + Math.random() * 4}px ${color}`,
-        opacity,
-        animation: `float-particle ${duration}s ease-in-out ${delay}s infinite`,
-      }}
+      className={clsx(
+        'absolute rounded-[10px] border border-[#b99373] bg-[linear-gradient(180deg,#c99a6e,#b7865e)] shadow-[0_8px_14px_rgba(15,23,42,0.08)]',
+        className
+      )}
     />
   )
 }
 
-// Animated grid line
-function GridOverlay() {
+function Chair({ className }: { className: string }) {
+  return <div className={clsx('absolute rounded-[6px] border border-[#b8c2cd] bg-[#dbe2ea]', className)} />
+}
+
+function RoomFixtures({ roomId }: { roomId: string }) {
+  if (roomId === 'creative') {
+    return (
+      <>
+        <Desk className="left-[12%] top-[28%] h-10 w-[24%]" />
+        <Desk className="left-[38%] top-[28%] h-10 w-[24%]" />
+        <Desk className="right-[12%] top-[28%] h-10 w-[24%]" />
+        <Chair className="left-[22%] top-[54%] h-5 w-5" />
+        <Chair className="left-[48%] top-[54%] h-5 w-5" />
+        <Chair className="right-[22%] top-[54%] h-5 w-5" />
+      </>
+    )
+  }
+
+  if (roomId === 'client-services') {
+    return (
+      <>
+        <Desk className="left-[12%] top-[27%] h-10 w-[28%]" />
+        <Desk className="right-[12%] top-[27%] h-10 w-[24%]" />
+        <Desk className="left-[28%] top-[50%] h-11 w-[42%]" />
+        <Chair className="left-[18%] top-[54%] h-5 w-5" />
+        <Chair className="right-[18%] top-[54%] h-5 w-5" />
+      </>
+    )
+  }
+
+  if (roomId === 'orchestration') {
+    return (
+      <>
+        <Desk className="left-[25%] top-[31%] h-10 w-[50%]" />
+        <Chair className="left-[32%] top-[54%] h-5 w-5" />
+        <Chair className="right-[32%] top-[54%] h-5 w-5" />
+      </>
+    )
+  }
+
+  if (roomId === 'research') {
+    return (
+      <>
+        <Desk className="left-[14%] top-[30%] h-10 w-[30%]" />
+        <Desk className="right-[12%] top-[30%] h-10 w-[28%]" />
+      </>
+    )
+  }
+
   return (
-    <div 
-      className="absolute inset-0 opacity-[0.03] pointer-events-none"
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
-        `,
-        backgroundSize: '32px 32px',
-      }}
-    />
+    <>
+      <Desk className="left-[18%] top-[30%] h-10 w-[26%]" />
+      <Desk className="right-[14%] top-[30%] h-10 w-[24%]" />
+      <Desk className="left-[30%] top-[54%] h-11 w-[40%]" />
+      <Chair className="left-[28%] top-[61%] h-5 w-5" />
+      <Chair className="right-[28%] top-[61%] h-5 w-5" />
+    </>
   )
 }
 
-// Zone glow effect
-function ZoneGlow({ color, intensity = 0.08 }: { color: string; intensity?: number }) {
-  return (
-    <div
-      className="absolute inset-0 pointer-events-none"
-      style={{
-        background: `radial-gradient(ellipse at center, ${color}${Math.round(intensity * 255).toString(16).padStart(2, '0')} 0%, transparent 70%)`,
-      }}
-    />
-  )
-}
-
-function ZonePanel({
-  zone,
+function RoomBlock({
+  room,
   agents,
-  selectedAgent,
-  onSelectAgent,
-  onClose,
+  isSelected,
+  onSelect,
 }: {
-  zone: (typeof ZONES)[0]
+  room: (typeof ROOMS)[number]
   agents: Agent[]
-  selectedAgent: Agent | null
-  onSelectAgent: (id: string | null) => void
-  onClose: () => void
+  isSelected: boolean
+  onSelect: () => void
 }) {
-  const missions = useAgentsStore((state) => state.missions)
-  const [expanded, setExpanded] = useState(false)
+  const seatedAgents = agents.filter((agent) => agent.status !== 'idle')
 
   return (
-    <div
-      className="absolute w-80 slide-in-up z-20"
+    <button
+      type="button"
+      onClick={onSelect}
+      className={clsx(
+        'absolute rounded-[22px] border-[2px] bg-[#fdfdfb] text-left transition-all duration-200',
+        isSelected && 'shadow-[0_18px_34px_rgba(15,23,42,0.12)]'
+      )}
       style={{
-        top: 16,
-        right: 16,
+        ...room.frame,
+        borderColor: isSelected ? `${room.accent}99` : '#dde3ea',
+        boxShadow: isSelected
+          ? `0 18px 34px rgba(15,23,42,0.12), 0 0 0 3px ${room.accent}22`
+          : '0 12px 28px rgba(15,23,42,0.08)',
       }}
     >
-      <div
-        className="rounded-2xl overflow-hidden"
-        style={{
-          background: 'var(--bg-panel)',
-          border: `1px solid ${zone.color}40`,
-          boxShadow: `0 0 0 1px ${zone.color}15, 0 8px 40px rgba(0,0,0,0.6), 0 0 60px ${zone.color}20`,
-        }}
-      >
-        {/* Zone header */}
-        <div
-          className="px-4 py-3 flex items-center gap-3"
-          style={{ background: `${zone.color}12`, borderBottom: `1px solid ${zone.color}25` }}
-        >
-          <span className="text-xl">{zone.icon}</span>
-          <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-semibold text-[var(--text-primary)]">{zone.name}</h4>
-            <p className="text-[10px] text-[var(--text-dim)] font-mono">{zone.desc}</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-[var(--bg-elevated)] text-[var(--text-dim)] transition-colors"
+      <div className="absolute inset-[10px] rounded-[16px] border border-black/5 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafb_100%)]" />
+      <div className="absolute inset-[10px] rounded-[16px] bg-[linear-gradient(rgba(174,180,188,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(174,180,188,0.12)_1px,transparent_1px)] bg-[size:24px_24px]" />
+      <div className="relative h-full w-full p-4">
+        <div className="flex items-start justify-between">
+          <div
+            className="rounded-[14px] px-3.5 py-2.5 shadow-[0_10px_22px_rgba(15,23,42,0.08)] relative z-10"
+            style={{
+              border: `1px solid ${room.accent}66`,
+              background: `linear-gradient(180deg, color-mix(in srgb, ${room.accent} 12%, white 88%), color-mix(in srgb, ${room.accent} 6%, white 94%))`,
+              boxShadow: `0 10px 22px rgba(15,23,42,0.08), 0 0 0 1px ${room.accent}18`,
+            }}
           >
-            <X size={14} />
-          </button>
-        </div>
-
-        {/* Agent count */}
-        <div className="px-4 py-2 border-b border-[var(--border-subtle)]">
-          <div className="flex items-center gap-2">
-            <div
-              className="w-2 h-2 rounded-full"
+            <p
+              className="font-mono text-[12px] font-black uppercase tracking-[0.12em] whitespace-nowrap"
               style={{
-                background: agents.length > 0 ? '#00d4aa' : '#555b73',
-                boxShadow: agents.length > 0 ? '0 0 8px #00d4aa' : 'none',
+                color: room.accent,
+                textShadow: `0 0 10px ${room.accent}33, 0 0 18px ${room.accent}22`,
               }}
-            />
-            <span className="text-[11px] font-mono text-[var(--text-secondary)]">
-              {agents.length} agent{agents.length !== 1 ? 's' : ''} in this zone
-            </span>
+            >
+              {room.name}
+            </p>
+          </div>
+          <div className="rounded-[12px] border border-[#e6e9ee] bg-[#fbfaf6] px-2.5 py-1.5 text-[11px] font-medium text-slate-500 shadow-[0_4px_10px_rgba(15,23,42,0.04)] relative z-10">
+            {agents.length}
           </div>
         </div>
 
-        {/* Agent list */}
-        <div className="max-h-72 overflow-y-auto">
-          {agents.map((agent) => {
-            const agentMissions = missions.filter((m) => m.assignedAgentIds.includes(agent.id))
-            const isSelected = selectedAgent?.id === agent.id
-            return (
-              <div
-                key={agent.id}
-                onClick={() => onSelectAgent(isSelected ? null : agent.id)}
-                className={clsx(
-                  'px-4 py-3 border-b border-[var(--border-subtle)] cursor-pointer transition-all',
-                  isSelected ? 'bg-[var(--bg-elevated)]' : 'hover:bg-[var(--bg-elevated)]/50'
-                )}
-                style={isSelected ? { borderLeft: `3px solid ${agent.color}` } : {}}
-              >
-                <div className="flex items-center gap-3">
-                  <AgentBot
-                    name={agent.name}
-                    avatar={agent.avatar}
-                    color={agent.color}
-                    status={agent.status}
-                    animation={agent.status === 'active' && agent.currentTask ? 'working' : 'idle'}
-                    size={36}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-[var(--text-primary)]">{agent.name}</p>
-                    <p className="text-[10px] text-[var(--text-dim)] truncate">{agent.role}</p>
-                  </div>
-                  <div
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{
-                      background: agent.status === 'active' ? '#00d4aa' : agent.status === 'paused' ? '#ffd166' : '#555b73',
-                      boxShadow: agent.status === 'active' ? '0 0 6px #00d4aa' : 'none',
-                    }}
-                  />
-                </div>
+        <div className="absolute inset-x-[8%] top-[20%] h-[10%] rounded-[14px] bg-[linear-gradient(180deg,rgba(246,247,248,0.92),rgba(237,241,244,0.82))] opacity-90" />
+        <RoomFixtures roomId={room.id} />
+        <Plant className="bottom-[10%] right-[9%]" />
 
-                {/* Expanded details */}
-                {isSelected && (
-                  <div className="mt-3 space-y-2">
-                    {agent.bio && (
-                      <p className="text-[11px] text-[var(--text-secondary)] italic">"{agent.bio}"</p>
-                    )}
-                    {agent.currentTask && (
-                      <div className="p-2 rounded-lg" style={{ background: 'var(--bg-base)' }}>
-                        <p className="text-[9px] font-mono text-[var(--text-dim)] uppercase mb-1">Current task</p>
-                        <p className="text-[11px] text-[var(--text-secondary)]">{agent.currentTask}</p>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-4 text-[10px] font-mono text-[var(--text-dim)]">
-                      <span>{agentMissions.length} mission{agentMissions.length !== 1 ? 's' : ''}</span>
-                      <span>·</span>
-                      <span>{agent.workload || 0}% workload</span>
-                      <span>·</span>
-                      <span>{getProviderLabel(agent.provider)}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
-
-          {agents.length === 0 && (
-            <div className="px-4 py-6 text-center">
-              <p className="text-xs text-[var(--text-dim)]">No agents in this zone</p>
+        {room.seats.map((seat, index) => {
+          const agent = seatedAgents[index]
+          return (
+            <div
+              key={`${room.id}-seat-${index}`}
+              className="absolute"
+              style={{ left: seat.left, top: seat.top, transform: 'translate(-50%, -50%)' }}
+            >
+              <div className="absolute left-1/2 top-[84%] h-3 w-12 -translate-x-1/2 rounded-full bg-black/10 blur-[3px]" />
+              {agent ? (
+                <AgentBot
+                  name={agent.name}
+                  avatar={agent.avatar}
+                  photoUrl={agent.photoUrl}
+                  color={agent.color}
+                  variant="office"
+                  status={agent.status}
+                  animation={agent.status === 'active' ? 'working' : 'resting'}
+                  size={66}
+                />
+              ) : (
+                <div className="h-10 w-10 rounded-md border border-dashed border-black/12 bg-slate-100/70" />
+              )}
             </div>
-          )}
+          )
+        })}
+      </div>
+    </button>
+  )
+}
+
+function Rover({
+  agent,
+  index,
+  onSelect,
+}: {
+  agent: Agent
+  index: number
+  onSelect: () => void
+}) {
+  const path = ROAM_PATHS[index % ROAM_PATHS.length]
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className="absolute z-20"
+      style={{ left: path.left, top: path.top, animation: path.animation, transform: 'translate(-50%, -50%)' }}
+    >
+      <div className="relative">
+        <div className="absolute left-1/2 top-[84%] h-3 w-12 -translate-x-1/2 rounded-full bg-black/10 blur-[3px]" />
+        <AgentBot
+          name={agent.name}
+          avatar={agent.avatar}
+          photoUrl={agent.photoUrl}
+          color={agent.color}
+          variant="office"
+          status={agent.status}
+          animation="idle"
+          size={64}
+        />
+      </div>
+    </button>
+  )
+}
+
+function DetailRail({
+  room,
+  selectedAgent,
+  roomAgents,
+  onSelectAgent,
+}: {
+  room: (typeof ROOMS)[number] | null
+  selectedAgent: Agent | null
+  roomAgents: Agent[]
+  onSelectAgent: (agent: Agent) => void
+}) {
+  if (!room) return null
+
+  return (
+    <aside className="absolute right-5 top-5 bottom-5 z-30 w-[290px] overflow-y-auto rounded-[24px] border border-[#d7dce5] bg-white/92 p-5 shadow-[0_18px_42px_rgba(15,23,42,0.12)]">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: room.accent }}>
+            {room.name}
+          </p>
+          <p className="mt-1 text-xs text-slate-500">{roomAgents.length} assigned agents</p>
+        </div>
+        <div className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500">live room</div>
+      </div>
+
+      {selectedAgent ? (
+        <div className="mt-5 rounded-[20px] border border-slate-200 bg-slate-50 p-4">
+          <div className="flex items-center gap-3">
+            <AgentBot
+              name={selectedAgent.name}
+              avatar={selectedAgent.avatar}
+              photoUrl={selectedAgent.photoUrl}
+              color={selectedAgent.color}
+              variant="office"
+              status={selectedAgent.status}
+              animation={selectedAgent.status === 'active' ? 'working' : 'idle'}
+              size={54}
+            />
+            <div>
+              <h3 className="text-base font-semibold text-slate-900">{selectedAgent.name}</h3>
+              <p className="text-sm text-slate-500">{selectedAgent.role}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl bg-white px-3 py-2">
+              <p className="text-[10px] font-mono uppercase tracking-[0.12em] text-slate-400">Status</p>
+              <p className="mt-1 text-sm font-medium text-slate-700">{selectedAgent.status}</p>
+            </div>
+            <div className="rounded-2xl bg-white px-3 py-2">
+              <p className="text-[10px] font-mono uppercase tracking-[0.12em] text-slate-400">Workload</p>
+              <p className="mt-1 text-sm font-medium text-slate-700">{selectedAgent.workload || 0}%</p>
+            </div>
+          </div>
+
+          {selectedAgent.currentTask ? (
+            <p className="mt-4 rounded-2xl bg-white px-3 py-3 text-sm leading-relaxed text-slate-600">
+              {selectedAgent.currentTask}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="mt-5">
+        <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.14em] text-slate-400">Roster</p>
+        <div className="space-y-2">
+          {roomAgents.map((agent) => (
+            <button
+              key={agent.id}
+              type="button"
+              onClick={() => onSelectAgent(agent)}
+              className={clsx(
+                'flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-colors',
+                selectedAgent?.id === agent.id
+                  ? 'border-slate-300 bg-slate-50'
+                  : 'border-transparent bg-white hover:border-slate-200 hover:bg-slate-50'
+              )}
+            >
+              <AgentBot
+                name={agent.name}
+                avatar={agent.avatar}
+                photoUrl={agent.photoUrl}
+                color={agent.color}
+                variant="office"
+                status={agent.status}
+                animation={agent.status === 'active' ? 'working' : 'idle'}
+                size={34}
+              />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-slate-800">{agent.name}</p>
+                <p className="truncate text-xs text-slate-500">{agent.role}</p>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
-    </div>
+    </aside>
   )
 }
 
 export function OfficeFloor() {
   const agents = useAgentsStore((state) => state.agents)
-  const missions = useAgentsStore((state) => state.missions)
   const selectedAgentId = useAgentsStore((state) => state.selectedAgentId)
   const selectAgent = useAgentsStore((state) => state.selectAgent)
-  const [hoveredZone, setHoveredZone] = useState<string | null>(null)
-  const [pulseTime, setPulseTime] = useState(0)
-  const [time, setTime] = useState(new Date())
 
-  // Animation frame for smooth updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPulseTime((t) => t + 1)
-      setTime(new Date())
-    }, 100)
-    return () => clearInterval(interval)
-  }, [])
+  const [selectedRoomId, setSelectedRoomId] = useState<string>('creative')
 
-  const selectedAgent = agents.find((a) => a.id === selectedAgentId) || null
-
-  const agentsByZone = useMemo(
+  const selectedAgent = agents.find((agent) => agent.id === selectedAgentId) || null
+  const idleAgents = useMemo(() => agents.filter((agent) => agent.status === 'idle'), [agents])
+  const roomAgents = useMemo(
     () =>
-      agents.reduce<Record<string, Agent[]>>((acc, agent) => {
-        const zoneId = agent.position.room
-        acc[zoneId] = [...(acc[zoneId] || []), agent]
+      ROOMS.reduce<Record<string, Agent[]>>((acc, room) => {
+        acc[room.id] = agents.filter((agent) => agent.position.room === room.id)
         return acc
       }, {}),
     [agents]
   )
 
-  const activeCount = agents.filter((a) => a.status === 'active').length
-  const idleCount = agents.filter((a) => a.status === 'idle').length
-
-  const hoveredZoneData = hoveredZone
-    ? ZONES.find((z) => z.id === hoveredZone)
-    : null
+  const selectedRoom = ROOMS.find((room) => room.id === (selectedAgent?.position.room || selectedRoomId)) || ROOMS[0]
+  const selectedRoomAgents = roomAgents[selectedRoom.id] || []
 
   return (
-    <div
-      className="relative w-full rounded-2xl overflow-hidden"
-      style={{
-        background: 'linear-gradient(145deg, #080a12 0%, #0d1020 40%, #0a0d18 100%)',
-        border: '1px solid var(--border)',
-        minHeight: 580,
-      }}
-    >
-      {/* CSS for floating particles */}
+    <div className="relative h-full min-h-[780px] overflow-hidden rounded-[32px] border border-[#dadfe8] bg-[linear-gradient(180deg,#eef1f3_0%,#e6eaee_100%)] shadow-[0_24px_54px_rgba(15,23,42,0.12)]">
       <style>{`
-        @keyframes float-particle {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-          25% { transform: translate(10px, -15px) scale(1.2); opacity: 0.5; }
-          50% { transform: translate(-5px, -25px) scale(0.8); opacity: 0.4; }
-          75% { transform: translate(15px, -10px) scale(1.1); opacity: 0.6; }
+        @keyframes office-route-a {
+          0%, 100% { transform: translate(-50%, -50%) translate3d(0px, 0px, 0); }
+          24% { transform: translate(-50%, -50%) translate3d(76px, 0px, 0); }
+          52% { transform: translate(-50%, -50%) translate3d(76px, 68px, 0); }
+          76% { transform: translate(-50%, -50%) translate3d(-22px, 68px, 0); }
         }
-        @keyframes zone-pulse {
-          0%, 100% { opacity: 0.03; }
-          50% { opacity: 0.08; }
+        @keyframes office-route-b {
+          0%, 100% { transform: translate(-50%, -50%) translate3d(0px, 0px, 0); }
+          22% { transform: translate(-50%, -50%) translate3d(-82px, 0px, 0); }
+          48% { transform: translate(-50%, -50%) translate3d(-82px, -76px, 0); }
+          76% { transform: translate(-50%, -50%) translate3d(18px, -76px, 0); }
         }
-        @keyframes bot-float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-3px); }
+        @keyframes office-route-c {
+          0%, 100% { transform: translate(-50%, -50%) translate3d(0px, 0px, 0); }
+          25% { transform: translate(-50%, -50%) translate3d(84px, 0px, 0); }
+          50% { transform: translate(-50%, -50%) translate3d(84px, -70px, 0); }
+          78% { transform: translate(-50%, -50%) translate3d(-16px, -70px, 0); }
         }
-        .bot-float { animation: bot-float 2s ease-in-out infinite; }
+        @keyframes office-route-d {
+          0%, 100% { transform: translate(-50%, -50%) translate3d(0px, 0px, 0); }
+          25% { transform: translate(-50%, -50%) translate3d(110px, 0px, 0); }
+          50% { transform: translate(-50%, -50%) translate3d(110px, 44px, 0); }
+          76% { transform: translate(-50%, -50%) translate3d(0px, 44px, 0); }
+        }
       `}</style>
 
-      {/* Grid overlay */}
-      <GridOverlay />
-
-      {/* Ambient background gradients */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(ellipse 60% 40% at 20% 30%, rgba(155, 109, 255, 0.06) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 35% at 75% 60%, rgba(0, 212, 170, 0.05) 0%, transparent 45%),
-            radial-gradient(ellipse 40% 30% at 50% 80%, rgba(56, 189, 248, 0.04) 0%, transparent 40%)
-          `,
-        }}
-      />
-
-      {/* Floating particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 25 }).map((_, i) => (
-          <FloatingParticle
-            key={i}
-            color={ZONES[i % ZONES.length].color}
-            index={i}
-          />
-        ))}
+      <div className="absolute left-5 top-5 z-20 flex items-center gap-3 rounded-full border border-white/70 bg-white/85 px-4 py-3 shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
+        <Building2 size={16} className="text-slate-500" />
+        <span className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Virtual Office</span>
       </div>
 
-      {/* Floor plan SVG */}
-      <svg
-        viewBox={`0 0 ${FLOOR_W} ${FLOOR_H}`}
-        className="relative w-full h-auto"
-        style={{ display: 'block', minHeight: 580 }}
-      >
-        {/* Floor label and time */}
-        <text x={16} y={24} fill="#4a5068" fontSize={9} fontFamily="monospace" letterSpacing={3}>
-          AGENCY HQ — FLOOR 1
-        </text>
-        <text x={FLOOR_W - 16} y={24} fill="#4a5068" fontSize={9} fontFamily="monospace" textAnchor="end">
-          {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-        </text>
-
-        {/* Connection lines between zones */}
-        <path d="M 480 135 Q 200 135 170 270" stroke="#2a2f3d" strokeWidth={1} strokeDasharray="4 6" fill="none" opacity={0.5} />
-        <path d="M 480 135 Q 600 135 790 270" stroke="#2a2f3d" strokeWidth={1} strokeDasharray="4 6" fill="none" opacity={0.5} />
-        <path d="M 480 135 L 480 390" stroke="#2a2f3d" strokeWidth={1} strokeDasharray="4 6" fill="none" opacity={0.5} />
-
-        {/* Zones */}
-        {ZONES.map((zone) => {
-          const zoneAgents = agentsByZone[zone.id] || []
-          const isHovered = hoveredZone === zone.id
-          const hasActiveAgents = zoneAgents.some((a) => a.status === 'active')
-          const pulseIntensity = Math.sin(pulseTime * 0.04 + ZONES.indexOf(zone) * 1.2) * 0.5 + 0.5
-
-          return (
-            <g key={zone.id}>
-              {/* Zone ambient glow */}
-              {hasActiveAgents && (
-                <rect
-                  x={zone.x - 2}
-                  y={zone.y - 2}
-                  width={zone.w + 4}
-                  height={zone.h + 4}
-                  rx={14}
-                  fill={zone.color}
-                  opacity={0.02 + pulseIntensity * 0.03}
-                  style={{ filter: 'blur(12px)' }}
-                />
-              )}
-
-              {/* Hover glow effect */}
-              {isHovered && (
-                <rect
-                  x={zone.x - 4}
-                  y={zone.y - 4}
-                  width={zone.w + 8}
-                  height={zone.h + 8}
-                  rx={14}
-                  fill="none"
-                  stroke={zone.color}
-                  strokeWidth={2}
-                  opacity={0.6}
-                  style={{ filter: `blur(4px)` }}
-                />
-              )}
-
-              {/* Zone fill */}
-              <rect
-                x={zone.x}
-                y={zone.y}
-                width={zone.w}
-                height={zone.h}
-                rx={12}
-                fill={`${zone.color}06`}
-                stroke={zone.color}
-                strokeWidth={isHovered ? 1.5 : 0.8}
-                strokeOpacity={isHovered ? 0.7 : 0.35}
-                style={{ transition: 'all 0.3s ease' }}
-              />
-
-              {/* Zone header bar */}
-              <rect
-                x={zone.x}
-                y={zone.y}
-                width={zone.w}
-                height={32}
-                rx={12}
-                fill={`${zone.color}12`}
-                style={{ clipPath: 'inset(0 0 70% 0 round 12px)' }}
-              />
-
-              {/* Corner decorations */}
-              <circle cx={zone.x + 8} cy={zone.y + 8} r={3} fill={zone.color} opacity={0.8} />
-              <circle cx={zone.x + zone.w - 8} cy={zone.y + 8} r={2} fill={zone.color} opacity={0.4} />
-              <circle cx={zone.x + zone.w - 8} cy={zone.y + zone.h - 8} r={2} fill={zone.color} opacity={0.3} />
-
-              {/* Zone icon */}
-              <text
-                x={zone.x + 14}
-                y={zone.y + 22}
-                fontSize={14}
-                style={{ pointerEvents: 'none' }}
-              >
-                {zone.icon}
-              </text>
-
-              {/* Zone name */}
-              <text
-                x={zone.x + 36}
-                y={zone.y + 20}
-                fill={zone.color}
-                fontSize={10}
-                fontFamily="system-ui, sans-serif"
-                fontWeight={600}
-                style={{ pointerEvents: 'none' }}
-              >
-                {zone.name.toUpperCase()}
-              </text>
-
-              {/* Agent count badge */}
-              {zoneAgents.length > 0 && (
-                <g transform={`translate(${zone.x + zone.w - 32}, ${zone.y + 6})`}>
-                  <rect
-                    x={0} y={0} width={26} height={18}
-                    rx={9}
-                    fill={`${zone.color}25`}
-                  />
-                  <text
-                    x={13} y={13}
-                    textAnchor="middle"
-                    fill={zone.color}
-                    fontSize={9}
-                    fontFamily="monospace"
-                    fontWeight={600}
-                  >
-                    {zoneAgents.length}
-                  </text>
-                </g>
-              )}
-
-              {/* Invisible hover target */}
-              <rect
-                x={zone.x}
-                y={zone.y}
-                width={zone.w}
-                height={zone.h}
-                rx={12}
-                fill="transparent"
-                stroke="transparent"
-                strokeWidth={0}
-                style={{ cursor: 'pointer' }}
-                onMouseEnter={() => setHoveredZone(zone.id)}
-                onMouseLeave={() => setHoveredZone(null)}
-                onClick={() => setHoveredZone(hoveredZone === zone.id ? null : zone.id)}
-              />
-            </g>
-          )
-        })}
-
-        {/* Agents */}
-        {agents.map((agent) => {
-          const zone = ZONES.find((z) => z.id === agent.position.room)
-          const isSelected = agent.id === selectedAgentId
-          const zoneAgents = agentsByZone[agent.position.room] || []
-          const idxInZone = zoneAgents.indexOf(agent)
-          const countInZone = zoneAgents.length
-
-          if (!zone) return null
-
-          const anchor = { x: zone.x + zone.w / 2, y: zone.y + zone.h / 2 + 4 }
-          const spacing = 50
-          const totalWidth = countInZone * spacing
-          const startX = anchor.x - totalWidth / 2 + spacing / 2
-          const botX = startX + idxInZone * spacing
-          const botY = anchor.y + 10
-          const safeY = Math.min(botY, zone.y + zone.h - 60)
-
-          return (
-            <g
-              key={agent.id}
-              style={{ cursor: 'pointer' }}
-              onClick={() => selectAgent(isSelected ? null : agent.id)}
-              onMouseEnter={() => setHoveredZone(agent.position.room)}
-              onMouseLeave={() => setHoveredZone(null)}
-            >
-              {/* Selection ring */}
-              {isSelected && (
-                <circle
-                  cx={botX + 20}
-                  cy={safeY + 20}
-                  r={34}
-                  fill="none"
-                  stroke={agent.color}
-                  strokeWidth={1.5}
-                  opacity={0.7}
-                />
-              )}
-
-              {/* Active agent glow */}
-              {agent.status === 'active' && (
-                <circle
-                  cx={botX + 20}
-                  cy={safeY + 20}
-                  r={30}
-                  fill={agent.color}
-                  opacity={0.06}
-                  style={{ filter: 'blur(8px)' }}
-                />
-              )}
-
-              <g className="bot-float" style={{ animationDelay: `${idxInZone * 0.2}s` }}>
-                <foreignObject x={botX} y={safeY} width={42} height={46}>
-                  <div style={{ width: 42, height: 46 }}>
-                    <AgentBot
-                      name={agent.name}
-                      avatar={agent.avatar}
-                      color={agent.color}
-                      status={agent.status}
-                      animation={
-                        agent.status === 'active' && agent.currentTask ? 'working' :
-                        agent.status === 'idle' ? 'idle' :
-                        agent.status === 'paused' ? 'resting' : 'idle'
-                      }
-                      size={40}
-                    />
-                  </div>
-                </foreignObject>
-              </g>
-
-              {/* Agent name */}
-              <text
-                x={botX + 20}
-                y={safeY + 58}
-                textAnchor="middle"
-                fill={isSelected ? agent.color : '#6b7280'}
-                fontSize={9}
-                fontFamily="monospace"
-                fontWeight={600}
-              >
-                {agent.name}
-              </text>
-            </g>
-          )
-        })}
-
-        {/* Legend */}
-        <g transform="translate(16, 510)">
-          <circle cx={6} cy={6} r={4} fill="#00d4aa">
-            <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite" />
-          </circle>
-          <text x={16} y={9} fill="#6b7280" fontSize={8} fontFamily="monospace">{activeCount} active</text>
-          
-          <circle cx={76} cy={6} r={4} fill="#ffd166" opacity={0.6} />
-          <text x={86} y={9} fill="#6b7280" fontSize={8} fontFamily="monospace">{idleCount} idle</text>
-          
-          <text x={136} y={9} fill="#4a5068" fontSize={8} fontFamily="monospace">
-            {agents.length} total · Click zones to explore
-          </text>
-        </g>
-      </svg>
-
-      {/* Zone hover tooltip */}
-      {hoveredZoneData && !selectedAgent && (
-        <div
-          className="absolute slide-in-down"
-          style={{
-            bottom: 72,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 15,
-          }}
-        >
-          <div
-            className="flex items-center gap-3 px-5 py-3 rounded-full"
-            style={{
-              background: 'var(--bg-panel)',
-              border: `1px solid ${hoveredZoneData.color}40`,
-              boxShadow: `0 4px 24px rgba(0,0,0,0.5), 0 0 30px ${hoveredZoneData.color}15`,
-            }}
-          >
-            <span className="text-lg">{hoveredZoneData.icon}</span>
-            <div>
-              <p className="text-xs font-semibold" style={{ color: hoveredZoneData.color }}>
-                {hoveredZoneData.name}
-              </p>
-              <p className="text-[10px] text-[var(--text-dim)]">
-                {(agentsByZone[hoveredZoneData.id] || []).length} agent
-                {(agentsByZone[hoveredZoneData.id] || []).length !== 1 ? 's' : ''} · Click to explore
-              </p>
-            </div>
-          </div>
+      <div className="absolute left-5 bottom-5 z-20 flex items-center gap-4 rounded-full border border-white/70 bg-white/85 px-5 py-3 text-slate-500 shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
+        <div className="flex items-center gap-2 text-xs">
+          <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
+          <span>{agents.filter((agent) => agent.status === 'active').length} seated</span>
         </div>
-      )}
+        <div className="h-4 w-px bg-slate-300" />
+        <div className="flex items-center gap-2 text-xs">
+          <Clock3 size={13} />
+          <span>{idleAgents.length} roaming</span>
+        </div>
+        <div className="h-4 w-px bg-slate-300" />
+        <div className="flex items-center gap-2 text-xs">
+          <Users size={13} />
+          <span>{agents.length} total</span>
+        </div>
+      </div>
 
-      {/* Selected agent panel */}
-      {selectedAgent && (
-        <ZonePanel
-          zone={ZONES.find((z) => z.id === selectedAgent.position.room) || ZONES[0]}
-          agents={agentsByZone[selectedAgent.position.room] || []}
-          selectedAgent={selectedAgent}
-          onSelectAgent={(id) => selectAgent(id)}
-          onClose={() => selectAgent(null)}
-        />
-      )}
+      <div className="absolute right-5 bottom-5 z-20 flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-3 text-xs text-slate-500 shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
+        <MapPin size={13} />
+        <span>Idle agents move through corridors while active agents stay at desks</span>
+      </div>
+
+      <div className="absolute inset-y-0 left-0 right-[310px] overflow-hidden">
+        <div className="absolute left-[3.5%] top-[6%] h-[86%] w-[92%] rounded-[34px] border border-white/70 bg-[#f7f7f2] shadow-[0_18px_48px_rgba(15,23,42,0.10)]">
+          <div className="absolute inset-[1.1%] rounded-[28px] border border-[#e6e9ed] bg-[linear-gradient(180deg,#fbfbf8,#f1f3ef)]" />
+
+          <div className="absolute inset-[1.1%] rounded-[28px] bg-[linear-gradient(rgba(184,188,193,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(184,188,193,0.12)_1px,transparent_1px)] bg-[size:22px_22px] pointer-events-none" />
+
+          <div className="absolute left-[39%] top-[66.5%] h-[8.5%] w-[9%] rounded-[18px] border border-white/90 bg-[linear-gradient(180deg,#ffffff,#f1f4f6)] shadow-[0_10px_22px_rgba(15,23,42,0.06)]" />
+          <div className="absolute right-[39%] top-[66.5%] h-[8.5%] w-[9%] rounded-[18px] border border-white/90 bg-[linear-gradient(180deg,#ffffff,#f1f4f6)] shadow-[0_10px_22px_rgba(15,23,42,0.06)]" />
+          <Plant className="left-[43%] top-[68.5%]" />
+          <Plant className="left-[53%] top-[68.5%]" />
+
+          <div className="absolute left-[17.5%] top-[46%] h-[7%] w-[10%] rounded-[18px] border border-white/90 bg-[linear-gradient(180deg,#f4f7fb,#e7eef6)] shadow-[0_10px_22px_rgba(15,23,42,0.05)]" />
+          <div className="absolute right-[17.5%] top-[46%] h-[7%] w-[10%] rounded-[18px] border border-white/90 bg-[linear-gradient(180deg,#f4f7fb,#e7eef6)] shadow-[0_10px_22px_rgba(15,23,42,0.05)]" />
+
+          {ROOMS.map((room) => (
+            <RoomBlock
+              key={room.id}
+              room={room}
+              agents={roomAgents[room.id] || []}
+              isSelected={selectedRoom.id === room.id}
+              onSelect={() => {
+                setSelectedRoomId(room.id)
+                if (!selectedAgent || selectedAgent.position.room !== room.id) {
+                  selectAgent(null)
+                }
+              }}
+            />
+          ))}
+
+          {idleAgents.map((agent, index) => (
+            <Rover
+              key={agent.id}
+              agent={agent}
+              index={index}
+              onSelect={() => {
+                selectAgent(agent.id)
+                setSelectedRoomId(agent.position.room)
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <DetailRail
+        room={selectedRoom}
+        selectedAgent={selectedAgent}
+        roomAgents={selectedRoomAgents}
+        onSelectAgent={(agent) => {
+          selectAgent(agent.id)
+          setSelectedRoomId(agent.position.room)
+        }}
+      />
     </div>
   )
 }

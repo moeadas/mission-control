@@ -153,14 +153,14 @@ export function inferRoutingContext(input: {
 
   const rules = [
     { keywords: ['brand strategy', 'campaign strategy', 'position', 'messaging', 'strategy'], agentId: 'maya' },
-    { keywords: ['client', 'presentation', 'update', 'email', 'brief'], agentId: 'sage' },
-    { keywords: ['timeline', 'schedule', 'handoff', 'traffic', 'resourcing'], agentId: 'piper' },
-    { keywords: ['creative concept', 'creative direction', 'campaign concept', 'concept'], agentId: 'finn' },
-    { keywords: ['content calendar', 'caption', 'script', 'copy', 'content'], agentId: 'echo' },
+    { keywords: ['content calendar', 'caption', 'script', 'copy', 'content', 'carousel', 'instagram', 'linkedin post', 'social post', 'hook', 'cta'], agentId: 'echo' },
     { keywords: ['visual', 'design', 'asset', 'image', 'nano banana'], agentId: 'lyra' },
+    { keywords: ['creative concept', 'creative direction', 'campaign concept', 'concept'], agentId: 'finn' },
     { keywords: ['media plan', 'budget', 'channel', 'ads', 'forecast'], agentId: 'nova' },
     { keywords: ['excel', 'spreadsheet', 'kpi', 'pacing', 'budget sheet'], agentId: 'dex' },
     { keywords: ['research', 'competitor', 'trend', 'seo', 'audit'], agentId: 'atlas' },
+    { keywords: ['timeline', 'schedule', 'handoff', 'traffic', 'resourcing'], agentId: 'piper' },
+    { keywords: ['client brief', 'presentation', 'stakeholder update', 'status update', 'account update', 'client email', 'briefing'], agentId: 'sage' },
   ]
 
   const matchedRule = rules.find((rule) => rule.keywords.some((keyword) => lower.includes(keyword)))
@@ -211,7 +211,7 @@ export function inferPipeline(content: string, pipelines: any[]): PipelineHint |
 
   const pipelineKeywords: Record<string, { keywords: string[]; confidence: 'high' | 'medium' | 'low' }> = {
     'content-calendar': {
-      keywords: ['content calendar', 'social media content', 'content ideas', 'post copy', 'caption', 'hashtag', 'hook', 'instagram', 'linkedin', 'tiktok', 'facebook', 'twitter', 'social post', '30 day', 'visual brief'],
+      keywords: ['content calendar', 'posting schedule', 'editorial calendar', '30 day content', 'monthly content plan', 'calendar for content'],
       confidence: 'high',
     },
     'campaign-brief': {
@@ -219,7 +219,7 @@ export function inferPipeline(content: string, pipelines: any[]): PipelineHint |
       confidence: 'high',
     },
     'ad-creative': {
-      keywords: ['ad creative', 'advertising creative', 'ad copy', 'ad assets', 'banner ads', 'facebook ads', 'google ads', 'instagram ads', 'ad campaign', 'a/b test'],
+      keywords: ['ad creative', 'advertising creative', 'ad copy', 'ad assets', 'banner ads', 'facebook ads', 'google ads', 'instagram ads', 'ad campaign', 'a/b test', 'creative asset'],
       confidence: 'high',
     },
     'seo-audit': {
@@ -232,6 +232,14 @@ export function inferPipeline(content: string, pipelines: any[]): PipelineHint |
     },
     'media-plan': {
       keywords: ['media plan', 'media strategy', 'channel strategy', 'budget allocation', 'media buying', 'ad spend', 'channel mix', 'media schedule'],
+      confidence: 'high',
+    },
+    'strategy-brief': {
+      keywords: ['strategy brief', 'brand strategy', 'messaging strategy', 'positioning', 'strategic brief', 'brand platform'],
+      confidence: 'high',
+    },
+    'client-brief': {
+      keywords: ['client brief', 'briefing document', 'intake brief', 'onboarding brief', 'client onboarding'],
       confidence: 'high',
     },
   }

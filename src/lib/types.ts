@@ -15,6 +15,7 @@ export type AgentSpecialty =
   | 'research'
 export type BotAnimation = 'idle' | 'working' | 'thinking' | 'resting' | 'alert'
 export type AIProvider = 'ollama' | 'gemini'
+export type ProviderFallback = AIProvider | 'none'
 export type AgentModel =
   | 'llama3.2:latest'
   | 'llama3.1:latest'
@@ -37,6 +38,7 @@ export interface Agent {
   id: string
   name: string
   role: string
+  photoUrl?: string
   division: AgencyDivision
   specialty: AgentSpecialty
   unit: AgencyDivision
@@ -91,6 +93,7 @@ export interface AgentTemplate {
   id: string
   name: string
   role: string
+  photoUrl?: string
   division: AgencyDivision
   specialty: AgentSpecialty
   unit: AgencyDivision
@@ -135,6 +138,7 @@ export type DeliverableType =
 
 export interface Mission {
   id: string
+  ownerUserId?: string
   title: string
   summary: string
   deliverableType: DeliverableType
@@ -143,6 +147,12 @@ export interface Mission {
   campaignId?: string
   clientId?: string
   assignedAgentIds: string[]
+  leadAgentId?: string
+  collaboratorAgentIds?: string[]
+  pipelineId?: string
+  pipelineName?: string
+  qualityChecklist?: string[]
+  handoffNotes?: string
   assignedBy: string
   createdAt: string
   updatedAt: string
@@ -151,7 +161,7 @@ export interface Mission {
 }
 
 export type ArtifactStatus = 'draft' | 'ready' | 'delivered'
-export type ArtifactFormat = 'markdown' | 'docx' | 'pdf' | 'xlsx' | 'image' | 'link'
+export type ArtifactFormat = 'html' | 'markdown' | 'docx' | 'pdf' | 'xlsx' | 'image' | 'link'
 
 export interface ArtifactExport {
   id: string
@@ -174,13 +184,24 @@ export interface CreativeArtifactSpec {
   assetPath?: string
 }
 
+export interface ArtifactExecutionStep {
+  id: string
+  agentId: string
+  agentName: string
+  role: 'support' | 'lead' | 'quality'
+  title: string
+  summary: string
+}
+
 export interface Artifact {
   id: string
+  ownerUserId?: string
   title: string
   deliverableType: DeliverableType
   status: ArtifactStatus
   format: ArtifactFormat
   content?: string
+  renderedHtml?: string
   sourcePrompt?: string
   path?: string
   link?: string
@@ -191,6 +212,7 @@ export interface Artifact {
   agentId?: string
   exports?: ArtifactExport[]
   creative?: CreativeArtifactSpec
+  executionSteps?: ArtifactExecutionStep[]
   createdAt: string
   updatedAt: string
 }
@@ -200,6 +222,12 @@ export interface ProviderSetting {
   verified: boolean
   verifiedAt?: string
   model?: string
+}
+
+export interface ProviderRoutingSettings {
+  primaryProvider: AIProvider
+  fallbackProvider: ProviderFallback
+  useGeminiForThinking: boolean
 }
 
 export interface OllamaSettings extends ProviderSetting {
@@ -214,6 +242,7 @@ export interface GeminiSettings extends ProviderSetting {
 }
 
 export interface ProviderSettings {
+  routing: ProviderRoutingSettings
   ollama: OllamaSettings
   gemini: GeminiSettings
 }

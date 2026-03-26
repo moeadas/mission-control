@@ -1190,6 +1190,219 @@
           ]
         }
       ]
+    },
+    {
+      "id": "strategy-brief",
+      "name": "Strategy Brief",
+      "description": "Structured workflow for producing a high-quality brand or campaign strategy brief with research, positioning, and recommendations",
+      "version": "1.0",
+      "isDefault": true,
+      "estimatedDuration": "5 days",
+      "clientProfileFields": [
+        { "id": "brand_name", "label": "Brand Name", "type": "text", "required": true },
+        { "id": "industry", "label": "Industry", "type": "text", "required": true },
+        { "id": "product_service", "label": "Product / Service", "type": "textarea", "required": true },
+        { "id": "target_audience", "label": "Target Audience", "type": "textarea", "required": true },
+        { "id": "business_objectives", "label": "Business Objectives", "type": "textarea", "required": true },
+        { "id": "competitive_landscape", "label": "Competitive Landscape", "type": "textarea", "required": false },
+        { "id": "tone", "label": "Brand Tone", "type": "text", "required": false }
+      ],
+      "phases": [
+        {
+          "id": "intake",
+          "name": "Brief Intake",
+          "color": "#4f8ef7",
+          "activities": [
+            {
+              "id": "intake-1",
+              "name": "Clarify Strategic Objective",
+              "description": "Synthesize the task into a sharp strategic problem statement and success criteria",
+              "assignedRole": "client-services",
+              "inputs": ["client-brief"],
+              "outputs": ["strategic-objective"],
+              "checklist": [
+                "Business objective clarified",
+                "Decision to be made is explicit",
+                "Client context summarized",
+                "Audience context confirmed"
+              ],
+              "prompts": {
+                "en": "Clarify the strategic objective for {{brand_name}} in {{industry}}. Summarize the client situation, the core decision to solve, and the success criteria.",
+                "ar": "توضيح الهدف الاستراتيجي للعميل وتحديد معايير النجاح."
+              }
+            }
+          ]
+        },
+        {
+          "id": "insight",
+          "name": "Insight & Research",
+          "color": "#38bdf8",
+          "activities": [
+            {
+              "id": "insight-1",
+              "name": "Audience and Market Insight",
+              "description": "Surface audience motivations, category dynamics, and commercial implications",
+              "assignedRole": "research",
+              "inputs": ["strategic-objective"],
+              "outputs": ["insight-summary"],
+              "checklist": [
+                "Audience motivations captured",
+                "Category signals identified",
+                "Competitive context reflected",
+                "Commercial implications stated"
+              ],
+              "prompts": {
+                "en": "Create an insight summary for {{brand_name}}. Use {{target_audience}}, {{business_objectives}}, and {{competitive_landscape}} to identify meaningful audience and market insights.",
+                "ar": "إنشاء ملخص رؤى للجمهور والسوق."
+              }
+            }
+          ]
+        },
+        {
+          "id": "strategy",
+          "name": "Strategic Development",
+          "color": "#9b6dff",
+          "activities": [
+            {
+              "id": "strategy-1",
+              "name": "Build Positioning Direction",
+              "description": "Develop the recommended strategic angle, message territory, and differentiation logic",
+              "assignedRole": "brand-strategist",
+              "inputs": ["strategic-objective", "insight-summary"],
+              "outputs": ["positioning-direction"],
+              "checklist": [
+                "Strategic opportunity framed",
+                "Positioning direction drafted",
+                "Messaging territory identified",
+                "Recommendations grounded in client context"
+              ],
+              "prompts": {
+                "en": "Build a strategic positioning direction for {{brand_name}} using {{product_service}}, {{target_audience}}, {{business_objectives}}, and {{competitive_landscape}}.",
+                "ar": "بناء اتجاه تموضع استراتيجي ورسائل رئيسية."
+              }
+            }
+          ]
+        },
+        {
+          "id": "qa",
+          "name": "QA & Finalization",
+          "color": "#ffd166",
+          "activities": [
+            {
+              "id": "qa-1",
+              "name": "Internal Strategic QA",
+              "description": "Check the strategy for logic, clarity, client relevance, and presentation readiness",
+              "assignedRole": "traffic-manager",
+              "inputs": ["positioning-direction"],
+              "outputs": ["qa-strategy-notes"],
+              "checklist": [
+                "Logic is coherent",
+                "Sections are client-ready",
+                "Recommendations are actionable",
+                "No unsupported claims"
+              ],
+              "prompts": {
+                "en": "Review the strategy output for clarity, logic, actionability, and client readiness for {{brand_name}}.",
+                "ar": "مراجعة الاستراتيجية للتأكد من الوضوح والجاهزية للعميل."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "client-brief",
+      "name": "Client Brief",
+      "description": "Structured intake workflow for turning client information into a usable agency brief with strategy-ready context",
+      "version": "1.0",
+      "isDefault": true,
+      "estimatedDuration": "3 days",
+      "clientProfileFields": [
+        { "id": "brand_name", "label": "Brand Name", "type": "text", "required": true },
+        { "id": "industry", "label": "Industry", "type": "text", "required": true },
+        { "id": "product_service", "label": "Products / Services", "type": "textarea", "required": true },
+        { "id": "target_audience", "label": "Target Audience", "type": "textarea", "required": true },
+        { "id": "business_objectives", "label": "Business Objectives", "type": "textarea", "required": true },
+        { "id": "tone", "label": "Tone of Voice", "type": "text", "required": false },
+        { "id": "competitive_landscape", "label": "Competitive Landscape", "type": "textarea", "required": false }
+      ],
+      "phases": [
+        {
+          "id": "discovery",
+          "name": "Discovery",
+          "color": "#4f8ef7",
+          "activities": [
+            {
+              "id": "discovery-1",
+              "name": "Client Context Consolidation",
+              "description": "Consolidate company, audience, offer, and objective details into a clear intake summary",
+              "assignedRole": "client-services",
+              "inputs": ["raw-client-inputs"],
+              "outputs": ["client-context-summary"],
+              "checklist": [
+                "Company overview summarized",
+                "Offer and audience clarified",
+                "Business objective stated",
+                "Open questions surfaced if needed"
+              ],
+              "prompts": {
+                "en": "Create a concise intake summary for {{brand_name}} using {{industry}}, {{product_service}}, {{target_audience}}, and {{business_objectives}}.",
+                "ar": "إنشاء ملخص استيعاب أولي للعميل."
+              }
+            }
+          ]
+        },
+        {
+          "id": "strategy",
+          "name": "Strategic Framing",
+          "color": "#9b6dff",
+          "activities": [
+            {
+              "id": "strategy-1",
+              "name": "Message and Priority Framing",
+              "description": "Translate intake notes into agency-ready messaging priorities and strategic watchouts",
+              "assignedRole": "brand-strategist",
+              "inputs": ["client-context-summary"],
+              "outputs": ["messaging-priorities"],
+              "checklist": [
+                "Messaging priorities set",
+                "Strategic risks noted",
+                "Differentiators surfaced",
+                "Tone and positioning aligned"
+              ],
+              "prompts": {
+                "en": "Frame the messaging priorities for {{brand_name}} using {{tone}}, {{competitive_landscape}}, and {{business_objectives}}.",
+                "ar": "صياغة أولويات الرسائل والاعتبارات الاستراتيجية."
+              }
+            }
+          ]
+        },
+        {
+          "id": "finalization",
+          "name": "Finalization",
+          "color": "#00d4aa",
+          "activities": [
+            {
+              "id": "finalization-1",
+              "name": "Agency Brief Finalization",
+              "description": "Package the intake and strategic framing into a clean client brief for downstream teams",
+              "assignedRole": "traffic-manager",
+              "inputs": ["client-context-summary", "messaging-priorities"],
+              "outputs": ["final-client-brief"],
+              "checklist": [
+                "Core business context documented",
+                "Audience and offer summarized",
+                "Messaging priorities included",
+                "Ready for strategy, creative, or media teams"
+              ],
+              "prompts": {
+                "en": "Finalize an agency-ready client brief for {{brand_name}} using the intake summary and messaging priorities.",
+                "ar": "إعداد موجز عميل نهائي جاهز للوكالة."
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
