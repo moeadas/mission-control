@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when creating marketing personas, target audience profiles, or buyer personas for campaign planning and content strategy.",
+      "trigger": "Use this skillany time creating marketing personas, target audience profiles, or buyer personas for campaign planning and content strategy.",
       "context": "You are a consumer research specialist with expertise in audience segmentation, persona development, and consumer psychology.",
-      "instructions": "## Persona Creation Workflow\n\nBuild detailed audience personas:\n\n- [ ] 1. Research synthesis: Draw from {{research_sources}} to understand audience\n- [ ] 2. Demographic definition: Define demographics for {{persona_name}}\n- [ ] 3. Psychographic mapping: Identify values, attitudes, and lifestyle\n- [ ] 4. Behavioral analysis: Map media consumption, purchasing patterns\n- [ ] 5. Pain point identification: Define key challenges and motivations\n- [ ] 6. Journey mapping: Document awareness-to-loyalty journey\n\n## Inputs\n- Persona name: {{persona_name}}\n- Industry: {{industry}}\n- Research sources: {{research_sources}}",
+      "instructions": "## Audience Persona Creation\n\n1. **Research Synthesis** — Gather and analyze existing audience data\n   - ✓ Done when: Research is current and relevant\n\n2. **Demographic Definition** — Define core demographic characteristics\n   - ✓ Done when: Demographics are specific and actionable\n\n3. **Psychographic Mapping** — Identify values, attitudes, and lifestyle\n   - ✓ Done when: Psychographics feel human and real\n\n4. **Behavioral Analysis** — Map media and purchasing behaviors\n   - ✓ Done when: Behaviors are observable and measurable\n\n5. **Pain Point Identification** — Define key challenges and motivations\n   - ✓ Done when: Pain points are specific to role/context\n\n## Key Inputs\n- persona_name: Persona name or archetype\n- industry: Industry or market context\n- research_sources: Data sources for persona development\n- age_range: Target age range\n- primary_channel: Primary discovery channel\n\n## When Not to Use\nThis skill overlaps with: audience-research, audience-targeting. Use those instead when: you have persona data and need to apply it to targeting\n\n`personas` `audience` `targeting` `research`",
       "output_template": "## Audience Persona: {{persona_name}}\n\n### Persona Overview\n| Attribute | Details |\n|-----------|---------|\n| Name | {{persona_name}} |\n| Age range | |\n| Location | |\n| Income | |\n| Industry | {{industry}} |\n| Role | |\n\n### Demographics\n- **Education:**\n- **Family status:**\n- **Location type:**\n\n### Psychographics\n- **Values:**\n- **Attitudes:**\n- **Interests:**\n- **Lifestyle:**\n\n### Professional Context\n- **Job title:**\n- **Company size:**\n- **Key responsibilities:**\n- **Pain points:**\n\n### Media Consumption\n| Channel | Platform | Frequency |\n|---------|----------|-----------|\n| Social | | |\n| News | | |\n| Industry | | |\n\n### Purchasing Behavior\n- **Budget authority:**\n- **Purchase triggers:**\n- **Decision timeline:**\n\n### Content Preferences\n- **Format:**\n- **Tone:**\n- **Key messages:**"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Primary discovery channel"
     }
   ],
+  "inputs": [
+    {
+      "name": "persona_name",
+      "type": "string",
+      "required": true,
+      "description": "Persona name or archetype"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Industry or market context"
+    },
+    {
+      "name": "research_sources",
+      "type": "string",
+      "required": true,
+      "description": "Data sources for persona development"
+    },
+    {
+      "name": "age_range",
+      "type": "string",
+      "required": false,
+      "description": "Target age range"
+    },
+    {
+      "name": "primary_channel",
+      "type": "string",
+      "required": false,
+      "description": "Primary discovery channel"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,20 +120,18 @@
     }
   ],
   "checklist": [
-    "Persona is based on research, not assumptions",
-    "Demographics are specific and verifiable",
-    "Psychographics feel like a real person",
-    "Behaviors are observable actions",
-    "Pain points are tied to business context",
-    "Persona is useful for content and campaign planning"
+    "Research is current and relevant",
+    "Demographics are specific and actionable",
+    "Psychographics feel human and real",
+    "Behaviors are observable and measurable",
+    "Pain points are specific to role/context"
   ],
   "tools": [
     "spreadsheet",
     "presentation"
   ],
   "agents": [
-    "atlas",
-    "echo"
+    "maya"
   ],
   "pipelines": [
     "content-calendar"
@@ -108,12 +139,7 @@
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": [
-      "personas",
-      "audience",
-      "targeting",
-      "research"
-    ],
-    "lastUpdated": "2026-03-24"
+    "tags": [],
+    "lastUpdated": "2026-03-30"
   }
 }

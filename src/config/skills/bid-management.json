@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when managing bids for paid search (Google Ads) or display campaigns — to set, adjust, or optimize bid strategies to achieve target CPA, ROAS, or volume goals.",
+      "trigger": "Use this skillany time managing bids for paid search (google ads) or display campaigns — to set, adjust, or optimize bid strategies to achieve target cpa, roas, or volume goals.",
       "context": "You are a paid media bid strategist who manages bid strategies across platforms to maximize return while hitting performance targets.",
-      "instructions": "## Bid Management Workflow\n\n- [ ] 1. Audit current bids: Review current CPC/bid levels vs. performance\n- [ ] 2. Set objectives: Define target CPA, ROAS, or volume goals\n- [ ] 3. Choose strategy: Select manual CPC, Target CPA, Target ROAS, Maximize Conversions\n- [ ] 4. Segment by performance: Identify top-performing and underperforming keywords/audiences\n- [ ] 5. Adjust bids: Raise bids on high performers, lower or pause low performers\n- [ ] 6. Monitor pacing: Ensure spend is on track to hit daily/monthly targets\n- [ ] 7. Iterate: Refine bids based on early performance signals\n\n## Key Inputs\n- Campaign: {{campaign_name}}\n- Platform: {{platform}}\n- Target CPA: {{target_cpa}}\n- Target ROAS: {{target_roas}}\n- Budget: {{budget}}",
+      "instructions": "## Bid Management\n\n1. **Performance Audit** — Review current bids and performance metrics\n   - ✓ Done when: Current state is clear and documented\n\n2. **Strategy Selection** — Choose the appropriate bid strategy\n   - ✓ Done when: Strategy aligns with business objectives\n\n3. **Bid Adjustments** — Apply bid changes based on performance data\n   - ✓ Done when: Changes are evidence-based\n\n4. **Pacing Check** — Verify spend is on track\n   - ✓ Done when: Budget pacing is healthy\n\n5. **Iteration** — Refine based on early signals\n   - ✓ Done when: Bidding improves over time\n\n## Key Inputs\n- campaign_name: Campaign being managed\n- platform: Advertising platform (Google Ads, Meta, etc.)\n- target_cpa: Target cost per acquisition\n- target_roas: Target return on ad spend\n- budget: Campaign budget",
       "output_template": "## Bid Management Plan: {{campaign_name}}\n\n### Campaign Overview\n| Field | Value |\n|-------|-------|\n| Platform | {{platform}} |\n| Budget | {{budget}} |\n| Target CPA | {{target_cpa}} |\n| Target ROAS | {{target_roas}} |\n\n### Current Bid Status\n| Keyword/Audience | Current CPC | Current CPA | Target CPA | Status |\n|-----------------|-------------|-------------|------------|--------|\n| | | | | ✅ / ⚠️ |\n\n### Bid Adjustments\n| Keyword/Audience | Current bid | New bid | Reason |\n|-----------------|-------------|---------|--------|\n| | | | |\n\n### Pacing\n| Period | Budget | Expected spend | Status |\n|--------|--------|----------------|--------|\n| Today | | | |\n| This week | | | |\n| This month | | | |\n\n### Next Review\n| Date | Action |\n|------|--------|\n| | |"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Campaign budget"
     }
   ],
+  "inputs": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign being managed"
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "required": true,
+      "description": "Advertising platform (Google Ads, Meta, etc.)"
+    },
+    {
+      "name": "target_cpa",
+      "type": "string",
+      "required": false,
+      "description": "Target cost per acquisition"
+    },
+    {
+      "name": "target_roas",
+      "type": "string",
+      "required": false,
+      "description": "Target return on ad spend"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Campaign budget"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,19 +120,30 @@
     }
   ],
   "checklist": [
-    "Bid strategy aligns with campaign objective",
-    "Keywords/audiences are segmented by performance",
-    "Adjustments are evidence-based and proportional",
-    "Pacing is on track",
-    "Next review date is set"
+    "Current state is clear and documented",
+    "Strategy aligns with business objectives",
+    "Changes are evidence-based",
+    "Budget pacing is healthy",
+    "Bidding improves over time"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["paid-search", "display"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [],
+  "pipelines": [
+    "paid-search",
+    "display"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["paid-search", "bid-management", "google-ads", "optimization"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "paid-search",
+      "bid-management",
+      "google-ads",
+      "optimization"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

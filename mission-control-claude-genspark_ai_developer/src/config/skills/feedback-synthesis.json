@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "feedback-synthesis",
+  "name": "Feedback Synthesis",
+  "description": "Transforms client and stakeholder feedback into clear, actionable items that drive creative iteration, project improvements, and aligned deliverables without losing the core intent of the original feedback.",
+  "category": "client-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when synthesizing feedback from multiple stakeholders, preparing creative revision briefs, resolving conflicting feedback, or translating vague feedback into specific action items.",
+      "context": "You are a feedback synthesis specialist who distills multiple perspectives into clear, actionable direction. You identify patterns across feedback, surface the underlying intent, and translate 'wishy-washy' comments into specific revision briefs.",
+      "instructions": "## Feedback Synthesis Workflow\n\n- [ ] 1. Collect all feedback from all stakeholders\n- [ ] 2. Identify each piece of feedback with its source\n- [ ] 3. Look for patterns and consensus across sources\n- [ ] 4. Distinguish between feedback (observations) and direction (requests)\n- [ ] 5. Identify the underlying intent behind the feedback\n- [ ] 6. Consolidate into clear, specific action items\n- [ ] 7. Flag any conflicting feedback that needs resolution\n\n## Key Inputs\n- Feedback Sources: {{feedback_sources}}\n- Feedback Content: {{feedback_content}}\n- Original Brief: {{original_brief}}\n- Deliverable: {{deliverable}}",
+      "output_template": "## Feedback Synthesis Report\n\n### Feedback Sources\n| Source | Key Points |\n|--------|-----------|\n| | |\n\n### Consensus Themes\n| Theme | Sources | Frequency |\n|-------|---------|-----------|\n| | | |\n\n### Action Items\n| # | Action | Source | Priority |\n|---|--------|--------|----------|\n| | | |\n\n### Conflicting Feedback\n| Conflict | Position A | Position B | Resolution |\n|---------|-----------|-----------|----------|\n| | | | |\n\n### Revised Brief\n[Updated brief incorporating feedback]"
+    }
+  },
+  "variables": [
+    { "name": "feedback_sources", "type": "string", "required": true, "description": "Who provided feedback: stakeholder names, roles" },
+    { "name": "feedback_content", "type": "string", "required": true, "description": "The actual feedback provided, verbatim or summarized" },
+    { "name": "original_brief", "type": "string", "required": false, "description": "The original creative or project brief" },
+    { "name": "deliverable", "type": "string", "required": false, "description": "What deliverable the feedback relates to" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Collect all feedback", "action": "Gather feedback from all sources in one place", "verify": "No feedback is lost or missed" },
+      { "step": 2, "name": "Identify patterns", "action": "Find consensus themes and conflicting points", "verify": "Patterns are clearly identified" },
+      { "step": 3, "name": "Translate to actions", "action": "Convert vague feedback into specific revision actions", "verify": "Actions are specific and implementable" },
+      { "step": 4, "name": "Resolve conflicts", "action": "Mediate conflicting feedback with stakeholders", "verify": "All conflicts are resolved" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Sources: CMO ('make it more bold'), VP Brand ('too aggressive, pull back color'), Designer ('they want more contrast'). Content: 15 pieces of feedback on homepage redesign. Deliverable: Homepage hero banner.",
+      "output": "Synthesis: 3/4 sources want bolder, 1 wants subtler. True consensus: 'needs to stand out more' (all sources). Conflict: boldness vs. aggression — resolved by focusing on contrast and typography rather than brighter colors. Action item: Increase headline contrast, test 2 color variations with CMO approval before finalizing."
+    }
+  ],
+  "checklist": [
+    "All feedback sources are captured",
+    "Consensus themes are clearly identified",
+    "Conflicting feedback is explicitly called out and resolved",
+    "Vague feedback is translated into specific actions",
+    "Original intent is preserved",
+    "Action items are prioritized"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["client-management-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["feedback-synthesis", "creative-briefing", "revision-management", "client-communication"],
+    "lastUpdated": "2026-03-24"
+  }
+}

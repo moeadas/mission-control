@@ -2,29 +2,97 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "rapport-building",
   "name": "Rapport Building",
-  "description": "Creates strong personal connections with clients and stakeholders to build trust, foster open communication, and establish long-term professional relationships.",
+  "description": "Builds intentional relationship plans that increase trust, openness, and long-term partnership quality with clients and stakeholders.",
   "category": "client-management",
   "difficulty": "beginner",
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when starting a new client relationship, rebuilding a strained relationship, preparing for an important meeting, or building long-term partnership trust.",
-      "context": "You are a rapport-building specialist who helps establish genuine connections with clients. You understand that strong relationships are the foundation of successful agency-client partnerships.",
-      "instructions": "## Rapport Building Workflow\n\n- [ ] 1. Research the stakeholder: background, interests, communication style\n- [ ] 2. Find common ground and shared interests\n- [ ] 3. Demonstrate genuine interest and curiosity\n- [ ] 4. Build trust through consistency and reliability\n- [ ] 5. Navigate difficult moments with empathy\n- [ ] 6. Maintain the relationship over time\n\n## Key Inputs\n- Stakeholder: {{stakeholder}}\n- Relationship Stage: {{relationship_stage}} (new, existing, strained)\n- Context: {{context}}",
-      "output_template": "## Rapport Building Plan\n\n### Stakeholder Profile\n| Element | Details |\n|---------|---------|\n| Name | |\n| Role | |\n| Communication Style | |\n| Personal Interests | |\n| Professional Goals | |\n\n### Common Ground\n| Area | Details |\n|------|---------|\n| Shared Interests | |\n| Shared Experiences | |\n| Shared Goals | |\n\n### Approach\n- [ ] How to demonstrate genuine interest\n- [ ] Conversation starters\n- [ ] Key things to remember and follow up on\n\n### Relationship Goals\n| Goal | Timeline |\n|------|----------|\n| | |"
+      "trigger": "Use this skillany time starting new client relationships, repairing strained relationships, preparing for high-stakes stakeholder meetings, or strengthening long-term partnership trust.",
+      "context": "You are a senior client relationship strategist. You help teams build trust deliberately through preparation, listening, empathy, memory, consistency, and thoughtful follow-through rather than vague friendliness.",
+      "instructions": "## Rapport Building\n\n1. **Clarify relationship context** — Clarify relationship context\n   - ✓ Done when: Clarify relationship context is completed to a high standard\n\n2. **Map stakeholder priorities** — Map stakeholder priorities\n   - ✓ Done when: Map stakeholder priorities is completed to a high standard\n\n3. **Identify authentic common ground** — Identify authentic common ground\n   - ✓ Done when: Identify authentic common ground is completed to a high standard\n\n4. **Define reliability behaviors** — Define reliability behaviors\n   - ✓ Done when: Define reliability behaviors is completed to a high standard\n\n5. **Plan trust-building conversations** — Plan trust-building conversations\n   - ✓ Done when: Plan trust-building conversations is completed to a high standard\n\n6. **Capture maintenance signals** — Capture maintenance signals\n   - ✓ Done when: Capture maintenance signals is completed to a high standard\n\n## Key Inputs\n- stakeholder: Client or stakeholder name and role\n- relationship_stage: Current stage of the relationship: new, established, strained\n- context: Context: upcoming meeting, project kickoff, ongoing partnership",
+      "output_template": "## Rapport Building Plan\n\n### 1. Relationship Context\n| Element | Details |\n|---|---|\n| Stakeholder | |\n| Role / Influence | |\n| Relationship Stage | |\n| Current Trust Level | |\n| Strategic Importance | |\n\n### 2. Stakeholder Readout\n| Dimension | Insight |\n|---|---|\n| Communication style | |\n| Priorities / pressures | |\n| Trust drivers | |\n| Likely friction points | |\n\n### 3. Rapport Strategy\n- Authentic common ground:\n- Best opening approach:\n- Questions to ask:\n- What to remember and follow up on:\n\n### 4. Trust-Building Actions\n| Action | Timing | Why It Matters |\n|---|---|---|\n| | | |\n\n### 5. Relationship Maintenance Notes\n- Signals to watch:\n- Follow-up cadence:\n- Risks to avoid:"
     }
   },
   "variables": [
-    { "name": "stakeholder", "type": "string", "required": true, "description": "Client or stakeholder name and role" },
-    { "name": "relationship_stage", "type": "string", "required": false, "description": "Current stage of the relationship: new, established, strained" },
-    { "name": "context", "type": "string", "required": false, "description": "Context: upcoming meeting, project kickoff, ongoing partnership" }
+    {
+      "name": "stakeholder",
+      "type": "string",
+      "required": true,
+      "description": "Client or stakeholder name and role"
+    },
+    {
+      "name": "relationship_stage",
+      "type": "string",
+      "required": false,
+      "description": "Current stage of the relationship: new, established, strained"
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "required": false,
+      "description": "Context: upcoming meeting, project kickoff, ongoing partnership"
+    }
   ],
+  "inputs": [
+    {
+      "name": "stakeholder",
+      "type": "string",
+      "required": true,
+      "description": "Client or stakeholder name and role"
+    },
+    {
+      "name": "relationship_stage",
+      "type": "string",
+      "required": false,
+      "description": "Current stage of the relationship: new, established, strained"
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "required": false,
+      "description": "Context: upcoming meeting, project kickoff, ongoing partnership"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Research", "action": "Learn about the person's background and interests", "verify": "Information is accurate" },
-      { "step": 2, "name": "Find common ground", "action": "Identify shared interests or experiences", "verify": "Common ground is genuine" },
-      { "step": 3, "name": "Connect authentically", "action": "Demonstrate genuine interest in the person", "verify": "Connection feels authentic" },
-      { "step": 4, "name": "Maintain", "action": "Follow up and nurture the relationship over time", "verify": "Relationship is sustained" }
+      {
+        "step": 1,
+        "name": "Clarify relationship context",
+        "action": "Clarify relationship context",
+        "verify": "Clarify relationship context is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Map stakeholder priorities",
+        "action": "Map stakeholder priorities",
+        "verify": "Map stakeholder priorities is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Identify authentic common ground",
+        "action": "Identify authentic common ground",
+        "verify": "Identify authentic common ground is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Define reliability behaviors",
+        "action": "Define reliability behaviors",
+        "verify": "Define reliability behaviors is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Plan trust-building conversations",
+        "action": "Plan trust-building conversations",
+        "verify": "Plan trust-building conversations is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Capture maintenance signals",
+        "action": "Capture maintenance signals",
+        "verify": "Capture maintenance signals is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -34,20 +102,31 @@
     }
   ],
   "checklist": [
-    "Stakeholder's background and interests are researched",
-    "Communication style is identified",
-    "Common ground is identified and genuine",
-    "Approach is tailored to the individual",
-    "Follow-up items are noted and acted upon",
-    "Relationship is maintained over time"
+    "Clarify relationship context is completed to a high standard",
+    "Map stakeholder priorities is completed to a high standard",
+    "Identify authentic common ground is completed to a high standard",
+    "Define reliability behaviors is completed to a high standard",
+    "Plan trust-building conversations is completed to a high standard",
+    "Capture maintenance signals is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["client-management-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "sage"
+  ],
+  "pipelines": [
+    "client-management-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["rapport-building", "client-relations", "relationship-management", "trust"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "rapport-building",
+      "client-relations",
+      "relationship-management",
+      "trust"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

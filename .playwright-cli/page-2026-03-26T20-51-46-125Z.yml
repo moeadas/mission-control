@@ -1,0 +1,213 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - img [ref=e8]
+      - generic [ref=e10]:
+        - button "Refresh latest app version" [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+        - button "Switch to dark mode" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - button "Sign out" [ref=e20] [cursor=pointer]:
+          - img [ref=e21]
+        - paragraph [ref=e25]: 21:51
+    - generic [ref=e26]:
+      - navigation "Main navigation" [ref=e27]:
+        - generic [ref=e29]:
+          - generic [ref=e31]: MC
+          - generic [ref=e32]:
+            - paragraph [ref=e33]: Mission Control
+            - paragraph [ref=e34]: Agency HQ
+        - generic [ref=e35]:
+          - link "Dashboard" [ref=e36] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e39]
+            - generic [ref=e44]: Dashboard
+          - link "Virtual Office" [ref=e45] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e47]
+            - generic [ref=e51]: Virtual Office
+          - link "Agents" [ref=e52] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e54]
+            - generic [ref=e57]: Agents
+          - link "Clients" [ref=e58] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e60]
+            - generic [ref=e65]: Clients
+          - link "Tasks" [ref=e66] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e68]
+            - generic [ref=e71]: Tasks
+          - link "Analytics" [ref=e72] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e74]
+            - generic [ref=e76]: Analytics
+          - link "Outputs" [ref=e77] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e79]
+            - generic [ref=e82]: Outputs
+        - generic [ref=e84]:
+          - generic [ref=e86]: MC
+          - generic [ref=e87]:
+            - paragraph [ref=e88]: Agency Mode
+            - paragraph [ref=e89]: Iris · Online
+      - main [ref=e91]:
+        - generic [ref=e93]:
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - heading "Command Center" [level=1] [ref=e97]
+              - paragraph [ref=e98]: 1 agents active·1 clients·1 tasks running
+            - generic [ref=e99]:
+              - generic [ref=e100]:
+                - generic "Atlas — idle" [ref=e101]:
+                  - img "Atlas" [ref=e106]
+                - generic "Dex — idle" [ref=e107]:
+                  - img "Dex" [ref=e112]
+                - generic "Echo — idle" [ref=e113]:
+                  - img "Echo" [ref=e118]
+                - generic "Finn — idle" [ref=e119]:
+                  - img "Finn" [ref=e124]
+                - generic "Iris — active" [ref=e125]:
+                  - img "Iris" [ref=e130]
+                - generic "Lyra — idle" [ref=e131]:
+                  - img "Lyra" [ref=e136]
+              - button "All agents →" [ref=e138] [cursor=pointer]
+          - generic [ref=e139]:
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - paragraph [ref=e143]: Active Agents
+                - generic [ref=e144]:
+                  - generic [ref=e145]: "1"
+                  - generic [ref=e146]: /10
+              - img [ref=e148]
+            - generic [ref=e152]:
+              - generic [ref=e153]:
+                - paragraph [ref=e154]: Running Tasks
+                - generic [ref=e155]:
+                  - generic [ref=e156]: "1"
+                  - generic [ref=e157]: /3
+              - img [ref=e159]
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - paragraph [ref=e166]: Completed
+                - generic [ref=e168]: "2"
+              - img [ref=e170]
+            - generic [ref=e174]:
+              - generic [ref=e175]:
+                - paragraph [ref=e176]: On Task
+                - generic [ref=e178]: "10"
+              - img [ref=e180]
+            - generic [ref=e184]:
+              - generic [ref=e185]:
+                - paragraph [ref=e186]: Open Missions
+                - generic [ref=e187]:
+                  - generic [ref=e188]: "1"
+                  - generic [ref=e189]: /3
+              - img [ref=e191]
+          - generic [ref=e193]:
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]:
+                  - generic [ref=e197]:
+                    - heading "Active Team" [level=3] [ref=e198]
+                    - paragraph [ref=e199]: 1 active · 9 idle
+                  - button "View all →" [ref=e200] [cursor=pointer]
+                - button "Iris Iris Agency" [ref=e202] [cursor=pointer]:
+                  - img "Iris" [ref=e208]
+                  - generic [ref=e214]:
+                    - paragraph [ref=e215]: Iris
+                    - paragraph [ref=e216]: Agency
+              - generic [ref=e217]:
+                - generic [ref=e219]:
+                  - heading "Live Activity" [level=3] [ref=e222]
+                  - generic [ref=e223]: 2 events
+                - generic [ref=e224]:
+                  - generic [ref=e225]:
+                    - img "Iris" [ref=e231]
+                    - generic [ref=e232]:
+                      - generic [ref=e233]:
+                        - generic [ref=e234]: Iris
+                        - generic [ref=e235]: started
+                        - generic [ref=e236]: — routed launch narrative mission
+                      - paragraph [ref=e237]: Assigned Sage and Maya to shape Victory Genomics messaging.
+                    - generic [ref=e240]: 2026-03-26 21:49
+                  - generic [ref=e241]:
+                    - img "Atlas" [ref=e247]
+                    - generic [ref=e248]:
+                      - generic [ref=e249]:
+                        - generic [ref=e250]: Atlas
+                        - generic [ref=e251]: thinking
+                        - generic [ref=e252]: — surfaced competitor intelligence
+                      - paragraph [ref=e253]: Found recurring weak spots in panel-testing competitors versus whole-genome positioning.
+                    - generic [ref=e254]:
+                      - img [ref=e255]
+                      - generic [ref=e257]: 2026-03-26 21:49
+            - generic [ref=e258]:
+              - generic [ref=e259]:
+                - heading "Quick Actions" [level=3] [ref=e260]
+                - generic [ref=e261]:
+                  - button "Add Agent Bring a new agent online" [ref=e262] [cursor=pointer]:
+                    - img [ref=e264]
+                    - generic [ref=e267]:
+                      - generic [ref=e268]: Add Agent
+                      - text: Bring a new agent online
+                    - img [ref=e270]
+                  - button "Virtual Office See the team in action" [ref=e272] [cursor=pointer]:
+                    - img [ref=e274]
+                    - generic [ref=e278]:
+                      - generic [ref=e279]: Virtual Office
+                      - text: See the team in action
+                    - img [ref=e281]
+                  - button "New Mission Create a task from scratch" [ref=e283] [cursor=pointer]:
+                    - img [ref=e285]
+                    - generic [ref=e289]:
+                      - generic [ref=e290]: New Mission
+                      - text: Create a task from scratch
+                    - img [ref=e292]
+              - generic [ref=e294]:
+                - generic [ref=e295]:
+                  - heading "Mission Queue" [level=3] [ref=e296]
+                  - generic [ref=e297]: 1 active
+                - generic [ref=e298]:
+                  - generic [ref=e299] [cursor=pointer]:
+                    - generic [ref=e300]:
+                      - generic [ref=e301]:
+                        - paragraph [ref=e302]: "Instagram Carousel: Equine Karyotyping"
+                        - paragraph [ref=e303]: Victory Genomics · completed
+                      - generic [ref=e304]: 100%
+                    - generic [ref=e307]:
+                      - button "⏸" [ref=e308]
+                      - button "✓" [ref=e309]
+                      - button "✕" [ref=e310]
+                  - generic [ref=e311] [cursor=pointer]:
+                    - generic [ref=e312]:
+                      - generic [ref=e313]:
+                        - paragraph [ref=e314]: "Instagram Carousel: Equine Karyotyping"
+                        - paragraph [ref=e315]: Victory Genomics · completed
+                      - generic [ref=e316]: 100%
+                    - generic [ref=e319]:
+                      - button "⏸" [ref=e320]
+                      - button "✓" [ref=e321]
+                      - button "✕" [ref=e322]
+                  - generic [ref=e323] [cursor=pointer]:
+                    - generic [ref=e324]:
+                      - generic [ref=e325]:
+                        - paragraph [ref=e326]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                        - paragraph [ref=e327]: Victory Genomics · review
+                      - generic [ref=e328]: 75%
+                    - generic [ref=e331]:
+                      - button "⏸" [ref=e332]
+                      - button "✓" [ref=e333]
+                      - button "✕" [ref=e334]
+              - generic [ref=e335]:
+                - generic [ref=e336]:
+                  - heading "In Progress" [level=3] [ref=e337]
+                  - button "View all →" [ref=e338] [cursor=pointer]
+                - generic [ref=e340]:
+                  - generic [ref=e343]:
+                    - paragraph [ref=e344]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                    - paragraph [ref=e345]: Victory Genomics
+                  - generic [ref=e346]: 75%
+    - button "Open Iris chat" [ref=e347] [cursor=pointer]:
+      - img [ref=e348]

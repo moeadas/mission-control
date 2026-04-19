@@ -26,14 +26,37 @@ export function AgentCard({ agent, onEdit }: AgentCardProps) {
   const deleteAgent = useAgentsStore((state) => state.deleteAgent)
   const updateAgentStatus = useAgentsStore((state) => state.updateAgentStatus)
   const missions = useAgentsStore((state) => state.missions)
+  const artifacts = useAgentsStore((state) => state.artifacts)
   const statusCfg = STATUS_CONFIG[agent.status]
   const skills = Array.isArray(agent.skills) ? agent.skills : []
   const primaryOutputs = Array.isArray(agent.primaryOutputs) ? agent.primaryOutputs : []
-  const completedTasksCount = missions.filter((mission) => {
-    if (mission.status !== 'completed') return false
+  const completedMissionIds = new Set<string>()
+
+  for (const mission of missions) {
     const assignedAgentIds = Array.isArray(mission.assignedAgentIds) ? mission.assignedAgentIds : []
-    return mission.leadAgentId === agent.id || assignedAgentIds.includes(agent.id)
-  }).length
+    const agentWasAssigned = mission.leadAgentId === agent.id || assignedAgentIds.includes(agent.id)
+    const missionHasFinishedStatus = ['completed', 'review'].includes(mission.status)
+
+    if (agentWasAssigned && missionHasFinishedStatus) {
+      completedMissionIds.add(mission.id)
+    }
+  }
+
+  for (const artifact of artifacts) {
+    const missionId = artifact.missionId
+    if (!missionId) continue
+
+    const agentWasPrimary = artifact.agentId === agent.id
+    const agentWorkedExecution = Array.isArray(artifact.executionSteps)
+      ? artifact.executionSteps.some((step) => step.agentId === agent.id && step.status !== 'failed')
+      : false
+
+    if (agentWasPrimary || agentWorkedExecution) {
+      completedMissionIds.add(missionId)
+    }
+  }
+
+  const completedTasksCount = completedMissionIds.size
 
   const [timeAgo, setTimeAgo] = useState('')
 

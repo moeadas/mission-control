@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when selecting or evaluating marketing channels for a campaign — to choose the right mix of channels that will reach the target audience effectively within budget.",
+      "trigger": "Use this skillany time selecting or evaluating marketing channels for a campaign — to choose the right mix of channels that will reach the target audience effectively within budget.",
       "context": "You are a media strategist who selects channels based on audience behavior data, channel effectiveness benchmarks, and campaign objectives to build an optimal channel mix.",
-      "instructions": "## Channel Selection Workflow\n\n- [ ] 1. Define objectives: Brand awareness, consideration, conversion, retention\n- [ ] 2. Know the audience: Where does the target audience spend time online/offline?\n- [ ] 3. Assess channel fit: Evaluate each channel against audience and objectives\n- [ ] 4. Consider budget: Match channel ambitions to realistic budget\n- [ ] 5. Build the mix: Select primary, secondary, and supporting channels\n- [ ] 6. Plan attribution: How will performance be tracked across channels?\n- [ ] 7. Document rationale: Explain why each channel was chosen or rejected\n\n## Key Inputs\n- Target audience: {{target_audience}}\n- Campaign objectives: {{objectives}}\n- Budget: {{budget}}\n- Time period: {{time_period}}\n- Available channels: {{available_channels}}",
+      "instructions": "## Channel Selection\n\n1. **Audience Profiling** — Understand where the audience spends time\n   - ✓ Done when: Channel habits are understood\n\n2. **Channel Assessment** — Evaluate each channel against criteria\n   - ✓ Done when: Assessment is evidence-based\n\n3. **Mix Building** — Build the channel mix with primary and supporting roles\n   - ✓ Done when: Mix is coherent and achievable\n\n4. **Attribution Planning** — Plan how performance will be measured\n   - ✓ Done when: Attribution approach is clear\n\n## Key Inputs\n- campaign_name: Campaign or initiative name\n- target_audience: Target audience definition\n- objectives: Campaign objectives\n- budget: Available budget\n- time_period: Campaign time period\n- available_channels: Channels being considered",
       "output_template": "## Channel Selection: {{campaign_name}}\n\n### Selection Criteria\n| Criterion | Weight | Notes |\n|-----------|--------|-------|\n| Audience reach | | |\n| Audience relevance | | |\n| Cost efficiency | | |\n| Conversion potential | | |\n| Brand fit | | |\n\n### Audience Channel Habits\n| Channel | Audience usage | Relevance score |\n|---------|---------------|----------------|\n| | | |\n\n### Channel Evaluation\n| Channel | Selected? | Rationale | Expected CPM/CPA |\n|---------|-----------|----------|----------------|\n| | | | |\n\n### Recommended Channel Mix\n| Channel | Role | Budget allocation | Expected contribution |\n|---------|------|-----------------|--------------------|\n| | Primary | | |\n| | Secondary | | |\n| | Supporting | | |\n\n### Attribution Approach\n**How performance will be tracked:**\n**Cross-touchpoint visibility:**\n\n### Channels Rejected\n| Channel | Reason for rejection |\n|---------|-------------------|\n| | |"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Channels being considered"
     }
   ],
+  "inputs": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign or initiative name"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience definition"
+    },
+    {
+      "name": "objectives",
+      "type": "string",
+      "required": true,
+      "description": "Campaign objectives"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Available budget"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Campaign time period"
+    },
+    {
+      "name": "available_channels",
+      "type": "string",
+      "required": false,
+      "description": "Channels being considered"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,20 +126,28 @@
     }
   ],
   "checklist": [
-    "Channel selection is driven by audience data",
-    "All relevant channels were evaluated",
-    "Mix includes primary, secondary, and supporting channels",
-    "Budget is realistic for the selected mix",
-    "Attribution approach is planned",
-    "Rationale for rejection is documented"
+    "Channel habits are understood",
+    "Assessment is evidence-based",
+    "Mix is coherent and achievable",
+    "Attribution approach is clear"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["media-strategy"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [],
+  "pipelines": [
+    "media-strategy"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["media", "channel-selection", "strategy", "planning"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "media",
+      "channel-selection",
+      "strategy",
+      "planning"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

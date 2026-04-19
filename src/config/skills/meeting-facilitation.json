@@ -2,58 +2,159 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "meeting-facilitation",
   "name": "Meeting Facilitation",
-  "description": "Leading productive meetings that achieve clear outcomes, engage participants, and respect everyone's time. From kickoffs to brainstorms to retrospectives — meetings that actually move work forward.",
+  "description": "Designs and runs meetings that move decisions forward, keep stakeholders aligned, and prevent wasted time.",
   "category": "project-management",
   "difficulty": "intermediate",
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when facilitating meetings, workshops, brainstorms, retrospectives, or any group session. Essential for kickoffs, strategic planning sessions, creative reviews, and stakeholder alignment.",
-      "context": "You are a meeting facilitation specialist who keeps discussions focused, ensures all voices are heard, and drives toward clear outcomes. You manage time, energy, and dynamics skillfully.",
-      "instructions": "## Meeting Facilitation Workflow\n\n- [ ] 1. Define meeting purpose and desired outcomes\n- [ ] 2. Create and share clear agenda\n- [ ] 3. Set ground rules and expectations\n- [ ] 4. Facilitate discussion with time management\n- [ ] 5. Capture decisions and action items\n- [ ] 6. Follow up with summary and next steps\n\n## Key Inputs\n- Meeting Type: {{type}}\n- Participants: {{participants}}\n- Purpose: {{purpose}}\n- Duration: {{duration}}\n- Key Topics: {{topics}}",
-      "output_template": "## Meeting Plan\n\n### Meeting Overview\n| Element | Details |\n|---------|---------|\n| Type | |\n| Date/Duration | |\n| Participants | |\n| Location/Link | |\n\n### Desired Outcomes\n| Outcome | Success Criteria |\n|---------|----------------|\n| | |\n\n### Agenda\n| Time | Topic | Owner | Desired Outcome |\n|------|-------|-------|----------------|\n| | | | |\n\n### Ground Rules\n1. \n2. \n3. \n\n### During Meeting\n| Item | Capture |\n|------|--------|\n| Decisions | |\n| Action Items | |\n| Parking Lot | |\n\n### Follow-Up\n| Item | Details |\n|------|--------|\n| Summary Sent | ☐ |\n| Action Items Tracked | ☐ |\n| Next Meeting Set | ☐ |"
+      "trigger": "Use this skillany time structuring meetings, facilitating workshops, leading alignment sessions, or improving meeting effectiveness around decisions or collaboration.",
+      "context": "You are a facilitation specialist. You make meetings purposeful, structured, and decision-oriented while managing participation and clarity.",
+      "instructions": "## Meeting Facilitation\n\n1. **Define meeting purpose** — Define meeting purpose\n   - ✓ Done when: Define meeting purpose is completed to a high standard\n\n2. **Choose attendees** — Choose attendees\n   - ✓ Done when: Choose attendees is completed to a high standard\n\n3. **Structure agenda around decisions** — Structure agenda around decisions\n   - ✓ Done when: Structure agenda around decisions is completed to a high standard\n\n4. **Prepare facilitation moves** — Prepare facilitation moves\n   - ✓ Done when: Prepare facilitation moves is completed to a high standard\n\n5. **Guide discussion and close** — Guide discussion and close\n   - ✓ Done when: Guide discussion and close is completed to a high standard\n\n6. **Document outcomes** — Document outcomes\n   - ✓ Done when: Document outcomes is completed to a high standard\n\n## Key Inputs\n- type: Type: kickoff, brainstorm, review, retrospective\n- participants: List of participants and roles\n- purpose: Meeting purpose and goals\n- duration: Meeting duration\n- topics: Key topics to cover",
+      "output_template": "## Meeting Facilitation Plan\n\n### 1. Meeting Objective\n| Element | Definition |\n|---|---|\n| Meeting purpose | |\n| Decision / outcome needed | |\n| Required attendees | |\n| Time limit | |\n\n### 2. Agenda\n| Segment | Purpose | Owner | Time |\n|---|---|---|---|\n| | | | |\n\n### 3. Facilitation Notes\n- Key prompts:\n- Likely tension points:\n- How to handle disagreement:\n- Decision method:\n\n### 4. Closeout\n- Decisions made:\n- Owners assigned:\n- Follow-up items:\n- Open issues:"
     }
   },
   "variables": [
-    { "name": "type", "type": "string", "required": true, "description": "Type: kickoff, brainstorm, review, retrospective" },
-    { "name": "participants", "type": "string", "required": true, "description": "List of participants and roles" },
-    { "name": "purpose", "type": "string", "required": true, "description": "Meeting purpose and goals" },
-    { "name": "duration", "type": "string", "required": false, "description": "Meeting duration" },
-    { "name": "topics", "type": "string", "required": false, "description": "Key topics to cover" }
+    {
+      "name": "type",
+      "type": "string",
+      "required": true,
+      "description": "Type: kickoff, brainstorm, review, retrospective"
+    },
+    {
+      "name": "participants",
+      "type": "string",
+      "required": true,
+      "description": "List of participants and roles"
+    },
+    {
+      "name": "purpose",
+      "type": "string",
+      "required": true,
+      "description": "Meeting purpose and goals"
+    },
+    {
+      "name": "duration",
+      "type": "string",
+      "required": false,
+      "description": "Meeting duration"
+    },
+    {
+      "name": "topics",
+      "type": "string",
+      "required": false,
+      "description": "Key topics to cover"
+    }
   ],
+  "inputs": [
+    {
+      "name": "type",
+      "type": "string",
+      "required": true,
+      "description": "Type: kickoff, brainstorm, review, retrospective"
+    },
+    {
+      "name": "participants",
+      "type": "string",
+      "required": true,
+      "description": "List of participants and roles"
+    },
+    {
+      "name": "purpose",
+      "type": "string",
+      "required": true,
+      "description": "Meeting purpose and goals"
+    },
+    {
+      "name": "duration",
+      "type": "string",
+      "required": false,
+      "description": "Meeting duration"
+    },
+    {
+      "name": "topics",
+      "type": "string",
+      "required": false,
+      "description": "Key topics to cover"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Define purpose", "action": "Clarify outcomes and success criteria", "verify": "Purpose is clear and achievable" },
-      { "step": 2, "name": "Create agenda", "action": "Build structured agenda with time allocations", "verify": "Agenda supports outcomes" },
-      { "step": 3, "name": "Share prep", "action": "Send agenda and pre-work in advance", "verify": "Participants are prepared" },
-      { "step": 4, "name": "Facilitate", "action": "Guide discussion, manage time, capture outputs", "verify": "Meeting stays on track" },
-      { "step": 5, "name": "Document", "action": "Record decisions and action items", "verify": "Nothing falls through cracks" },
-      { "step": 6, "name": "Follow up", "action": "Send summary with clear next steps", "verify": "Accountability is clear" }
+      {
+        "step": 1,
+        "name": "Define meeting purpose",
+        "action": "Define meeting purpose",
+        "verify": "Define meeting purpose is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Choose attendees",
+        "action": "Choose attendees",
+        "verify": "Choose attendees is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Structure agenda around decisions",
+        "action": "Structure agenda around decisions",
+        "verify": "Structure agenda around decisions is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Prepare facilitation moves",
+        "action": "Prepare facilitation moves",
+        "verify": "Prepare facilitation moves is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Guide discussion and close",
+        "action": "Guide discussion and close",
+        "verify": "Guide discussion and close is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Document outcomes",
+        "action": "Document outcomes",
+        "verify": "Document outcomes is completed to a high standard"
+      }
     ]
   },
   "examples": [
-    { "input": "Facilitate a creative brief kickoff meeting with the client, strategist, and creative team.", "output": "Meeting plan with agenda, facilitation notes, and follow-up template." },
-    { "input": "Lead a quarterly retrospective for a 10-person project team to identify process improvements.", "output": "Retrospective facilitation guide with exercises and action item template." }
+    {
+      "input": "Facilitate a creative brief kickoff meeting with the client, strategist, and creative team.",
+      "output": "Meeting plan with agenda, facilitation notes, and follow-up template."
+    },
+    {
+      "input": "Lead a quarterly retrospective for a 10-person project team to identify process improvements.",
+      "output": "Retrospective facilitation guide with exercises and action item template."
+    }
   ],
   "checklist": [
-    "Clear purpose and outcomes defined",
-    "Agenda shared in advance",
-    "Right participants invited",
-    "Ground rules established",
-    "Time managed throughout",
-    "All voices heard",
-    "Decisions documented",
-    "Action items have owners",
-    "Summary sent within 24 hours",
-    "Next steps scheduled"
+    "Define meeting purpose is completed to a high standard",
+    "Choose attendees is completed to a high standard",
+    "Structure agenda around decisions is completed to a high standard",
+    "Prepare facilitation moves is completed to a high standard",
+    "Guide discussion and close is completed to a high standard",
+    "Document outcomes is completed to a high standard"
   ],
-  "tools": ["document", "presentation"],
-  "agents": ["nova"],
+  "tools": [
+    "document",
+    "presentation"
+  ],
+  "agents": [
+    "iris"
+  ],
   "pipelines": [],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["facilitation", "meetings", "workshops", "brainstorm", "retrospective"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "facilitation",
+      "meetings",
+      "workshops",
+      "brainstorm",
+      "retrospective"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

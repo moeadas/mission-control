@@ -1,0 +1,14 @@
+{
+  "name": "seo-audit",
+  "description": "Updated test",
+  "prompts": {
+    "en": {
+      "trigger": "Test"
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-03-25"
+  },
+  "id": "seo-audit"
+}

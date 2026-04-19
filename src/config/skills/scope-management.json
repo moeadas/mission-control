@@ -2,29 +2,97 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "scope-management",
   "name": "Scope Management",
-  "description": "Controls project scope and change requests to prevent creep, ensure projects stay on time and on budget, and maintain healthy client relationships through clear boundaries.",
+  "description": "Defines, protects, and evolves project scope so teams can control delivery quality, resource use, and client expectations without creating unnecessary friction.",
   "category": "client-management",
   "difficulty": "intermediate",
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when managing change requests, handling scope creep, defining project boundaries, or renegotiating scope with clients.",
-      "context": "You are a scope management specialist who protects project health while maintaining client relationships. You know how to say 'yes and' instead of just 'no,' and how to make scope changes profitable rather than painful.",
-      "instructions": "## Scope Management Workflow\n\n- [ ] 1. Define and document the project scope clearly upfront\n- [ ] 2. Establish a change control process\n- [ ] 3. Evaluate any new request against scope\n- [ ] 4. Quantify the impact (time, cost, resources)\n- [ ] 5. Present options: decline, absorb, or change order\n- [ ] 6. Document agreed scope changes formally\n- [ ] 7. Monitor throughout the project\n\n## Key Inputs\n- Current Scope: {{current_scope}}\n- Change Request: {{change_request}}\n- Contract/Terms: {{contract_terms}}",
-      "output_template": "## Scope Change Request\n\n### Request\n| Element | Details |\n|---------|---------|\n| Requested By | |\n| Date | |\n| Description | |\n\n### Scope Impact Assessment\n| Impact Area | Assessment |\n|-------------|------------|\n| Timeline | |\n| Budget | |\n| Resources | |\n| Other Projects | |\n\n### Options\n| Option | Impact | Client Agreement |\n|--------|--------|-----------------|\n| Decline (within scope) | None | Client accepts original scope |\n| Absorb (courtesy) | [impact] | No additional charge |\n| Change Order | [impact + fee] | Client approves additional cost |\n\n### Resolution\n[Agreed approach and next steps]"
+      "trigger": "Use this skillany time defining scope, handling change requests, controlling scope creep, clarifying deliverables, or aligning stakeholders around project boundaries.",
+      "context": "You are a delivery and account management specialist. You manage scope as both an operational and relationship discipline, keeping work commercially healthy while preserving trust.",
+      "instructions": "## Scope Management\n\n1. **Define business objective** — Define business objective\n   - ✓ Done when: Define business objective is completed to a high standard\n\n2. **Clarify scope boundaries** — Clarify scope boundaries\n   - ✓ Done when: Clarify scope boundaries is completed to a high standard\n\n3. **Identify scope-creep risks** — Identify scope-creep risks\n   - ✓ Done when: Identify scope-creep risks is completed to a high standard\n\n4. **Create change-control path** — Create change-control path\n   - ✓ Done when: Create change-control path is completed to a high standard\n\n5. **Prepare client communication** — Prepare client communication\n   - ✓ Done when: Prepare client communication is completed to a high standard\n\n6. **Monitor scope health** — Monitor scope health\n   - ✓ Done when: Monitor scope health is completed to a high standard\n\n## Key Inputs\n- current_scope: Current agreed project scope\n- change_request: The new request or change being evaluated\n- contract_terms: Contract terms related to scope changes",
+      "output_template": "## Scope Management Framework\n\n### 1. Scope Summary\n| Element | Definition |\n|---|---|\n| Objective | |\n| Included Deliverables | |\n| Exclusions | |\n| Key Assumptions | |\n| Dependencies | |\n\n### 2. Scope Pressure Points\n| Risk / Trigger | Likely Impact | Early Warning Sign |\n|---|---|---|\n| | | |\n\n### 3. Change Control Approach\n| Step | Action | Owner |\n|---|---|---|\n| Request captured | | |\n| Impact assessed | | |\n| Decision made | | |\n| Scope updated | | |\n\n### 4. Client Communication Notes\n- How to frame scope boundaries:\n- How to explain tradeoffs:\n- How to present options:\n\n### 5. Ongoing Scope Health\n- Signals to monitor:\n- Review cadence:\n- Escalation trigger:"
     }
   },
   "variables": [
-    { "name": "current_scope", "type": "string", "required": true, "description": "Current agreed project scope" },
-    { "name": "change_request", "type": "string", "required": true, "description": "The new request or change being evaluated" },
-    { "name": "contract_terms", "type": "string", "required": false, "description": "Contract terms related to scope changes" }
+    {
+      "name": "current_scope",
+      "type": "string",
+      "required": true,
+      "description": "Current agreed project scope"
+    },
+    {
+      "name": "change_request",
+      "type": "string",
+      "required": true,
+      "description": "The new request or change being evaluated"
+    },
+    {
+      "name": "contract_terms",
+      "type": "string",
+      "required": false,
+      "description": "Contract terms related to scope changes"
+    }
   ],
+  "inputs": [
+    {
+      "name": "current_scope",
+      "type": "string",
+      "required": true,
+      "description": "Current agreed project scope"
+    },
+    {
+      "name": "change_request",
+      "type": "string",
+      "required": true,
+      "description": "The new request or change being evaluated"
+    },
+    {
+      "name": "contract_terms",
+      "type": "string",
+      "required": false,
+      "description": "Contract terms related to scope changes"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Assess request", "action": "Determine if request is inside or outside scope", "verify": "Scope boundary is clear" },
-      { "step": 2, "name": "Quantify impact", "action": "Calculate time, cost, and resource impact", "verify": "Impact is accurate" },
-      { "step": 3, "name": "Present options", "action": "Offer clear options with trade-offs", "verify": "Options are reasonable" },
-      { "step": 4, "name": "Document agreement", "action": "Formalize any scope change in writing", "verify": "Agreement is documented" }
+      {
+        "step": 1,
+        "name": "Define business objective",
+        "action": "Define business objective",
+        "verify": "Define business objective is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Clarify scope boundaries",
+        "action": "Clarify scope boundaries",
+        "verify": "Clarify scope boundaries is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Identify scope-creep risks",
+        "action": "Identify scope-creep risks",
+        "verify": "Identify scope-creep risks is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Create change-control path",
+        "action": "Create change-control path",
+        "verify": "Create change-control path is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Prepare client communication",
+        "action": "Prepare client communication",
+        "verify": "Prepare client communication is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Monitor scope health",
+        "action": "Monitor scope health",
+        "verify": "Monitor scope health is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -34,20 +102,32 @@
     }
   ],
   "checklist": [
-    "Original scope is documented clearly",
-    "Change control process is followed",
-    "Impact is quantified accurately",
-    "Client is presented with options, not just a 'no'",
-    "Agreement is documented formally",
-    "Scope changes are tracked throughout the project"
+    "Define business objective is completed to a high standard",
+    "Clarify scope boundaries is completed to a high standard",
+    "Identify scope-creep risks is completed to a high standard",
+    "Create change-control path is completed to a high standard",
+    "Prepare client communication is completed to a high standard",
+    "Monitor scope health is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["client-management-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "piper",
+    "sage"
+  ],
+  "pipelines": [
+    "client-management-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["scope-management", "change-control", "project-management", "client-management"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "scope-management",
+      "change-control",
+      "project-management",
+      "client-management"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

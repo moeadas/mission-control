@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "process-improvement",
+  "name": "Process Improvement",
+  "description": "Continuously improves operational and creative processes by identifying inefficiencies, designing better workflows, and implementing changes that make agency work more effective.",
+  "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when reviewing and improving agency workflows, reducing cycle times, eliminating waste, or implementing continuous improvement practices.",
+      "context": "You are a process improvement specialist who uses lean and agile principles to make work flow better. You identify waste, bottlenecks, and friction points and redesign processes for maximum efficiency.",
+      "instructions": "## Process Improvement Workflow\n\n- [ ] 1. Define the process to improve and its current performance\n- [ ] 2. Map the current process step-by-step\n- [ ] 3. Identify waste: unnecessary steps, handoffs, delays, rework\n- [ ] 4. Design an improved process\n- [ ] 5. Implement the change with the team\n- [ ] 6. Measure improvement and iterate\n\n## Key Inputs\n- Process: {{process}}\n- Current Pain Points: {{current_pain_points}}\n- Performance Data: {{performance_data}}\n- Improvement Goal: {{improvement_goal}}",
+      "output_template": "## Process Improvement Report\n\n### Process: [Name]\n\n### Current Process Map\n| Step | Owner | Avg Time | Waste Type |\n|------|-------|---------|-----------|\n| | | | |\n\n### Waste Identified\n| Waste Type | Location | Impact | Root Cause |\n|-----------|---------|--------|-----------|\n| | | | |\n\n### Improved Process\n| Step | Owner | Avg Time | Improvement |\n|------|-------|---------|------------|\n| | | | |\n\n### Expected Impact\n- Cycle Time Reduction: \n- Cost Savings: \n- Quality Improvement: \n\n### Implementation Plan\n| Step | Owner | Timeline |\n|------|-------|----------|\n| | | |"
+    }
+  },
+  "variables": [
+    { "name": "process", "type": "string", "required": true, "description": "The process or workflow to improve" },
+    { "name": "current_pain_points", "type": "string", "required": true, "description": "Known pain points or inefficiencies in the current process" },
+    { "name": "performance_data", "type": "string", "required": false, "description": "Current cycle time, error rates, throughput data" },
+    { "name": "improvement_goal", "type": "string", "required": false, "description": "Target improvement: cycle time reduction, cost savings, quality improvement" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Map process", "action": "Document the current process step by step", "verify": "Map reflects how work actually happens" },
+      { "step": 2, "name": "Identify waste", "action": "Find unnecessary steps, delays, and rework", "verify": "All wastes are identified" },
+      { "step": 3, "name": "Design improvement", "action": "Create a better process design", "verify": "Improvement is feasible and sustainable" },
+      { "step": 4, "name": "Implement", "action": "Roll out improved process with team buy-in", "verify": "Team is aligned and trained" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Process: Creative brief to final delivery. Pain points: briefs are vague, revisions happen late, approvals are slow. Goal: Reduce cycle time by 30%.",
+      "output": "Identified waste: (1) vague briefs cause 3+ revision rounds, (2) legal review happens too late, (3) no single point of contact for approvals. Improved process: mandatory brief review gate, legal involved at concept stage, dedicated approval owner. Expected: 35% cycle time reduction."
+    }
+  ],
+  "checklist": [
+    "Process is mapped accurately",
+    "Waste is identified with root cause analysis",
+    "Improvement is grounded in data",
+    "Team is involved in designing the solution",
+    "Implementation has a clear plan",
+    "KPIs are defined to measure success"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["operations-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["process-improvement", "lean", "workflow", "efficiency", "agency-ops"],
+    "lastUpdated": "2026-03-24"
+  }
+}

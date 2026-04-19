@@ -1,0 +1,72 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - button "Refresh latest app version" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - button "Switch to light mode" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+        - paragraph [ref=e24]: 23:01
+    - generic [ref=e25]:
+      - navigation "Main navigation" [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e30]: MC
+          - generic [ref=e31]:
+            - paragraph [ref=e32]: Mission Control
+            - paragraph [ref=e33]: Agency HQ
+        - generic [ref=e34]:
+          - link "Dashboard" [ref=e35] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e37]
+            - generic [ref=e42]: Dashboard
+          - link "Virtual Office" [ref=e43] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e45]
+            - generic [ref=e49]: Virtual Office
+          - link "Agents" [ref=e50] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e52]
+            - generic [ref=e55]: Agents
+          - link "Clients" [ref=e56] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e58]
+            - generic [ref=e63]: Clients
+          - link "Tasks" [ref=e64] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e67]
+            - generic [ref=e70]: Tasks
+          - link "Pipeline" [ref=e71] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e73]
+            - generic [ref=e77]: Pipeline
+          - link "Skills" [ref=e78] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e80]
+            - generic [ref=e83]: Skills
+          - link "Runner" [ref=e84] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e86]
+            - generic [ref=e88]: Runner
+          - link "Analytics" [ref=e89] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e91]
+            - generic [ref=e93]: Analytics
+          - link "Outputs" [ref=e94] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e96]
+            - generic [ref=e99]: Outputs
+          - link "Settings" [ref=e100] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e102]
+            - generic [ref=e105]: Settings
+        - generic [ref=e107]:
+          - generic [ref=e109]: MC
+          - generic [ref=e110]:
+            - paragraph [ref=e111]: Agency Mode
+            - paragraph [ref=e112]: Iris · Online
+      - main [ref=e114]:
+        - paragraph [ref=e117]: Loading task…
+    - button "Open Iris chat" [ref=e118] [cursor=pointer]:
+      - img [ref=e119]
+  - alert [ref=e121]

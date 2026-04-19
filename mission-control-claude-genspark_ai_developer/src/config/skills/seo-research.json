@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "seo-research",
+  "name": "SEO Research",
+  "description": "Conducts in-depth research to inform search engine optimization strategies, including competitor analysis, SERP feature identification, and content opportunity mapping.",
+  "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when developing an SEO strategy, researching competitive positioning, identifying content opportunities, or analyzing search engine result page features.",
+      "context": "You are an SEO research specialist with deep knowledge of search engine algorithms, SERP features, and organic search strategy. You translate research into actionable optimization roadmaps.",
+      "instructions": "## SEO Research Workflow\n\n- [ ] 1. Define research objectives and target keywords\n- [ ] 2. Analyze current ranking positions and traffic share\n- [ ] 3. Identify SERP features appearing for target queries (featured snippets, People Also Ask, etc.)\n- [ ] 4. Research competitor ranking profiles and content strategies\n- [ ] 5. Map content opportunities by keyword and intent\n- [ ] 6. Identify link-building and authority-building opportunities\n- [ ] 7. Synthesize into an SEO roadmap\n\n## Key Inputs\n- Target Keywords: {{target_keywords}}\n- Website URL: {{website_url}}\n- Competitors: {{competitors}}\n- Research Focus: {{research_focus}} (content, technical, links, all)",
+      "output_template": "## SEO Research Report\n\n### Keyword Landscape\n| Keyword | Current Rank | Search Volume | SERP Features | Opportunity |\n|---------|-------------|---------------|---------------|-------------|\n| | | | | |\n\n### Competitor Analysis\n| Competitor | Domain Rating | Top Keywords | Content Type | Backlinks |\n|------------|--------------|--------------|-------------|-----------|\n| | | | | |\n\n### SERP Feature Opportunities\n| Feature | Target Keywords | Difficulty | Content Approach |\n|---------|----------------|-----------|-------------------|\n| | | | |\n\n### Content Gaps\n- [Topics competitors rank for that we don't]\n\n### Recommendations\n- [ ] Prioritized SEO actions"
+    }
+  },
+  "variables": [
+    { "name": "target_keywords", "type": "string", "required": true, "description": "Primary keywords or topics to research" },
+    { "name": "website_url", "type": "string", "required": false, "description": "Client website URL for position tracking" },
+    { "name": "competitors", "type": "string", "required": false, "description": "Known competitor URLs to analyze" },
+    { "name": "research_focus", "type": "string", "required": false, "description": "Primary focus: content, technical, links, or comprehensive" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Map keyword landscape", "action": "Identify current rankings and SERP features", "verify": "All target keywords are covered" },
+      { "step": 2, "name": "Analyze competitors", "action": "Research what competitors rank for and how", "verify": "Competitor analysis is thorough" },
+      { "step": 3, "name": "Identify gaps", "action": "Find content and keyword opportunities", "verify": "Gaps represent real opportunities" },
+      { "step": 4, "name": "Synthesize", "action": "Create actionable SEO roadmap", "verify": "Recommendations are prioritized" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Target keywords: project management software, team collaboration tools. Website: oursite.com. Competitors: asana.com, monday.com, clickup.com.",
+      "output": "Identified 12 high-opportunity keywords with featured snippet potential. Competitors dominate informational content; strongest opportunity is comparison and use-case content. 8 'People Also Ask' questions unanswered by competitors. Estimated 34% traffic growth opportunity with targeted content."
+    }
+  ],
+  "checklist": [
+    "All target keywords are researched",
+    "SERP features are identified and mapped",
+    "Competitor strengths and weaknesses are documented",
+    "Content gaps are specific and actionable",
+    "Link opportunities are identified",
+    "Recommendations are prioritized by impact"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["seo-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["seo", "search", "content-research", "competitive-analysis"],
+    "lastUpdated": "2026-03-24"
+  }
+}

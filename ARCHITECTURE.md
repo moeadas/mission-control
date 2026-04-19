@@ -10,6 +10,21 @@ Current practical model:
 - task execution now supports autonomous multi-agent runs inside the chat request lifecycle
 - when a suitable pipeline exists, the task runner executes activities phase by phase and passes outputs between agents
 - outputs are rendered in the app as designed HTML artifacts and can still be exported as DOCX, PDF, or XLSX
+- Iris intelligence is now driven by a shared deliverable registry instead of separate first-match keyword lists
+- Iris chat now has a client-side pending-brief state machine for missing intake fields, so follow-up answers advance a live brief instead of being misread as brand-new tasks
+- authenticated app-state sync no longer pushes `conversations` back to the server on every message change, so live Iris briefing state is not destabilized by background rehydration during intake
+- pending Iris briefs are now treated as local ephemeral UI state for server sync purposes and are restored from the local Zustand store after chat-shell remounts, so a session refresh or shell re-render does not bounce the intake flow back to question one
+- missions now seed an initial squad from the shared deliverable registry as soon as Iris locks the brief, and the chat polls task execution state during active runs so progress, current phase, and office activity do not stay frozen at the initial client placeholder
+- `/api/chat` now bootstraps a real relational `tasks` row plus `task_assignments` as soon as a briefed mission starts execution, so signed-in live runs can be polled immediately instead of waiting for a later shared-state sync
+- workflow updates now also mirror progress/status back onto the `tasks` row, and client hydration preserves recent in-flight local missions if a stale `/api/state` payload arrives mid-run
+- built-in pipelines now prefer the on-disk config definitions over stale database copies, which keeps structured-output metadata like batching and JSON contracts current during live execution
+- Iris chat only persists outputs when the response clears the quality gate, so broken partials and routing boilerplate do not masquerade as deliverables in the Outputs view
+- the dashboard and mission console now expose a lightweight game loop:
+  - urgency
+  - next best action
+  - reward framing
+  - mission complexity
+  - routing confidence
 
 ## Tech Stack
 
@@ -17,7 +32,7 @@ Current practical model:
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS with custom design system
 - **Animation**: CSS animations, Framer Motion patterns
-- **State**: Zustand (localStorage persistence)
+- **State**: Zustand (local persistence for structural app state) + Supabase-backed shared state
 - **Icons**: Lucide React
 - **AI Providers**: Ollama (local), Google Gemini
 
@@ -103,6 +118,96 @@ Accent Pink:       #f472b6
 │  (AI: Ollama, Gemini)                                     │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+## Shared Deliverable Intelligence
+
+The app now has a shared deliverable intelligence layer in:
+
+- `src/lib/deliverables.ts`
+
+This registry is the single source of truth for:
+
+- deliverable IDs and labels
+- deliverable category
+- inference patterns and scoring priority
+- default lead and collaborator agents
+- pipeline hints
+- complexity level
+
+Consumers now aligned to this registry:
+
+- `src/lib/server/ai.ts`
+- `src/lib/server/task-channeling.ts`
+- `src/lib/agents-store.ts`
+- `src/lib/task-output.ts`
+- `src/lib/output-quality.ts`
+- `src/lib/bot-animations.ts`
+
+Practical effect:
+
+- Iris classifies more natural request shapes like short-form descriptions, email campaigns, website copy, blog articles, scripts, decks, brand guidelines, PR/comms, event plans, and analytics work
+- client-side mission creation and server-side routing now agree much more often
+- routing now returns confidence and collaborator context instead of only a single lead agent
+
+## Iris Intelligence Flow
+
+The current task intelligence flow is:
+
+1. User prompt enters Iris chat or mission creation
+2. `deliverables.ts` scores the prompt and resolves a deliverable type
+3. If the request needs more intake data, `iris-briefing.ts` opens a pending brief in the client and collects the missing fields with typed answers or clickable options
+4. The active brief is mirrored into the local store so Iris can recover the same question step even if the chat shell remounts during the intake flow
+5. Once complete, Iris composes a confirmed brief and starts the task from that enriched request
+6. `ai.ts` builds routing context:
+  - lead agent
+  - collaborators
+  - pipeline hint
+  - confidence
+7. `task-channeling.ts` builds the skill stack and orchestration trace
+8. `task-output.ts` defines the expected output structure and quality checklist
+9. `output-quality.ts` validates that the result matches the expected deliverable shape
+
+This is the main reason Iris now behaves more like an agency-aware AI model rather than a generic chat wrapper.
+
+## Gamified UX Layer
+
+Gamification is intentionally tied to real operational state rather than decorative counters.
+
+Primary files:
+
+- `src/lib/live-ops.ts`
+- `src/components/dashboard/MetricsCards.tsx`
+- `src/components/tasks/GlobalTaskTracker.tsx`
+- `src/components/analytics/AgentLeaderboardPanel.tsx`
+
+Current game-loop elements:
+
+- `CommandQuestDeck` on the dashboard:
+  - shows next-best actions
+  - frames actions as quests
+  - exposes visible reward labels
+- `MissionQueue`:
+  - shows next action
+  - shows reward label
+  - shows mission complexity
+  - shows routing confidence
+- `GlobalTaskTracker` mission console:
+  - shows complexity
+  - shows routing confidence
+  - shows reward framing
+  - shows next-action guidance
+- `buildAgentLeaderboard` in `live-ops.ts` now rewards:
+  - completed work
+  - lead wins
+  - support wins
+  - rescue / blocker work
+  - quality wins
+  - impact from mission complexity and confidence
+
+Design rule:
+
+- progress visuals should be backed by real mission state whenever possible
+- the app should feel playful and rewarding without lying about execution progress
 
 ## Configuration Files
 
@@ -209,6 +314,7 @@ The app now uses a hybrid shared persistence model.
   - hydrates the app from `/api/state` on load
   - sends bearer-authenticated sync writes back to `/api/state`
   - sets `appStateReady` so direct links wait for shared state hydration
+  - self-heals `409 Conflict` sync races by refetching the latest shared state and rehydrating the store instead of silently drifting
 
 ### Relational Supabase Schema (Now Started)
 
@@ -258,6 +364,55 @@ Important status note:
   - `agencySettings`
   - `providerSettings`
   - `campaigns`
+
+## State Sync Model
+
+Mission Control now uses a hybrid but more granular sync model:
+
+- browser-local Zustand persistence is only a fast structural cache
+- shared state still has a full snapshot row for recovery
+- core mutable collections now sync as entity deltas:
+  - `agents`
+  - `clients`
+  - `missions`
+  - `artifacts`
+  - `conversations`
+- each client sync computes:
+  - per-record `upserts`
+  - per-record `deletes`
+  - smaller top-level `statePatch` updates for settings-like data
+- relational Supabase tables are updated from those deltas so the backend is no longer dependent on full-state overwrite behavior
+
+Conflict handling:
+
+- `/api/state` rejects stale writes with `409 Conflict`
+- `ClientShell` responds by re-fetching the latest shared state and hydrating the local store, rather than continuing with a stale snapshot
+
+## Task Execution Model
+
+Task execution now has three layers:
+
+1. **Direct chat execution**
+   - Iris can still execute work during the original `/api/chat` request
+   - execution steps, provider info, and quality outcomes are written onto the task/output records
+
+2. **Persisted execution state**
+   - `workflow_instances` stores the latest task workflow status, phase, and progress
+   - `task_runs` stores discrete execution-stage events with timestamps and status
+
+3. **Retry / resume execution route**
+   - `/api/tasks/[id]/execution` supports `GET` for live execution state and `POST` for retry/resume actions
+   - execution is queued through `src/lib/server/execution-queue.ts`
+   - the queue is currently in-process, not yet a detached worker service
+
+Task detail UI now surfaces:
+
+- workflow status
+- current phase
+- execution progress
+- runner/job status
+- recent run history
+- richer autonomous execution audit steps
   - `activities`
   - `agentMemories`
 - `skills` and `pipelines` are now database-backed catalogs for both editor reads/writes and server-side runtime loading
@@ -353,7 +508,12 @@ Skills are now stored in Supabase and edited through authenticated API routes:
 - `PUT /api/skills/[id]`
 - `DELETE /api/skills/[id]`
 
-The client-side skill library is backed by `src/lib/stores/skills-store.ts`, which loads from Supabase with the current bearer token. The JSON config under `src/config/skills` now acts as seed/fallback content only.
+The client-side skill library is backed by `src/lib/stores/skills-store.ts`, which loads from Supabase with the current bearer token. The JSON config under `src/config/skills` now acts as seed/fallback content, but the server runtime also merges full config definitions into DB-backed skills via `src/lib/server/skills-catalog.ts` so agents receive rich instructions, output templates, workflow steps, and checklists even when the database row began as a thin stub.
+
+As of the latest hardening pass, the previously weak skill set has been rewritten so the current audit baseline is:
+
+- `157` config skills reviewed
+- `0` remaining below the minimum structural quality threshold used for instructions, output templates, checklist depth, and workflow-step coverage
 
 ### Skill Schema
 Each skill row follows:
@@ -436,6 +596,7 @@ OAuth connections shown in Settings with connect/disconnect buttons and status b
 ### Chat API
 - Endpoint: `POST /api/chat`
 - Features:
+  - bearer-token authentication
   - client-context injection
   - deliverable inference
   - agent routing
@@ -447,6 +608,7 @@ OAuth connections shown in Settings with connect/disconnect buttons and status b
   - HTML artifact rendering payloads
   - no-hallucination output rules
 - Iris is the default chat interface
+- `/api/chat` now refuses unauthenticated requests, which closes the biggest compute-exposure route in the app
 
 ### Current Task Execution Logic
 
@@ -474,9 +636,29 @@ When a user gives Iris a task:
    - quality steps
    - exports
 
+- Client knowledge assets now feed directly into the main `/api/chat` client context block, so uploaded brand docs and research are no longer write-only metadata during generation
+
 If the final lead-model pass returns no visible output:
 - the server synthesizes a fallback deliverable from pipeline outputs and execution steps
 - this guarantees the task still has a visible draft in the app
+
+### Standalone Pipeline Runner Safeguards
+
+- `src/lib/pipeline-execution.ts` now calls the real authenticated `/api/chat` runtime instead of returning a fake hardcoded agent response
+- `createPipelineInstance()` seeds client data from the selected client profile, so the runner no longer starts with an empty prompt context
+- `validatePipelineClientData()` now checks:
+  - required `clientProfileFields`
+  - all `{{template_variables}}` referenced in prompt templates and activity descriptions
+- `/pipeline/run` now blocks execution and shows a setup error when the selected client is missing required pipeline data, instead of silently substituting `TBD`
+- The standalone pipeline executor now injects:
+  - assigned agent skill instructions and output-template hints
+  - client knowledge asset summaries and extracted insights
+- `executeActivityBatch()` now respects activity batching metadata (`batchSize` + `parallel`) so the runner can execute eligible activities in parallel slices instead of always forcing one-by-one execution
+- Pipeline activity execution now carries richer execution-step metadata, including:
+  - phase / activity identifiers
+  - provider and model used
+  - produced output ids
+  - per-step quality issues when applicable
 
 ### How The Autonomous Runner Works
 
@@ -495,6 +677,7 @@ Execution flow:
 9. append a quality-control step from Iris
 
 The execution trace is stored on the artifact as `executionSteps`, which powers the autonomous execution panels in Tasks and Outputs.
+- Execution steps now function as a more explicit audit trail instead of just freeform summaries.
 
 ### HTML Output Logic
 
@@ -545,6 +728,7 @@ How it works:
 |---------|---------|
 | `skill-schema.ts` | Skill TypeScript interfaces |
 | `pipeline-execution.ts` | Pipeline routing engine |
+| `agent-roles.ts` | Shared role-to-agent and deliverable-to-agent mapping |
 | `skill-import.ts` | Import skills from markdown |
 | `server/ai.ts` | AI text generation |
 | `server/autonomous-task.ts` | Autonomous task runner and phase-by-phase agent execution |
@@ -685,7 +869,26 @@ Pipeline and skill editing surfaces now use a shared editor theme layer from `sr
 - Tasks only create saved output artifacts when the response looks like a real deliverable, not when it is just boilerplate status language
 - `src/app/tasks/[id]/page.tsx` now uses client-side router navigation after deletion instead of forcing a full-page reload
 - `/api/chat` now returns provider-aware service statuses (for example `503` for unavailable AI runtime) instead of flattening availability problems into generic `500` errors
+- `src/app/api/chat/route.ts` now also guards artifact-truth checks against missing artifact arrays, so a null-ish artifact payload no longer crashes the response assembly
+- `/api/state` now performs optimistic concurrency checks using the last known `updatedAt` value and returns `409 Conflict` if a stale browser tab tries to overwrite a newer shared-state snapshot
+- `src/components/ClientShell.tsx` now skips redundant `/api/state` writes when the serialized persistence snapshot has not actually changed
+- `src/components/ClientShell.tsx` now sends top-level `statePatch` payloads for changed collections/settings instead of always posting the full snapshot, which reduces unnecessary sync volume even though the server still stores a merged shared snapshot
+- `conversations` are intentionally excluded from shared-state hydration/sync for live chat reliability:
+  - conversation message churn stays local during active chat updates so the server cannot overwrite in-progress intake UI
+- `pendingBriefs` remain local-only for shared server sync:
+  - the live briefing flow is restored from local Zustand persistence after remounts
+  - this avoids reintroducing the old shared-state race where briefing could snap back to an earlier question
+- Browser local persistence now stores a lighter snapshot:
+  - artifact bodies, HTML, and source prompts are stripped
+  - execution-step summaries are truncated
+  - conversation history is reduced to the latest 6 trimmed messages
+  Shared Supabase state remains the full source of truth for complete records
 - `src/components/layout/TopBar.tsx` exposes a "Refresh latest app version" control that clears browser caches and reloads with a timestamped URL when a user gets stuck on an old build
+- Deliverable quality is now evaluated before a task/output is treated as usable:
+  - missing required sections
+  - coordination/status boilerplate
+  - weak deliverable structure
+  will now fail the quality gate and keep the task blocked instead of pretending the output is ready
 
 ## Provider Runtime Model
 
@@ -711,6 +914,17 @@ Pipeline and skill editing surfaces now use a shared editor theme layer from `sr
   - conversations
   - activities/campaigns/memories bridge data
 - Provider secrets are therefore no longer conceptually shared across all users of the workspace
+- Raw Gemini keys are no longer persisted into browser localStorage snapshots; only masked/provider-safe values remain in browser persistence
+- The authenticated server-side provider profile is now the trusted source for runtime selection
+
+## Security Notes
+
+- `SUPER_ADMIN_EMAIL` is now configurable through environment variables instead of being hardcoded as an unchangeable code constant
+- `.env.local.example` now documents the required runtime variables, including `SUPER_ADMIN_EMAIL`
+- Client-supplied brand/context values now pass through prompt-safety sanitization before they are injected into AI prompts or template interpolation
+- The remaining planned security hardening items are:
+  - deeper entity-level sync beyond the current core collections
+  - fuller background execution infrastructure beyond request/response lifecycles
 
 ### Runtime Selection Rules
 
@@ -739,6 +953,96 @@ Pipeline and skill editing surfaces now use a shared editor theme layer from `sr
 
 - Authenticated super-admin flow has been verified through Supabase auth plus the `/users` admin APIs
 - Shared state API has been verified with bearer-authenticated reads for:
+
+## State Sync Model
+
+- Shared state still keeps a full `mission_control_state.state` snapshot in Supabase for recovery and hydration
+- The client no longer syncs only top-level slice replacements:
+  - `agents`
+  - `clients`
+  - `missions`
+  - `artifacts`
+  - `conversations`
+  are now tracked as **record-level entity deltas**
+- `src/components/ClientShell.tsx` now computes:
+  - per-record `upserts`
+  - per-record `deletes`
+  for the core entity collections
+- `/api/state` now accepts:
+  - `entityPatch`
+  - `statePatch`
+  - `updatedAt`
+- `updatedAt` is used for optimistic concurrency, so stale tabs receive `409 Conflict` instead of silently overwriting newer shared state
+- `src/lib/supabase/app-state.ts` now applies entity deltas to the snapshot and syncs those same deltas into relational tables
+- `src/lib/supabase/relational-sync.ts` now supports targeted relational updates for:
+  - agents
+  - clients
+  - missions/tasks
+  - outputs
+  - conversations/messages
+  - knowledge assets for changed clients
+- Non-entity bridge data still syncs as top-level patches:
+  - `agencySettings`
+  - `providerSettings`
+  - `campaigns`
+  - `activities`
+  - `agentMemories`
+
+## Task Execution Model
+
+- A task can now execute through two paths:
+  - immediate request-driven execution from `src/app/api/chat/route.ts`
+  - explicit retry/resume execution from `src/app/api/tasks/[id]/execution/route.ts`
+- The second path is important because it removes the “only during the original chat request” limitation
+- Persisted execution data now lives in Supabase tables:
+  - `workflow_instances`
+  - `task_runs`
+- `src/lib/server/task-execution.ts` is the server helper responsible for:
+  - loading a saved task
+  - loading its client context, knowledge assets, agents, pipelines, and skills
+  - selecting the runtime from user-scoped provider settings
+  - running autonomous execution
+  - persisting workflow status and task-run records
+  - saving/updating the output artifact row
+- `src/lib/server/autonomous-task.ts` now supports execution hooks so the caller can persist:
+  - phase start
+  - activity completion
+  - runtime/provider/model per activity
+- `src/app/tasks/[id]/page.tsx` now reads persisted execution state and shows:
+  - workflow status
+  - current phase
+  - progress
+  - recent task-run records
+  - retry/resume controls
+
+## Skills And Pipelines In Runtime
+
+- Skills and pipelines are not just editable config surfaces anymore; they are now part of the live execution path
+- `src/app/api/chat/route.ts` loads:
+  - pipelines from Supabase first, config fallback second
+  - skills from Supabase first, config fallback second
+- `src/app/pipeline/run/page.tsx` and `src/app/api/pipeline/run/route.ts` now launch the same tracked server-side task lifecycle as Iris:
+  - the runner page creates a real `tasks` record
+  - execution is queued through `/api/tasks/[id]/execution` semantics
+  - live progress is polled from persisted `workflow_instances` + `task_runs`
+  - the page no longer acts as a disconnected local pipeline engine
+- `src/lib/pipeline-execution.ts` is now a compatibility layer for:
+  - route matching
+  - client-field validation
+  - pipeline task scaffolding for the runner UI
+  - mapping persisted execution state back into runner task cards
+- `src/lib/server/autonomous-task.ts` now:
+  - builds per-agent skill context
+  - runs pipeline activities through the assigned role/agent mapping
+  - records per-activity execution metadata for auditability
+- Lead-skill injection is now deeper:
+  - the top-ranked skill includes full instructions and output template
+  - variable hints, richer checklist detail, workflow verification hints, and examples are exposed for primary skills instead of being reduced to tiny fragments
+- This means the live generation path now actually uses:
+  - pipeline definitions
+  - assigned agent skills
+  - client knowledge assets
+  instead of only storing them in the database/UI
   - `/api/state`
   - `/api/admin/users`
 - Current runtime caveat:
@@ -768,3 +1072,24 @@ Access at: http://localhost:3000
 - No hardcoded values — everything editable
 - Skills follow Claude best practices format
 - Build must pass before commits (`npm run build`)
+
+- `IrisChat` now distinguishes between conversational chat and task intake: greetings, questions, and normal back-and-forth stay in the chat thread only, while explicit work requests open missions and persist deliverables as artifacts.
+- The Iris chat shell self-heals stale conversation state: if the active conversation id points to a missing thread, it creates a fresh chat automatically before sending so messages never vanish into an invalid local session reference.
+- `pendingBriefs` stay out of shared app-state sync and relational persistence:
+  - they are recovered from local browser persistence after remounts
+  - cross-device pending-brief recovery still needs a safer dedicated persistence design rather than the shared-state sync loop
+- Deliverable routing defaults are now centralized through `src/lib/deliverables.ts` compatibility helpers:
+  - `agent-roles.ts` reads registry defaults instead of maintaining a fully separate lead/collaborator matrix
+  - `task-channeling.ts` now derives lead, collaborator, and complexity defaults from the same deliverable registry and only keeps skill-pattern overrides
+- `output-quality.ts` now adds semantic checks on top of structural section checks:
+  - placeholder markers like `TBD`
+  - unreplaced `{{variables}}`
+  - bracketed template instructions such as `[Insert client name]`
+  - underdeveloped sections on high-complexity deliverables
+- The imported `mission-control-claude-genspark_ai_developer` variant was merged selectively rather than copied wholesale:
+  - `ClientShell`, `TopBar`, and `AgentEditor` now memoize the Supabase browser client to avoid client-side hydration instability
+  - the app shell now exposes a skip-to-content link and stronger focus-visible states on shared buttons
+  - `/api/chat` now defaults to larger generation budgets and uses a lightweight conversational path for normal Iris chat
+  - Ollama calls now use `/api/chat` with structured messages and a larger context window instead of flattening everything into one prompt string
+  - the Nova media skill set was expanded with 16 detailed media-planning skills and corrected skill ids
+  - server-side skill loading now merges Supabase-backed skills with full JSON config definitions, so missing config-only skills still appear in the UI/runtime and missing config skills are inserted into Supabase on later relational sync without overwriting edited DB rows

@@ -20,6 +20,8 @@ import {
   Activity,
 } from 'lucide-react'
 import { clsx } from 'clsx'
+import { buildAgentLeaderboard } from '@/lib/live-ops'
+import { AgentLeaderboardPanel } from '@/components/analytics/AgentLeaderboardPanel'
 
 // Mock data for demonstration
 const MOCK_CAMPAIGNS = [
@@ -28,16 +30,11 @@ const MOCK_CAMPAIGNS = [
   { id: 'camp-3', name: 'Product Launch', spend: 15000, conversions: 423, roas: 4.5 },
 ]
 
-const MOCK_AGENTS = [
-  { id: 'iris', name: 'Iris', tasksCompleted: 47, avgDuration: 45, quality: 92 },
-  { id: 'sage', name: 'Sage', tasksCompleted: 38, avgDuration: 52, quality: 88 },
-  { id: 'nova', name: 'Nova', tasksCompleted: 52, avgDuration: 38, quality: 95 },
-  { id: 'dex', name: 'Dex', tasksCompleted: 41, avgDuration: 61, quality: 90 },
-]
-
 export default function AnalyticsPage() {
   const agents = useAgentsStore(state => state.agents)
   const campaigns = useAgentsStore(state => state.campaigns)
+  const missions = useAgentsStore(state => state.missions)
+  const artifacts = useAgentsStore(state => state.artifacts)
   const { learnedPatterns, abTests, getAgentLeaderboard, getPredictiveTimeline } = useAnalyticsStore()
   
   const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'agents' | 'intelligence'>('overview')
@@ -47,7 +44,8 @@ export default function AnalyticsPage() {
   const totalSpend = MOCK_CAMPAIGNS.reduce((sum, c) => sum + c.spend, 0)
   const totalConversions = MOCK_CAMPAIGNS.reduce((sum, c) => sum + c.conversions, 0)
   const avgRoas = MOCK_CAMPAIGNS.reduce((sum, c) => sum + c.roas, 0) / MOCK_CAMPAIGNS.length
-  const topAgent = MOCK_AGENTS.sort((a, b) => b.tasksCompleted - a.tasksCompleted)[0]
+  const leaderboard = buildAgentLeaderboard({ agents, missions, artifacts })
+  const topAgent = leaderboard[0]
 
   return (
     <ClientShell>
@@ -134,9 +132,9 @@ export default function AnalyticsPage() {
                   color="#9b6dff"
                 />
                 <MetricCard
-                  label="Active Agents"
-                  value={agents.length.toString()}
-                  trend="All active"
+                  label="Top Agent"
+                  value={topAgent?.agentName || '—'}
+                  trend={topAgent ? `${topAgent.tasksCompleted} completed` : 'No runs yet'}
                   trendUp={true}
                   icon={Zap}
                   color="#00d4aa"
@@ -168,34 +166,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Agent Leaderboard */}
-              <div className="bg-base-200 rounded-xl p-6">
-                <h3 className="font-medium mb-4 flex items-center gap-2">
-                  <Award size={16} />
-                  Agent Leaderboard
-                </h3>
-                <div className="space-y-2">
-                  {MOCK_AGENTS.sort((a, b) => b.tasksCompleted - a.tasksCompleted).map((agent, i) => (
-                    <div key={agent.id} className="flex items-center gap-3 p-3 bg-base rounded-lg">
-                      <span className={clsx(
-                        'w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold',
-                        i === 0 ? 'bg-accent-yellow text-black' :
-                        i === 1 ? 'bg-gray-400 text-black' :
-                        i === 2 ? 'bg-amber-600 text-white' :
-                        'bg-base-300 text-text-secondary'
-                      )}>
-                        {i + 1}
-                      </span>
-                      <div className="flex-1">
-                        <p className="font-medium">{agent.name}</p>
-                        <p className="text-xs text-text-secondary">{agent.tasksCompleted} tasks • {agent.avgDuration}min avg</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium">{agent.quality}% quality</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <AgentLeaderboardPanel entries={leaderboard} />
 
               {/* Predicted Timeline */}
               <div className="bg-base-200 rounded-xl p-6">
@@ -275,30 +246,35 @@ export default function AnalyticsPage() {
           {/* Agents Tab */}
           {activeTab === 'agents' && (
             <div className="space-y-6">
+              <AgentLeaderboardPanel
+                entries={leaderboard}
+                title="Agent of the Week"
+                subtitle="Weighted from completed tasks, lead wins, support contributions, and current streak."
+              />
               <div className="grid grid-cols-2 gap-4">
-                {MOCK_AGENTS.map(agent => (
-                  <div key={agent.id} className="bg-base-200 rounded-xl p-6">
+                {leaderboard.map(agent => (
+                  <div key={agent.agentId} className="bg-base-200 rounded-xl p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 rounded-full bg-accent-purple/20 flex items-center justify-center text-accent-purple font-bold">
-                        {agent.name[0]}
+                        {agent.agentName[0]}
                       </div>
                       <div>
-                        <p className="font-medium">{agent.name}</p>
+                        <p className="font-medium">{agent.agentName}</p>
                         <p className="text-xs text-text-secondary">{agent.tasksCompleted} tasks completed</p>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-text-secondary">Avg Duration</span>
-                        <span>{agent.avgDuration} min</span>
+                        <span className="text-text-secondary">Lead Wins</span>
+                        <span>{agent.leadWins}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-text-secondary">Quality Score</span>
-                        <span className="text-accent-green">{agent.quality}%</span>
+                        <span className="text-text-secondary">Support Wins</span>
+                        <span className="text-accent-green">{agent.supportWins}</span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-text-secondary">Efficiency</span>
-                        <span className="text-accent-blue">94%</span>
+                        <span className="text-text-secondary">Momentum</span>
+                        <span className="text-accent-blue">{agent.currentHotStreak} recent</span>
                       </div>
                     </div>
                   </div>

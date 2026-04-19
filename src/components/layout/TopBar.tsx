@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Activity, Menu, Sun, Moon, RefreshCcw, LogOut } from 'lucide-react'
+import React, { useState, useEffect, useMemo } from 'react'
+import Image from 'next/image'
+import { Menu, Sun, Moon, RefreshCcw, LogOut } from 'lucide-react'
 import { useAgentsStore } from '@/lib/agents-store'
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
 import { clsx } from 'clsx'
@@ -12,7 +13,7 @@ interface TopBarProps {
 
 export function TopBar({ onMobileMenuToggle }: TopBarProps) {
   const [time, setTime] = useState('')
-  const supabase = getSupabaseBrowserClient()
+  const supabase = useMemo(() => getSupabaseBrowserClient(), [])
   const themeMode = useAgentsStore((state) => state.agencySettings.themeMode)
   const setThemeMode = useAgentsStore((state) => state.setThemeMode)
   const missions = useAgentsStore((state) => state.missions)
@@ -60,12 +61,17 @@ export function TopBar({ onMobileMenuToggle }: TopBarProps) {
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-purple)] to-[var(--accent-blue)] flex items-center justify-center shadow-sm">
-            <Activity size={18} className="text-white" />
-          </div>
-          <div className="hidden xs:block">
-            <h1 className="text-base font-semibold text-[var(--text-primary)] leading-tight">
-              Mission Control
+          <Image
+            src="/branding/mission-control-logo.png"
+            alt="Mission Control logo"
+            width={40}
+            height={40}
+            className="h-10 w-10 object-contain"
+            priority
+          />
+          <div className="block">
+            <h1 className="text-base font-semibold leading-tight text-slate-900">
+              Command Center
             </h1>
             <p className="text-xs text-[var(--text-dim)]">
               {activeMissionCount} active mission{activeMissionCount !== 1 ? 's' : ''}

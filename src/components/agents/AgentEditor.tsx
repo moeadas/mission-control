@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { createAppPersistenceSnapshot, useAgentsStore } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { SkillPicker } from '@/components/ui/SkillPicker'
@@ -8,26 +8,29 @@ import { toast } from '@/components/ui/Toast'
 import { X, Save } from 'lucide-react'
 import type { AgencyDivision } from '@/lib/types'
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
+import { getAgentArchitectureBundle, getAgentMemoryNote, getAgentSourceOfTruthPath, getProviderRoutingNote } from '@/lib/agent-architecture'
 
 interface AgentEditorProps {
   agentId: string | null
   onClose: () => void
 }
 
-const DIVISIONS = ['orchestration', 'client-services', 'creative', 'media', 'research']
+const DIVISIONS = ['orchestration', 'client-services', 'creative', 'media', 'research', 'strategy']
 const DIVISION_COLORS: Record<string, string> = {
   orchestration: '#a78bfa',
   'client-services': '#4f8ef7',
   creative: '#00d4aa',
   media: '#ff5fa0',
   research: '#38bdf8',
+  strategy: '#9b6dff',
 }
 
 export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
   const agents = useAgentsStore(state => state.agents)
   const updateAgent = useAgentsStore(state => state.updateAgent)
-  const supabase = getSupabaseBrowserClient()
+  const supabase = useMemo(() => getSupabaseBrowserClient(), [])
   const agent = agents.find(a => a.id === agentId)
+  const architectureBundle = agentId ? getAgentArchitectureBundle(agentId) : null
   
   const [formData, setFormData] = useState({
     name: '',
@@ -97,10 +100,17 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
 
     try {
       const effectivePhotoUrl = latestPhotoUrlRef.current || formData.photoUrl || ''
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      const authHeaders = {
+        'Content-Type': 'application/json',
+        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+      }
 
       await fetch(`/api/agent-photos/${agentId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders,
         body: JSON.stringify({ photoUrl: effectivePhotoUrl || null }),
       }).catch(() => {})
 
@@ -121,15 +131,11 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
       })
 
       try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
         const snapshot = createAppPersistenceSnapshot(useAgentsStore.getState())
         await fetch('/api/state', {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
-            ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+            ...authHeaders,
           },
           body: JSON.stringify({ state: snapshot }),
         })
@@ -186,9 +192,13 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
       const body = new FormData()
       body.append('file', normalizedFile)
       body.append('agentId', agentId)
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
 
       const response = await fetch('/api/agent-photos/upload', {
         method: 'POST',
+        headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined,
         body,
       })
 
@@ -303,6 +313,37 @@ export function AgentEditor({ agentId, onClose }: AgentEditorProps) {
               />
             </div>
           </div>
+
+          {architectureBundle ? (
+            <div className="rounded-2xl border border-border bg-[var(--bg-elevated)] p-4 space-y-3">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-text-primary">Architecture Source Of Truth</p>
+                  <p className="text-xs text-text-dim mt-1">
+                    This agent now loads from folder-based architecture files. Use the app here for avatar changes; use the config files for behavioral edits.
+                  </p>
+                </div>
+                <code className="text-[11px] text-text-dim bg-[var(--bg-panel)] px-2 py-1 rounded-md">
+                  {getAgentSourceOfTruthPath(agent.id)}
+                </code>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div className="rounded-xl border border-border bg-[var(--bg-panel)] p-3">
+                  <p className="text-xs uppercase tracking-[0.14em] text-text-dim mb-1">Soul</p>
+                  <p className="text-text-secondary line-clamp-4">{architectureBundle.soul.split('\n').find(line => line.trim() && !line.startsWith('#'))}</p>
+                </div>
+                <div className="rounded-xl border border-border bg-[var(--bg-panel)] p-3">
+                  <p className="text-xs uppercase tracking-[0.14em] text-text-dim mb-1">Runtime</p>
+                  <p className="text-text-secondary">{getProviderRoutingNote(agent.provider, agent.model)}</p>
+                </div>
+                <div className="rounded-xl border border-border bg-[var(--bg-panel)] p-3 md:col-span-2">
+                  <p className="text-xs uppercase tracking-[0.14em] text-text-dim mb-1">Memory</p>
+                  <p className="text-text-secondary">{getAgentMemoryNote()}</p>
+                </div>
+              </div>
+            </div>
+          ) : null}
 
           <div>
             <label className="block text-sm font-medium mb-2 text-text-primary">Personal Photo</label>

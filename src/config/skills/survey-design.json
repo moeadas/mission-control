@@ -8,25 +8,103 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when designing consumer research, measuring brand awareness, gathering campaign feedback, conducting audience segmentation studies, or validating creative concepts.",
+      "trigger": "Use this skillany time designing consumer research, measuring brand awareness, gathering campaign feedback, conducting audience segmentation studies, or validating creative concepts.",
       "context": "You are a survey design specialist with expertise in questionnaire construction, sampling methodology, and bias prevention. You design surveys that produce reliable, actionable data.",
-      "instructions": "## Survey Design Workflow\n\n- [ ] 1. Define research objectives and key questions\n- [ ] 2. Determine survey type (online, phone, in-person) and sample size\n- [ ] 3. Write questions: start with screening, then demographic, then core questions\n- [ ] 4. Apply best practices: avoid leading questions, double-barreled items, jargon\n- [ ] 5. Structure the survey with logical flow and appropriate length\n- [ ] 6. Pilot test the survey and refine\n- [ ] 7. Document methodology for reporting\n\n## Key Inputs\n- Research Objective: {{research_objective}}\n- Target Audience: {{target_audience}} (demographics, criteria)\n- Survey Type: {{survey_type}} (online, phone, mixed)\n- Sample Size: {{sample_size}}\n- Key Questions: {{key_questions}}",
+      "instructions": "## Survey Design\n\n1. **Define objectives** — Clarify what decisions the survey will inform\n   - ✓ Done when: Objectives are measurable\n\n2. **Write questions** — Draft questions following survey best practices\n   - ✓ Done when: Questions are clear and unbiased\n\n3. **Structure survey** — Organize questions with logical flow and skip logic\n   - ✓ Done when: Survey is navigable and not fatiguing\n\n4. **Pilot test** — Test survey with small sample and refine\n   - ✓ Done when: No errors or confusing items\n\n## Key Inputs\n- research_objective: Primary goal of the survey research\n- target_audience: Target respondent profile: demographics, behaviors, criteria\n- survey_type: Survey delivery method: online panel, phone, in-person, email\n- sample_size: Required sample size or target completion number\n- key_questions: Core questions the survey must answer",
       "output_template": "## Survey Design Document\n\n### Research Objectives\n[What this survey aims to learn]\n\n### Methodology\n| Parameter | Value |\n|-----------|-------|\n| Survey Type | |\n| Sample Size | |\n| Sampling Method | |\n| Fielding Period | |\n| Margin of Error | |\n\n### Questionnaire\n| Q# | Question | Type | Response Options |\n|----|---------|------|------------------|\n| | | | |\n\n### Quality Checks\n- [ ] Pilot test conducted\n- [ ] Bias reviewed\n- [ ] Logic flows correctly"
     }
   },
   "variables": [
-    { "name": "research_objective", "type": "string", "required": true, "description": "Primary goal of the survey research" },
-    { "name": "target_audience", "type": "string", "required": true, "description": "Target respondent profile: demographics, behaviors, criteria" },
-    { "name": "survey_type", "type": "string", "required": false, "description": "Survey delivery method: online panel, phone, in-person, email" },
-    { "name": "sample_size", "type": "string", "required": false, "description": "Required sample size or target completion number" },
-    { "name": "key_questions", "type": "string", "required": false, "description": "Core questions the survey must answer" }
+    {
+      "name": "research_objective",
+      "type": "string",
+      "required": true,
+      "description": "Primary goal of the survey research"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target respondent profile: demographics, behaviors, criteria"
+    },
+    {
+      "name": "survey_type",
+      "type": "string",
+      "required": false,
+      "description": "Survey delivery method: online panel, phone, in-person, email"
+    },
+    {
+      "name": "sample_size",
+      "type": "string",
+      "required": false,
+      "description": "Required sample size or target completion number"
+    },
+    {
+      "name": "key_questions",
+      "type": "string",
+      "required": false,
+      "description": "Core questions the survey must answer"
+    }
   ],
+  "inputs": [
+    {
+      "name": "research_objective",
+      "type": "string",
+      "required": true,
+      "description": "Primary goal of the survey research"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target respondent profile: demographics, behaviors, criteria"
+    },
+    {
+      "name": "survey_type",
+      "type": "string",
+      "required": false,
+      "description": "Survey delivery method: online panel, phone, in-person, email"
+    },
+    {
+      "name": "sample_size",
+      "type": "string",
+      "required": false,
+      "description": "Required sample size or target completion number"
+    },
+    {
+      "name": "key_questions",
+      "type": "string",
+      "required": false,
+      "description": "Core questions the survey must answer"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Define objectives", "action": "Clarify what decisions the survey will inform", "verify": "Objectives are measurable" },
-      { "step": 2, "name": "Write questions", "action": "Draft questions following survey best practices", "verify": "Questions are clear and unbiased" },
-      { "step": 3, "name": "Structure survey", "action": "Organize questions with logical flow and skip logic", "verify": "Survey is navigable and not fatiguing" },
-      { "step": 4, "name": "Pilot test", "action": "Test survey with small sample and refine", "verify": "No errors or confusing items" }
+      {
+        "step": 1,
+        "name": "Define objectives",
+        "action": "Clarify what decisions the survey will inform",
+        "verify": "Objectives are measurable"
+      },
+      {
+        "step": 2,
+        "name": "Write questions",
+        "action": "Draft questions following survey best practices",
+        "verify": "Questions are clear and unbiased"
+      },
+      {
+        "step": 3,
+        "name": "Structure survey",
+        "action": "Organize questions with logical flow and skip logic",
+        "verify": "Survey is navigable and not fatiguing"
+      },
+      {
+        "step": 4,
+        "name": "Pilot test",
+        "action": "Test survey with small sample and refine",
+        "verify": "No errors or confusing items"
+      }
     ]
   },
   "examples": [
@@ -36,20 +114,29 @@
     }
   ],
   "checklist": [
-    "Research objectives are clearly defined",
-    "Questions are clear, concise, and unbiased",
-    "Response scales are appropriate for each question type",
-    "Survey length is reasonable for the audience",
-    "Skip logic and flow are tested",
-    "Pilot testing was conducted"
+    "Objectives are measurable",
+    "Questions are clear and unbiased",
+    "Survey is navigable and not fatiguing",
+    "No errors or confusing items"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["research-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "research-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["survey", "research", "questionnaire", "consumer-insights"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "survey",
+      "research",
+      "questionnaire",
+      "consumer-insights"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

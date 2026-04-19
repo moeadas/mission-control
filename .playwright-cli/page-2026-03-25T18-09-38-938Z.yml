@@ -1,0 +1,159 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - button "Switch to light mode" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - paragraph [ref=e18]: 19:09
+    - generic [ref=e19]:
+      - navigation "Main navigation" [ref=e20]:
+        - generic [ref=e22]:
+          - generic [ref=e24]: MC
+          - generic [ref=e25]:
+            - paragraph [ref=e26]: Mission Control
+            - paragraph [ref=e27]: Agency HQ
+        - generic [ref=e28]:
+          - link "Dashboard" [ref=e29] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e31]
+            - generic [ref=e36]: Dashboard
+          - link "Virtual Office" [ref=e37] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e39]
+            - generic [ref=e43]: Virtual Office
+          - link "Agents" [ref=e44] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e46]
+            - generic [ref=e49]: Agents
+          - link "Clients" [ref=e50] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e52]
+            - generic [ref=e57]: Clients
+          - link "Tasks" [ref=e58] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e60]
+            - generic [ref=e63]: Tasks
+          - link "Pipeline" [ref=e64] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e66]
+            - generic [ref=e70]: Pipeline
+          - link "Skills" [ref=e71] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e74]
+            - generic [ref=e77]: Skills
+          - link "Runner" [ref=e78] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e80]
+            - generic [ref=e82]: Runner
+          - link "Analytics" [ref=e83] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e85]
+            - generic [ref=e87]: Analytics
+          - link "Outputs" [ref=e88] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e90]
+            - generic [ref=e93]: Outputs
+          - link "Settings" [ref=e94] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e96]
+            - generic [ref=e99]: Settings
+        - generic [ref=e101]:
+          - generic [ref=e103]: MC
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: Agency Mode
+            - paragraph [ref=e106]: Iris · Online
+      - main [ref=e108]:
+        - generic [ref=e110]:
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - heading "Edit Skill" [level=1] [ref=e113]
+              - paragraph [ref=e114]: Build solid, reusable skills following best practices
+            - button "Save Skill" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - text: Save Skill
+          - generic [ref=e121]:
+            - button "Main" [ref=e122] [cursor=pointer]:
+              - img [ref=e123]
+              - text: Main
+            - button "Workflow" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - text: Workflow
+            - button "Examples" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - text: Examples
+            - button "Advanced" [ref=e134] [cursor=pointer]:
+              - img [ref=e135]
+              - text: Advanced
+          - generic [ref=e138]:
+            - generic [ref=e139]:
+              - heading "Basic Information" [level=3] [ref=e140]
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - generic [ref=e143]: Skill Name (kebab-case)
+                  - textbox "brand-strategy" [ref=e144]
+                - generic [ref=e145]:
+                  - generic [ref=e146]: Category
+                  - combobox [ref=e147]:
+                    - option "Strategy & Planning" [selected]
+                    - option "Creative & Copy"
+                    - option "Media & Advertising"
+                    - option "Research & Analytics"
+                    - option "Operations & Workflow"
+                    - option "Client Services"
+                    - option "Content Production"
+                - generic [ref=e148]:
+                  - generic [ref=e149]: Difficulty
+                  - combobox [ref=e150]:
+                    - option "Beginner"
+                    - option "Intermediate" [selected]
+                    - option "Advanced"
+              - generic [ref=e151]:
+                - generic [ref=e152]: Description (third person, max 1024 chars)
+                - textbox "Processes Excel files and generates reports. Use when working with spreadsheets, tabular data, or .xlsx files." [ref=e153]
+                - paragraph [ref=e154]: 0/1024
+            - generic [ref=e155]:
+              - button "English Prompts (Primary)" [ref=e156] [cursor=pointer]:
+                - generic [ref=e157]:
+                  - img [ref=e158]
+                  - generic [ref=e160]: English Prompts
+                  - generic [ref=e161]: (Primary)
+                - img [ref=e162]
+              - generic [ref=e164]:
+                - generic [ref=e165]:
+                  - generic [ref=e166]: Trigger (When to use this skill)
+                  - textbox "Use when working with PDF files, forms, or document extraction." [ref=e167]
+                - generic [ref=e168]:
+                  - generic [ref=e169]: Context (Agent persona)
+                  - textbox "You are a PDF processing specialist with expertise in document extraction, form filling, and document manipulation." [ref=e170]
+                - generic [ref=e171]:
+                  - generic [ref=e172]: Instructions (Step-by-step workflow)
+                  - 'textbox "## Task Workflow Follow these steps: - [ ] 1. Analyze the input - [ ] 2. Process according to requirements - [ ] 3. Validate output - [ ] 4. Format and deliver Use tools: pdfplumber, pypdf" [ref=e173]':
+                    - /placeholder: "## Task Workflow\n\nFollow these steps:\n\n- [ ] 1. Analyze the input\n- [ ] 2. Process according to requirements\n- [ ] 3. Validate output\n- [ ] 4. Format and deliver\n\nUse tools: pdfplumber, pypdf"
+                - generic [ref=e174]:
+                  - generic [ref=e175]: Output Template
+                  - 'textbox "## Output Structure ### Summary [1-2 sentence overview] ### Details [Detailed findings] ### Recommendations 1. [Specific action item] 2. [Specific action item]" [ref=e176]':
+                    - /placeholder: "## Output Structure\n\n### Summary\n[1-2 sentence overview]\n\n### Details\n[Detailed findings]\n\n### Recommendations\n1. [Specific action item]\n2. [Specific action item]"
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - generic [ref=e179]:
+                  - img [ref=e180]
+                  - heading "Variables" [level=3] [ref=e183]
+                  - generic [ref=e184]: "({{placeholder}} syntax)"
+                - button "Add Variable" [ref=e185] [cursor=pointer]:
+                  - img [ref=e186]
+                  - text: Add Variable
+              - paragraph [ref=e188]: "No variables yet. Add {{variableName}} placeholders used in your prompts."
+            - generic [ref=e189]:
+              - generic [ref=e190]:
+                - generic [ref=e191]:
+                  - img [ref=e192]
+                  - heading "Quality Checklist" [level=3] [ref=e195]
+                  - generic [ref=e196]: (Verification steps)
+                - button "Add Item" [ref=e197] [cursor=pointer]:
+                  - img [ref=e198]
+                  - text: Add Item
+              - paragraph [ref=e200]: No checklist items. Add quality checkpoints for verification.
+    - button "Open Iris chat" [ref=e201] [cursor=pointer]:
+      - img [ref=e202]
+  - alert [ref=e204]

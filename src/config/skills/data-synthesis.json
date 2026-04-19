@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when synthesizing data from multiple sources — to combine analytics, survey, CRM, social, and media data into a coherent narrative that informs strategic decisions.",
+      "trigger": "Use this skillany time synthesizing data from multiple sources — to combine analytics, survey, crm, social, and media data into a coherent narrative that informs strategic decisions.",
       "context": "You are a data strategist who combines disparate data sources into a unified story that reveals insights and drives specific, actionable marketing decisions.",
-      "instructions": "## Data Synthesis Workflow\n\n- [ ] 1. Define the question: What decision does this data need to inform?\n- [ ] 2. Inventory data sources: List all available data sources\n- [ ] 3. Extract and clean: Pull data, clean inconsistencies, align time periods\n- [ ] 4. Find patterns: Look for correlations, divergences, and trends\n- [ ] 5. Formulate insights: Turn patterns into meaningful statements\n- [ ] 6. Build the narrative: Connect insights into a coherent story\n- [ ] 7. Make recommendations: What should be done based on the data?\n\n## Key Inputs\n- Decision to inform: {{decision}}\n- Data sources: {{data_sources}}\n- Time period: {{time_period}}\n- Key questions: {{key_questions}}",
+      "instructions": "## Data Synthesis\n\n1. **Question Definition** — Define the decision the synthesis must inform\n   - ✓ Done when: Question is clear and answerable\n\n2. **Data Inventory** — List and assess all available data sources\n   - ✓ Done when: Sources are accessible and relevant\n\n3. **Pattern Finding** — Look for correlations and trends across sources\n   - ✓ Done when: Patterns are evidenced\n\n4. **Narrative Building** — Connect insights into a coherent story\n   - ✓ Done when: Story is clear and evidenced\n\n5. **Recommendations** — Make specific recommendations based on the data\n   - ✓ Done when: Recommendations are actionable\n\n## Key Inputs\n- decision: Business decision the data should inform\n- data_sources: Data sources to be synthesized\n- time_period: Time period covered\n- key_questions: Key questions the synthesis should answer",
       "output_template": "## Data Synthesis Report\n\n### Synthesis Brief\n| Field | Value |\n|-------|-------|\n| Decision to inform | {{decision}} |\n| Time period | {{time_period}} |\n| Date | {{date}} |\n\n### Data Sources\n| Source | Data used | Quality | Notes |\n|--------|----------|--------|------|\n| | | | |\n\n### Data Cleaning Notes\n| Issue found | Resolution |\n|------------|-----------|\n| | |\n\n### Key Patterns Identified\n| Pattern | Data sources showing this | Confidence |\n|---------|------------------------|----------|\n| | | |\n\n### Key Insight 1\n**Statement:**\n**Supporting data:**\n**Implication:**\n\n### Key Insight 2\n**Statement:**\n**Supporting data:**\n**Implication:**\n\n### Key Insight 3\n**Statement:**\n**Supporting data:**\n**Implication:**\n\n### The Narrative\n[Connected story tying all insights together]\n\n### Recommendations\n| Recommendation | Evidence | Priority |\n|---------------|----------|----------|\n| | | |\n\n### Data Gaps\n| Gap | Impact | How to address |\n|-----|--------|--------------|\n| | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Key questions the synthesis should answer"
     }
   ],
+  "inputs": [
+    {
+      "name": "decision",
+      "type": "string",
+      "required": true,
+      "description": "Business decision the data should inform"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": true,
+      "description": "Data sources to be synthesized"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period covered"
+    },
+    {
+      "name": "key_questions",
+      "type": "string",
+      "required": false,
+      "description": "Key questions the synthesis should answer"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,31 @@
     }
   ],
   "checklist": [
-    "Data from all sources is clean and aligned",
-    "Patterns are evidenced, not assumed",
-    "Insights are connected into a coherent narrative",
-    "Recommendations are specific and actionable",
-    "Data gaps are acknowledged",
-    "The synthesis clearly informs the original decision"
+    "Question is clear and answerable",
+    "Sources are accessible and relevant",
+    "Patterns are evidenced",
+    "Story is clear and evidenced",
+    "Recommendations are actionable"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["analytics"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "analytics"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["research", "data-synthesis", "analytics", "insights"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "research",
+      "data-synthesis",
+      "analytics",
+      "insights"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

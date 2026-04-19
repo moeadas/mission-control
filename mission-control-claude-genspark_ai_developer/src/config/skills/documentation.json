@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "documentation",
+  "name": "Documentation",
+  "description": "Creates and maintains clear, accessible process documentation, playbooks, and knowledge bases that help agencies operate consistently and onboard team members efficiently.",
+  "category": "operations",
+  "difficulty": "beginner",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when creating process documentation, building knowledge bases, writing playbooks, documenting campaign workflows, or organizing institutional knowledge.",
+      "context": "You are a documentation specialist who creates clear, useful documentation that people actually read and reference. You write for the audience, keep it practical, and maintain consistency.",
+      "instructions": "## Documentation Workflow\n\n- [ ] 1. Define the purpose and audience for the documentation\n- [ ] 2. Gather existing information and subject matter experts\n- [ ] 3. Outline the structure and key sections\n- [ ] 4. Write clear, practical content with examples\n- [ ] 5. Add visuals: flowcharts, screenshots, diagrams\n- [ ] 6. Review for clarity and accuracy\n- [ ] 7. Publish and maintain (set review schedule)\n\n## Key Inputs\n- Document Type: {{document_type}} (playbook, process doc, how-to, knowledge base)\n- Purpose: {{purpose}}\n- Audience: {{audience}}\n- Existing Content: {{existing_content}}",
+      "output_template": "## Documentation Outline\n\n### Document Info\n| Element | Details |\n|---------|---------|\n| Title | |\n| Type | |\n| Audience | |\n| Owner | |\n\n### Structure\n| Section | Content | Owner |\n|---------|---------|-------|\n| | | |\n\n### Full Content\n[Written content]\n\n### Maintenance Schedule\n- Review: [frequency]\n- Owner: [person]"
+    }
+  },
+  "variables": [
+    { "name": "document_type", "type": "string", "required": true, "description": "Type of document: playbook, process guide, how-to, knowledge base article" },
+    { "name": "purpose", "type": "string", "required": true, "description": "What this documentation is meant to accomplish" },
+    { "name": "audience", "type": "string", "required": true, "description": "Who will use this documentation" },
+    { "name": "existing_content", "type": "string", "required": false, "description": "Existing documentation or content to build upon" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define scope", "action": "Clarify purpose, audience, and boundaries", "verify": "Scope is clear and manageable" },
+      { "step": 2, "name": "Gather info", "action": "Collect information from SMEs and existing docs", "verify": "Information is accurate and complete" },
+      { "step": 3, "name": "Write", "action": "Draft clear, practical content with examples", "verify": "Writing is clear and actionable" },
+      { "step": 4, "name": "Review and publish", "action": "Have SMEs review and finalize", "verify": "Documentation is accurate and approved" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Type: Playbook. Purpose: Standardize Google Ads campaign setup across the agency. Audience: Junior media buyers. Existing content: Scattered notes from 3 senior buyers.",
+      "output": "35-page playbook covering: account structure conventions, keyword research process, ad copy standards, bidding strategy guidelines, reporting templates. Each section has a checklist and worked example. Review schedule: annual."
+    }
+  ],
+  "checklist": [
+    "Purpose and audience are clearly defined",
+    "Content is practical and actionable",
+    "Structure is logical and easy to navigate",
+    "Examples are included where helpful",
+    "Document is reviewed by subject matter experts",
+    "Maintenance schedule is set"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["operations-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["documentation", "knowledge-base", "playbook", "process-doc"],
+    "lastUpdated": "2026-03-24"
+  }
+}

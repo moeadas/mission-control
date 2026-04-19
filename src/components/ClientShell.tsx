@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { TopBar } from '@/components/layout/TopBar'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { ToastContainer } from '@/components/ui/Toast'
 import { IrisChat } from '@/components/agents/IrisChat'
+import { GlobalTaskTracker } from '@/components/tasks/GlobalTaskTracker'
 import { createAppPersistenceSnapshot, useAgentsStore } from '@/lib/agents-store'
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
 import { MessageCircle, LayoutDashboard, Building2, Bot, ListTodo, X } from 'lucide-react'
@@ -18,6 +19,16 @@ const MOBILE_NAV = [
   { id: 'tasks', label: 'Tasks', icon: ListTodo, href: '/tasks' },
 ]
 
+const PERSISTED_STATE_KEYS = [
+  'activities',
+  'campaigns',
+  'agencySettings',
+  'providerSettings',
+  'agentMemories',
+] as const
+
+const ENTITY_COLLECTION_KEYS = ['agents', 'clients', 'missions', 'artifacts'] as const
+
 export function ClientShell({ children }: { children: React.ReactNode }) {
   const openIris = useAgentsStore((state) => state.openIris)
   const isIrisOpen = useAgentsStore((state) => state.isIrisOpen)
@@ -28,7 +39,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
   const setAuthenticatedUser = useAgentsStore((state) => state.setAuthenticatedUser)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const supabase = getSupabaseBrowserClient()
+  const supabase = useMemo(() => getSupabaseBrowserClient(), [])
 
   useEffect(() => {
     document.documentElement.dataset.theme = themeMode
@@ -59,6 +70,12 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
     let saveTimer: ReturnType<typeof setTimeout> | null = null
     let canSync = false
     let authHeaders: HeadersInit = {}
+    let latestUpdatedAt: string | null = null
+    let lastSyncedSnapshot = ''
+    let lastSyncedSections: Record<string, string> = {}
+    let lastSyncedEntities: Record<string, Record<string, string>> = Object.fromEntries(
+      ENTITY_COLLECTION_KEYS.map((key) => [key, {}])
+    )
 
     let latestPhotos: Record<string, string> | null = null
 
@@ -72,21 +89,29 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
 
     supabase.auth.getSession()
       .then(({ data }) => {
-        authHeaders = data.session?.access_token
-          ? { Authorization: `Bearer ${data.session.access_token}` }
+        const accessToken = data.session?.access_token
+        authHeaders = accessToken
+          ? { Authorization: `Bearer ${accessToken}` }
           : {}
-        if (data.session?.access_token) {
-          fetch('/api/auth/session', { headers: authHeaders })
-            .then((response) => (response.ok ? response.json() : null))
-            .then((payload) => {
-              if (payload?.authenticated && isMounted) {
-                setAuthenticatedUser(payload.user)
-              }
-            })
-            .catch(() => {})
-        } else if (isMounted) {
-          setAuthenticatedUser(null)
+
+        if (!accessToken) {
+          canSync = false
+          if (isMounted) {
+            setAuthenticatedUser(null)
+            setAppStateReady(true)
+          }
+          return null
         }
+
+        fetch('/api/auth/session', { headers: authHeaders })
+          .then((response) => (response.ok ? response.json() : null))
+          .then((payload) => {
+            if (payload?.authenticated && isMounted) {
+              setAuthenticatedUser(payload.user)
+            }
+          })
+          .catch(() => {})
+
         return fetch('/api/state', { cache: 'no-store', headers: authHeaders })
       })
       .then((response) => (response?.ok ? response.json() : null))
@@ -95,17 +120,23 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
         if (payload?.state) {
           hydrateAppState(payload.state)
         }
+        latestUpdatedAt = payload?.updatedAt || null
         const photoMap = latestPhotos || (await photosPromise)
         if (photoMap && isMounted) {
           hydrateAgentPhotos(photoMap)
         }
         canSync = payload?.connected === true
         if (payload?.connected === true && payload?.state) {
-          fetch('/api/state', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', ...authHeaders },
-            body: JSON.stringify({ state: payload.state }),
-          }).catch(() => {})
+          lastSyncedSections = Object.fromEntries(
+            PERSISTED_STATE_KEYS.map((key) => [key, JSON.stringify((payload.state as any)[key])])
+          )
+          lastSyncedEntities = Object.fromEntries(
+            ENTITY_COLLECTION_KEYS.map((key) => [
+              key,
+              Object.fromEntries((((payload.state as any)[key] || []) as Array<{ id: string }>).map((item) => [item.id, JSON.stringify(item)])),
+            ])
+          )
+          lastSyncedSnapshot = JSON.stringify(payload.state)
         }
         setAppStateReady(true)
       })
@@ -125,15 +156,89 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
         const {
           data: { session },
         } = await supabase.auth.getSession()
+        if (!session?.access_token) {
+          canSync = false
+          return
+        }
         const snapshot = createAppPersistenceSnapshot(state)
+        const serializedSnapshot = JSON.stringify(snapshot)
+        if (serializedSnapshot === lastSyncedSnapshot) {
+          return
+        }
+        const entityEntries = ENTITY_COLLECTION_KEYS.map((key) => {
+            const nextItems = ((snapshot as any)[key] || []) as Array<{ id: string }>
+            const previousMap = lastSyncedEntities[key] || {}
+            const nextMap = Object.fromEntries(nextItems.map((item) => [item.id, JSON.stringify(item)]))
+            const upserts = nextItems.filter((item) => previousMap[item.id] !== nextMap[item.id])
+            const deletes = Object.keys(previousMap).filter((id) => !nextMap[id])
+            return [key, { upserts, deletes }]
+          }) as Array<[string, { upserts: Array<{ id: string }>; deletes: string[] }]>
+        const entityPatch = Object.fromEntries(
+          entityEntries.filter(([, delta]) => delta.upserts.length || delta.deletes.length)
+        )
+        const statePatch = Object.fromEntries(
+          PERSISTED_STATE_KEYS.filter((key) => JSON.stringify((snapshot as any)[key]) !== lastSyncedSections[key]).map((key) => [
+            key,
+            (snapshot as any)[key],
+          ])
+        )
+        if (!Object.keys(statePatch).length && !Object.keys(entityPatch).length) {
+          lastSyncedSnapshot = serializedSnapshot
+          return
+        }
         fetch('/api/state', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
           },
-          body: JSON.stringify({ state: snapshot }),
-        }).catch(() => {})
+          body: JSON.stringify({ statePatch, entityPatch, updatedAt: latestUpdatedAt }),
+        })
+          .then(async (response) => {
+            if (response.status === 409) {
+              const latestResponse = await fetch('/api/state', {
+                headers: {
+                  Authorization: `Bearer ${session.access_token}`,
+                },
+                cache: 'no-store',
+              }).catch(() => null)
+
+              const latestPayload = latestResponse?.ok ? await latestResponse.json().catch(() => null) : null
+              if (latestPayload?.state) {
+                hydrateAppState(latestPayload.state)
+                latestUpdatedAt = latestPayload.updatedAt || null
+                lastSyncedSnapshot = JSON.stringify(latestPayload.state)
+                lastSyncedSections = Object.fromEntries(
+                  PERSISTED_STATE_KEYS.map((key) => [key, JSON.stringify((latestPayload.state as any)[key])])
+                )
+                lastSyncedEntities = Object.fromEntries(
+                  ENTITY_COLLECTION_KEYS.map((key) => [
+                    key,
+                    Object.fromEntries(
+                      ((((latestPayload.state as any)[key] || []) as Array<{ id: string }>)).map((item) => [item.id, JSON.stringify(item)])
+                    ),
+                  ])
+                )
+              }
+              return
+            }
+
+            if (!response.ok) return
+            const payload = await response.json().catch(() => null)
+            if (payload?.updatedAt) {
+              latestUpdatedAt = payload.updatedAt
+              lastSyncedSnapshot = serializedSnapshot
+              for (const key of Object.keys(statePatch)) {
+                lastSyncedSections[key] = JSON.stringify((statePatch as any)[key])
+              }
+              for (const key of ENTITY_COLLECTION_KEYS) {
+                lastSyncedEntities[key] = Object.fromEntries(
+                  ((((snapshot as any)[key] || []) as Array<{ id: string }>)).map((item) => [item.id, JSON.stringify(item)])
+                )
+              }
+            }
+          })
+          .catch(() => {})
       }, 700)
     })
 
@@ -157,6 +262,12 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col h-screen bg-[var(--bg-base)] overflow-hidden">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[var(--accent-purple)] focus:text-white focus:text-sm focus:font-medium focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
       <TopBar onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
 
       <div className="flex flex-1 overflow-hidden">
@@ -220,6 +331,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
       </button>
 
       <IrisChat />
+      <GlobalTaskTracker />
       <ToastContainer />
     </div>
   )

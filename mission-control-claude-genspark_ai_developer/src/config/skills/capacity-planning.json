@@ -1,0 +1,99 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "capacity-planning",
+  "name": "Capacity Planning",
+  "description": "Forecasts and plans resource needs across people, time, and skills to ensure the team can deliver committed work without overload or underutilization.",
+  "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when planning resource capacity for upcoming projects or quarters — to ensure the right people are available with the right skills at the right time.",
+      "context": "You are a resource planner who forecasts team capacity against workload commitments to prevent burnout and ensure deliverables are achievable.",
+      "instructions": "## Capacity Planning Workflow\n\n- [ ] 1. Inventory resources: List team members, skills, and availability\n- [ ] 2. Forecast demand: Estimate hours/story points needed per project\n- [ ] 3. Calculate capacity: Compare demand against available hours\n- [ ] 4. Identify gaps: Flag over-capacity (burnout risk) or under-capacity (waste)\n- [ ] 5. Resolve gaps: Hire, reassign, delay, or scope adjust\n- [ ] 6. Monitor: Track actual vs. planned throughout the period\n\n## Key Inputs\n- Team: {{team_name}}\n- Period: {{planning_period}}\n- Committed work: {{committed_work}}\n- Available hours: {{available_hours}}",
+      "output_template": "## Capacity Plan: {{team_name}} — {{planning_period}}\n\n### Team Overview\n| Team member | Role | Available hours | Utilization target |\n|-------------|------|----------------|-------------------|\n| | | | |\n\n### Workload Forecast\n| Project | Estimated hours | Priority | Assigned to |\n|---------|----------------|----------|-------------|\n| | | | |\n\n### Capacity vs. Demand\n| Team member | Available | Demand | Gap | Status |\n|-------------|-----------|--------|-----|--------|\n| | | | | ✅ / ⚠️ |\n\n### Gap Analysis\n| Gap type | Team member(s) | Impact | Resolution |\n|----------|---------------|--------|------------|\n| | | | |\n\n### Hiring / Reassignment Plan\n| Action | Owner | By when |\n|--------|-------|---------|\n| | | |\n\n### Risks\n| Risk | Probability | Impact | Mitigation |\n|------|-------------|--------|------------|\n| | | | |\n\n### Review Cadence\n| Check point | Date | Action |\n|-------------|------|--------|\n| | | |"
+    }
+  },
+  "variables": [
+    {
+      "name": "team_name",
+      "type": "string",
+      "required": true,
+      "description": "Team or department name"
+    },
+    {
+      "name": "planning_period",
+      "type": "string",
+      "required": true,
+      "description": "Planning period (e.g., Q3 2026, Next sprint)"
+    },
+    {
+      "name": "committed_work",
+      "type": "string",
+      "required": false,
+      "description": "Committed projects and deliverables"
+    },
+    {
+      "name": "available_hours",
+      "type": "string",
+      "required": false,
+      "description": "Available hours per team member"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Resource Inventory",
+        "action": "List all resources, skills, and availability",
+        "verify": "Full picture of who can do what"
+      },
+      {
+        "step": 2,
+        "name": "Demand Forecast",
+        "action": "Estimate effort required for all committed work",
+        "verify": "Estimates are realistic"
+      },
+      {
+        "step": 3,
+        "name": "Gap Analysis",
+        "action": "Compare demand to capacity",
+        "verify": "Gaps are quantified"
+      },
+      {
+        "step": 4,
+        "name": "Resolution",
+        "action": "Plan how to resolve gaps",
+        "verify": "Resolutions are agreed and owned"
+      },
+      {
+        "step": 5,
+        "name": "Monitoring",
+        "action": "Track actual utilization against plan",
+        "verify": "Plan is adjusted as reality changes"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Plan Q3 capacity for a 5-person creative team. Committed to 3 client projects plus internal initiatives. One team member is on leave for 3 weeks.",
+      "output": "Capacity plan showing utilization per person, gap analysis, and hiring/reassignment recommendations"
+    }
+  ],
+  "checklist": [
+    "All team members and skills are inventoried",
+    "Demand estimates are realistic and reviewed",
+    "Over-capacity situations are identified and resolved",
+    "Under-utilization is minimized",
+    "Gaps have assigned resolutions with owners"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova"],
+  "pipelines": ["resource-planning"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["project-management", "resource-management", "capacity"],
+    "lastUpdated": "2026-03-24"
+  }
+}

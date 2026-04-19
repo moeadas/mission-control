@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when building or refreshing a performance dashboard — to consolidate metrics from multiple sources into a clear, actionable view of campaign and business performance.",
+      "trigger": "Use this skillany time building or refreshing a performance dashboard — to consolidate metrics from multiple sources into a clear, actionable view of campaign and business performance.",
       "context": "You are a data analyst who designs and builds dashboards that give stakeholders immediate visibility into performance, enabling fast, data-driven decisions.",
-      "instructions": "## Dashboard Creation Workflow\n\n- [ ] 1. Define stakeholders: Who will use this dashboard and why?\n- [ ] 2. Define KPIs: What metrics matter most to each stakeholder?\n- [ ] 3. Map data sources: Where does each metric come from?\n- [ ] 4. Design layout: What goes on the overview vs. detail views?\n- [ ] 5. Build the dashboard: Connect data sources and build visualizations\n- [ ] 6. Add context: Labels, benchmarks, targets, and trend lines\n- [ ] 7. Test with users: Does it answer the questions stakeholders have?\n- [ ] 8. Set refresh cadence: How often is data updated?\n\n## Key Inputs\n- Dashboard purpose: {{dashboard_purpose}}\n- Stakeholders: {{stakeholders}}\n- KPIs needed: {{kpis}}\n- Data sources: {{data_sources}}\n- Tools available: {{tools}}",
+      "instructions": "## Dashboard Creation\n\n1. **Stakeholder Definition** — Define who will use the dashboard and why\n   - ✓ Done when: Questions to be answered are clear\n\n2. **KPI Definition** — Define the metrics that answer stakeholder questions\n   - ✓ Done when: KPIs are measurable and available\n\n3. **Data Mapping** — Map each KPI to its data source\n   - ✓ Done when: All data sources are accessible\n\n4. **Layout Design** — Design the dashboard layout and visualizations\n   - ✓ Done when: Layout answers key stakeholder questions\n\n5. **Testing** — Test the dashboard with real users\n   - ✓ Done when: Dashboard answers stakeholder questions\n\n## Key Inputs\n- dashboard_name: Name of the dashboard\n- dashboard_purpose: Purpose of the dashboard\n- stakeholders: Who will use this dashboard\n- kpis: Key metrics to include\n- data_sources: Data sources for the dashboard\n- tools: Dashboard tools available (Tableau, Looker, etc.)",
       "output_template": "## Dashboard Design: {{dashboard_name}}\n\n### Dashboard Overview\n| Field | Value |\n|-------|-------|\n| Name | {{dashboard_name}} |\n| Purpose | {{dashboard_purpose}} |\n| Primary stakeholders | {{stakeholders}} |\n| Refresh cadence | |\n| Date | {{date}} |\n\n### KPI Definitions\n| KPI | Definition | Data source | Calculation | Target |\n|-----|-----------|-------------|-------------|--------|\n| | | | | |\n\n### Data Sources\n| Source | Data pulled | Refresh frequency | Connection method |\n|--------|------------|-----------------|-----------------|\n| | | | |\n\n### Dashboard Layout\n\n#### Overview Page (Executive Summary)\n**Key metrics displayed:**\n- \n\n**Visualizations:**\n- \n\n#### Campaign Performance Page\n**Metrics:**\n- \n\n**Visualizations:**\n- \n\n#### Channel Performance Page\n**Metrics:**\n- \n\n**Visualizations:**\n- \n\n### Design Specifications\n| Element | Specification |\n|---------|--------------|\n| Color coding | |\n| Date range default | |\n| Filters available | |\n| Export options | |\n\n### Stakeholder Access\n| Stakeholder | Access level | Pages visible |\n|-----------|-------------|-------------|\n| | | |\n\n### Maintenance\n| Task | Frequency | Owner |\n|------|---------|-------|\n| Data refresh | | |\n| Metric validation | | |\n| Layout update | | |"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Dashboard tools available (Tableau, Looker, etc.)"
     }
   ],
+  "inputs": [
+    {
+      "name": "dashboard_name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the dashboard"
+    },
+    {
+      "name": "dashboard_purpose",
+      "type": "string",
+      "required": true,
+      "description": "Purpose of the dashboard"
+    },
+    {
+      "name": "stakeholders",
+      "type": "string",
+      "required": false,
+      "description": "Who will use this dashboard"
+    },
+    {
+      "name": "kpis",
+      "type": "string",
+      "required": false,
+      "description": "Key metrics to include"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Data sources for the dashboard"
+    },
+    {
+      "name": "tools",
+      "type": "string",
+      "required": false,
+      "description": "Dashboard tools available (Tableau, Looker, etc.)"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,20 +132,31 @@
     }
   ],
   "checklist": [
-    "Stakeholder questions are clearly defined",
-    "KPIs are measurable and sourced",
-    "Data sources are connected and reliable",
-    "Layout is clear and actionable",
-    "Context (targets, benchmarks, trends) is included",
-    "Dashboard has been tested with real users"
+    "Questions to be answered are clear",
+    "KPIs are measurable and available",
+    "All data sources are accessible",
+    "Layout answers key stakeholder questions",
+    "Dashboard answers stakeholder questions"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["analytics"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "dex"
+  ],
+  "pipelines": [
+    "analytics"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["analytics", "dashboard", "reporting", "data"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "analytics",
+      "dashboard",
+      "reporting",
+      "data"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

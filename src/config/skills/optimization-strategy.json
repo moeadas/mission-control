@@ -2,56 +2,160 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "optimization-strategy",
   "name": "Optimization Strategy",
-  "description": "Developing systematic approaches to optimize marketing performance across channels, campaigns, and funnels. Move from guesswork to data-driven decisions that improve ROI continuously.",
+  "description": "Designs optimization strategies that identify what to test, what to scale, and how to improve performance systematically over time.",
   "category": "media",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when developing optimization strategies, improving campaign performance, troubleshooting underperforming channels, or building systematic testing and optimization programs.",
-      "context": "You are an optimization strategy specialist who understands channel-specific best practices, testing methodologies, and how to build continuous improvement programs that compound results over time.",
-      "instructions": "## Optimization Strategy Workflow\n\n- [ ] 1. Audit current performance and identify opportunities\n- [ ] 2. Prioritize optimization opportunities by impact\n- [ ] 3. Design optimization tests and experiments\n- [ ] 4. Implement changes systematically\n- [ ] 5. Measure and learn from results\n- [ ] 6. Build ongoing optimization culture\n\n## Key Inputs\n- Current Performance: {{performance}}\n- Focus Channels: {{channels}}\n- Budget: {{budget}}\n- Constraints: {{constraints}}\n- Timeline: {{timeline}}",
-      "output_template": "## Optimization Strategy\n\n### Performance Audit\n| Channel/Campaign | Current Metric | Benchmark | Gap | Opportunity |\n|-----------------|----------------|-----------|-----|-------------|\n| | | | | |\n\n### Prioritized Opportunities\n| Opportunity | Impact | Effort | Priority | Owner |\n|-------------|--------|-------|---------|-------|\n| | | | | |\n\n### Testing Roadmap\n| Test | Hypothesis | Metric | Timeline | Status |\n|------|-----------|--------|---------|--------|\n| | | | | |\n\n### Quick Wins\n| Optimization | Expected Lift | Implementation |\n|-------------|-------------|----------------|\n| | | |\n\n### Channel-Specific Optimizations\n| Channel | Optimization | Current → Target |\n|---------|-------------|-----------------|\n| | | |\n\n### Measurement Framework\n| Metric | Baseline | Target | Frequency |\n|--------|----------|--------|----------|\n| | | | |\n\n### Optimization Culture\n| Practice | Cadence | Owner |\n|----------|---------|-------|\n| Performance Review | | |\n| Test Prioritization | | |\n| Learnings Documentation | | |"
+      "trigger": "Use this skillany time building optimization plans for campaigns, funnels, media accounts, conversion paths, or ongoing performance programs.",
+      "context": "You are a performance optimization strategist. You turn noisy results into a clear decision framework for what to test, what to fix, and what to scale next.",
+      "instructions": "## Optimization Strategy\n\n1. **Define KPI hierarchy** — Define KPI hierarchy\n   - ✓ Done when: Define KPI hierarchy is completed to a high standard\n\n2. **Find bottlenecks** — Find bottlenecks\n   - ✓ Done when: Find bottlenecks is completed to a high standard\n\n3. **Prioritize hypotheses** — Prioritize hypotheses\n   - ✓ Done when: Prioritize hypotheses is completed to a high standard\n\n4. **Design test roadmap** — Design test roadmap\n   - ✓ Done when: Design test roadmap is completed to a high standard\n\n5. **Separate quick wins from structural fixes** — Separate quick wins from structural fixes\n   - ✓ Done when: Separate quick wins from structural fixes is completed to a high standard\n\n6. **Define learning loop** — Define learning loop\n   - ✓ Done when: Define learning loop is completed to a high standard\n\n## Key Inputs\n- performance: Current performance data\n- channels: Channels to optimize\n- budget: Optimization budget\n- constraints: Technical or business constraints\n- timeline: Optimization timeline",
+      "output_template": "## Optimization Strategy\n\n### 1. Goal And Performance Context\n| Element | Detail |\n|---|---|\n| Primary KPI | |\n| Supporting KPIs | |\n| Current Bottleneck | |\n| Main Opportunity | |\n\n### 2. Priority Hypotheses\n| Hypothesis | Bottleneck Addressed | Expected Impact | Confidence | Effort |\n|---|---|---|---|---|\n| | | High / Med / Low | High / Med / Low | High / Med / Low |\n\n### 3. Test Roadmap\n| Sequence | Test / Change | Success Metric | Decision Rule |\n|---|---|---|---|\n| 1 | | | |\n| 2 | | | |\n| 3 | | | |\n\n### 4. Immediate Fixes Vs Strategic Changes\n- Immediate fixes:\n- Structural improvements:\n\n### 5. Learning Loop\n- What to document:\n- When to re-evaluate:\n- What to scale if successful:"
     }
   },
   "variables": [
-    { "name": "performance", "type": "string", "required": true, "description": "Current performance data" },
-    { "name": "channels", "type": "string", "required": true, "description": "Channels to optimize" },
-    { "name": "budget", "type": "string", "required": false, "description": "Optimization budget" },
-    { "name": "constraints", "type": "string", "required": false, "description": "Technical or business constraints" },
-    { "name": "timeline", "type": "string", "required": false, "description": "Optimization timeline" }
+    {
+      "name": "performance",
+      "type": "string",
+      "required": true,
+      "description": "Current performance data"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Channels to optimize"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Optimization budget"
+    },
+    {
+      "name": "constraints",
+      "type": "string",
+      "required": false,
+      "description": "Technical or business constraints"
+    },
+    {
+      "name": "timeline",
+      "type": "string",
+      "required": false,
+      "description": "Optimization timeline"
+    }
   ],
+  "inputs": [
+    {
+      "name": "performance",
+      "type": "string",
+      "required": true,
+      "description": "Current performance data"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Channels to optimize"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Optimization budget"
+    },
+    {
+      "name": "constraints",
+      "type": "string",
+      "required": false,
+      "description": "Technical or business constraints"
+    },
+    {
+      "name": "timeline",
+      "type": "string",
+      "required": false,
+      "description": "Optimization timeline"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Audit performance", "action": "Analyze current metrics and identify gaps", "verify": "Opportunities are identified" },
-      { "step": 2, "name": "Prioritize", "action": "Rank by impact and effort", "verify": "Priority is logical" },
-      { "step": 3, "name": "Design tests", "action": "Create test plans for high-priority items", "verify": "Tests are rigorous" },
-      { "step": 4, "name": "Implement", "action": "Execute optimizations systematically", "verify": "Changes are tracked" },
-      { "step": 5, "name": "Measure", "action": "Analyze results and document learnings", "verify": "Learnings are captured" },
-      { "step": 6, "name": "Scale", "action": "Apply winning optimizations across channels", "verify": "Improvements are sustained" }
+      {
+        "step": 1,
+        "name": "Define KPI hierarchy",
+        "action": "Define KPI hierarchy",
+        "verify": "Define KPI hierarchy is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Find bottlenecks",
+        "action": "Find bottlenecks",
+        "verify": "Find bottlenecks is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Prioritize hypotheses",
+        "action": "Prioritize hypotheses",
+        "verify": "Prioritize hypotheses is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Design test roadmap",
+        "action": "Design test roadmap",
+        "verify": "Design test roadmap is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Separate quick wins from structural fixes",
+        "action": "Separate quick wins from structural fixes",
+        "verify": "Separate quick wins from structural fixes is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Define learning loop",
+        "action": "Define learning loop",
+        "verify": "Define learning loop is completed to a high standard"
+      }
     ]
   },
   "examples": [
-    { "input": "Develop an optimization strategy for an e-commerce brand spending $100K/month on paid social with declining ROAS.", "output": "Complete optimization strategy with audit, test roadmap, and implementation plan." },
-    { "input": "Create a systematic optimization program for a B2B SaaS company looking to improve conversion rates across the funnel.", "output": "Optimization strategy with channel-specific tactics and testing framework." }
+    {
+      "input": "Develop an optimization strategy for an e-commerce brand spending $100K/month on paid social with declining ROAS.",
+      "output": "Complete optimization strategy with audit, test roadmap, and implementation plan."
+    },
+    {
+      "input": "Create a systematic optimization program for a B2B SaaS company looking to improve conversion rates across the funnel.",
+      "output": "Optimization strategy with channel-specific tactics and testing framework."
+    }
   ],
   "checklist": [
-    "Current performance audited",
-    "Opportunities identified and prioritized",
-    "Testing roadmap established",
-    "Quick wins identified and implemented",
-    "Channel-specific optimizations defined",
-    "Measurement framework in place",
-    "Learnings documented systematically",
-    "Optimization culture embedded"
+    "Define KPI hierarchy is completed to a high standard",
+    "Find bottlenecks is completed to a high standard",
+    "Prioritize hypotheses is completed to a high standard",
+    "Design test roadmap is completed to a high standard",
+    "Separate quick wins from structural fixes is completed to a high standard",
+    "Define learning loop is completed to a high standard"
   ],
-  "tools": ["document", "spreadsheet", "analytics"],
-  "agents": ["nova"],
+  "tools": [
+    "document",
+    "spreadsheet",
+    "analytics"
+  ],
+  "agents": [
+    "dex"
+  ],
   "pipelines": [],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["optimization", "performance", "testing", "roas", "conversion"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "optimization",
+      "performance",
+      "testing",
+      "roas",
+      "conversion"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

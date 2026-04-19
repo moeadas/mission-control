@@ -8,24 +8,91 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when presenting campaign performance data, creating client reports with charts, building dashboards, or needing to communicate data findings visually.",
+      "trigger": "Use this skillany time presenting campaign performance data, creating client reports with charts, building dashboards, or needing to communicate data findings visually.",
       "context": "You are a data visualization specialist focused on advertising and marketing analytics. You understand which chart types work best for different data stories and how to design visuals that communicate clearly without distortion.",
-      "instructions": "## Data Visualization Workflow\n\n- [ ] 1. Identify the core data story — what question does this visualization answer?\n- [ ] 2. Select the appropriate chart type (line for trends, bar for comparisons, pie for proportions, scatter for correlations)\n- [ ] 3. Design the visual with clear labels, legends, and axis titles\n- [ ] 4. Apply brand-consistent colors and styling\n- [ ] 5. Add context with annotations or callout boxes for key data points\n- [ ] 6. Review for clarity and accuracy\n\n## Key Inputs\n- Data: {{data}} (raw numbers or dataset)\n- Chart Type: {{chart_type}} (line, bar, pie, scatter, heatmap)\n- Context: {{context}} (what story this tells)\n- Audience: {{audience}} (client, internal team, executive)",
+      "instructions": "## Data Visualization\n\n1. **Understand data story** — Identify the key question and metric focus\n   - ✓ Done when: Data story is clear and answerable\n\n2. **Select chart type** — Choose the most effective visualization for the data type\n   - ✓ Done when: Chart type matches data and story\n\n3. **Design visual** — Create chart with proper labeling, colors, and annotations\n   - ✓ Done when: Visual is readable and accurate\n\n4. **Add context** — Include callouts, benchmarks, and explanatory text\n   - ✓ Done when: Context helps audience understand significance\n\n## Key Inputs\n- data: Raw data to visualize (table, CSV format, or dataset summary)\n- chart_type: Type of chart: line, bar, pie, scatter, heatmap, area\n- context: Business context or question the visualization answers\n- audience: Who will view this: client, executive, internal team",
       "output_template": "## Data Visualization Output\n\n### Chart\n![Visualization description]\n\n### Key Insights\n| Metric | Value | Change |\n|--------|-------|--------|\n| | | |\n\n### Data Story\n[2-3 sentence interpretation of what the data shows]\n\n### Recommendations\n- [ ] ..."
     }
   },
   "variables": [
-    { "name": "data", "type": "string", "required": true, "description": "Raw data to visualize (table, CSV format, or dataset summary)" },
-    { "name": "chart_type", "type": "string", "required": true, "description": "Type of chart: line, bar, pie, scatter, heatmap, area" },
-    { "name": "context", "type": "string", "required": false, "description": "Business context or question the visualization answers" },
-    { "name": "audience", "type": "string", "required": false, "description": "Who will view this: client, executive, internal team" }
+    {
+      "name": "data",
+      "type": "string",
+      "required": true,
+      "description": "Raw data to visualize (table, CSV format, or dataset summary)"
+    },
+    {
+      "name": "chart_type",
+      "type": "string",
+      "required": true,
+      "description": "Type of chart: line, bar, pie, scatter, heatmap, area"
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "required": false,
+      "description": "Business context or question the visualization answers"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": false,
+      "description": "Who will view this: client, executive, internal team"
+    }
   ],
+  "inputs": [
+    {
+      "name": "data",
+      "type": "string",
+      "required": true,
+      "description": "Raw data to visualize (table, CSV format, or dataset summary)"
+    },
+    {
+      "name": "chart_type",
+      "type": "string",
+      "required": true,
+      "description": "Type of chart: line, bar, pie, scatter, heatmap, area"
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "required": false,
+      "description": "Business context or question the visualization answers"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": false,
+      "description": "Who will view this: client, executive, internal team"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Understand data story", "action": "Identify the key question and metric focus", "verify": "Data story is clear and answerable" },
-      { "step": 2, "name": "Select chart type", "action": "Choose the most effective visualization for the data type", "verify": "Chart type matches data and story" },
-      { "step": 3, "name": "Design visual", "action": "Create chart with proper labeling, colors, and annotations", "verify": "Visual is readable and accurate" },
-      { "step": 4, "name": "Add context", "action": "Include callouts, benchmarks, and explanatory text", "verify": "Context helps audience understand significance" }
+      {
+        "step": 1,
+        "name": "Understand data story",
+        "action": "Identify the key question and metric focus",
+        "verify": "Data story is clear and answerable"
+      },
+      {
+        "step": 2,
+        "name": "Select chart type",
+        "action": "Choose the most effective visualization for the data type",
+        "verify": "Chart type matches data and story"
+      },
+      {
+        "step": 3,
+        "name": "Design visual",
+        "action": "Create chart with proper labeling, colors, and annotations",
+        "verify": "Visual is readable and accurate"
+      },
+      {
+        "step": 4,
+        "name": "Add context",
+        "action": "Include callouts, benchmarks, and explanatory text",
+        "verify": "Context helps audience understand significance"
+      }
     ]
   },
   "examples": [
@@ -35,19 +102,30 @@
     }
   ],
   "checklist": [
-    "Chart type matches the data story",
-    "Labels and legends are clear",
-    "Colors are brand-consistent and accessible",
-    "Key data points are annotated",
-    "Takeaway message is immediately clear"
+    "Data story is clear and answerable",
+    "Chart type matches data and story",
+    "Visual is readable and accurate",
+    "Context helps audience understand significance"
   ],
-  "tools": ["document", "spreadsheet"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["analytics-pipeline"],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "analytics-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["data-viz", "reporting", "analytics", "dashboards"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "data-viz",
+      "reporting",
+      "analytics",
+      "dashboards"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -8,9 +8,9 @@
   "freedom": "low",
   "prompts": {
     "en": {
-      "trigger": "Use when reviewing creative output to ensure brand consistency — checking visuals, copy tone, messaging alignment, and adherence to brand guidelines across all channels.",
+      "trigger": "Use this skillany time reviewing creative output to ensure brand consistency — checking visuals, copy tone, messaging alignment, and adherence to brand guidelines across all channels.",
       "context": "You are a brand guardian who ensures every piece of creative maintains the client's brand standards, visual identity, and voice — flagging inconsistencies before they go live.",
-      "instructions": "## Brand Consistency Workflow\n\n- [ ] 1. Reference brand guidelines: Pull up brand book, logo usage rules, color palette, typography\n- [ ] 2. Check visual elements: Logo placement, colors, fonts, imagery style\n- [ ] 3. Check tone and voice: Does the copy sound like the brand?\n- [ ] 4. Check messaging: Does the message align with current brand positioning?\n- [ ] 5. Flag issues: Document any deviations from guidelines\n- [ ] 6. Recommend fixes: Suggest specific corrections\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Creative asset: {{creative_asset}}\n- Deliverable type: {{deliverable_type}}\n- Channel: {{channel}}",
+      "instructions": "## Brand Consistency\n\n1. **Guidelines Review** — Pull and review brand guidelines\n   - ✓ Done when: Guidelines are current and accessible\n\n2. **Visual Audit** — Check logo, colors, typography, imagery\n   - ✓ Done when: All visual elements match guidelines\n\n3. **Tone Check** — Review copy tone and voice\n   - ✓ Done when: Copy sounds like the brand\n\n4. **Messaging Check** — Verify messaging alignment\n   - ✓ Done when: Message aligns with brand positioning\n\n5. **Issue Documentation** — Document and prioritize any issues found\n   - ✓ Done when: Fixes are clear and actionable\n\n## Key Inputs\n- brand_name: Brand being reviewed\n- creative_asset: Specific creative asset being reviewed\n- deliverable_type: Type of deliverable (banner, social post, video, etc.)\n- channel: Channel where the asset will run",
       "output_template": "## Brand Consistency Review: {{creative_asset}}\n\n### Review Details\n| Field | Value |\n|-------|-------|\n| Brand | {{brand_name}} |\n| Asset | {{creative_asset}} |\n| Deliverable type | {{deliverable_type}} |\n| Channel | {{channel}} |\n| Review date | {{date}} |\n\n### Visual Consistency\n| Element | Guideline | Asset | Status |\n|---------|-----------|-------|--------|\n| Logo usage | | | ✅ / ❌ |\n| Color palette | | | ✅ / ❌ |\n| Typography | | | ✅ / ❌ |\n| Imagery style | | | ✅ / ❌ |\n| Spacing/layout | | | ✅ / ❌ |\n\n### Tone & Voice\n| Aspect | Expected | Actual | Status |\n|--------|----------|--------|--------|\n| | | | ✅ / ❌ |\n\n### Messaging Alignment\n| Message | Brand positioning | Asset message | Status |\n|---------|------------------|--------------|--------|\n| | | | ✅ / ❌ |\n\n### Issues Found\n| Issue | Severity | Fix |\n|-------|----------|-----|\n| | | |\n\n### Overall Verdict\n**Status:** ✅ Approved / ⚠️ Revisions needed / ❌ Rejected\n**Notes:**"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Channel where the asset will run"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being reviewed"
+    },
+    {
+      "name": "creative_asset",
+      "type": "string",
+      "required": true,
+      "description": "Specific creative asset being reviewed"
+    },
+    {
+      "name": "deliverable_type",
+      "type": "string",
+      "required": false,
+      "description": "Type of deliverable (banner, social post, video, etc.)"
+    },
+    {
+      "name": "channel",
+      "type": "string",
+      "required": false,
+      "description": "Channel where the asset will run"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,32 @@
     }
   ],
   "checklist": [
-    "Logo usage is correct (placement, size, clearance)",
-    "Colors match brand palette (hex codes verified)",
-    "Typography follows guidelines",
-    "Imagery style is on-brand",
-    "Tone and voice are consistent",
-    "Messaging aligns with current positioning"
+    "Guidelines are current and accessible",
+    "All visual elements match guidelines",
+    "Copy sounds like the brand",
+    "Message aligns with brand positioning",
+    "Fixes are clear and actionable"
   ],
-  "tools": ["document", "spreadsheet"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["creative-review"],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "finn",
+    "lyra"
+  ],
+  "pipelines": [
+    "creative-review"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["creative", "brand", "quality", "consistency"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "creative",
+      "brand",
+      "quality",
+      "consistency"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

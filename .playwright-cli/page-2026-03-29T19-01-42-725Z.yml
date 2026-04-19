@@ -1,0 +1,77 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e5]:
+      - img [ref=e9]
+      - generic [ref=e11]:
+        - button "Refresh latest app version" [ref=e12] [cursor=pointer]:
+          - img [ref=e13]
+        - button "Switch to light mode" [ref=e18] [cursor=pointer]:
+          - img [ref=e19]
+        - button "Sign out" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - paragraph [ref=e30]: 21:01
+    - generic [ref=e31]:
+      - navigation "Main navigation" [ref=e32]:
+        - generic [ref=e34]:
+          - generic [ref=e36]: MC
+          - generic [ref=e37]:
+            - paragraph [ref=e38]: Mission Control
+            - paragraph [ref=e39]: Agency HQ
+        - generic [ref=e40]:
+          - link "Dashboard" [ref=e41] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e43]
+            - generic [ref=e48]: Dashboard
+          - link "Virtual Office" [ref=e49] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e51]
+            - generic [ref=e55]: Virtual Office
+          - link "Agents" [ref=e56] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e58]
+            - generic [ref=e61]: Agents
+          - link "Clients" [ref=e62] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e64]
+            - generic [ref=e69]: Clients
+          - link "Tasks" [ref=e70] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e72]
+            - generic [ref=e75]: Tasks
+          - link "Analytics" [ref=e76] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e78]
+            - generic [ref=e80]: Analytics
+          - link "Outputs" [ref=e81] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e84]
+            - generic [ref=e87]: Outputs
+        - generic [ref=e89]:
+          - generic [ref=e91]: MC
+          - generic [ref=e92]:
+            - paragraph [ref=e93]: Agency Mode
+            - paragraph [ref=e94]: Iris · Online
+      - main [ref=e96]:
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic [ref=e99]:
+              - heading "Outputs" [level=1] [ref=e100]:
+                - img [ref=e101]
+                - text: Outputs
+              - paragraph [ref=e104]: Central registry for briefs, plans, KPI sheets, and creative production outputs
+            - generic [ref=e106]: 0 saved outputs
+          - generic [ref=e107]:
+            - combobox [ref=e108]:
+              - option "All clients" [selected]
+              - option "Victory Genomics"
+            - combobox [ref=e109]:
+              - option "All statuses" [selected]
+              - option "Draft"
+              - option "Ready"
+              - option "Delivered"
+          - paragraph [ref=e113]: Loading outputs…
+    - button "Open Iris chat" [ref=e114] [cursor=pointer]:
+      - img [ref=e115]

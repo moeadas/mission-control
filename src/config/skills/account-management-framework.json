@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when setting up account management processes, designing client onboarding/offboarding, or establishing scalable client service operations.",
+      "trigger": "Use this skillany time setting up account management processes, designing client onboarding/offboarding, or establishing scalable client service operations.",
       "context": "You are an agency operations expert specializing in client account management frameworks, service delivery, and relationship systems.",
-      "instructions": "## Account Management Framework Design\n\nBuild a scalable account management system:\n\n- [ ] 1. Account classification: Define segmentation criteria ({{segmentation_criteria}}) and tier structure\n- [ ] 2. Service model design: Map service levels to account tiers ({{tier_structure}})\n- [ ] 3. Handoff protocols: Define how accounts move between tiers or team members\n- [ ] 4. Communication cadences: Set meeting rhythms and reporting schedules per tier\n- [ ] 5. Escalation paths: Define when and how issues escalate ({{escalation_matrix}})\n- [ ] 6. Growth mechanisms: Design upsell, cross-sell, and expansion triggers\n- [ ] 7. Review cycles: Set quarterly and annual account review processes\n\n## Inputs\n- Segmentation: {{segmentation_criteria}}\n- Tier structure: {{tier_structure}}\n- Team size: {{team_size}}",
+      "instructions": "## Account Management Framework\n\n1. **Segmentation** — Define account classification criteria\n   - ✓ Done when: All accounts can be classified unambiguously\n\n2. **Service Model** — Design service levels per tier\n   - ✓ Done when: Model is financially sustainable\n\n3. **Handoff Protocols** — Define tier transition rules\n   - ✓ Done when: Handoffs are clear and objective\n\n4. **Cadences** — Set communication rhythms per tier\n   - ✓ Done when: Cadences match tier value\n\n5. **Escalation Paths** — Define escalation criteria and routes\n   - ✓ Done when: Escalation paths are clear to all parties\n\n6. **Growth Mechanisms** — Design expansion triggers and processes\n   - ✓ Done when: Growth opportunities are systematically identified\n\n## Key Inputs\n- segmentation_criteria: Criteria for segmenting accounts (revenue, industry, potential)\n- tier_structure: Number of tiers and naming\n- team_size: Size of account management team\n- avg_account_revenue: Average revenue per account\n- churn_rate: Current annual churn rate",
       "output_template": "## Account Management Framework\n\n### Account Segmentation\n| Tier | Criteria | # of Accounts | Service Level |\n|------|----------|---------------|---------------|\n| Strategic | | | |\n| Growth | | | |\n| Standard | | | |\n\n### Service Model by Tier\n| Element | Strategic | Growth | Standard |\n|---------|-----------|--------|---------|\n| Meeting cadence | | | |\n| Reporting | | | |\n| Response SLA | | | |\n\n### Handoff Protocols\n- Tier upgrade criteria:\n- Tier downgrade criteria:\n\n### Escalation Matrix\n| Issue Severity | First response | Resolution target | Escalate to |\n|----------------|-----------------|-------------------|-------------|\n| Critical | | | |\n| High | | | |\n| Medium | | | |\n| Low | | | |\n\n### Growth Triggers\n| Signal | Action | Owner |\n|--------|--------|-------|\n| Usage increase | | |\n| New department | | |\n| Satisfaction spike | | |"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Current annual churn rate"
     }
   ],
+  "inputs": [
+    {
+      "name": "segmentation_criteria",
+      "type": "string",
+      "required": true,
+      "description": "Criteria for segmenting accounts (revenue, industry, potential)"
+    },
+    {
+      "name": "tier_structure",
+      "type": "string",
+      "required": true,
+      "description": "Number of tiers and naming"
+    },
+    {
+      "name": "team_size",
+      "type": "string",
+      "required": true,
+      "description": "Size of account management team"
+    },
+    {
+      "name": "avg_account_revenue",
+      "type": "string",
+      "required": false,
+      "description": "Average revenue per account"
+    },
+    {
+      "name": "churn_rate",
+      "type": "string",
+      "required": false,
+      "description": "Current annual churn rate"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,12 +126,12 @@
     }
   ],
   "checklist": [
-    "Segmentation criteria are objective and measurable",
-    "Service model is financially viable",
-    "Handoff criteria are documented and fair",
-    "Communication cadences match tier value",
-    "Escalation paths are clear to all team members",
-    "Growth mechanisms are systematically tracked"
+    "All accounts can be classified unambiguously",
+    "Model is financially sustainable",
+    "Handoffs are clear and objective",
+    "Cadences match tier value",
+    "Escalation paths are clear to all parties",
+    "Growth opportunities are systematically identified"
   ],
   "tools": [
     "spreadsheet",
@@ -106,8 +139,7 @@
     "presentation"
   ],
   "agents": [
-    "sage",
-    "piper"
+    "iris"
   ],
   "pipelines": [],
   "metadata": {
@@ -118,6 +150,6 @@
       "operations",
       "framework"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when testing creative concepts with target audiences before full production — to validate ideas, identify which concepts resonate most strongly, and gather feedback to strengthen the concept.",
+      "trigger": "Use this skillany time testing creative concepts with target audiences before full production — to validate ideas, identify which concepts resonate most strongly, and gather feedback to strengthen the concept.",
       "context": "You are a research strategist who designs and executes concept tests to validate creative directions with real target audience members before committing production resources.",
-      "instructions": "## Concept Testing Workflow\n\n- [ ] 1. Define test objectives: What decisions will this test inform?\n- [ ] 2. Select concepts to test: 2-4 concepts maximum for clarity\n- [ ] 3. Design test instrument: Survey, focus group, or interview guide\n- [ ] 4. Recruit participants: Representative of target audience\n- [ ] 5. Execute test: Collect feedback systematically\n- [ ] 6. Analyze results: Score and synthesize feedback\n- [ ] 7. Make recommendation: Which concept(s) to proceed with and why\n\n## Key Inputs\n- Concepts to test: {{concepts}}\n- Target audience: {{target_audience}}\n- Test method: {{test_method}}\n- Sample size: {{sample_size}}",
+      "instructions": "## Concept Testing\n\n1. **Objective Definition** — Define what decisions the test will inform\n   - ✓ Done when: Objectives are clear and actionable\n\n2. **Concept Selection** — Select 2-4 concepts to test\n   - ✓ Done when: Concepts are distinct enough to compare\n\n3. **Instrument Design** — Design survey or discussion guide\n   - ✓ Done when: Instrument captures decision-relevant data\n\n4. **Execution** — Conduct testing with target audience\n   - ✓ Done when: Participants are representative\n\n5. **Analysis** — Score concepts and synthesize feedback\n   - ✓ Done when: Analysis is objective and evidenced\n\n6. **Recommendation** — Recommend which concept(s) to proceed with\n   - ✓ Done when: Recommendation is clear and evidenced\n\n## Key Inputs\n- concepts: Concepts to be tested\n- target_audience: Target audience for testing\n- test_method: Testing method (survey, focus group, interview)\n- sample_size: Number of participants",
       "output_template": "## Concept Test Report\n\n### Test Overview\n| Field | Value |\n|-------|-------|\n| Test objective | |\n| Date conducted | |\n| Method | |\n| Sample size | |\n| Target audience | |\n\n### Concepts Tested\n| Concept | Description |\n|---------|------------|\n| A | |\n| B | |\n| C | |\n\n### Results Summary\n| Metric | Concept A | Concept B | Concept C |\n|--------|-----------|-----------|-----------|\n| Comprehension | | | |\n| Appeal | | | |\n| Relevance | | | |\n| Uniqueness | | | |\n| Purchase intent | | | |\n| Overall score | | | |\n\n### Key Feedback Themes\n\n**Concept A — Strengths:**\n**Concept A — Weaknesses:**\n\n**Concept B — Strengths:**\n**Concept B — Weaknesses:**\n\n**Concept C — Strengths:**\n**Concept C — Weaknesses:**\n\n### Concept Comparison Matrix\n| Criterion | A | B | C | Weight |\n|-----------|---|---|---|--------|\n| | | | | |\n\n### Recommendation\n**Proceed with:**\n**Rationale:**\n**Modifications recommended:**\n\n### Next Steps\n| Action | Owner | By when |\n|--------|-------|---------|\n| | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Number of participants"
     }
   ],
+  "inputs": [
+    {
+      "name": "concepts",
+      "type": "string",
+      "required": true,
+      "description": "Concepts to be tested"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience for testing"
+    },
+    {
+      "name": "test_method",
+      "type": "string",
+      "required": false,
+      "description": "Testing method (survey, focus group, interview)"
+    },
+    {
+      "name": "sample_size",
+      "type": "string",
+      "required": false,
+      "description": "Number of participants"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,20 +114,32 @@
     }
   ],
   "checklist": [
-    "Test objectives are clear and decision-relevant",
-    "Concepts are sufficiently different to yield clear signal",
-    "Participants are representative of target audience",
-    "Instrument captures both quantitative scores and qualitative feedback",
-    "Results are analyzed objectively",
-    "Recommendation is evidenced and clear"
+    "Objectives are clear and actionable",
+    "Concepts are distinct enough to compare",
+    "Instrument captures decision-relevant data",
+    "Participants are representative",
+    "Analysis is objective and evidenced",
+    "Recommendation is clear and evidenced"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["research"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "finn"
+  ],
+  "pipelines": [
+    "research"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["research", "concept-testing", "creative", "validation"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "research",
+      "concept-testing",
+      "creative",
+      "validation"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -182,6 +182,16 @@ export default function SettingsPage() {
     reader.readAsText(file)
   }
 
+  const resetLocalBrowserState = () => {
+    try {
+      window.localStorage.removeItem('moes-mission-control')
+      toast.success('Local browser state cleared. Reloading fresh shared data…')
+      window.location.href = `/dashboard?refresh=${Date.now()}`
+    } catch {
+      toast.error('Could not clear local browser state')
+    }
+  }
+
   return (
     <ClientShell>
       <div className="flex flex-col h-full">
@@ -242,6 +252,18 @@ export default function SettingsPage() {
               <p className="mt-4 text-[11px] text-text-dim">
                 Required env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>, and <code>SUPABASE_SECRET_KEY</code>.
               </p>
+              <div className="mt-4 rounded-xl border border-border bg-base p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-xs font-mono text-text-dim uppercase mb-1">Local recovery</p>
+                  <p className="text-sm text-text-primary">
+                    If a browser gets stuck on stale cached state, clear only this device&apos;s local Mission Control cache and reload from shared Supabase data.
+                  </p>
+                </div>
+                <Button variant="secondary" onClick={resetLocalBrowserState} className="gap-2">
+                  <RefreshCcw size={16} />
+                  Reset Local Browser State
+                </Button>
+              </div>
             </Card>
 
             <Card>
@@ -365,9 +387,25 @@ export default function SettingsPage() {
                     value={providerSettings.ollama.baseUrl}
                     onChange={(e) => updateProviderSettings('ollama', { baseUrl: e.target.value })}
                   />
+                  <Input
+                    label="Context Window"
+                    type="number"
+                    min="2048"
+                    step="1024"
+                    placeholder="Model default"
+                    value={providerSettings.ollama.contextWindow ? String(providerSettings.ollama.contextWindow) : ''}
+                    onChange={(e) =>
+                      updateProviderSettings('ollama', {
+                        contextWindow: e.target.value ? Math.max(2048, Number(e.target.value)) : undefined,
+                      })
+                    }
+                  />
                   {providerSettings.ollama.model ? (
                     <p className="text-[11px] text-text-secondary">Preferred model: {providerSettings.ollama.model}</p>
                   ) : null}
+                  <p className="text-[11px] text-text-dim">
+                    Leave this empty to let Ollama choose the model default. Only override it if you know the model supports a larger context window.
+                  </p>
                   <Button variant="secondary" onClick={verifyOllama} disabled={isVerifyingOllama}>
                     <RefreshCcw size={14} />
                     {isVerifyingOllama ? 'Checking...' : 'Verify Ollama'}
@@ -405,6 +443,75 @@ export default function SettingsPage() {
                     {isVerifyingGemini ? 'Checking...' : 'Save & Verify Gemini'}
                   </Button>
                 </div>
+              </div>
+            </Card>
+
+            <Card>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-sm font-heading font-semibold text-text-primary">Audit MCP Connectors</h2>
+                  <p className="text-xs text-text-secondary mt-1">Optional MCP endpoints for browser-backed UI and SEO audits.</p>
+                </div>
+                <span className="text-[11px] font-mono text-text-dim">
+                  {Object.values(providerSettings.mcp || {}).filter((connector) => connector.enabled && connector.endpoint).length} ready
+                </span>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  ['browserInspector', 'Browser Inspector MCP', 'Screenshots, DOM capture, interaction states'],
+                  ['seoCrawler', 'SEO Crawler MCP', 'Metadata, links, canonicals, crawl findings'],
+                  ['searchConsole', 'Search Console MCP', 'Search Console evidence and performance context'],
+                  ['accessibilityProbe', 'Accessibility Probe MCP', 'Contrast, keyboard, aria, WCAG checks'],
+                ].map(([key, label, description]) => {
+                  const connector = providerSettings.mcp[key as keyof typeof providerSettings.mcp]
+                  return (
+                    <div key={key} className="rounded-xl border border-border bg-base p-4 space-y-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-medium text-text-primary">{label}</p>
+                          <p className="text-xs text-text-secondary mt-1">{description}</p>
+                        </div>
+                        <Badge
+                          color={connector.enabled && connector.endpoint ? '#00d4aa' : '#8b92a8'}
+                          variant="outline"
+                        >
+                          {connector.enabled && connector.endpoint ? 'Ready' : 'Optional'}
+                        </Badge>
+                      </div>
+
+                      <Input
+                        label="Endpoint"
+                        value={connector.endpoint}
+                        placeholder="http://localhost:3001/mcp"
+                        onChange={(e) =>
+                          updateProviderSettings('mcp', {
+                            [key]: {
+                              ...connector,
+                              endpoint: e.target.value,
+                            },
+                          } as any)
+                        }
+                      />
+
+                      <label className="flex items-center gap-2 text-sm text-text-primary">
+                        <input
+                          type="checkbox"
+                          checked={connector.enabled}
+                          onChange={(e) =>
+                            updateProviderSettings('mcp', {
+                              [key]: {
+                                ...connector,
+                                enabled: e.target.checked,
+                              },
+                            } as any)
+                          }
+                        />
+                        Enable this connector for audit routing
+                      </label>
+                    </div>
+                  )
+                })}
               </div>
             </Card>
 

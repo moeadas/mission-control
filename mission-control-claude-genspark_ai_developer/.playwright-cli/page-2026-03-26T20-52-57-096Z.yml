@@ -1,0 +1,282 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - img [ref=e8]
+      - generic [ref=e10]:
+        - button "Refresh latest app version" [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+        - button "Switch to light mode" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - button "Sign out" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - paragraph [ref=e29]: 21:52
+    - generic [ref=e30]:
+      - navigation "Main navigation" [ref=e31]:
+        - generic [ref=e33]:
+          - generic [ref=e35]: MC
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Mission Control
+            - paragraph [ref=e38]: Agency HQ
+        - generic [ref=e39]:
+          - link "Dashboard" [ref=e40] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e42]
+            - generic [ref=e47]: Dashboard
+          - link "Virtual Office" [ref=e48] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e50]
+            - generic [ref=e54]: Virtual Office
+          - link "Agents" [ref=e55] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e57]
+            - generic [ref=e60]: Agents
+          - link "Clients" [ref=e61] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e63]
+            - generic [ref=e68]: Clients
+          - link "Tasks" [ref=e69] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e71]
+            - generic [ref=e74]: Tasks
+          - link "Analytics" [ref=e75] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e77]
+            - generic [ref=e79]: Analytics
+          - link "Outputs" [ref=e80] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e82]
+            - generic [ref=e85]: Outputs
+        - generic [ref=e87]:
+          - generic [ref=e89]: MC
+          - generic [ref=e90]:
+            - paragraph [ref=e91]: Agency Mode
+            - paragraph [ref=e92]: Iris · Online
+      - main [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e97]:
+            - heading "Settings" [level=1] [ref=e98]:
+              - img [ref=e99]
+              - text: Settings
+            - paragraph [ref=e102]: Agency defaults, providers, and presentation mode
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - generic [ref=e107]:
+                  - heading "Shared Persistence" [level=2] [ref=e108]
+                  - paragraph [ref=e109]: Supabase sync makes tasks, outputs, and clients available across browsers.
+                - generic [ref=e110]: Checking…
+              - generic [ref=e111]:
+                - generic [ref=e112]:
+                  - paragraph [ref=e113]: Backend status
+                  - paragraph [ref=e114]: The app is still using browser-local persistence until Supabase env vars are configured.
+                - generic [ref=e115]:
+                  - paragraph [ref=e116]: Last remote update
+                  - paragraph [ref=e117]: No remote state yet
+              - paragraph [ref=e118]:
+                - text: "Required env vars:"
+                - code [ref=e119]: NEXT_PUBLIC_SUPABASE_URL
+                - text: ","
+                - code [ref=e120]: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+                - text: ", and"
+                - code [ref=e121]: SUPABASE_SECRET_KEY
+                - text: .
+            - generic [ref=e122]:
+              - heading "Agency Profile" [level=2] [ref=e123]
+              - generic [ref=e124]:
+                - generic [ref=e125]:
+                  - generic [ref=e126]: Agency Name
+                  - textbox [ref=e127]: Moe's Mission Control
+                - generic [ref=e128]:
+                  - generic [ref=e129]: Theme Mode
+                  - combobox [ref=e130] [cursor=pointer]:
+                    - option "Dark Command Center" [selected]
+                    - option "Light Studio Mode"
+                - generic [ref=e131]:
+                  - generic [ref=e132]: Default Provider
+                  - combobox [ref=e133] [cursor=pointer]:
+                    - option "Ollama" [selected]
+                    - option "Google Gemini"
+                - generic [ref=e134]:
+                  - generic [ref=e135]: Default Model
+                  - combobox [ref=e136] [cursor=pointer]:
+                    - option "MiniMax M2.7 (Cloud)" [selected]
+                    - option "Llama 3.2"
+                    - option "Llama 3.1"
+            - generic [ref=e137]:
+              - generic [ref=e138]:
+                - generic [ref=e139]:
+                  - heading "Provider Connections" [level=2] [ref=e140]
+                  - paragraph [ref=e141]: Each user keeps their own Ollama and Gemini runtime settings.
+                - generic [ref=e142]: 0 verified
+              - generic [ref=e143]:
+                - generic [ref=e144]:
+                  - generic [ref=e145]: Primary Runtime
+                  - combobox [ref=e146] [cursor=pointer]:
+                    - option "Ollama" [selected]
+                    - option "Google Gemini"
+                - generic [ref=e147]:
+                  - generic [ref=e148]: Fallback Runtime
+                  - combobox [ref=e149] [cursor=pointer]:
+                    - option "Google Gemini" [selected]
+                    - option "Ollama"
+                    - option "No fallback"
+                - generic [ref=e150]:
+                  - checkbox "Use Gemini for thinking tasks Strategy, research, SEO, and heavier reasoning can prefer Gemini automatically." [checked] [ref=e151]
+                  - generic [ref=e152]:
+                    - paragraph [ref=e153]: Use Gemini for thinking tasks
+                    - paragraph [ref=e154]: Strategy, research, SEO, and heavier reasoning can prefer Gemini automatically.
+              - generic [ref=e155]:
+                - paragraph [ref=e156]: User Runtime Profile
+                - paragraph [ref=e157]:
+                  - text: Current user uses
+                  - strong [ref=e158]: ollama
+                  - text: as the main runtime with
+                  - strong [ref=e159]: gemini
+                  - text: as fallback.
+                - paragraph [ref=e160]: Ollama should run locally on each user computer. Gemini only becomes active after a valid key is saved and verified.
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - generic [ref=e163]:
+                    - generic [ref=e164]:
+                      - heading "Ollama" [level=3] [ref=e165]
+                      - paragraph [ref=e166]: Primary local runtime on this machine. Each user can point to their own local Ollama app.
+                    - generic [ref=e167]: Unverified
+                  - generic [ref=e168]:
+                    - generic [ref=e169]: Base URL
+                    - textbox [ref=e170]: http://localhost:11434
+                  - button "Verify Ollama" [ref=e171] [cursor=pointer]:
+                    - img [ref=e172]
+                    - text: Verify Ollama
+                - generic [ref=e177]:
+                  - generic [ref=e178]:
+                    - generic [ref=e179]:
+                      - heading "Gemini" [level=3] [ref=e180]
+                      - paragraph [ref=e181]: Fallback and thinking runtime for strategy, research, and heavier reasoning tasks.
+                    - generic [ref=e182]: Unverified
+                  - generic [ref=e183]:
+                    - generic [ref=e184]: Gemini API Key
+                    - textbox "Paste API key" [ref=e185]
+                  - button "Save & Verify Gemini" [ref=e186] [cursor=pointer]:
+                    - img [ref=e187]
+                    - text: Save & Verify Gemini
+            - generic [ref=e189]:
+              - heading "Agency System Defaults" [level=2] [ref=e190]
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - paragraph [ref=e193]: "10"
+                  - paragraph [ref=e194]: Total Agents
+                - generic [ref=e195]:
+                  - paragraph [ref=e196]: "0"
+                  - paragraph [ref=e197]: Programs
+                - generic [ref=e198]:
+                  - paragraph [ref=e199]: "1"
+                  - paragraph [ref=e200]: Clients
+                - generic [ref=e201]:
+                  - paragraph [ref=e202]: "0"
+                  - paragraph [ref=e203]: Missions
+              - generic [ref=e204]:
+                - generic [ref=e205]:
+                  - paragraph [ref=e206]: Theme posture
+                  - paragraph [ref=e207]:
+                    - img [ref=e208]
+                    - text: Dark command center
+                - generic [ref=e214]:
+                  - paragraph [ref=e215]: Model registry
+                  - paragraph [ref=e216]: 9 configured model options across Ollama and Gemini
+            - generic [ref=e217]:
+              - generic [ref=e218]:
+                - generic [ref=e219]:
+                  - heading "OAuth Integrations" [level=2] [ref=e220]
+                  - paragraph [ref=e221]: Connect Google and Meta accounts for seamless data access.
+                - generic [ref=e222]: 0 connected
+              - generic [ref=e223]:
+                - generic [ref=e224]:
+                  - generic [ref=e225]:
+                    - img [ref=e226]
+                    - generic [ref=e231]: Google
+                  - generic [ref=e232]:
+                    - generic [ref=e233]:
+                      - paragraph [ref=e234]: Google Docs
+                      - paragraph [ref=e235]: Access documents and briefs
+                    - button "Connect" [ref=e236] [cursor=pointer]:
+                      - generic [ref=e237]:
+                        - img [ref=e238]
+                        - text: Connect
+                  - generic [ref=e242]:
+                    - generic [ref=e243]:
+                      - paragraph [ref=e244]: Google Sheets
+                      - paragraph [ref=e245]: Sync campaign data and reports
+                    - button "Connect" [ref=e246] [cursor=pointer]:
+                      - generic [ref=e247]:
+                        - img [ref=e248]
+                        - text: Connect
+                  - generic [ref=e252]:
+                    - generic [ref=e253]:
+                      - paragraph [ref=e254]: Google Ads
+                      - paragraph [ref=e255]: Import campaign performance
+                    - button "Connect" [ref=e256] [cursor=pointer]:
+                      - generic [ref=e257]:
+                        - img [ref=e258]
+                        - text: Connect
+                - generic [ref=e262]:
+                  - generic [ref=e263]:
+                    - img [ref=e264]
+                    - generic [ref=e266]: Meta
+                  - generic [ref=e267]:
+                    - generic [ref=e268]:
+                      - paragraph [ref=e269]: Facebook Ads
+                      - paragraph [ref=e270]: Import ad performance data
+                    - button "Connect" [ref=e271] [cursor=pointer]:
+                      - generic [ref=e272]:
+                        - img [ref=e273]
+                        - text: Connect
+                  - generic [ref=e277]:
+                    - generic [ref=e278]:
+                      - paragraph [ref=e279]: Instagram Ads
+                      - paragraph [ref=e280]: Social campaign metrics
+                    - button "Connect" [ref=e281] [cursor=pointer]:
+                      - generic [ref=e282]:
+                        - img [ref=e283]
+                        - text: Connect
+            - generic [ref=e287]:
+              - heading "Import / Export" [level=2] [ref=e288]
+              - paragraph [ref=e289]: Export or hydrate the full agency state, including tasks, clients, outputs, optional programs, and provider settings.
+              - generic [ref=e290]:
+                - button "Export Config" [ref=e291] [cursor=pointer]:
+                  - img [ref=e292]
+                  - text: Export Config
+                - generic [ref=e296] [cursor=pointer]:
+                  - img [ref=e297]
+                  - text: Import Config
+            - generic [ref=e300]:
+              - heading "Integrations" [level=2] [ref=e301]
+              - paragraph [ref=e302]: Connect your external accounts to enable seamless data sync and reporting.
+              - generic [ref=e303]:
+                - generic [ref=e304]:
+                  - heading "Google" [level=3] [ref=e305]
+                  - generic [ref=e306]:
+                    - generic [ref=e307]:
+                      - generic [ref=e308]: Google Docs
+                      - generic [ref=e309]:
+                        - generic [ref=e310]: Disconnected
+                        - button "Connect" [ref=e311] [cursor=pointer]
+                    - generic [ref=e312]:
+                      - generic [ref=e313]: Google Sheets
+                      - generic [ref=e314]:
+                        - generic [ref=e315]: Disconnected
+                        - button "Connect" [ref=e316] [cursor=pointer]
+                    - generic [ref=e317]:
+                      - generic [ref=e318]: Google Ads
+                      - generic [ref=e319]:
+                        - generic [ref=e320]: Disconnected
+                        - button "Connect" [ref=e321] [cursor=pointer]
+                - generic [ref=e322]:
+                  - heading "Meta" [level=3] [ref=e323]
+                  - generic [ref=e325]:
+                    - generic [ref=e326]: Meta Ads
+                    - generic [ref=e327]:
+                      - generic [ref=e328]: Disconnected
+                      - button "Connect" [ref=e329] [cursor=pointer]
+    - button "Open Iris chat" [ref=e330] [cursor=pointer]:
+      - img [ref=e331]

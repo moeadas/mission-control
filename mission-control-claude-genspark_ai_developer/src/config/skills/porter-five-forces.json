@@ -1,0 +1,119 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "porter-five-forces",
+  "name": "Porter's Five Forces Analysis",
+  "description": "Applies Porter's Five Forces framework to analyze industry structure and profitability, identifying the forces that shape competitive rivalry and market attractiveness.",
+  "category": "strategy",
+  "difficulty": "advanced",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when conducting a Porter's Five Forces analysis to understand industry structure and profitability — useful for market entry, investment, or strategic planning decisions.",
+      "context": "You are a strategic analyst who applies Porter's Five Forces rigorously to assess industry attractiveness and competitive intensity, informing market entry and investment decisions.",
+      "instructions": "## Porter's Five Forces Analysis Workflow\n\nAnalyze industry structure using Five Forces:\n\n- [ ] 1. Industry definition: Clearly define the industry scope and boundaries\n- [ ] 2. Competitive rivalry: Assess intensity of existing competition\n- [ ] 3. Threat of new entrants: Evaluate barriers to entry and entrant threat\n- [ ] 4. Supplier power: Assess supplier concentration and leverage\n- [ ] 5. Buyer power: Assess buyer concentration and leverage\n- [ ] 6. Threat of substitutes: Evaluate substitute products or services\n- [ ] 7. Industry attractiveness: Synthesize overall industry outlook\n- [ ] 8. Strategic implications: Recommend responses to each force\n\n## Key Inputs\n- Industry: {{industry_name}}\n- Market segment: {{market_segment}}\n- Geography: {{geography}}",
+      "output_template": "## Porter's Five Forces: {{industry_name}}\n\n### Industry Definition\n**Scope:**\n**Geographic boundaries:**\n**Value chain position:**\n\n### Force 1: Competitive Rivalry\n\n**Intensity assessment:** ⬜ ⬜ ⬜ ⬜ ⬜ (Low ←————————→ High)\n\n**Key factors:**\n- Number of competitors:\n- Industry concentration:\n- Growth rate:\n- Product differentiation:\n- Exit barriers:\n- Strategic stakes:\n\n**Analysis:**\n\n### Force 2: Threat of New Entrants\n\n**Threat assessment:** ⬜ ⬜ ⬜ ⬜ ⬜ (Low ←————————→ High)\n\n**Entry barriers:**\n| Barrier | Strength | Implication |\n|---------|----------|-------------|\n| Economies of scale | | |\n| Brand loyalty | | |\n| Capital requirements | | |\n| Access to distribution | | |\n| Regulatory barriers | | |\n| Switching costs | | |\n| Access to technology | | |\n\n**Analysis:**\n\n### Force 3: Supplier Power\n\n**Power assessment:** ⬜ ⬜ ⬜ ⬜ ⬜ (Low ←————————→ High)\n\n**Key factors:**\n- Number of suppliers:\n- Supplier concentration:\n- Uniqueness of supplier services:\n- Switching costs for buyers:\n- Threat of forward integration:\n\n**Key suppliers:**\n| Supplier | Power | Alternatives available? |\n|----------|-------|------------------------|\n| | | |\n\n**Analysis:**\n\n### Force 4: Buyer Power\n\n**Power assessment:** ⬜ ⬜ ⬜ ⬜ ⬜ (Low ←————————→ High)\n\n**Key factors:**\n- Number of buyers:\n- Buyer concentration:\n- Buyer switching costs:\n- Price sensitivity:\n- Threat of backward integration:\n- Ability to substitute:\n\n**Key buyer segments:**\n| Segment | Power | Price sensitivity |\n|---------|-------|------------------|\n| | | |\n\n**Analysis:**\n\n### Force 5: Threat of Substitutes\n\n**Threat assessment:** ⬜ ⬜ ⬜ ⬜ ⬜ (Low ←————————→ High)\n\n**Substitute products:**\n| Substitute | Quality vs. industry | Switch cost | Availability |\n|------------|---------------------|-------------|---------------|\n| | | | |\n\n**Analysis:**\n\n### Industry Attractiveness Summary\n\n| Force | Score | Trend |\n|-------|-------|-------|\n| Competitive rivalry | | |\n| Threat of new entrants | | |\n| Supplier power | | |\n| Buyer power | | |\n| Threat of substitutes | | |\n\n**Overall attractiveness:** ⬜ ⬜ ⬜ ⬜ ⬜ (Low ←————————→ High)\n\n**Key drivers of profitability:**\n\n### Strategic Implications\n\n| Force | Recommended Response |\n|-------|---------------------|\n| Competitive rivalry | |\n| New entrants | |\n| Supplier power | |\n| Buyer power | |\n| Substitutes | |"
+    }
+  },
+  "variables": [
+    {
+      "name": "industry_name",
+      "type": "string",
+      "required": true,
+      "description": "Industry being analyzed"
+    },
+    {
+      "name": "market_segment",
+      "type": "string",
+      "required": false,
+      "description": "Specific market segment focus"
+    },
+    {
+      "name": "geography",
+      "type": "string",
+      "required": false,
+      "description": "Geographic scope of analysis"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Industry Definition",
+        "action": "Clearly define industry scope and boundaries",
+        "verify": "Scope is clear and defensible"
+      },
+      {
+        "step": 2,
+        "name": "Rivalry Analysis",
+        "action": "Assess competitive intensity",
+        "verify": "Analysis is evidence-based"
+      },
+      {
+        "step": 3,
+        "name": "Entrant Analysis",
+        "action": "Evaluate barriers and entrant threat",
+        "verify": "Barriers are current and accurate"
+      },
+      {
+        "step": 4,
+        "name": "Supplier/Buyer Analysis",
+        "action": "Assess power dynamics in the value chain",
+        "verify": "Power dynamics are well-evidenced"
+      },
+      {
+        "step": 5,
+        "name": "Substitute Analysis",
+        "action": "Evaluate substitute threats",
+        "verify": "Substitutes are correctly identified"
+      },
+      {
+        "step": 6,
+        "name": "Synthesis",
+        "action": "Assess overall industry attractiveness",
+        "verify": "Assessment is balanced and logical"
+      },
+      {
+        "step": 7,
+        "name": "Implications",
+        "action": "Derive strategic implications for the client",
+        "verify": "Recommendations are specific and actionable"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Conduct Porter's Five Forces analysis for the B2B SaaS expense management market in the GCC region. For TechStart considering market entry.",
+      "output": "Full Five Forces analysis with industry attractiveness assessment and strategic implications"
+    }
+  ],
+  "checklist": [
+    "Industry is clearly and appropriately scoped",
+    "All five forces are assessed rigorously",
+    "Barriers to entry are current and accurate",
+    "Supplier and buyer power are well-evidenced",
+    "Substitutes are correctly identified",
+    "Overall attractiveness assessment is balanced",
+    "Strategic implications are specific and actionable"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "nova"
+  ],
+  "pipelines": [
+    "strategy"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "strategy",
+      "porter-five-forces",
+      "industry-analysis",
+      "market-research"
+    ],
+    "lastUpdated": "2026-03-24"
+  }
+}

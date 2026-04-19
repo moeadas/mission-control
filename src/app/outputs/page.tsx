@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { getArtifactFamily, getDefaultCreativeSpec, getSupportedExportFormats } from '@/lib/artifacts'
 import { useAgentsStore } from '@/lib/agents-store'
+import { getSupabaseAccessToken } from '@/lib/supabase/browser'
 import { Artifact, ArtifactExport, CreativeArtifactSpec } from '@/lib/types'
 import { ArtifactOutputView } from '@/components/outputs/ArtifactOutputView'
 
@@ -25,6 +26,16 @@ function formatTimestamp(value: string) {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+function getArtifactActivityTimestamp(artifact: Artifact) {
+  const safeTime = (value?: string | null) => {
+    if (!value) return 0
+    const time = new Date(value).getTime()
+    return Number.isFinite(time) ? time : 0
+  }
+
+  return safeTime(artifact.createdAt || artifact.updatedAt)
 }
 
 function CreativePackEditor({
@@ -181,7 +192,7 @@ export default function OutputsPage() {
         const clientMatch = clientFilter === 'all' || artifact.clientId === clientFilter
         const statusMatch = statusFilter === 'all' || artifact.status === statusFilter
         return clientMatch && statusMatch
-      }),
+      }).sort((a, b) => getArtifactActivityTimestamp(b) - getArtifactActivityTimestamp(a)),
     [artifacts, clientFilter, statusFilter]
   )
 
@@ -198,9 +209,17 @@ export default function OutputsPage() {
     setFeedback(null)
 
     try {
+      const token = await getSupabaseAccessToken()
+      if (!token) {
+        throw new Error('Your session expired. Please sign in again and retry the export.')
+      }
+
       const response = await fetch('/api/artifacts/export', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           artifact: payloadArtifact,
           format,
@@ -223,7 +242,30 @@ export default function OutputsPage() {
       })
 
       setFeedback(`${artifact.title} exported as ${format.toUpperCase()}.`)
-      window.open(exportRecord.publicUrl, '_blank', 'noopener,noreferrer')
+
+      if (exportRecord.publicUrl?.startsWith('/api/artifacts/download')) {
+        const downloadResponse = await fetch(exportRecord.publicUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!downloadResponse.ok) {
+          throw new Error('The export was generated, but the secure download failed.')
+        }
+
+        const blob = await downloadResponse.blob()
+        const downloadUrl = URL.createObjectURL(blob)
+        const anchor = document.createElement('a')
+        anchor.href = downloadUrl
+        anchor.download = exportRecord.fileName || `${artifact.title}.${format}`
+        document.body.appendChild(anchor)
+        anchor.click()
+        anchor.remove()
+        URL.revokeObjectURL(downloadUrl)
+      } else if (exportRecord.publicUrl) {
+        window.open(exportRecord.publicUrl, '_blank', 'noopener,noreferrer')
+      }
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : 'Unable to generate export.')
     } finally {
@@ -422,8 +464,29 @@ export default function OutputsPage() {
                         <div className="space-y-2">
                           {artifact.executionSteps.map((step) => (
                             <div key={step.id} className="p-3 rounded-lg border border-border bg-base/40">
-                              <p className="text-sm text-text-primary">{step.agentName} · {step.title}</p>
+                              <div className="flex items-center justify-between gap-3">
+                                <p className="text-sm text-text-primary">{step.agentName} · {step.title}</p>
+                                <span className="text-[10px] font-mono uppercase text-text-dim">
+                                  {step.status || 'completed'}
+                                </span>
+                              </div>
                               <p className="text-[11px] text-text-secondary mt-1">{step.summary}</p>
+                              <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-text-dim font-mono">
+                                {step.phaseName ? <span>phase:{step.phaseName}</span> : null}
+                                {step.activityId ? <span>activity:{step.activityId}</span> : null}
+                                {step.provider ? <span>provider:{step.provider}</span> : null}
+                                {step.model ? <span>model:{step.model}</span> : null}
+                                {step.outputIds?.length ? <span>outputs:{step.outputIds.join(', ')}</span> : null}
+                              </div>
+                              {step.qualityIssues?.length ? (
+                                <div className="mt-2 space-y-1">
+                                  {step.qualityIssues.map((issue, index) => (
+                                    <p key={`${step.id}-issue-${index}`} className="text-[11px] text-accent-yellow">
+                                      {issue}
+                                    </p>
+                                  ))}
+                                </div>
+                              ) : null}
                             </div>
                           ))}
                         </div>

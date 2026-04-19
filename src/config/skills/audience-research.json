@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when conducting audience research, gathering consumer insights, or validating assumptions about target audiences.",
+      "trigger": "Use this skillany time conducting audience research, gathering consumer insights, or validating assumptions about target audiences.",
       "context": "You are a market research specialist with expertise in qualitative and quantitative research methodologies, survey design, and consumer insight generation.",
-      "instructions": "## Audience Research Workflow\n\nConduct comprehensive audience research:\n\n- [ ] 1. Research design: Define methodology ({{methodology}}) and sample ({{sample_size}})\n- [ ] 2. Data collection: Gather primary and secondary data from {{sources}}\n- [ ] 3. Segmentation: Identify distinct audience segments\n- [ ] 4. Insight synthesis: Extract key themes and patterns\n- [ ] 5. Validation: Cross-check findings against {{existing_data}}\n- [ ] 6. Report: Present findings with actionable recommendations\n\n## Inputs\n- Research objective: {{research_objective}}\n- Methodology: {{methodology}}\n- Sample: {{sample_size}}",
+      "instructions": "## Audience Research\n\n1. **Research Design** — Define methodology and sampling approach\n   - ✓ Done when: Design will yield actionable insights\n\n2. **Data Collection** — Gather primary and secondary data\n   - ✓ Done when: Data is representative and current\n\n3. **Segmentation** — Identify distinct audience segments\n   - ✓ Done when: Segments are meaningful and differentiable\n\n4. **Insight Synthesis** — Extract themes and patterns from data\n   - ✓ Done when: Insights are surprising and actionable\n\n5. **Validation** — Cross-check against existing knowledge\n   - ✓ Done when: Findings are credible\n\n## Key Inputs\n- client_name: Client or brand name\n- research_objective: Primary research question\n- methodology: Research methodology (survey, focus groups, etc.)\n- sample_size: Sample size and demographics\n- sources: Primary and secondary data sources\n- existing_data: Existing data to validate against",
       "output_template": "## Audience Research Report: {{client_name}}\n\n### Research Overview\n| Element | Details |\n|---------|---------|\n| Client | {{client_name}} |\n| Objective | {{research_objective}} |\n| Methodology | {{methodology}} |\n| Sample size | {{sample_size}} |\n\n### Key Findings\n\n#### Finding 1: [Title]\n**Insight:** [2-3 sentences]\n**Implication:** [What this means for marketing]\n\n#### Finding 2: [Title]\n**Insight:** [2-3 sentences]\n**Implication:** [What this means for marketing]\n\n### Audience Segments\n| Segment | Size (%) | Key Characteristics | Marketing Approach |\n|---------|----------|---------------------|--------------------|\n| | | | |\n\n### Behavioral Patterns\n| Behavior | % Reporting | Segment |\n|----------|-------------|---------|\n| | | |\n\n### Media Consumption\n| Channel | Primary | Secondary | Rare |\n|---------|---------|-----------|------|\n| | | | |\n\n### Recommendations\n1. [Priority recommendation with rationale]\n2. [Secondary recommendation]\n3. [Tactical next steps]\n\n### Methodology Notes\n[Research limitations and confidence levels]"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Existing data to validate against"
     }
   ],
+  "inputs": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "research_objective",
+      "type": "string",
+      "required": true,
+      "description": "Primary research question"
+    },
+    {
+      "name": "methodology",
+      "type": "string",
+      "required": true,
+      "description": "Research methodology (survey, focus groups, etc.)"
+    },
+    {
+      "name": "sample_size",
+      "type": "string",
+      "required": true,
+      "description": "Sample size and demographics"
+    },
+    {
+      "name": "sources",
+      "type": "string",
+      "required": true,
+      "description": "Primary and secondary data sources"
+    },
+    {
+      "name": "existing_data",
+      "type": "string",
+      "required": false,
+      "description": "Existing data to validate against"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,12 +132,11 @@
     }
   ],
   "checklist": [
-    "Research methodology is appropriate for objectives",
-    "Sample is representative of target population",
-    "Findings are based on data, not assumptions",
-    "Insights are actionable for marketing",
-    "Segments are meaningfully different",
-    "Limitations are acknowledged"
+    "Design will yield actionable insights",
+    "Data is representative and current",
+    "Segments are meaningful and differentiable",
+    "Insights are surprising and actionable",
+    "Findings are credible"
   ],
   "tools": [
     "spreadsheet",
@@ -118,6 +156,6 @@
       "insights",
       "market-research"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

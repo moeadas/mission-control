@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "quality-assurance",
+  "name": "Quality Assurance",
+  "description": "Implements and executes quality assurance processes to ensure all creative work, campaign deliverables, and client-facing materials meet agency standards before they leave the door.",
+  "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when establishing QA processes, reviewing deliverables before client submission, improving creative quality standards, or handling quality issues.",
+      "context": "You are a quality assurance specialist who protects the agency's reputation by ensuring every deliverable meets high standards. You design QA processes that catch errors without creating bureaucratic bottlenecks.",
+      "instructions": "## Quality Assurance Workflow\n\n- [ ] 1. Define quality standards for the deliverable type\n- [ ] 2. Create a QA checklist tailored to the project\n- [ ] 3. Conduct self-review first\n- [ ] 4. Conduct peer review\n- [ ] 5. Address and verify all findings\n- [ ] 6. Final approval before delivery\n\n## Key Inputs\n- Deliverable: {{deliverable}}\n- Quality Standards: {{quality_standards}}\n- Reviewers: {{reviewers}}\n- Deadline: {{deadline}}",
+      "output_template": "## Quality Assurance Checklist\n\n### Deliverable: [Name]\n\n### Pre-Review\n- [ ] Self-review completed\n- [ ] All brand guidelines checked\n- [ ] Factual accuracy verified\n\n### QA Checklist\n| Check | Status | Notes |\n|-------|--------|-------|\n| Spelling & Grammar | | |\n| Brand Voice & Tone | | |\n| Factual Accuracy | | |\n| Technical Specs Met | | |\n| Links/Forms Functional | | |\n| Legal/Compliance | | |\n| Client Brief Alignment | | |\n\n### Review Sign-Off\n| Reviewer | Role | Sign-Off |\n|---------|------|---------|\n| | | |\n\n### Issues Found & Resolved\n| Issue | Resolved By | Verified |\n|-------|-------------|---------|\n| | | |"
+    }
+  },
+  "variables": [
+    { "name": "deliverable", "type": "string", "required": true, "description": "Deliverable being reviewed: type, format, client" },
+    { "name": "quality_standards", "type": "string", "required": false, "description": "Quality standards to apply: brand guidelines, client specs" },
+    { "name": "reviewers", "type": "string", "required": false, "description": "Who will review the deliverable" },
+    { "name": "deadline", "type": "string", "required": false, "description": "Delivery deadline" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Set standards", "action": "Define quality criteria for this deliverable", "verify": "Standards are clear and measurable" },
+      { "step": 2, "name": "Self-review", "action": "Creator reviews own work first", "verify": "Obvious errors are caught" },
+      { "step": 3, "name": "Peer review", "action": "Second pair of eyes reviews", "verify": "Fresh perspective catches issues" },
+      { "step": 4, "name": "Final sign-off", "action": "Final approval before delivery", "verify": "Deliverable meets all standards" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Deliverable: Client email campaign (4 emails). Standards: brand voice, link accuracy, subject line A/B test, GDPR compliance. Reviewers: copywriter (self), senior copywriter (peer), account manager (final).",
+      "output": "Self-review: 3 broken links found and fixed. Peer review: subject line #3 was below brand tone bar — rewritten. Account manager sign-off: approved. QA complete and delivered on time."
+    }
+  ],
+  "checklist": [
+    "Quality standards are defined before work begins",
+    "Self-review is completed first",
+    "Peer review is conducted by a second person",
+    "All items on the QA checklist are checked",
+    "Issues found are tracked and resolved",
+    "Sign-off is documented before delivery"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["operations-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["quality-assurance", "qa", "creative-quality", "process"],
+    "lastUpdated": "2026-03-24"
+  }
+}

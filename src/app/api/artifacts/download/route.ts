@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 
 export const runtime = 'nodejs'
 
@@ -12,7 +13,18 @@ const CONTENT_TYPES: Record<string, string> = {
   xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 }
 
+function getBearerToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || ''
+  if (!authHeader.toLowerCase().startsWith('bearer ')) return null
+  return authHeader.slice(7).trim()
+}
+
 export async function GET(request: NextRequest) {
+  const auth = await resolveAuthContextFromToken(getBearerToken(request))
+  if (!auth) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const fileName = request.nextUrl.searchParams.get('fileName')
 
   if (!fileName || fileName.includes('/') || fileName.includes('\\')) {

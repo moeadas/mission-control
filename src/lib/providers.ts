@@ -1,7 +1,7 @@
 import { AIProvider, AgentModel, ProviderOption } from './types'
 
 export const PROVIDER_LABELS: Record<AIProvider, string> = {
-  ollama: 'Ollama',
+  ollama: 'Ollama-Compatible',
   gemini: 'Google Gemini',
 }
 
@@ -12,7 +12,7 @@ export const PROVIDER_OPTIONS: { value: AIProvider; label: string }[] = [
 
 // Default model options - will be overridden by verified models from the system
 export const MODEL_OPTIONS: ProviderOption[] = [
-  { id: 'minimax-m2.7:cloud', label: 'MiniMax M2.7 (Cloud)', provider: 'ollama' },
+  { id: 'minimax-m2.7:cloud', label: 'MiniMax M2.7 (Cloud via Ollama-Compatible)', provider: 'ollama' },
   { id: 'llama3.2:latest', label: 'Llama 3.2', provider: 'ollama' },
   { id: 'llama3.1:latest', label: 'Llama 3.1', provider: 'ollama' },
   { id: 'gemini-2.0-flash-exp', label: 'Gemini 2.0 Flash (Experimental)', provider: 'gemini' },

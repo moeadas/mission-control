@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
+import { loadConfigSkillMap } from '@/lib/server/skills-catalog'
 
 function getBearerToken(request: NextRequest) {
   const authHeader = request.headers.get('authorization') || ''
@@ -54,11 +55,43 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const { id } = await params
     const supabase = getSupabaseServerClient()
     const agencyId = await getAgencyId()
-    if (!supabase || !agencyId) return NextResponse.json({ error: 'Supabase not available' }, { status: 503 })
+    const configSkillMap = await loadConfigSkillMap()
 
-    const { data, error } = await supabase.from('skills').select('*').eq('agency_id', agencyId).eq('id', id).single()
+    if (!supabase || !agencyId) {
+      const fallback = configSkillMap.get(id)
+      return fallback
+        ? NextResponse.json(fallback)
+        : NextResponse.json({ error: 'Skill not found' }, { status: 404 })
+    }
+
+    const { data, error } = await supabase.from('skills').select('*').eq('agency_id', agencyId).eq('id', id).maybeSingle()
     if (error) throw error
-    return NextResponse.json(mapSkill(data))
+    if (!data) {
+      const fallback = configSkillMap.get(id)
+      return fallback
+        ? NextResponse.json(fallback)
+        : NextResponse.json({ error: 'Skill not found' }, { status: 404 })
+    }
+
+    const fallback = configSkillMap.get(id)
+    const mapped = mapSkill(data)
+    return NextResponse.json({
+      ...mapped,
+      prompts: mapped.prompts?.en?.instructions ? mapped.prompts : fallback?.prompts || mapped.prompts,
+      variables: mapped.variables?.length ? mapped.variables : fallback?.variables || [],
+      inputs: mapped.inputs?.length ? mapped.inputs : fallback?.inputs || [],
+      outputs: mapped.outputs?.length ? mapped.outputs : fallback?.outputs || [],
+      workflow: mapped.workflow?.steps?.length ? mapped.workflow : fallback?.workflow || mapped.workflow,
+      tools: mapped.tools?.length ? mapped.tools : fallback?.tools || [],
+      agents: mapped.agents?.length ? mapped.agents : fallback?.agents || [],
+      pipelines: mapped.pipelines?.length ? mapped.pipelines : fallback?.pipelines || [],
+      checklist: mapped.checklist?.length ? mapped.checklist : fallback?.checklist || [],
+      examples: mapped.examples?.length ? mapped.examples : fallback?.examples || [],
+      metadata: {
+        ...(fallback?.metadata || {}),
+        ...(mapped.metadata || {}),
+      },
+    })
   } catch (error) {
     console.error('Failed to load skill:', error)
     return NextResponse.json({ error: 'Failed to load skill' }, { status: 500 })

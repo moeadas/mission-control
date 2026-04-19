@@ -5,6 +5,7 @@ import { extname } from 'path'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { buildAgentPhotoUrl, getUploadsDir, setAgentPhoto, syncAgentPhotoToDatabase } from '@/lib/server/agent-photos'
+import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 
 const EXT_BY_TYPE: Record<string, string> = {
   'image/jpeg': '.jpg',
@@ -13,8 +14,17 @@ const EXT_BY_TYPE: Record<string, string> = {
   'image/gif': '.gif',
 }
 
+function getBearerToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || ''
+  if (!authHeader.toLowerCase().startsWith('bearer ')) return null
+  return authHeader.slice(7).trim()
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const auth = await resolveAuthContextFromToken(getBearerToken(request))
+    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
     const formData = await request.formData()
     const file = formData.get('file')
     const agentId = String(formData.get('agentId') || 'agent')

@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when a new client has signed and needs to be onboarded — includes setting up accounts, scheduling kickoff, gathering assets, and establishing working rhythms.",
+      "trigger": "Use this skillany time a new client has signed and needs to be onboarded — includes setting up accounts, scheduling kickoff, gathering assets, and establishing working rhythms.",
       "context": "You are a client success specialist managing the transition of new clients into the agency relationship with clarity, professionalism, and structured handoffs.",
-      "instructions": "## Client Onboarding Workflow\n\nExecute a smooth new client onboarding:\n\n- [ ] 1. Welcome & confirmation: Send welcome message and confirm contract signed\n- [ ] 2. Access provisioning: Set up client in all relevant platforms (ad accounts, analytics, PM tools)\n- [ ] 3. Stakeholder mapping: Identify key contacts and decision-makers\n- [ ] 4. Kickoff scheduling: Schedule and agenda the kickoff meeting\n- [ ] 5. Discovery gathering: Collect brand guidelines, assets, historical data, and objectives\n- [ ] 6. Internal handoff: Brief the team on account, roles, and client expectations\n- [ ] 7. First-week plan: Deliver a structured plan for the first 30 days\n\n## Key Inputs\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Primary contacts: {{key_stakeholders}}\n- Contract scope: {{scope_summary}}",
+      "instructions": "## Client Onboarding\n\n1. **Contract & Welcome** — Confirm contract signed and send welcome package\n   - ✓ Done when: Client acknowledges receipt\n\n2. **Access Setup** — Provision access across all required platforms\n   - ✓ Done when: All platforms accessible and tested\n\n3. **Stakeholder Mapping** — Identify and document all client stakeholders\n   - ✓ Done when: Org chart and contact list complete\n\n4. **Kickoff Meeting** — Schedule and run the kickoff meeting with agenda\n   - ✓ Done when: Minutes and action items documented\n\n5. **Discovery Collection** — Gather all brand assets, data, and briefs\n   - ✓ Done when: All required materials in hand\n\n6. **Internal Briefing** — Brief the delivery team with full context\n   - ✓ Done when: Team has everything needed to execute\n\n7. **30-Day Plan Delivery** — Deliver structured first-month plan to client\n   - ✓ Done when: Client approves and aligns on plan\n\n## Key Inputs\n- client_name: Client brand or company name\n- industry: Client's industry or vertical\n- key_stakeholders: Key client contacts and their roles\n- scope_summary: Summary of contracted scope of work\n- budget: Agreed media budget and retainer fee",
       "output_template": "## Client Onboarding: {{client_name}}\n\n### Welcome Status\n| Step | Status | Owner | Due Date |\n|------|--------|-------|----------|\n| Contract confirmed | ✅ | CS | Done |\n| Access provisioned | ⏳ | | |\n| Kickoff scheduled | ⏳ | | |\n| Discovery complete | ⏳ | | |\n| Internal handoff | ⏳ | | |\n| 30-day plan sent | ⏳ | | |\n\n### Key Stakeholders\n| Role | Name | Contact | Notes |\n|------|------|---------|-------|\n| | | | |\n\n### Account Access\n| Platform | Access Status | Credentials Owner |\n|----------|---------------|-------------------|\n| | | |\n\n### Kickoff Agenda\n1. Introductions & roles\n2. Business objectives review\n3. Current performance snapshot\n4. Target audience alignment\n5. Timeline & milestones\n6. Q&A\n\n### Discovery Checklist\n- [ ] Brand guidelines received\n- [ ] Logo & asset files collected\n- [ ] Existing ad account access\n- [ ] Historical performance data\n- [ ] Competitor list\n- [ ] Target audience brief\n- [ ] Budget confirmation\n- [ ] Reporting cadence agreed\n\n### First 30 Days Plan\n| Week | Focus |\n|------|-------|\n| 1 | Access, discovery, kickoff |\n| 2 | Audit & baseline report |\n| 3 | Strategy alignment |\n| 4 | First campaign launch |\n\n### Internal Handoff Brief\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Scope: {{scope_summary}}\n- Key concerns: \n- Budget: {{budget}}\n- Team: [list]"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Agreed media budget and retainer fee"
     }
   ],
+  "inputs": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client brand or company name"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Client's industry or vertical"
+    },
+    {
+      "name": "key_stakeholders",
+      "type": "string",
+      "required": true,
+      "description": "Key client contacts and their roles"
+    },
+    {
+      "name": "scope_summary",
+      "type": "string",
+      "required": true,
+      "description": "Summary of contracted scope of work"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Agreed media budget and retainer fee"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -99,13 +132,13 @@
     }
   ],
   "checklist": [
-    "Welcome message sent within 24h of signing",
-    "All platform access provisioned and tested",
-    "Kickoff meeting scheduled within first week",
-    "Discovery materials collected (brand guide, assets, data)",
-    "Internal team briefed before work begins",
-    "30-day plan delivered and client-approved",
-    "First campaign or deliverable scheduled within 30 days"
+    "Client acknowledges receipt",
+    "All platforms accessible and tested",
+    "Org chart and contact list complete",
+    "Minutes and action items documented",
+    "All required materials in hand",
+    "Team has everything needed to execute",
+    "Client approves and aligns on plan"
   ],
   "tools": [
     "document",
@@ -113,8 +146,7 @@
     "calendar"
   ],
   "agents": [
-    "nova",
-    "atlas"
+    "sage"
   ],
   "pipelines": [
     "client-setup"
@@ -128,6 +160,6 @@
       "account-setup",
       "kickoff"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

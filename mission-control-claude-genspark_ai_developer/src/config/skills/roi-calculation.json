@@ -1,0 +1,127 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "roi-calculation",
+  "name": "ROI Calculation",
+  "description": "Calculates return on investment for campaigns and marketing activities, connecting spend to business outcomes and attributing value appropriately.",
+  "category": "analytics",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when calculating ROI for marketing campaigns, channels, or overall marketing investment — connecting spend to business outcomes and quantifying return.",
+      "context": "You are a marketing analyst who calculates and communicates ROI rigorously, accounting for attribution complexity and connecting marketing investment to business value.",
+      "instructions": "## ROI Calculation Workflow\n\nCalculate marketing ROI accurately:\n\n- [ ] 1. Define scope: Clarify what costs and returns are included\n- [ ] 2. Cost capture: Compile all marketing costs (media, production, agency fees)\n- [ ] 3. Revenue attribution: Connect conversions to marketing touchpoints\n- [ ] 4. Value assignment: Assign monetary value to conversions\n- [ ] 5. Attribution model: Apply appropriate attribution logic\n- [ ] 6. Calculate metrics: Compute ROI, ROAS, and related metrics\n- [ ] 7. Sensitivity analysis: Test assumptions and ranges\n- [ ] 8. Present clearly: Communicate ROI in accessible language\n\n## Key Inputs\n- Campaign/period: {{campaign_name}}\n- Costs to include: {{costs}}\n- Revenue data: {{revenue_source}}\n- Attribution model: {{attribution_model}}",
+      "output_template": "## ROI Calculation: {{campaign_name}}\n\n### Scope Definition\n| Element | Included | Notes |\n|---------|----------|-------|\n| Media spend | | |\n| Production costs | | |\n| Agency fees | | |\n| Technology costs | | |\n| Other costs | | |\n\n### Cost Summary\n| Cost Category | Amount | Notes |\n|--------------|--------|-------|\n| Media spend | | |\n| Creative/production | | |\n| Agency fees | | |\n| Technology/platform | | |\n| Other | | |\n| **Total Investment** | | |\n\n### Revenue Attribution\n\n**Attribution model used:** {{attribution_model}}\n\n| Channel/Source | Conversions | Avg Value | Revenue |\n|---------------|-------------|-----------|---------|\n| | | | |\n| **Total** | | | |\n\n### Value Calculation\n\n| Metric | Value | Calculation |\n|--------|-------|------------|\n| Total revenue | | |\n| Total investment | | |\n| Gross profit | | |\n| Profit margin assumed | | |\n| **Net profit attributed** | | |\n\n### ROI Metrics\n\n| Metric | Value | Interpretation |\n|--------|-------|--------------|\n| **ROAS** | | |\n| **ROI** | | |\n| **CPA** | | |\n| **Gross margin** | | |\n\n### Cost Breakdown by Channel\n| Channel | Spend | Revenue | ROAS | ROI |\n|---------|-------|---------|------|-----|\n| | | | | |\n\n### Sensitivity Analysis\n\n| Assumption | Base Case | Upside | Downside |\n|-----------|-----------|--------|----------|\n| Conversion value | | | |\n| Attribution rate | | | |\n| Profit margin | | | |\n\n### Key Assumptions & Limitations\n1. \n2. \n3. \n\n### Presentation Summary\n**One-line summary:**\nFor every AED/SH spend, we generated AED/SH in revenue (X:1 ROAS / X% ROI).\n\n### Recommendations\n| Metric | Current | Benchmark | Gap | Recommendation |\n|--------|---------|-----------|-----|----------------|\n| | | | | |"
+    }
+  },
+  "variables": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign or period being analyzed"
+    },
+    {
+      "name": "costs",
+      "type": "string",
+      "required": true,
+      "description": "Costs to include in ROI calculation"
+    },
+    {
+      "name": "revenue_source",
+      "type": "string",
+      "required": true,
+      "description": "Source of conversion/revenue data"
+    },
+    {
+      "name": "attribution_model",
+      "type": "string",
+      "required": false,
+      "description": "Attribution model to apply"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Scope Definition",
+        "action": "Define exactly what costs and returns are included",
+        "verify": "Scope is clear and agreed"
+      },
+      {
+        "step": 2,
+        "name": "Cost Capture",
+        "action": "Compile all marketing costs comprehensively",
+        "verify": "Costs are complete and accurate"
+      },
+      {
+        "step": 3,
+        "name": "Revenue Attribution",
+        "action": "Connect conversions to marketing activity",
+        "verify": "Attribution model is appropriate"
+      },
+      {
+        "step": 4,
+        "name": "Value Assignment",
+        "action": "Assign monetary value to conversions",
+        "verify": "Values are justified and consistent"
+      },
+      {
+        "step": 5,
+        "name": "Calculation",
+        "action": "Calculate ROI, ROAS, and related metrics",
+        "verify": "Math is correct and documented"
+      },
+      {
+        "step": 6,
+        "name": "Sensitivity Analysis",
+        "action": "Test key assumptions and ranges",
+        "verify": "Confidence range is understood"
+      },
+      {
+        "step": 7,
+        "name": "Presentation",
+        "action": "Communicate ROI in accessible, actionable format",
+        "verify": "Stakeholders understand and can act on findings"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Calculate Q1 ROI for TechStart paid media across Meta and LinkedIn. Total media spend: AED 180,000. Attribution model: last-click. Revenue from 847 conversions at avg AED 2,400.",
+      "output": "Full ROI analysis with cost breakdown, attribution, ROAS, ROI, and sensitivity analysis"
+    }
+  ],
+  "checklist": [
+    "All relevant costs are included",
+    "Revenue attribution is clearly documented",
+    "Attribution model is appropriate for the business",
+    "Assumptions are stated and justified",
+    "Sensitivity analysis shows range of outcomes",
+    "Metrics are calculated correctly",
+    "Presentation is accessible to non-analysts"
+  ],
+  "tools": [
+    "spreadsheet",
+    "analytics",
+    "document"
+  ],
+  "agents": [
+    "dex",
+    "nova"
+  ],
+  "pipelines": [
+    "reporting"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "analytics",
+      "roi",
+      "reporting",
+      "attribution"
+    ],
+    "lastUpdated": "2026-03-24"
+  }
+}

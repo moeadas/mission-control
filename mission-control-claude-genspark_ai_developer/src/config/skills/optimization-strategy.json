@@ -1,0 +1,57 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "optimization-strategy",
+  "name": "Optimization Strategy",
+  "description": "Developing systematic approaches to optimize marketing performance across channels, campaigns, and funnels. Move from guesswork to data-driven decisions that improve ROI continuously.",
+  "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when developing optimization strategies, improving campaign performance, troubleshooting underperforming channels, or building systematic testing and optimization programs.",
+      "context": "You are an optimization strategy specialist who understands channel-specific best practices, testing methodologies, and how to build continuous improvement programs that compound results over time.",
+      "instructions": "## Optimization Strategy Workflow\n\n- [ ] 1. Audit current performance and identify opportunities\n- [ ] 2. Prioritize optimization opportunities by impact\n- [ ] 3. Design optimization tests and experiments\n- [ ] 4. Implement changes systematically\n- [ ] 5. Measure and learn from results\n- [ ] 6. Build ongoing optimization culture\n\n## Key Inputs\n- Current Performance: {{performance}}\n- Focus Channels: {{channels}}\n- Budget: {{budget}}\n- Constraints: {{constraints}}\n- Timeline: {{timeline}}",
+      "output_template": "## Optimization Strategy\n\n### Performance Audit\n| Channel/Campaign | Current Metric | Benchmark | Gap | Opportunity |\n|-----------------|----------------|-----------|-----|-------------|\n| | | | | |\n\n### Prioritized Opportunities\n| Opportunity | Impact | Effort | Priority | Owner |\n|-------------|--------|-------|---------|-------|\n| | | | | |\n\n### Testing Roadmap\n| Test | Hypothesis | Metric | Timeline | Status |\n|------|-----------|--------|---------|--------|\n| | | | | |\n\n### Quick Wins\n| Optimization | Expected Lift | Implementation |\n|-------------|-------------|----------------|\n| | | |\n\n### Channel-Specific Optimizations\n| Channel | Optimization | Current → Target |\n|---------|-------------|-----------------|\n| | | |\n\n### Measurement Framework\n| Metric | Baseline | Target | Frequency |\n|--------|----------|--------|----------|\n| | | | |\n\n### Optimization Culture\n| Practice | Cadence | Owner |\n|----------|---------|-------|\n| Performance Review | | |\n| Test Prioritization | | |\n| Learnings Documentation | | |"
+    }
+  },
+  "variables": [
+    { "name": "performance", "type": "string", "required": true, "description": "Current performance data" },
+    { "name": "channels", "type": "string", "required": true, "description": "Channels to optimize" },
+    { "name": "budget", "type": "string", "required": false, "description": "Optimization budget" },
+    { "name": "constraints", "type": "string", "required": false, "description": "Technical or business constraints" },
+    { "name": "timeline", "type": "string", "required": false, "description": "Optimization timeline" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Audit performance", "action": "Analyze current metrics and identify gaps", "verify": "Opportunities are identified" },
+      { "step": 2, "name": "Prioritize", "action": "Rank by impact and effort", "verify": "Priority is logical" },
+      { "step": 3, "name": "Design tests", "action": "Create test plans for high-priority items", "verify": "Tests are rigorous" },
+      { "step": 4, "name": "Implement", "action": "Execute optimizations systematically", "verify": "Changes are tracked" },
+      { "step": 5, "name": "Measure", "action": "Analyze results and document learnings", "verify": "Learnings are captured" },
+      { "step": 6, "name": "Scale", "action": "Apply winning optimizations across channels", "verify": "Improvements are sustained" }
+    ]
+  },
+  "examples": [
+    { "input": "Develop an optimization strategy for an e-commerce brand spending $100K/month on paid social with declining ROAS.", "output": "Complete optimization strategy with audit, test roadmap, and implementation plan." },
+    { "input": "Create a systematic optimization program for a B2B SaaS company looking to improve conversion rates across the funnel.", "output": "Optimization strategy with channel-specific tactics and testing framework." }
+  ],
+  "checklist": [
+    "Current performance audited",
+    "Opportunities identified and prioritized",
+    "Testing roadmap established",
+    "Quick wins identified and implemented",
+    "Channel-specific optimizations defined",
+    "Measurement framework in place",
+    "Learnings documented systematically",
+    "Optimization culture embedded"
+  ],
+  "tools": ["document", "spreadsheet", "analytics"],
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["optimization", "performance", "testing", "roas", "conversion"],
+    "lastUpdated": "2026-03-24"
+  }
+}

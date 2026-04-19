@@ -1,0 +1,664 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - img [ref=e8]
+      - generic [ref=e10]:
+        - button "Refresh latest app version" [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+        - button "Switch to light mode" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - button "Sign out" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - paragraph [ref=e29]: 16:16
+    - generic [ref=e30]:
+      - navigation "Main navigation" [ref=e31]:
+        - generic [ref=e33]:
+          - generic [ref=e35]: MC
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Mission Control
+            - paragraph [ref=e38]: Agency HQ
+        - generic [ref=e39]:
+          - link "Dashboard" [ref=e40] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e42]
+            - generic [ref=e47]: Dashboard
+          - link "Virtual Office" [ref=e48] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e50]
+            - generic [ref=e54]: Virtual Office
+          - link "Agents" [ref=e55] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e58]
+            - generic [ref=e61]: Agents
+          - link "Clients" [ref=e62] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e64]
+            - generic [ref=e69]: Clients
+          - link "Tasks" [ref=e70] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e72]
+            - generic [ref=e75]: Tasks
+          - link "Analytics" [ref=e76] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e78]
+            - generic [ref=e80]: Analytics
+          - link "Outputs" [ref=e81] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e83]
+            - generic [ref=e86]: Outputs
+        - generic [ref=e88]:
+          - generic [ref=e90]: MC
+          - generic [ref=e91]:
+            - paragraph [ref=e92]: Agency Mode
+            - paragraph [ref=e93]: Iris · Online
+      - main [ref=e95]:
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - heading "Agent Roster" [level=1] [ref=e99]:
+                - img [ref=e100]
+                - text: Agent Roster
+              - paragraph [ref=e103]: 10 agents — click any agent to edit
+            - button "New Agent" [ref=e104] [cursor=pointer]:
+              - img [ref=e105]
+              - text: New Agent
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - img [ref=e108]
+              - textbox "Search agents..." [ref=e111]
+            - generic [ref=e112]:
+              - button "All" [ref=e113] [cursor=pointer]
+              - button "Active" [ref=e114] [cursor=pointer]
+              - button "Idle" [ref=e115] [cursor=pointer]
+              - button "Paused" [ref=e116] [cursor=pointer]
+              - button "Creative" [ref=e117] [cursor=pointer]
+              - button "Client Services" [ref=e118] [cursor=pointer]
+              - button "Media" [ref=e119] [cursor=pointer]
+              - button "Research" [ref=e120] [cursor=pointer]
+              - button "Strategy" [ref=e121] [cursor=pointer]
+              - button "Copy" [ref=e122] [cursor=pointer]
+              - button "Design" [ref=e123] [cursor=pointer]
+          - generic [ref=e125]:
+            - article [ref=e126]:
+              - generic [ref=e130]:
+                - generic [ref=e131]:
+                  - generic [ref=e132]:
+                    - img [ref=e133]
+                    - text: Agent Profile
+                  - generic [ref=e135]: Active
+                - generic [ref=e137]:
+                  - img [ref=e142]
+                  - generic [ref=e160]:
+                    - generic [ref=e161]:
+                      - generic [ref=e162]:
+                        - heading "Iris" [level=3] [ref=e163]
+                        - paragraph [ref=e164]: Agency Operations Lead
+                      - generic [ref=e165]:
+                        - paragraph [ref=e166]: Completed
+                        - paragraph [ref=e167]: "0"
+                    - generic [ref=e168]:
+                      - generic [ref=e169]: Mission Control
+                      - generic [ref=e170]: Client Services
+                - generic [ref=e171]:
+                  - generic [ref=e172]:
+                    - generic [ref=e173]:
+                      - img [ref=e174]
+                      - text: Output
+                    - paragraph [ref=e177]: Status Report
+                  - generic [ref=e178]:
+                    - generic [ref=e179]:
+                      - img [ref=e180]
+                      - text: Runtime
+                    - paragraph [ref=e184]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e185]:
+                    - paragraph [ref=e186]: Workload
+                    - paragraph [ref=e187]: 76% utilization
+                - generic [ref=e190]:
+                  - paragraph [ref=e191]: Current Mission
+                  - paragraph [ref=e192]: Coordinating active missions across the agency
+                - generic [ref=e193]:
+                  - generic [ref=e194]: task-triaging
+                  - generic [ref=e195]: workflow-design
+                  - generic [ref=e196]: cross-functional-coordination
+                - generic [ref=e197]:
+                  - button "Pause" [ref=e198] [cursor=pointer]:
+                    - img [ref=e199]
+                    - text: Pause
+                  - button "Clone" [ref=e202] [cursor=pointer]:
+                    - img [ref=e203]
+                    - text: Clone
+                  - button "Remove" [ref=e206] [cursor=pointer]:
+                    - img [ref=e207]
+                    - text: Remove
+                - generic [ref=e210]:
+                  - generic [ref=e211]:
+                    - paragraph [ref=e212]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e213]: Status Report · Client Brief
+                  - generic [ref=e214]:
+                    - text: Open profile
+                    - img [ref=e215]
+            - article [ref=e217]:
+              - generic [ref=e221]:
+                - generic [ref=e222]:
+                  - generic [ref=e223]:
+                    - img [ref=e224]
+                    - text: Agent Profile
+                  - generic [ref=e226]: Idle
+                - generic [ref=e228]:
+                  - img [ref=e233]
+                  - generic [ref=e247]:
+                    - generic [ref=e248]:
+                      - generic [ref=e249]:
+                        - heading "Lyra" [level=3] [ref=e250]
+                        - paragraph [ref=e251]: Visual Production Lead
+                      - generic [ref=e252]:
+                        - paragraph [ref=e253]: Completed
+                        - paragraph [ref=e254]: "0"
+                    - generic [ref=e255]:
+                      - generic [ref=e256]: Creative
+                      - generic [ref=e257]: Design
+                - generic [ref=e258]:
+                  - generic [ref=e259]:
+                    - generic [ref=e260]:
+                      - img [ref=e261]
+                      - text: Output
+                    - paragraph [ref=e264]: Creative Asset
+                  - generic [ref=e265]:
+                    - generic [ref=e266]:
+                      - img [ref=e267]
+                      - text: Runtime
+                    - paragraph [ref=e271]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e272]:
+                    - paragraph [ref=e273]: Workload
+                    - paragraph [ref=e274]: 65% utilization
+                - generic [ref=e277]:
+                  - paragraph [ref=e278]: Current Mission
+                  - paragraph [ref=e279]: Preparing visual asset packs
+                - generic [ref=e280]:
+                  - generic [ref=e281]: art-direction
+                  - generic [ref=e282]: visual-leadership
+                  - generic [ref=e283]: design-systems
+                - generic [ref=e284]:
+                  - button "Activate" [ref=e285] [cursor=pointer]:
+                    - img [ref=e286]
+                    - text: Activate
+                  - button "Clone" [ref=e288] [cursor=pointer]:
+                    - img [ref=e289]
+                    - text: Clone
+                  - button "Remove" [ref=e292] [cursor=pointer]:
+                    - img [ref=e293]
+                    - text: Remove
+                - generic [ref=e296]:
+                  - generic [ref=e297]:
+                    - paragraph [ref=e298]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e299]: Creative Asset
+                  - generic [ref=e300]:
+                    - text: Open profile
+                    - img [ref=e301]
+            - article [ref=e303]:
+              - generic [ref=e307]:
+                - generic [ref=e308]:
+                  - generic [ref=e309]:
+                    - img [ref=e310]
+                    - text: Agent Profile
+                  - generic [ref=e312]: Idle
+                - generic [ref=e314]:
+                  - img [ref=e319]
+                  - generic [ref=e333]:
+                    - generic [ref=e334]:
+                      - generic [ref=e335]:
+                        - heading "Piper" [level=3] [ref=e336]
+                        - paragraph [ref=e337]: Project & Traffic Manager
+                      - generic [ref=e338]:
+                        - paragraph [ref=e339]: Completed
+                        - paragraph [ref=e340]: "0"
+                    - generic [ref=e341]:
+                      - generic [ref=e342]: Mission Control
+                      - generic [ref=e343]: Traffic Management
+                - generic [ref=e344]:
+                  - generic [ref=e345]:
+                    - generic [ref=e346]:
+                      - img [ref=e347]
+                      - text: Output
+                    - paragraph [ref=e350]: Status Report
+                  - generic [ref=e351]:
+                    - generic [ref=e352]:
+                      - img [ref=e353]
+                      - text: Runtime
+                    - paragraph [ref=e357]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e358]:
+                    - paragraph [ref=e359]: Workload
+                    - paragraph [ref=e360]: 80% utilization
+                - generic [ref=e363]:
+                  - paragraph [ref=e364]: Current Mission
+                  - paragraph [ref=e365]: Tracking delivery schedule
+                - generic [ref=e366]:
+                  - generic [ref=e367]: project-scheduling
+                  - generic [ref=e368]: traffic-coordination
+                  - generic [ref=e369]: resource-allocation
+                - generic [ref=e370]:
+                  - button "Activate" [ref=e371] [cursor=pointer]:
+                    - img [ref=e372]
+                    - text: Activate
+                  - button "Clone" [ref=e374] [cursor=pointer]:
+                    - img [ref=e375]
+                    - text: Clone
+                  - button "Remove" [ref=e378] [cursor=pointer]:
+                    - img [ref=e379]
+                    - text: Remove
+                - generic [ref=e382]:
+                  - generic [ref=e383]:
+                    - paragraph [ref=e384]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e385]: Status Report · Client Brief
+                  - generic [ref=e386]:
+                    - text: Open profile
+                    - img [ref=e387]
+            - article [ref=e389]:
+              - generic [ref=e393]:
+                - generic [ref=e394]:
+                  - generic [ref=e395]:
+                    - img [ref=e396]
+                    - text: Agent Profile
+                  - generic [ref=e398]: Idle
+                - generic [ref=e400]:
+                  - img [ref=e405]
+                  - generic [ref=e419]:
+                    - generic [ref=e420]:
+                      - generic [ref=e421]:
+                        - heading "Sage" [level=3] [ref=e422]
+                        - paragraph [ref=e423]: Client Services Director
+                      - generic [ref=e424]:
+                        - paragraph [ref=e425]: Completed
+                        - paragraph [ref=e426]: "0"
+                    - generic [ref=e427]:
+                      - generic [ref=e428]: Client Services
+                      - generic [ref=e429]: Client Services
+                - generic [ref=e430]:
+                  - generic [ref=e431]:
+                    - generic [ref=e432]:
+                      - img [ref=e433]
+                      - text: Output
+                    - paragraph [ref=e436]: Status Report
+                  - generic [ref=e437]:
+                    - generic [ref=e438]:
+                      - img [ref=e439]
+                      - text: Runtime
+                    - paragraph [ref=e443]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e444]:
+                    - paragraph [ref=e445]: Workload
+                    - paragraph [ref=e446]: 55% utilization
+                - generic [ref=e449]:
+                  - paragraph [ref=e450]: Current Mission
+                  - paragraph [ref=e451]: Preparing client presentation
+                - generic [ref=e452]:
+                  - generic [ref=e453]: client-relationship-management
+                  - generic [ref=e454]: strategic-account-planning
+                  - generic [ref=e455]: presentation-design
+                - generic [ref=e456]:
+                  - button "Activate" [ref=e457] [cursor=pointer]:
+                    - img [ref=e458]
+                    - text: Activate
+                  - button "Clone" [ref=e460] [cursor=pointer]:
+                    - img [ref=e461]
+                    - text: Clone
+                  - button "Remove" [ref=e464] [cursor=pointer]:
+                    - img [ref=e465]
+                    - text: Remove
+                - generic [ref=e468]:
+                  - generic [ref=e469]:
+                    - paragraph [ref=e470]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e471]: Status Report · Client Brief
+                  - generic [ref=e472]:
+                    - text: Open profile
+                    - img [ref=e473]
+            - article [ref=e475]:
+              - generic [ref=e479]:
+                - generic [ref=e480]:
+                  - generic [ref=e481]:
+                    - img [ref=e482]
+                    - text: Agent Profile
+                  - generic [ref=e484]: Idle
+                - generic [ref=e486]:
+                  - img [ref=e491]
+                  - generic [ref=e505]:
+                    - generic [ref=e506]:
+                      - generic [ref=e507]:
+                        - heading "Maya" [level=3] [ref=e508]
+                        - paragraph [ref=e509]: Brand & Campaign Strategist
+                      - generic [ref=e510]:
+                        - paragraph [ref=e511]: Completed
+                        - paragraph [ref=e512]: "0"
+                    - generic [ref=e513]:
+                      - generic [ref=e514]: Client Services
+                      - generic [ref=e515]: Brand Strategy
+                - generic [ref=e516]:
+                  - generic [ref=e517]:
+                    - generic [ref=e518]:
+                      - img [ref=e519]
+                      - text: Output
+                    - paragraph [ref=e522]: Strategy Brief
+                  - generic [ref=e523]:
+                    - generic [ref=e524]:
+                      - img [ref=e525]
+                      - text: Runtime
+                    - paragraph [ref=e529]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e530]:
+                    - paragraph [ref=e531]: Workload
+                    - paragraph [ref=e532]: 68% utilization
+                - generic [ref=e535]:
+                  - paragraph [ref=e536]: Current Mission
+                  - paragraph [ref=e537]: Developing brand strategy
+                - generic [ref=e538]:
+                  - generic [ref=e539]: brand-strategy
+                  - generic [ref=e540]: campaign-planning
+                  - generic [ref=e541]: go-to-market-strategy
+                - generic [ref=e542]:
+                  - button "Activate" [ref=e543] [cursor=pointer]:
+                    - img [ref=e544]
+                    - text: Activate
+                  - button "Clone" [ref=e546] [cursor=pointer]:
+                    - img [ref=e547]
+                    - text: Clone
+                  - button "Remove" [ref=e550] [cursor=pointer]:
+                    - img [ref=e551]
+                    - text: Remove
+                - generic [ref=e554]:
+                  - generic [ref=e555]:
+                    - paragraph [ref=e556]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e557]: Strategy Brief · Campaign Strategy
+                  - generic [ref=e558]:
+                    - text: Open profile
+                    - img [ref=e559]
+            - article [ref=e561]:
+              - generic [ref=e565]:
+                - generic [ref=e566]:
+                  - generic [ref=e567]:
+                    - img [ref=e568]
+                    - text: Agent Profile
+                  - generic [ref=e570]: Idle
+                - generic [ref=e572]:
+                  - img [ref=e577]
+                  - generic [ref=e591]:
+                    - generic [ref=e592]:
+                      - generic [ref=e593]:
+                        - heading "Finn" [level=3] [ref=e594]
+                        - paragraph [ref=e595]: Creative Director
+                      - generic [ref=e596]:
+                        - paragraph [ref=e597]: Completed
+                        - paragraph [ref=e598]: "0"
+                    - generic [ref=e599]:
+                      - generic [ref=e600]: Creative
+                      - generic [ref=e601]: Creative
+                - generic [ref=e602]:
+                  - generic [ref=e603]:
+                    - generic [ref=e604]:
+                      - img [ref=e605]
+                      - text: Output
+                    - paragraph [ref=e608]: Creative Asset
+                  - generic [ref=e609]:
+                    - generic [ref=e610]:
+                      - img [ref=e611]
+                      - text: Runtime
+                    - paragraph [ref=e615]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e616]:
+                    - paragraph [ref=e617]: Workload
+                    - paragraph [ref=e618]: 72% utilization
+                - generic [ref=e621]:
+                  - paragraph [ref=e622]: Current Mission
+                  - paragraph [ref=e623]: Creative direction session
+                - generic [ref=e624]:
+                  - generic [ref=e625]: creative-concept-development
+                  - generic [ref=e626]: art-direction
+                  - generic [ref=e627]: visual-leadership
+                - generic [ref=e628]:
+                  - button "Activate" [ref=e629] [cursor=pointer]:
+                    - img [ref=e630]
+                    - text: Activate
+                  - button "Clone" [ref=e632] [cursor=pointer]:
+                    - img [ref=e633]
+                    - text: Clone
+                  - button "Remove" [ref=e636] [cursor=pointer]:
+                    - img [ref=e637]
+                    - text: Remove
+                - generic [ref=e640]:
+                  - generic [ref=e641]:
+                    - paragraph [ref=e642]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e643]: Creative Asset · Campaign Strategy
+                  - generic [ref=e644]:
+                    - text: Open profile
+                    - img [ref=e645]
+            - article [ref=e647]:
+              - generic [ref=e651]:
+                - generic [ref=e652]:
+                  - generic [ref=e653]:
+                    - img [ref=e654]
+                    - text: Agent Profile
+                  - generic [ref=e656]: Idle
+                - generic [ref=e658]:
+                  - img [ref=e663]
+                  - generic [ref=e677]:
+                    - generic [ref=e678]:
+                      - generic [ref=e679]:
+                        - heading "Echo" [level=3] [ref=e680]
+                        - paragraph [ref=e681]: Copy & Content Lead
+                      - generic [ref=e682]:
+                        - paragraph [ref=e683]: Completed
+                        - paragraph [ref=e684]: "0"
+                    - generic [ref=e685]:
+                      - generic [ref=e686]: Creative
+                      - generic [ref=e687]: Content & Copy
+                - generic [ref=e688]:
+                  - generic [ref=e689]:
+                    - generic [ref=e690]:
+                      - img [ref=e691]
+                      - text: Output
+                    - paragraph [ref=e694]: Campaign Copy
+                  - generic [ref=e695]:
+                    - generic [ref=e696]:
+                      - img [ref=e697]
+                      - text: Runtime
+                    - paragraph [ref=e701]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e702]:
+                    - paragraph [ref=e703]: Workload
+                    - paragraph [ref=e704]: 63% utilization
+                - generic [ref=e707]:
+                  - paragraph [ref=e708]: Current Mission
+                  - paragraph [ref=e709]: Writing campaign copy
+                - generic [ref=e710]:
+                  - generic [ref=e711]: campaign-copywriting
+                  - generic [ref=e712]: brand-voice
+                  - generic [ref=e713]: direct-response-copy
+                - generic [ref=e714]:
+                  - button "Activate" [ref=e715] [cursor=pointer]:
+                    - img [ref=e716]
+                    - text: Activate
+                  - button "Clone" [ref=e718] [cursor=pointer]:
+                    - img [ref=e719]
+                    - text: Clone
+                  - button "Remove" [ref=e722] [cursor=pointer]:
+                    - img [ref=e723]
+                    - text: Remove
+                - generic [ref=e726]:
+                  - generic [ref=e727]:
+                    - paragraph [ref=e728]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e729]: Campaign Copy · Content Calendar
+                  - generic [ref=e730]:
+                    - text: Open profile
+                    - img [ref=e731]
+            - article [ref=e733]:
+              - generic [ref=e737]:
+                - generic [ref=e738]:
+                  - generic [ref=e739]:
+                    - img [ref=e740]
+                    - text: Agent Profile
+                  - generic [ref=e742]: Idle
+                - generic [ref=e744]:
+                  - img [ref=e749]
+                  - generic [ref=e763]:
+                    - generic [ref=e764]:
+                      - generic [ref=e765]:
+                        - heading "Nova" [level=3] [ref=e766]
+                        - paragraph [ref=e767]: Media Planning Lead
+                      - generic [ref=e768]:
+                        - paragraph [ref=e769]: Completed
+                        - paragraph [ref=e770]: "0"
+                    - generic [ref=e771]:
+                      - generic [ref=e772]: Media
+                      - generic [ref=e773]: Media Planning
+                - generic [ref=e774]:
+                  - generic [ref=e775]:
+                    - generic [ref=e776]:
+                      - img [ref=e777]
+                      - text: Output
+                    - paragraph [ref=e780]: Media Plan
+                  - generic [ref=e781]:
+                    - generic [ref=e782]:
+                      - img [ref=e783]
+                      - text: Runtime
+                    - paragraph [ref=e787]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e788]:
+                    - paragraph [ref=e789]: Workload
+                    - paragraph [ref=e790]: 70% utilization
+                - generic [ref=e793]:
+                  - paragraph [ref=e794]: Current Mission
+                  - paragraph [ref=e795]: Building media plan for Q2 campaign
+                - generic [ref=e796]:
+                  - generic [ref=e797]: media-strategy
+                  - generic [ref=e798]: channel-planning
+                  - generic [ref=e799]: budget-allocation
+                - generic [ref=e800]:
+                  - button "Activate" [ref=e801] [cursor=pointer]:
+                    - img [ref=e802]
+                    - text: Activate
+                  - button "Clone" [ref=e804] [cursor=pointer]:
+                    - img [ref=e805]
+                    - text: Clone
+                  - button "Remove" [ref=e808] [cursor=pointer]:
+                    - img [ref=e809]
+                    - text: Remove
+                - generic [ref=e812]:
+                  - generic [ref=e813]:
+                    - paragraph [ref=e814]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e815]: Media Plan · Budget Sheet
+                  - generic [ref=e816]:
+                    - text: Open profile
+                    - img [ref=e817]
+            - article [ref=e819]:
+              - generic [ref=e823]:
+                - generic [ref=e824]:
+                  - generic [ref=e825]:
+                    - img [ref=e826]
+                    - text: Agent Profile
+                  - generic [ref=e828]: Idle
+                - generic [ref=e830]:
+                  - img [ref=e835]
+                  - generic [ref=e849]:
+                    - generic [ref=e850]:
+                      - generic [ref=e851]:
+                        - heading "Dex" [level=3] [ref=e852]
+                        - paragraph [ref=e853]: Performance & Analytics Lead
+                      - generic [ref=e854]:
+                        - paragraph [ref=e855]: Completed
+                        - paragraph [ref=e856]: "0"
+                    - generic [ref=e857]:
+                      - generic [ref=e858]: Media
+                      - generic [ref=e859]: Performance Ops
+                - generic [ref=e860]:
+                  - generic [ref=e861]:
+                    - generic [ref=e862]:
+                      - img [ref=e863]
+                      - text: Output
+                    - paragraph [ref=e866]: Status Report
+                  - generic [ref=e867]:
+                    - generic [ref=e868]:
+                      - img [ref=e869]
+                      - text: Runtime
+                    - paragraph [ref=e873]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e874]:
+                    - paragraph [ref=e875]: Workload
+                    - paragraph [ref=e876]: 58% utilization
+                - generic [ref=e879]:
+                  - paragraph [ref=e880]: Current Mission
+                  - paragraph [ref=e881]: Analyzing campaign performance
+                - generic [ref=e882]:
+                  - generic [ref=e883]: performance-analysis
+                  - generic [ref=e884]: ab-test-design
+                  - generic [ref=e885]: statistical-analysis
+                - generic [ref=e886]:
+                  - button "Activate" [ref=e887] [cursor=pointer]:
+                    - img [ref=e888]
+                    - text: Activate
+                  - button "Clone" [ref=e890] [cursor=pointer]:
+                    - img [ref=e891]
+                    - text: Clone
+                  - button "Remove" [ref=e894] [cursor=pointer]:
+                    - img [ref=e895]
+                    - text: Remove
+                - generic [ref=e898]:
+                  - generic [ref=e899]:
+                    - paragraph [ref=e900]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e901]: Status Report · KPI Forecast
+                  - generic [ref=e902]:
+                    - text: Open profile
+                    - img [ref=e903]
+            - article [ref=e905]:
+              - generic [ref=e909]:
+                - generic [ref=e910]:
+                  - generic [ref=e911]:
+                    - img [ref=e912]
+                    - text: Agent Profile
+                  - generic [ref=e914]: Idle
+                - generic [ref=e916]:
+                  - img [ref=e921]
+                  - generic [ref=e935]:
+                    - generic [ref=e936]:
+                      - generic [ref=e937]:
+                        - heading "Atlas" [level=3] [ref=e938]
+                        - paragraph [ref=e939]: Research & Insights Lead
+                      - generic [ref=e940]:
+                        - paragraph [ref=e941]: Completed
+                        - paragraph [ref=e942]: "0"
+                    - generic [ref=e943]:
+                      - generic [ref=e944]: Research
+                      - generic [ref=e945]: Research
+                - generic [ref=e946]:
+                  - generic [ref=e947]:
+                    - generic [ref=e948]:
+                      - img [ref=e949]
+                      - text: Output
+                    - paragraph [ref=e952]: Research Brief
+                  - generic [ref=e953]:
+                    - generic [ref=e954]:
+                      - img [ref=e955]
+                      - text: Runtime
+                    - paragraph [ref=e959]: Ollama · MiniMax M2.7 (Cloud)
+                  - generic [ref=e960]:
+                    - paragraph [ref=e961]: Workload
+                    - paragraph [ref=e962]: 60% utilization
+                - generic [ref=e965]:
+                  - paragraph [ref=e966]: Current Mission
+                  - paragraph [ref=e967]: Researching market trends
+                - generic [ref=e968]:
+                  - generic [ref=e969]: market-research
+                  - generic [ref=e970]: competitive-intelligence
+                  - generic [ref=e971]: consumer-insights
+                - generic [ref=e972]:
+                  - button "Activate" [ref=e973] [cursor=pointer]:
+                    - img [ref=e974]
+                    - text: Activate
+                  - button "Clone" [ref=e976] [cursor=pointer]:
+                    - img [ref=e977]
+                    - text: Clone
+                  - button "Remove" [ref=e980] [cursor=pointer]:
+                    - img [ref=e981]
+                    - text: Remove
+                - generic [ref=e984]:
+                  - generic [ref=e985]:
+                    - paragraph [ref=e986]: Last active 2026-03-26 16:16
+                    - paragraph [ref=e987]: Research Brief · Strategy Brief
+                  - generic [ref=e988]:
+                    - text: Open profile
+                    - img [ref=e989]
+    - button "Open Iris chat" [ref=e991] [cursor=pointer]:
+      - img [ref=e992]

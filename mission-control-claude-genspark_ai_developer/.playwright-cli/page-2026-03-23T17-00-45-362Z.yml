@@ -1,0 +1,388 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - img [ref=e6]
+        - generic [ref=e8]:
+          - heading "Moe's Mission Control" [level=1] [ref=e9]
+          - paragraph [ref=e10]: Virtual creative and digital media agency
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - img [ref=e13]
+          - generic [ref=e17]: 3 live missions
+        - generic [ref=e22]: SYSTEMS ONLINE
+      - generic [ref=e23]:
+        - button "Light mode" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+          - generic [ref=e31]: Light mode
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: 18:00
+          - paragraph [ref=e34]: Mon 23 Mar
+        - img [ref=e36]
+    - generic [ref=e40]:
+      - navigation [ref=e41]:
+        - generic [ref=e42]:
+          - link "Dashboard Agency overview" [ref=e43] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e46]
+            - generic [ref=e51]:
+              - generic [ref=e52]: Dashboard
+              - generic [ref=e53]: Agency overview
+          - link "Virtual Office Bot workstations" [ref=e54] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e57]
+            - generic [ref=e61]:
+              - generic [ref=e62]: Virtual Office
+              - generic [ref=e63]: Bot workstations
+          - link "Agents Manage your team" [ref=e64] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e67]
+            - generic [ref=e70]:
+              - generic [ref=e71]: Agents
+              - generic [ref=e72]: Manage your team
+            - img [ref=e73]
+          - link "Clients Client profiles" [ref=e75] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e78]
+            - generic [ref=e83]:
+              - generic [ref=e84]: Clients
+              - generic [ref=e85]: Client profiles
+          - link "Campaigns Active projects" [ref=e86] [cursor=pointer]:
+            - /url: /campaigns
+            - img [ref=e89]
+            - generic [ref=e92]:
+              - generic [ref=e93]: Campaigns
+              - generic [ref=e94]: Active projects
+          - link "Settings Configuration" [ref=e95] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e98]
+            - generic [ref=e101]:
+              - generic [ref=e102]: Settings
+              - generic [ref=e103]: Configuration
+        - generic [ref=e105]:
+          - generic [ref=e107]: MC
+          - generic [ref=e108]:
+            - paragraph [ref=e109]: AGENCY MODE
+            - paragraph [ref=e110]: Iris Orchestration
+      - main [ref=e111]:
+        - generic [ref=e112]:
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - heading "Agent Roster" [level=1] [ref=e115]:
+                - img [ref=e116]
+                - text: Agent Roster
+              - paragraph [ref=e119]: 10 agents — click any agent to edit
+            - button "New Agent" [ref=e120] [cursor=pointer]:
+              - img [ref=e121]
+              - text: New Agent
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - img [ref=e124]
+              - textbox "Search agents..." [ref=e127]
+            - generic [ref=e128]:
+              - button "All" [ref=e129] [cursor=pointer]
+              - button "Active" [ref=e130] [cursor=pointer]
+              - button "Idle" [ref=e131] [cursor=pointer]
+              - button "Paused" [ref=e132] [cursor=pointer]
+              - button "Creative" [ref=e133] [cursor=pointer]
+              - button "Client Services" [ref=e134] [cursor=pointer]
+              - button "Media" [ref=e135] [cursor=pointer]
+              - button "Research" [ref=e136] [cursor=pointer]
+              - button "Strategy" [ref=e137] [cursor=pointer]
+              - button "Copy" [ref=e138] [cursor=pointer]
+              - button "Design" [ref=e139] [cursor=pointer]
+          - generic [ref=e141]:
+            - generic [ref=e142] [cursor=pointer]:
+              - generic [ref=e144]:
+                - img [ref=e149]
+                - generic [ref=e159]:
+                  - generic [ref=e160]:
+                    - heading "Iris" [level=3] [ref=e161]
+                    - generic [ref=e162]: Active
+                  - paragraph [ref=e164]: Agency Operations Lead
+                  - generic [ref=e165]:
+                    - generic [ref=e166]: Mission Control
+                    - generic [ref=e167]: Client Services
+                    - generic [ref=e168]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e169]: → Coordinating active missions across the agency
+              - generic [ref=e170]:
+                - button "Pause" [ref=e171]:
+                  - img [ref=e172]
+                  - text: Pause
+                - button "Clone" [ref=e175]:
+                  - img [ref=e176]
+                  - text: Clone
+                - button "Remove" [ref=e179]:
+                  - img [ref=e180]
+                  - text: Remove
+              - paragraph [ref=e183]: Last active just now
+              - generic [ref=e184]:
+                - generic [ref=e185]: triage
+                - generic [ref=e186]: routing
+                - generic [ref=e187]: briefing
+              - paragraph [ref=e188]: "Outputs: Status Report · Client Brief"
+            - generic [ref=e189] [cursor=pointer]:
+              - generic [ref=e191]:
+                - img [ref=e196]
+                - generic [ref=e206]:
+                  - generic [ref=e207]:
+                    - heading "Sage" [level=3] [ref=e208]
+                    - generic [ref=e209]: Active
+                  - paragraph [ref=e211]: Client Director
+                  - generic [ref=e212]:
+                    - generic [ref=e213]: Client Services
+                    - generic [ref=e214]: Client Services
+                    - generic [ref=e215]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e216]: → Preparing executive-ready client updates
+              - generic [ref=e217]:
+                - button "Pause" [ref=e218]:
+                  - img [ref=e219]
+                  - text: Pause
+                - button "Clone" [ref=e222]:
+                  - img [ref=e223]
+                  - text: Clone
+                - button "Remove" [ref=e226]:
+                  - img [ref=e227]
+                  - text: Remove
+              - paragraph [ref=e230]: Last active just now
+              - generic [ref=e231]:
+                - generic [ref=e232]: client leadership
+                - generic [ref=e233]: briefing
+                - generic [ref=e234]: presentations
+              - paragraph [ref=e235]: "Outputs: Client Brief · Status Report"
+            - generic [ref=e236] [cursor=pointer]:
+              - generic [ref=e238]:
+                - img [ref=e243]
+                - generic [ref=e253]:
+                  - generic [ref=e254]:
+                    - heading "Piper" [level=3] [ref=e255]
+                    - generic [ref=e256]: Active
+                  - paragraph [ref=e258]: Project / Traffic Manager
+                  - generic [ref=e259]:
+                    - generic [ref=e260]: Client Services
+                    - generic [ref=e261]: Traffic Management
+                    - generic [ref=e262]: Ollama · Llama 3.2
+                  - paragraph [ref=e263]: → Updating agency schedule and deadlines
+              - generic [ref=e264]:
+                - button "Pause" [ref=e265]:
+                  - img [ref=e266]
+                  - text: Pause
+                - button "Clone" [ref=e269]:
+                  - img [ref=e270]
+                  - text: Clone
+                - button "Remove" [ref=e273]:
+                  - img [ref=e274]
+                  - text: Remove
+              - paragraph [ref=e277]: Last active just now
+              - generic [ref=e278]:
+                - generic [ref=e279]: timeline management
+                - generic [ref=e280]: resourcing
+                - generic [ref=e281]: delivery tracking
+              - paragraph [ref=e282]: "Outputs: Status Report · Client Brief"
+            - generic [ref=e283] [cursor=pointer]:
+              - generic [ref=e285]:
+                - img [ref=e290]
+                - generic [ref=e300]:
+                  - generic [ref=e301]:
+                    - heading "Maya" [level=3] [ref=e302]
+                    - generic [ref=e303]: Active
+                  - paragraph [ref=e305]: Brand & Campaign Strategist
+                  - generic [ref=e306]:
+                    - generic [ref=e307]: Client Services
+                    - generic [ref=e308]: Brand Strategy
+                    - generic [ref=e309]: Google Gemini · Gemini 2.5 Pro
+                  - paragraph [ref=e310]: → Building launch strategy architecture for TechStart
+              - generic [ref=e311]:
+                - button "Pause" [ref=e312]:
+                  - img [ref=e313]
+                  - text: Pause
+                - button "Clone" [ref=e316]:
+                  - img [ref=e317]
+                  - text: Clone
+                - button "Remove" [ref=e320]:
+                  - img [ref=e321]
+                  - text: Remove
+              - paragraph [ref=e324]: Last active just now
+              - generic [ref=e325]:
+                - generic [ref=e326]: brand strategy
+                - generic [ref=e327]: campaign strategy
+                - generic [ref=e328]: positioning
+              - paragraph [ref=e329]: "Outputs: Strategy Brief · Campaign Strategy"
+            - generic [ref=e330] [cursor=pointer]:
+              - generic [ref=e332]:
+                - img [ref=e337]
+                - generic [ref=e347]:
+                  - generic [ref=e348]:
+                    - heading "Finn" [level=3] [ref=e349]
+                    - generic [ref=e350]: Active
+                  - paragraph [ref=e352]: Creative Director
+                  - generic [ref=e353]:
+                    - generic [ref=e354]: Creative
+                    - generic [ref=e355]: Creative
+                    - generic [ref=e356]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e357]: → Leading concept review for the next campaign wave
+              - generic [ref=e358]:
+                - button "Pause" [ref=e359]:
+                  - img [ref=e360]
+                  - text: Pause
+                - button "Clone" [ref=e363]:
+                  - img [ref=e364]
+                  - text: Clone
+                - button "Remove" [ref=e367]:
+                  - img [ref=e368]
+                  - text: Remove
+              - paragraph [ref=e371]: Last active just now
+              - generic [ref=e372]:
+                - generic [ref=e373]: creative direction
+                - generic [ref=e374]: campaign concepts
+                - generic [ref=e375]: art direction
+              - paragraph [ref=e376]: "Outputs: Creative Asset · Campaign Copy"
+            - generic [ref=e377] [cursor=pointer]:
+              - generic [ref=e379]:
+                - img [ref=e384]
+                - generic [ref=e394]:
+                  - generic [ref=e395]:
+                    - heading "Echo" [level=3] [ref=e396]
+                    - generic [ref=e397]: Active
+                  - paragraph [ref=e399]: Copy & Content Lead
+                  - generic [ref=e400]:
+                    - generic [ref=e401]: Creative
+                    - generic [ref=e402]: Content & Copy
+                    - generic [ref=e403]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e404]: → Drafting launch copy and weekly calendar
+              - generic [ref=e405]:
+                - button "Pause" [ref=e406]:
+                  - img [ref=e407]
+                  - text: Pause
+                - button "Clone" [ref=e410]:
+                  - img [ref=e411]
+                  - text: Clone
+                - button "Remove" [ref=e414]:
+                  - img [ref=e415]
+                  - text: Remove
+              - paragraph [ref=e418]: Last active just now
+              - generic [ref=e419]:
+                - generic [ref=e420]: copywriting
+                - generic [ref=e421]: content calendars
+                - generic [ref=e422]: scripts
+              - paragraph [ref=e423]: "Outputs: Campaign Copy · Content Calendar"
+            - generic [ref=e424] [cursor=pointer]:
+              - generic [ref=e426]:
+                - img [ref=e431]
+                - generic [ref=e441]:
+                  - generic [ref=e442]:
+                    - heading "Nova Studio" [level=3] [ref=e443]
+                    - generic [ref=e444]: Active
+                  - paragraph [ref=e446]: Design & Visual Production Lead
+                  - generic [ref=e447]:
+                    - generic [ref=e448]: Creative
+                    - generic [ref=e449]: Design
+                    - generic [ref=e450]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e451]: → Preparing visual prompt packs for ad variations
+              - generic [ref=e452]:
+                - button "Pause" [ref=e453]:
+                  - img [ref=e454]
+                  - text: Pause
+                - button "Clone" [ref=e457]:
+                  - img [ref=e458]
+                  - text: Clone
+                - button "Remove" [ref=e461]:
+                  - img [ref=e462]
+                  - text: Remove
+              - paragraph [ref=e465]: Last active just now
+              - generic [ref=e466]:
+                - generic [ref=e467]: visual systems
+                - generic [ref=e468]: creative production
+                - generic [ref=e469]: Nano Banana 2 prompt design
+              - paragraph [ref=e470]: "Outputs: Creative Asset"
+            - generic [ref=e471] [cursor=pointer]:
+              - generic [ref=e473]:
+                - img [ref=e478]
+                - generic [ref=e490]:
+                  - generic [ref=e491]:
+                    - heading "Nova" [level=3] [ref=e492]
+                    - generic [ref=e493]: Active
+                  - paragraph [ref=e495]: Media Planning Lead
+                  - generic [ref=e496]:
+                    - generic [ref=e497]: Media
+                    - generic [ref=e498]: Media Planning
+                    - generic [ref=e499]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e500]: → Balancing channel mix and budget for active launch work
+              - generic [ref=e501]:
+                - button "Pause" [ref=e502]:
+                  - img [ref=e503]
+                  - text: Pause
+                - button "Clone" [ref=e506]:
+                  - img [ref=e507]
+                  - text: Clone
+                - button "Remove" [ref=e510]:
+                  - img [ref=e511]
+                  - text: Remove
+              - paragraph [ref=e514]: Last active just now
+              - generic [ref=e515]:
+                - generic [ref=e516]: media planning
+                - generic [ref=e517]: budgeting
+                - generic [ref=e518]: channel strategy
+              - paragraph [ref=e519]: "Outputs: Media Plan · Budget Sheet"
+            - generic [ref=e520] [cursor=pointer]:
+              - generic [ref=e522]:
+                - img [ref=e527]
+                - generic [ref=e537]:
+                  - generic [ref=e538]:
+                    - heading "Dex" [level=3] [ref=e539]
+                    - generic [ref=e540]: Active
+                  - paragraph [ref=e542]: Performance & Media Ops
+                  - generic [ref=e543]:
+                    - generic [ref=e544]: Media
+                    - generic [ref=e545]: Performance Ops
+                    - generic [ref=e546]: Ollama · Llama 3.2
+                  - paragraph [ref=e547]: → Updating media pacing sheets and KPI assumptions
+              - generic [ref=e548]:
+                - button "Pause" [ref=e549]:
+                  - img [ref=e550]
+                  - text: Pause
+                - button "Clone" [ref=e553]:
+                  - img [ref=e554]
+                  - text: Clone
+                - button "Remove" [ref=e557]:
+                  - img [ref=e558]
+                  - text: Remove
+              - paragraph [ref=e561]: Last active just now
+              - generic [ref=e562]:
+                - generic [ref=e563]: spreadsheet planning
+                - generic [ref=e564]: budget pacing
+                - generic [ref=e565]: KPI operations
+              - paragraph [ref=e566]: "Outputs: Budget Sheet · Media Plan"
+            - generic [ref=e567] [cursor=pointer]:
+              - generic [ref=e569]:
+                - img [ref=e574]
+                - generic [ref=e584]:
+                  - generic [ref=e585]:
+                    - heading "Atlas" [level=3] [ref=e586]
+                    - generic [ref=e587]: Active
+                  - paragraph [ref=e589]: Research, Insights & SEO Lead
+                  - generic [ref=e590]:
+                    - generic [ref=e591]: Research
+                    - generic [ref=e592]: Research
+                    - generic [ref=e593]: Google Gemini · Gemini 2.5 Flash
+                  - paragraph [ref=e594]: → Running insight scans across client categories
+              - generic [ref=e595]:
+                - button "Pause" [ref=e596]:
+                  - img [ref=e597]
+                  - text: Pause
+                - button "Clone" [ref=e600]:
+                  - img [ref=e601]
+                  - text: Clone
+                - button "Remove" [ref=e604]:
+                  - img [ref=e605]
+                  - text: Remove
+              - paragraph [ref=e608]: Last active just now
+              - generic [ref=e609]:
+                - generic [ref=e610]: competitor research
+                - generic [ref=e611]: trend analysis
+                - generic [ref=e612]: seo audits
+              - paragraph [ref=e613]: "Outputs: Research Brief · SEO Audit"
+    - button "Chat with Iris" [ref=e614] [cursor=pointer]:
+      - img [ref=e615]
+      - generic [ref=e617]: Chat with Iris
+  - alert [ref=e619]

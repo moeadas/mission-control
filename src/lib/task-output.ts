@@ -1,4 +1,6 @@
 import { DeliverableType } from '@/lib/types'
+import { getDeliverableAgentPlan } from '@/lib/agent-roles'
+import { getDeliverableSpec } from '@/lib/deliverables'
 
 export function buildTaskTitleFromRequest(request: string, deliverableType: DeliverableType) {
   const trimmed = request.trim()
@@ -14,26 +16,16 @@ export function buildTaskTitleFromRequest(request: string, deliverableType: Deli
     .replace(/^make\s+/i, '')
     .trim()
 
-  const prefix = {
-    'client-brief': 'Client Brief',
-    'strategy-brief': 'Strategy Task',
-    'campaign-strategy': 'Campaign Strategy',
-    'content-calendar': 'Content Calendar',
-    'campaign-copy': 'Content Task',
-    'creative-asset': 'Creative Task',
-    'media-plan': 'Media Plan',
-    'budget-sheet': 'Budget Sheet',
-    'kpi-forecast': 'KPI Forecast',
-    'seo-audit': 'SEO Audit',
-    'research-brief': 'Research Task',
-    'status-report': 'Task',
-  }[deliverableType]
+  const prefix = getDeliverableSpec(deliverableType).label || 'Task'
 
   return cleaned.length > 72 ? `${prefix}: ${cleaned.slice(0, 69)}...` : `${prefix}: ${cleaned}`
 }
 
 export function getDeliverableOutputSpec(deliverableType: DeliverableType, request: string) {
   const lower = request.toLowerCase()
+  const isSimpleSocialPost =
+    /(instagram post|linkedin post|social post|single post|caption)/.test(lower) &&
+    !/(carousel|slide by slide|slide-by-slide|content calendar|campaign strategy|media plan|audit|brief|visual direction|design)/.test(lower)
   const formatRules = [
     'Format the final output for direct rendering in the app.',
     'Use this exact structure style:',
@@ -45,7 +37,7 @@ export function getDeliverableOutputSpec(deliverableType: DeliverableType, reque
   ].join('\n')
 
   if (deliverableType === 'campaign-copy') {
-    if (lower.includes('carousel') || lower.includes('instagram')) {
+    if (lower.includes('carousel') || lower.includes('slide by slide') || lower.includes('slide-by-slide')) {
       return [
         formatRules,
         'Produce the final client-ready social deliverable, not a brief.',
@@ -65,6 +57,21 @@ export function getDeliverableOutputSpec(deliverableType: DeliverableType, reque
       ].join('\n')
     }
 
+    if (isSimpleSocialPost) {
+      return [
+        formatRules,
+        'Produce a short ready-to-publish social post, not a strategy brief.',
+        'Keep it tight, platform-native, and client-ready.',
+        'Output sections in this exact order:',
+        '## Objective',
+        '## Post Copy',
+        '## CTA',
+        '## Hashtags',
+        'Do not include audience analysis, hook option lists, supporting variants, or design-direction sections unless the user explicitly asked for them.',
+        'Keep the main post copy concise enough for a single post, not a carousel.',
+      ].join('\n')
+    }
+
     return [
       formatRules,
       'Produce the final copy deliverable, not a brief.',
@@ -76,6 +83,91 @@ export function getDeliverableOutputSpec(deliverableType: DeliverableType, reque
       '## Primary Copy',
       '## Supporting Variants',
       '## CTA',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'short-form-copy') {
+    return [
+      formatRules,
+      'Produce concise client-ready business copy for a short profile or description surface.',
+      'Output sections in this exact order:',
+      '## Objective',
+      '## Primary Option',
+      '## Alternate Options',
+      '## Character Check',
+      'Keep the primary option tight, distinctive, and usable without further editing.',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'email-campaign') {
+    return [
+      formatRules,
+      'Produce the email deliverable itself, not a planning note.',
+      'Output sections in this exact order:',
+      '## Objective',
+      '## Audience',
+      '## Email Structure',
+      '## Subject Line Options',
+      '## Body Copy',
+      '## CTA',
+      '## Follow-Up Notes',
+      'If the request implies a sequence, number the emails clearly.',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'website-copy') {
+    return [
+      formatRules,
+      'Produce website-ready copy organised by page section.',
+      'Output sections in this exact order:',
+      '## Objective',
+      '## Audience',
+      '## Hero',
+      '## Value Proposition',
+      '## Supporting Sections',
+      '## CTA',
+      'Keep the copy conversion-focused and scan-friendly.',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'blog-article') {
+    return [
+      formatRules,
+      'Produce the actual article draft, not a blog plan.',
+      'Output sections in this exact order:',
+      '## Objective',
+      '## Working Title',
+      '## Meta Description',
+      '## Article Draft',
+      '## CTA',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'video-script') {
+    return [
+      formatRules,
+      'Produce a script that can be handed directly into production.',
+      'Output sections in this exact order:',
+      '## Objective',
+      '## Format',
+      '## Hook',
+      '## Script',
+      '## On-Screen Text',
+      '## Production Notes',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'presentation') {
+    return [
+      formatRules,
+      'Produce a slide-by-slide deck outline ready for presentation drafting.',
+      'Output sections in this exact order:',
+      '## Objective',
+      '## Audience',
+      '## Narrative Arc',
+      '## Slide Outline',
+      '## Speaker Notes',
+      '## Visual Direction',
     ].join('\n')
   }
 
@@ -126,12 +218,41 @@ export function getDeliverableOutputSpec(deliverableType: DeliverableType, reque
     ].join('\n')
   }
 
-  if (deliverableType === 'seo-audit' || deliverableType === 'research-brief') {
+  if (deliverableType === 'brand-guidelines') {
+    return [
+      formatRules,
+      'Produce a usable brand guide, not a high-level note.',
+      'Include sections in this order:',
+      '## Brand Core',
+      '## Visual System',
+      '## Tone of Voice',
+      '## Do / Do Not',
+      '## Application Notes',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'seo-audit' || deliverableType === 'research-brief' || deliverableType === 'data-analysis') {
     return [
       formatRules,
       'Produce the actual audit or research output.',
       'Include sections: ## Executive Summary, ## Key Findings, ## Implications, ## Recommended Actions, ## Priority Order.',
       'Be specific and commercially useful.',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'ui-audit') {
+    return [
+      formatRules,
+      'Produce a browser-backed UI audit, not a vague critique.',
+      'Include sections in this order:',
+      '## Executive Summary',
+      '## Scope',
+      '## Key UX Findings',
+      '## Accessibility Findings',
+      '## Messaging / Conversion Findings',
+      '## Priority Fixes',
+      '## Evidence Needed',
+      'Rank findings by severity and keep recommendations concrete.',
     ].join('\n')
   }
 
@@ -148,6 +269,34 @@ export function getDeliverableOutputSpec(deliverableType: DeliverableType, reque
       '## Image-Generation Prompt',
       '## Variations',
       '## Production Notes',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'pr-comms' || deliverableType === 'client-brief') {
+    return [
+      formatRules,
+      'Produce a communications-ready draft that can be reviewed directly with minimal cleanup.',
+      'Include sections in this order:',
+      '## Objective',
+      '## Audience',
+      '## Core Narrative',
+      '## Draft',
+      '## Delivery Notes',
+    ].join('\n')
+  }
+
+  if (deliverableType === 'event-plan') {
+    return [
+      formatRules,
+      'Produce the event plan itself, not a generic overview.',
+      'Include sections in this order:',
+      '## Objective',
+      '## Audience',
+      '## Event Concept',
+      '## Run of Show',
+      '## Promotion Plan',
+      '## Logistics',
+      '## Risks and Watchouts',
     ].join('\n')
   }
 
@@ -173,52 +322,11 @@ export function buildTaskExecutionPlan(input: {
   pipelinePhases?: string[]
 }) : TaskExecutionPlan {
   const lower = input.request.toLowerCase()
-
-  let leadAgentId = input.routedAgentId || 'iris'
-  let collaboratorAgentIds: string[] = []
-
-  switch (input.deliverableType) {
-    case 'campaign-copy':
-      leadAgentId = 'echo'
-      collaboratorAgentIds = lower.includes('carousel') || lower.includes('instagram')
-        ? ['maya', 'lyra']
-        : ['maya']
-      break
-    case 'content-calendar':
-      leadAgentId = 'echo'
-      collaboratorAgentIds = ['maya', 'lyra']
-      break
-    case 'strategy-brief':
-    case 'campaign-strategy':
-      leadAgentId = 'maya'
-      collaboratorAgentIds = ['sage', 'atlas']
-      break
-    case 'creative-asset':
-      leadAgentId = 'lyra'
-      collaboratorAgentIds = ['finn', 'echo']
-      break
-    case 'media-plan':
-      leadAgentId = 'nova'
-      collaboratorAgentIds = ['dex', 'maya']
-      break
-    case 'budget-sheet':
-    case 'kpi-forecast':
-      leadAgentId = 'dex'
-      collaboratorAgentIds = ['nova']
-      break
-    case 'seo-audit':
-    case 'research-brief':
-      leadAgentId = 'atlas'
-      collaboratorAgentIds = ['maya']
-      break
-    case 'client-brief':
-      leadAgentId = 'sage'
-      collaboratorAgentIds = ['maya', 'piper']
-      break
-    default:
-      collaboratorAgentIds = []
-      break
-  }
+  const { leadAgentId, collaboratorAgentIds } = getDeliverableAgentPlan(
+    input.deliverableType,
+    input.request,
+    input.routedAgentId
+  )
 
   const qualityChecklist =
     input.pipelinePhases?.length
@@ -251,7 +359,7 @@ function getDefaultQualityChecklist(deliverableType: DeliverableType, lowerReque
     ]
   }
 
-  if (deliverableType === 'campaign-copy' && (lowerRequest.includes('carousel') || lowerRequest.includes('instagram'))) {
+  if (deliverableType === 'campaign-copy' && (lowerRequest.includes('carousel') || lowerRequest.includes('slide by slide') || lowerRequest.includes('slide-by-slide'))) {
     return [
       '1. Confirm objective, audience, and client message hierarchy',
       '2. Build hook and cover-slide angle',
@@ -259,6 +367,51 @@ function getDefaultQualityChecklist(deliverableType: DeliverableType, lowerReque
       '4. Add caption, CTA, and hashtags',
       '5. Review tone, readability, and claim safety',
       '6. Add design direction for production handoff',
+    ]
+  }
+
+  if (deliverableType === 'campaign-copy' && /(instagram post|linkedin post|social post|single post|caption)/.test(lowerRequest)) {
+    return [
+      '1. Confirm the post objective and target tone',
+      '2. Draft one concise platform-native post',
+      '3. Add a clear CTA and relevant hashtags',
+      '4. Review for brevity, readability, and brand fit',
+    ]
+  }
+
+  if (deliverableType === 'short-form-copy') {
+    return [
+      '1. Confirm the audience, surface, and character limit',
+      '2. Draft a concise primary line with sharp brand fit',
+      '3. Generate 2-3 alternates with slightly different tone angles',
+      '4. Review for brevity, memorability, and character compliance',
+    ]
+  }
+
+  if (deliverableType === 'email-campaign') {
+    return [
+      '1. Confirm objective, audience, and send context',
+      '2. Draft the email structure and message hierarchy',
+      '3. Write subject lines, body copy, and CTA',
+      '4. Review for scannability, clarity, and conversion logic',
+    ]
+  }
+
+  if (deliverableType === 'website-copy' || deliverableType === 'blog-article' || deliverableType === 'video-script') {
+    return [
+      '1. Confirm the user journey and audience intent',
+      '2. Draft the core narrative with the right structure for the format',
+      '3. Add a strong hook, message hierarchy, and CTA',
+      '4. Review for clarity, flow, and brand voice',
+    ]
+  }
+
+  if (deliverableType === 'presentation' || deliverableType === 'client-brief') {
+    return [
+      '1. Confirm the stakeholder audience and meeting objective',
+      '2. Build the narrative arc and strongest proof points',
+      '3. Draft the slide or briefing structure',
+      '4. Review for persuasion, clarity, and executive readability',
     ]
   }
 
@@ -283,6 +436,44 @@ function getDefaultQualityChecklist(deliverableType: DeliverableType, lowerReque
     ]
   }
 
+  if (deliverableType === 'brand-guidelines') {
+    return [
+      '1. Confirm the core brand promise and audience impression to create',
+      '2. Define visual and verbal system rules',
+      '3. Add do / do not examples and application guidance',
+      '4. Review for consistency and usability across teams',
+    ]
+  }
+
+  if (deliverableType === 'seo-audit' || deliverableType === 'research-brief' || deliverableType === 'data-analysis') {
+    return [
+      '1. Confirm the audit or research scope and evidence sources',
+      '2. Gather and group findings into clear themes',
+      '3. Translate findings into commercial implications',
+      '4. Prioritize actions by urgency and impact',
+      '5. Package the output into a client-ready report',
+    ]
+  }
+
+  if (deliverableType === 'ui-audit') {
+    return [
+      '1. Confirm the page or flow scope and audit objective',
+      '2. Review navigation, hierarchy, and usability friction',
+      '3. Check accessibility, responsiveness, and interaction states',
+      '4. Translate issues into severity-ranked findings',
+      '5. Recommend fixes with clear rationale and evidence requirements',
+    ]
+  }
+
+  if (deliverableType === 'creative-asset' || deliverableType === 'pr-comms' || deliverableType === 'event-plan') {
+    return [
+      '1. Confirm brief, audience, and execution context',
+      '2. Draft the primary concept or structure',
+      '3. Add production, delivery, or rollout notes where relevant',
+      '4. Review for quality, clarity, and readiness',
+    ]
+  }
+
   return [
     '1. Confirm brief and business context',
     '2. Draft the core deliverable',
@@ -304,6 +495,7 @@ function buildHandoffNotes(input: {
   return [
     `Lead agent owns the draft and final assembly: ${input.leadAgentId}.`,
     collaboratorText,
+    `Deliverable mode: ${getDeliverableSpec(input.deliverableType).label}.`,
     `Original request focus: ${input.request}`,
   ].join(' ')
 }

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "consumer-journey-mapping",
+  "name": "Consumer Journey Mapping",
+  "description": "Maps the complete customer decision journey from initial awareness through purchase and loyalty — identifying touchpoints, barriers, moments of truth, and opportunities to influence the decision.",
+  "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when mapping or refreshing the customer decision journey for a brand — to understand how customers move from awareness to purchase, where barriers exist, and where marketing can influence the decision.",
+      "context": "You are a customer experience strategist who maps end-to-end customer journeys to identify friction points, opportunities, and the moments that matter most in the decision process.",
+      "instructions": "## Consumer Journey Mapping Workflow\n\n- [ ] 1. Define scope: Set journey boundaries (awareness to loyalty, or specific phase)\n- [ ] 2. Identify stages: Map the major journey stages\n- [ ] 3. Identify touchpoints: Document all contact points at each stage\n- [ ] 4. Map emotions: Track customer feelings throughout the journey\n- [ ] 5. Identify barriers: Where do customers drop off or get frustrated?\n- [ ] 6. Find moments of truth: Identify high-impact moments for the brand\n- [ ] 7. Assign ownership: Which team/channel owns each touchpoint\n- [ ] 8. Identify opportunities: Where can marketing intervention change behavior?\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Target audience: {{target_audience}}\n- Journey scope: {{journey_scope}}\n- Existing research: {{existing_research}}",
+      "output_template": "## Consumer Journey Map: {{brand_name}}\n\n### Journey Overview\n| Field | Value |\n|-------|-------|\n| Brand | {{brand_name}} |\n| Audience | {{target_audience}} |\n| Scope | {{journey_scope}} |\n| Date | {{date}} |\n\n### Journey Stages\n| Stage | Description | Duration |\n|-------|-------------|---------|\n| Awareness | | |\n| Consideration | | |\n| Decision | | |\n| Purchase | | |\n| Retention | | |\n| Advocacy | | |\n\n### Stage-by-Stage Map\n\n#### Awareness\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Consideration\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Decision\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Purchase\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Retention\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Advocacy\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n### Moments of Truth\n| Moment | Stage | Why it matters | Brand action |\n|--------|-------|---------------|-------------|\n| | | | |\n\n### Drop-off Points\n| Stage | Drop-off rate | Why | Intervention |\n|-------|-------------|-----|-------------|\n| | | | |\n\n### Touchpoint Ownership\n| Touchpoint | Owner | Channel |\n|-----------|-------|--------|\n| | | |\n\n### Key Opportunities\n| Opportunity | Stage | Expected impact | Priority |\n|-------------|-------|----------------|----------|\n| | | | |"
+    }
+  },
+  "variables": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being mapped"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience segment"
+    },
+    {
+      "name": "journey_scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of the journey (e.g., awareness to purchase)"
+    },
+    {
+      "name": "existing_research",
+      "type": "string",
+      "required": false,
+      "description": "Existing journey or customer research"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Scope Definition",
+        "action": "Define journey boundaries and stages",
+        "verify": "Stages are comprehensive and logical"
+      },
+      {
+        "step": 2,
+        "name": "Touchpoint Mapping",
+        "action": "Document all touchpoints per stage",
+        "verify": "Touchpoints are complete"
+      },
+      {
+        "step": 3,
+        "name": "Emotion and Barrier Analysis",
+        "action": "Track emotions and identify barriers",
+        "verify": "Barriers are evidenced"
+      },
+      {
+        "step": 4,
+        "name": "Moment of Truth Identification",
+        "action": "Identify high-impact moments",
+        "verify": "Moments are correctly prioritized"
+      },
+      {
+        "step": 5,
+        "name": "Opportunity Mapping",
+        "action": "Identify marketing intervention points",
+        "verify": "Opportunities are specific and actionable"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Map the consumer journey for TechStart's expense management product. Target: CFOs at mid-market companies in UAE. Focus on awareness through purchase decision.",
+      "output": "Full consumer journey map with touchpoints, emotions, barriers, moments of truth, and marketing opportunities"
+    }
+  ],
+  "checklist": [
+    "All major journey stages are covered",
+    "Touchpoints are complete and accurate",
+    "Customer emotions are tracked at each stage",
+    "Drop-off points are identified with causes",
+    "Moments of truth are correctly prioritized",
+    "Marketing opportunities are specific and actionable"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova"],
+  "pipelines": ["strategy"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["strategy", "customer-journey", "cx", "mapping"],
+    "lastUpdated": "2026-03-24"
+  }
+}

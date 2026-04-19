@@ -2,30 +2,103 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "design-systems",
   "name": "Design Systems",
-  "description": "Builds scalable design systems and component libraries that ensure brand consistency across all creative output, from digital ads to long-form content.",
+  "description": "Creates and evaluates design systems that improve consistency, speed, scalability, and UI quality across products and campaigns.",
   "category": "creative",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when establishing a design system for a brand, creating component libraries, documenting design standards, or ensuring consistency across creative output.",
-      "context": "You are a design systems specialist who creates scalable, consistent design frameworks. You understand how to build systems that give creative teams freedom within guardrails.",
-      "instructions": "## Design Systems Workflow\n\n- [ ] 1. Audit existing brand assets and identify inconsistencies\n- [ ] 2. Define the design system scope and principles\n- [ ] 3. Build core components: color, typography, spacing, imagery\n- [ ] 4. Document component specifications and usage guidelines\n- [ ] 5. Create templates for common use cases\n- [ ] 6. Establish a governance process for updates\n\n## Key Inputs\n- Brand: {{brand}}\n- Scope: {{scope}} (full system, digital only, ad templates)\n- Existing Assets: {{existing_assets}}\n- Key Platforms: {{key_platforms}}",
-      "output_template": "## Design System Specification\n\n### Core Elements\n| Element | Specification | Usage |\n|---------|--------------|-------|\n| Primary Color | | |\n| Secondary Color | | |\n| Accent Color | | |\n| Typography — Headlines | | |\n| Typography — Body | | |\n| Spacing Scale | | |\n| Border Radius | | |\n| Shadow Scale | | |\n\n### Component Library\n| Component | States | Notes |\n|-----------|--------|-------|\n| Buttons | default, hover, active, disabled | |\n| Cards | | |\n| Forms | | |\n| Navigation | | |\n\n### Usage Guidelines\n- [ ] Do's: \n- [ ] Don'ts:"
+      "trigger": "Use this skillany time defining, auditing, or evolving a design system, component library, token structure, or shared visual language.",
+      "context": "You are a design systems lead. You think about governance, adoption, consistency, reusability, and the gap between visual standards and working implementation.",
+      "instructions": "## Design Systems\n\n1. **Define system problem** — Define system problem\n   - ✓ Done when: Define system problem is completed to a high standard\n\n2. **Identify foundations** — Identify foundations\n   - ✓ Done when: Identify foundations is completed to a high standard\n\n3. **Define shared components** — Define shared components\n   - ✓ Done when: Define shared components is completed to a high standard\n\n4. **Specify governance** — Specify governance\n   - ✓ Done when: Specify governance is completed to a high standard\n\n5. **Flag adoption risks** — Flag adoption risks\n   - ✓ Done when: Flag adoption risks is completed to a high standard\n\n## Key Inputs\n- brand: Brand this design system is for\n- scope: Scope: full system, digital only, ad templates, social templates\n- existing_assets: Existing brand assets: logos, colors, typography, guidelines\n- key_platforms: Key platforms: Google Ads, Meta, display, website, print",
+      "output_template": "## Design System Plan\n\n### 1. Objective\n- System goal:\n- Product / brand context:\n- Main inconsistency problem:\n\n### 2. Foundations\n| Foundation | Standard / Rule | Notes |\n|---|---|---|\n| Typography | | |\n| Color | | |\n| Spacing | | |\n| Grid / layout | | |\n| Motion / interaction | | |\n\n### 3. Component Priorities\n| Component / Pattern | Why It Matters | Priority |\n|---|---|---|\n| | | High / Med / Low |\n\n### 4. Governance Rules\n- Reuse when:\n- Extend when:\n- Create new when:\n\n### 5. Adoption Notes\n- Documentation gaps:\n- Engineering dependencies:\n- Rollout recommendation:"
     }
   },
   "variables": [
-    { "name": "brand", "type": "string", "required": true, "description": "Brand this design system is for" },
-    { "name": "scope", "type": "string", "required": false, "description": "Scope: full system, digital only, ad templates, social templates" },
-    { "name": "existing_assets", "type": "string", "required": false, "description": "Existing brand assets: logos, colors, typography, guidelines" },
-    { "name": "key_platforms", "type": "string", "required": false, "description": "Key platforms: Google Ads, Meta, display, website, print" }
+    {
+      "name": "brand",
+      "type": "string",
+      "required": true,
+      "description": "Brand this design system is for"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope: full system, digital only, ad templates, social templates"
+    },
+    {
+      "name": "existing_assets",
+      "type": "string",
+      "required": false,
+      "description": "Existing brand assets: logos, colors, typography, guidelines"
+    },
+    {
+      "name": "key_platforms",
+      "type": "string",
+      "required": false,
+      "description": "Key platforms: Google Ads, Meta, display, website, print"
+    }
   ],
+  "inputs": [
+    {
+      "name": "brand",
+      "type": "string",
+      "required": true,
+      "description": "Brand this design system is for"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope: full system, digital only, ad templates, social templates"
+    },
+    {
+      "name": "existing_assets",
+      "type": "string",
+      "required": false,
+      "description": "Existing brand assets: logos, colors, typography, guidelines"
+    },
+    {
+      "name": "key_platforms",
+      "type": "string",
+      "required": false,
+      "description": "Key platforms: Google Ads, Meta, display, website, print"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Audit assets", "action": "Review existing brand assets for consistency", "verify": "Gaps and inconsistencies are identified" },
-      { "step": 2, "name": "Define system", "action": "Establish core design tokens and principles", "verify": "System is coherent and scalable" },
-      { "step": 3, "name": "Build components", "action": "Create reusable components with all states", "verify": "Components are practical" },
-      { "step": 4, "name": "Document", "action": "Write clear usage guidelines", "verify": "Guidelines are easy to follow" }
+      {
+        "step": 1,
+        "name": "Define system problem",
+        "action": "Define system problem",
+        "verify": "Define system problem is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Identify foundations",
+        "action": "Identify foundations",
+        "verify": "Identify foundations is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Define shared components",
+        "action": "Define shared components",
+        "verify": "Define shared components is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Specify governance",
+        "action": "Specify governance",
+        "verify": "Specify governance is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Flag adoption risks",
+        "action": "Flag adoption risks",
+        "verify": "Flag adoption risks is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -35,20 +108,31 @@
     }
   ],
   "checklist": [
-    "Core design tokens are defined and documented",
-    "Component states are comprehensive",
-    "Usage guidelines are clear and practical",
-    "Templates cover key use cases",
-    "System is maintainable and versioned",
-    "System is accessible (WCAG guidelines)"
+    "Define system problem is completed to a high standard",
+    "Identify foundations is completed to a high standard",
+    "Define shared components is completed to a high standard",
+    "Specify governance is completed to a high standard",
+    "Flag adoption risks is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["creative-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "finn",
+    "lyra"
+  ],
+  "pipelines": [
+    "creative-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["design-systems", "brand-consistency", "creative", "component-library"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "design-systems",
+      "brand-consistency",
+      "creative",
+      "component-library"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

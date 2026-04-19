@@ -8,9 +8,9 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when entering any negotiation with a client or prospect — pricing discussions, scope changes, contract terms, renewals, or resource disputes.",
+      "trigger": "Use this skillany time entering any negotiation with a client or prospect — pricing discussions, scope changes, contract terms, renewals, or resource disputes.",
       "context": "You are a skilled negotiator focused on understanding client needs, articulating agency value, and finding creative solutions that work for both parties.",
-      "instructions": "## Negotiation Workflow\n\nPrepare for and execute effective negotiations:\n\n- [ ] 1. Know your BATNA: Identify your best alternative to a negotiated agreement\n- [ ] 2. Understand their position: Research the client's constraints, pressures, and priorities\n- [ ] 3. Define objectives: Set clear target, acceptable range, and walk-away points\n- [ ] 4. Prepare concessions: Plan what to give up and what to hold firm on\n- [ ] 5. Frame the value: Prepare evidence of the agency's value delivery\n- [ ] 6. Execute negotiation: Use active listening, anchor first, and trade not give\n- [ ] 7. Document agreement: Capture all terms clearly and confirm mutual understanding\n\n## Key Inputs\n- Negotiation topic: {{topic}}\n- Client perspective: {{client_position}}\n- Agency position: {{agency_position}}\n- Priority weighting: {{priority_weighting}}",
+      "instructions": "## Negotiation\n\n1. **Prepare Intelligence** — Research client situation, constraints, and history\n   - ✓ Done when: You understand their likely position and pressures\n\n2. **Define Strategy** — Set targets, walk-aways, and concession ladder\n   - ✓ Done when: Strategy is clear and team-aligned\n\n3. **Frame the Conversation** — Open with shared goals and value delivered\n   - ✓ Done when: Conversation starts collaboratively\n\n4. **Negotiate** — Trade concessions, not give them away; listen actively\n   - ✓ Done when: Making progress toward objectives without conceding too much\n\n5. **Document Outcome** — Capture agreed terms clearly and immediately\n   - ✓ Done when: Both parties aligned on what was agreed\n\n6. **Post-Negotiation Review** — Assess outcome against objectives and document learnings\n   - ✓ Done when: Future negotiations informed by this experience\n\n## Key Inputs\n- topic: Main subject of the negotiation\n- client_name: Client or counterparty name\n- client_position: Client's known or assumed position and constraints\n- agency_position: Agency's desired outcome and hard limits\n- priority_weighting: Which elements matter most to each party",
       "output_template": "## Negotiation Brief: {{topic}}\n\n### Parties\n| | Agency | Client |\n|-|--------|--------|\n| Primary contact | | |\n| Decision maker | | |\n| Constraints | | |\n\n### BATNA Analysis\n| | Details |\n|-|--------|\n| Agency BATNA | |\n| Client BATNA (perceived) | |\n| Who has more leverage? | |\n\n### Objectives & Walk-Aways\n| Element | Target | Walk-away |\n|---------|--------|-----------|\n| | | |\n\n### Known Client Priorities\n1. \n2. \n3. \n\n### Agency Concession Ladder (Most to Least Flexible)\n| Concession | When to offer | Linked ask |\n|------------|---------------|------------|\n| | | |\n\n### Value Framing Points\n- [ ] \n\n### Negotiation Script / Talking Points\n**Opening:**\n**On [topic]:**\n**If they push back:**\n**If we need to close:**\n\n### Post-Negotiation\n| Outcome | |\n|---------|\n| Result: |\n| Agreed terms: |\n| Next steps: |\n| Relationship impact: |"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Which elements matter most to each party"
     }
   ],
+  "inputs": [
+    {
+      "name": "topic",
+      "type": "string",
+      "required": true,
+      "description": "Main subject of the negotiation"
+    },
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or counterparty name"
+    },
+    {
+      "name": "client_position",
+      "type": "string",
+      "required": true,
+      "description": "Client's known or assumed position and constraints"
+    },
+    {
+      "name": "agency_position",
+      "type": "string",
+      "required": true,
+      "description": "Agency's desired outcome and hard limits"
+    },
+    {
+      "name": "priority_weighting",
+      "type": "string",
+      "required": false,
+      "description": "Which elements matter most to each party"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,19 +126,20 @@
     }
   ],
   "checklist": [
-    "BATNA is clear and realistic",
-    "Walk-away point is defined before entering",
-    "Concessions are traded, not given freely",
-    "Value is framed with evidence, not claims",
-    "Agreement documented before ending the conversation",
-    "Post-negotiation review completed"
+    "You understand their likely position and pressures",
+    "Strategy is clear and team-aligned",
+    "Conversation starts collaboratively",
+    "Making progress toward objectives without conceding too much",
+    "Both parties aligned on what was agreed",
+    "Future negotiations informed by this experience"
   ],
   "tools": [
     "document",
-    "spreadsheet"
+    "spreadsheet",
+    "## Client Management"
   ],
   "agents": [
-    "atlas"
+    "sage"
   ],
   "pipelines": [
     "biz-dev"
@@ -119,6 +153,6 @@
       "pricing",
       "contracts"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -2,7 +2,9 @@ import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { normalizeProviderSettings } from '@/lib/provider-settings'
 import type { ProviderSettings } from '@/lib/types'
 
-const SUPER_ADMIN_EMAIL = 'moeadas@yahoo.com'
+export function getSuperAdminEmail() {
+  return (process.env.SUPER_ADMIN_EMAIL || 'moeadas@yahoo.com').trim().toLowerCase()
+}
 
 export interface AuthContext {
   userId: string
@@ -47,7 +49,8 @@ export async function resolveAuthContextFromToken(token: string | null | undefin
   if (error || !data.user?.id || !data.user.email) return null
 
   const email = data.user.email.toLowerCase()
-  const defaultRole = email === SUPER_ADMIN_EMAIL ? 'super_admin' : 'member'
+  const superAdminEmail = getSuperAdminEmail()
+  const defaultRole = email === superAdminEmail ? 'super_admin' : 'member'
 
   const { data: profile, error: profileLookupError } = await supabase
     .from('profiles')
@@ -59,7 +62,7 @@ export async function resolveAuthContextFromToken(token: string | null | undefin
     throw profileLookupError
   }
 
-  const role = email === SUPER_ADMIN_EMAIL ? 'super_admin' : profile?.role === 'super_admin' ? 'super_admin' : defaultRole
+  const role = email === superAdminEmail ? 'super_admin' : profile?.role === 'super_admin' ? 'super_admin' : defaultRole
   const isActive = profile?.is_active ?? true
 
   const { error: profileError } = await supabase

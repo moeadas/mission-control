@@ -8,9 +8,9 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when developing or refreshing brand positioning — defining the strategic foundation for how a brand should be perceived relative to competitors.",
+      "trigger": "Use this skillany time developing or refreshing brand positioning — defining the strategic foundation for how a brand should be perceived relative to competitors.",
       "context": "You are a brand strategist who uses rigorous frameworks to develop a clear, ownable, and differentiated brand position that resonates with target audiences.",
-      "instructions": "## Positioning Framework Workflow\n\nDevelop a clear brand positioning:\n\n- [ ] 1. Market analysis: Understand the competitive landscape and category norms\n- [ ] 2. Audience insight: Deeply understand target audience needs and perceptions\n- [ ] 3. Self-analysis: Honestly assess brand strengths and weaknesses\n- [ ] 4. White space identification: Find unoccupied positioning territory\n- [ ] 5. Positioning statement: Craft a clear, ownable positioning\n- [ ] 6. Brand promise: Define the core promise the brand makes\n- [ ] 7. Proof points: Identify the evidence that supports the position\n- [ ] 8. Messaging hierarchy: Translate position into messaging tiers\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Category: {{category}}\n- Target audience: {{target_audience}}\n- Competitive set: {{competitors}}",
+      "instructions": "## Positioning Framework\n\n1. **Market & Competitive Analysis** — Map competitive landscape and category norms\n   - ✓ Done when: Full picture of positioning battlefield\n\n2. **Audience Deep-Dive** — Develop deep understanding of audience needs\n   - ✓ Done when: Insight is specific and actionable\n\n3. **White Space Analysis** — Identify unoccupied or underserved territory\n   - ✓ Done when: Opportunity is real and ownable\n\n4. **Positioning Statement** — Craft clear positioning statement\n   - ✓ Done when: Position is specific, ownable, and credible\n\n5. **Proof Points** — Identify evidence that supports the position\n   - ✓ Done when: Brand can substantiate the claim\n\n6. **Messaging Hierarchy** — Translate position into organized messaging\n   - ✓ Done when: All channels can express the position\n\n7. **Validation** — Test positioning with audience and stakeholders\n   - ✓ Done when: Position resonates and is approved\n\n## Key Inputs\n- brand_name: Brand or product name\n- category: Competitive category\n- target_audience: Primary target audience\n- competitors: Key competitors to analyze",
       "output_template": "## Positioning Framework: {{brand_name}}\n\n### Category Context\n**Category definition:**\n**Category entry barriers:**\n**Category trends:**\n\n### Competitive Landscape\n| Competitor | Positioning | Strength | Weakness |\n|------------|-------------|----------|----------|\n| | | | |\n| | | | |\n\n**Competitive positioning map:**\n[Y-axis: ]\n[X-axis: ]\n[Map competitors]\n\n### Target Audience\n\n**Primary audience:**\n- Demographics:\n- Psychographics:\n- Key needs:\n- Decision journey:\n\n**Audience frustrations with current options:**\n- \n\n### Self-Assessment\n\n**Brand strengths:**\n- \n\n**Brand weaknesses:**\n- \n\n### White Space Analysis\n\n**Unoccupied territory:**\n**Why it matters to audience:**\n**Can we credibly own it?**\n\n### Positioning Statement\n\n**For** [target audience]\n**Who** [audience need/category need]\n**{{brand_name}}** is the [category/frame of reference]\n**that** [key differentiator]\n**because** [reason to believe]\n\n### Brand Promise\n**Core promise:**\n\n**Emotional promise:**\n\n**Functional promise:**\n\n### Reason to Believe / Proof Points\n1. \n2. \n3. \n\n### Messaging Hierarchy\n\n**Elevator pitch:**\n[1-2 sentences]\n\n**Primary message:**\n\n**Supporting message 1:**\n\n**Supporting message 2:**\n\n**Supporting message 3:**\n\n### What This Positioning Is NOT\n[Clear boundaries to avoid confusion]\n\n### Positioning Test\n| Test | Result |\n|------|--------|\n| Is it ownable? | |\n| Is it meaningful to audience? | |\n| Is it distinctive? | |\n| Is it credible? | |\n| Is it sustainable? | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Key competitors to analyze"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand or product name"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": true,
+      "description": "Competitive category"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary target audience"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Key competitors to analyze"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,13 +120,13 @@
     }
   ],
   "checklist": [
-    "Competitive landscape is thoroughly analyzed",
-    "Audience insights are specific and actionable",
-    "White space is identified and validated",
-    "Positioning is ownable and defensible",
-    "Brand can credibly support the position",
-    "Messaging hierarchy is clear and usable",
-    "Positioning passes the positioning tests"
+    "Full picture of positioning battlefield",
+    "Insight is specific and actionable",
+    "Opportunity is real and ownable",
+    "Position is specific, ownable, and credible",
+    "Brand can substantiate the claim",
+    "All channels can express the position",
+    "Position resonates and is approved"
   ],
   "tools": [
     "document",
@@ -107,8 +134,7 @@
     "presentation"
   ],
   "agents": [
-    "nova",
-    "echo"
+    "maya"
   ],
   "pipelines": [
     "strategy"
@@ -122,6 +148,6 @@
       "branding",
       "competitive-analysis"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when planning or managing a content calendar across platforms — to schedule content, ensure consistency, avoid gaps, and align content with campaigns and business objectives.",
+      "trigger": "Use this skillany time planning or managing a content calendar across platforms — to schedule content, ensure consistency, avoid gaps, and align content with campaigns and business objectives.",
       "context": "You are a content operations specialist who builds and manages content calendars that ensure consistent publishing, brand alignment, and optimal timing across all channels.",
-      "instructions": "## Content Calendar Management Workflow\n\n- [ ] 1. Set objectives: Align calendar with campaign and business goals\n- [ ] 2. Audit existing content: What's already performing well?\n- [ ] 3. Define cadence: Set publishing frequency per platform\n- [ ] 4. Plan content themes: Map content themes to business objectives\n- [ ] 5. Build the calendar: Assign content to specific dates and platforms\n- [ ] 6. Include campaigns: Overlay campaign dates and key moments\n- [ ] 7. Assign owners: Who is creating, reviewing, and publishing each piece?\n- [ ] 8. Review and adjust: Weekly review to ensure on-track delivery\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Platforms: {{platforms}}\n- Publishing cadence: {{publishing_cadence}}\n- Campaigns: {{campaigns}}\n- Content themes: {{content_themes}}",
+      "instructions": "## Content Calendar Management\n\n1. **Objective Alignment** — Align calendar with business and campaign goals\n   - ✓ Done when: Calendar supports key business objectives\n\n2. **Cadence Planning** — Define publishing frequency per platform\n   - ✓ Done when: Cadence is realistic and consistent\n\n3. **Theme Mapping** — Map content themes to objectives and weeks\n   - ✓ Done when: Themes are coherent and varied\n\n4. **Calendar Build** — Assign content to specific dates and platforms\n   - ✓ Done when: Calendar is complete with no major gaps\n\n5. **Owner Assignment** — Assign create, review, and publish owners\n   - ✓ Done when: Every piece has a clear owner\n\n6. **Weekly Review** — Review pipeline status weekly\n   - ✓ Done when: Calendar stays on track\n\n## Key Inputs\n- brand_name: Brand being planned\n- platforms: Platforms to publish on\n- publishing_cadence: Publishing frequency per platform\n- campaigns: Upcoming campaigns to align with\n- content_themes: Content themes for the period",
       "output_template": "## Content Calendar: {{brand_name}}\n\n### Calendar Overview\n| Field | Value |\n|-------|-------|\n| Brand | {{brand_name}} |\n| Period | |\n| Platforms | {{platforms}} |\n| Total content pieces | |\n| Date | {{date}} |\n\n### Publishing Cadence\n| Platform | Frequency | Best time | Owner |\n|----------|-----------|-----------|-------|\n| | | | |\n\n### Content Theme Mapping\n| Week | Theme | Business objective | Content pieces |\n|------|-------|-------------------|---------------|\n| | | | |\n\n### Campaign Overlay\n| Campaign | Start | End | Content needed |\n|---------|-------|-----|---------------|\n| | | | |\n\n### Monthly Calendar\n| Date | Platform | Content type | Topic | Owner | Status |\n|------|----------|-------------|-------|-------|--------|\n| | | | | | |\n\n### Content Pipeline\n| Status | Count | Pieces |\n|--------|-------|-------|\n| Ideated | | |\n| In progress | | |\n| Approved | | |\n| Scheduled | | |\n| Published | | |\n\n### Gaps and Risks\n| Gap/Risk | Date affected | Mitigation |\n|----------|--------------|------------|\n| | | |"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Content themes for the period"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being planned"
+    },
+    {
+      "name": "platforms",
+      "type": "string",
+      "required": true,
+      "description": "Platforms to publish on"
+    },
+    {
+      "name": "publishing_cadence",
+      "type": "string",
+      "required": false,
+      "description": "Publishing frequency per platform"
+    },
+    {
+      "name": "campaigns",
+      "type": "string",
+      "required": false,
+      "description": "Upcoming campaigns to align with"
+    },
+    {
+      "name": "content_themes",
+      "type": "string",
+      "required": false,
+      "description": "Content themes for the period"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,20 +126,32 @@
     }
   ],
   "checklist": [
-    "Calendar is aligned with business objectives",
-    "Publishing cadence is realistic and consistent",
-    "Content themes are varied and on-brand",
-    "Campaign dates are overlaid on the calendar",
+    "Calendar supports key business objectives",
+    "Cadence is realistic and consistent",
+    "Themes are coherent and varied",
+    "Calendar is complete with no major gaps",
     "Every piece has a clear owner",
-    "Gaps and risks are identified and mitigated"
+    "Calendar stays on track"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["content"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "echo"
+  ],
+  "pipelines": [
+    "content"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["content", "social-media", "planning", "calendar"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "content",
+      "social-media",
+      "planning",
+      "calendar"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

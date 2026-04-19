@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ClientShell } from '@/components/ClientShell'
 import { useAgentsStore } from '@/lib/agents-store'
 import { SkillImporter } from '@/components/skills/SkillImporter'
@@ -21,12 +21,21 @@ import {
   Loader2,
 } from 'lucide-react'
 import { clsx } from 'clsx'
-import { routeTask, createPipelineInstance, type PipelineInstance, type PipelineTask } from '@/lib/pipeline-execution'
+import {
+  routeTask,
+  applyExecutionStateToInstance,
+  createPipelineInstance,
+  validatePipelineClientData,
+  type PipelineInstance,
+} from '@/lib/pipeline-execution'
 import type { Pipeline } from '@/lib/stores/pipelines-store'
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
+import Link from 'next/link'
 
 export default function PipelineRunPage() {
   const agents = useAgentsStore(state => state.agents)
   const clients = useAgentsStore(state => state.clients)
+  const supabase = useMemo(() => getSupabaseBrowserClient(), [])
   
   const [pipelines, setPipelines] = useState<Pipeline[]>([])
   const [selectedPipeline, setSelectedPipeline] = useState<Pipeline | null>(null)
@@ -37,6 +46,7 @@ export default function PipelineRunPage() {
   const [taskDescription, setTaskDescription] = useState('')
   const [routingResult, setRoutingResult] = useState<any>(null)
   const [isRouting, setIsRouting] = useState(false)
+  const [isLaunching, setIsLaunching] = useState(false)
   
   // Active instances
   const [instances, setInstances] = useState<PipelineInstance[]>([])
@@ -47,17 +57,93 @@ export default function PipelineRunPage() {
   useEffect(() => {
     async function loadPipelines() {
       try {
-        const modules = await import('@/config/pipelines/pipelines.json')
-        setPipelines(modules.default.pipelines)
-        if (modules.default.pipelines.length > 0) {
-          setSelectedPipeline(modules.default.pipelines[0])
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+
+        const response = await fetch('/api/pipelines', {
+          headers: session?.access_token
+            ? {
+                Authorization: `Bearer ${session.access_token}`,
+              }
+            : {},
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to load pipelines.')
+        }
+
+        const loadedPipelines = await response.json()
+        setPipelines(loadedPipelines)
+        if (loadedPipelines.length > 0) {
+          setSelectedPipeline(loadedPipelines[0])
         }
       } catch (error) {
         console.error('Failed to load pipelines:', error)
       }
     }
     loadPipelines()
-  }, [])
+  }, [supabase])
+
+  useEffect(() => {
+    if (!instances.length) return
+
+    const activeTaskIds = instances
+      .filter((instance) => instance.taskId && instance.status !== 'completed')
+      .map((instance) => instance.taskId as string)
+
+    if (!activeTaskIds.length) return
+
+    let cancelled = false
+
+    const poll = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        if (!session?.access_token) return
+
+        const updates = await Promise.all(
+          activeTaskIds.map(async (taskId) => {
+            const response = await fetch(`/api/tasks/${taskId}/execution`, {
+              headers: {
+                Authorization: `Bearer ${session.access_token}`,
+              },
+              cache: 'no-store',
+            })
+
+            if (!response.ok) return null
+            return {
+              taskId,
+              state: await response.json(),
+            }
+          })
+        )
+
+        if (cancelled) return
+
+        setInstances((current) =>
+          current.map((instance) => {
+            if (!instance.taskId) return instance
+            const update = updates.find((entry) => entry?.taskId === instance.taskId)
+            if (!update) return instance
+            const pipeline = pipelines.find((entry) => entry.id === instance.pipelineId)
+            return pipeline ? applyExecutionStateToInstance(instance, update.state, pipeline) : instance
+          })
+        )
+      } catch (error) {
+        console.error('Failed to poll pipeline execution:', error)
+      }
+    }
+
+    poll()
+    const intervalId = window.setInterval(poll, 2500)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(intervalId)
+    }
+  }, [instances, pipelines, supabase])
 
   const handleRouteTask = async () => {
     if (!taskDescription.trim()) return
@@ -81,20 +167,87 @@ export default function PipelineRunPage() {
     setIsRouting(false)
   }
 
-  const startPipeline = (pipelineId: string) => {
+  const startPipeline = async (pipelineId: string) => {
     const pipeline = pipelines.find(p => p.id === pipelineId)
     if (!pipeline) return
-    
-    const instance = createPipelineInstance(
-      pipeline,
-      selectedClient,
-      {}, // client data would be filled from form
-      language
-    )
-    setInstances(prev => [...prev, instance])
-    setActiveTab('active')
-    setRoutingResult(null)
-    setTaskDescription('')
+
+    const clientData = createPipelineInstance(pipeline, selectedClient, {}, language).clientData
+    const validation = validatePipelineClientData(pipeline, clientData)
+    if (!validation.ok) {
+      setRoutingResult({
+        success: false,
+        message: validation.message,
+        availablePipelines: [
+          {
+            id: pipeline.id,
+            name: pipeline.name,
+            description: [
+              validation.missingFields.length ? `Missing required fields: ${validation.missingFields.join(', ')}` : '',
+              validation.missingTemplateVariables.length
+                ? `Missing template variables: ${validation.missingTemplateVariables.join(', ')}`
+                : '',
+            ]
+              .filter(Boolean)
+              .join(' • '),
+            version: pipeline.version,
+            phases: pipeline.phases.map(ph => ({ id: ph.id, name: ph.name })),
+          },
+        ],
+      })
+      return
+    }
+
+    setIsLaunching(true)
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!session?.access_token) {
+        throw new Error('You need to sign in before running pipelines.')
+      }
+
+      const response = await fetch('/api/pipeline/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          description: taskDescription,
+          clientId: selectedClient,
+          language,
+          pipelineId,
+        }),
+      })
+
+      const payload = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        throw new Error(payload?.error || 'Failed to launch tracked pipeline run.')
+      }
+
+      const instance = createPipelineInstance(pipeline, selectedClient, clientData, language)
+      instance.id = payload.taskId || instance.id
+      instance.taskId = payload.taskId
+      instance.status = 'running'
+      instance.pipelineName = pipeline.name
+      instance.currentPhaseName = payload.pipeline?.phases?.[0]?.name || pipeline.phases[0]?.name || null
+      instance.progress = 5
+      instance.jobStatus = payload.job?.status || 'queued'
+
+      setInstances((prev) => [instance, ...prev.filter((entry) => entry.taskId !== instance.taskId)])
+      setActiveTab('active')
+      setRoutingResult(null)
+      setTaskDescription('')
+    } catch (error) {
+      setRoutingResult({
+        success: false,
+        message: error instanceof Error ? error.message : 'Failed to launch pipeline.',
+      })
+    } finally {
+      setIsLaunching(false)
+    }
   }
 
   return (
@@ -266,10 +419,16 @@ export default function PipelineRunPage() {
                       
                       <button
                         onClick={() => startPipeline(routingResult.pipelineId)}
-                        className="w-full py-3 bg-accent-green text-white rounded-lg font-medium hover:bg-accent-green/80 flex items-center justify-center gap-2"
+                        disabled={isLaunching}
+                        className={clsx(
+                          'w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors',
+                          isLaunching
+                            ? 'bg-base-300 text-text-dim cursor-not-allowed'
+                            : 'bg-accent-green text-white hover:bg-accent-green/80'
+                        )}
                       >
-                        <Play size={16} />
-                        Start Pipeline: {routingResult.pipelineName}
+                        {isLaunching ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
+                        Start Tracked Run: {routingResult.pipelineName}
                       </button>
                     </>
                   ) : (
@@ -326,10 +485,17 @@ export default function PipelineRunPage() {
                   <div key={instance.id} className="bg-base-200 rounded-xl p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h3 className="font-medium">{instance.pipelineId}</h3>
+                        <h3 className="font-medium">{instance.pipelineName || instance.pipelineId}</h3>
                         <p className="text-xs text-text-secondary">
                           Client: {instance.clientId} • Language: {instance.language}
                         </p>
+                        {instance.taskId && (
+                          <p className="text-xs text-text-dim mt-1">
+                            Task ID: {instance.taskId}
+                            {' · '}
+                            Phase: {instance.currentPhaseName || instance.currentPhase}
+                          </p>
+                        )}
                       </div>
                       <span className={clsx(
                         'px-3 py-1 rounded-full text-xs font-medium',
@@ -346,19 +512,31 @@ export default function PipelineRunPage() {
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-text-secondary">Progress</span>
                         <span className="font-medium">
-                          {instance.tasks.filter(t => t.status === 'completed').length}/
-                          {instance.tasks.length}
+                          {typeof instance.progress === 'number'
+                            ? `${instance.progress}%`
+                            : `${instance.tasks.filter(t => t.status === 'completed').length}/${instance.tasks.length}`}
                         </span>
                       </div>
                       <div className="h-2 bg-base-300 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-accent-purple transition-all"
                           style={{
-                            width: `${(instance.tasks.filter(t => t.status === 'completed').length / instance.tasks.length) * 100}%`
+                            width: `${typeof instance.progress === 'number'
+                              ? instance.progress
+                              : (instance.tasks.filter(t => t.status === 'completed').length / Math.max(instance.tasks.length, 1)) * 100}%`
                           }}
                         />
                       </div>
                     </div>
+
+                    {instance.taskId && (
+                      <div className="mb-4 text-xs text-text-secondary flex items-center justify-between gap-3">
+                        <span>Live execution is being tracked through the shared task runner.</span>
+                        <Link href={`/tasks/${instance.taskId}`} className="text-accent-purple hover:underline">
+                          Open task console
+                        </Link>
+                      </div>
+                    )}
                     
                     {/* Tasks */}
                     <div className="space-y-2">

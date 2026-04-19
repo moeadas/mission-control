@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { loadSharedAppState, saveSharedAppState } from '@/lib/supabase/app-state'
+import { loadSharedAppState, saveSharedAppState, saveSharedAppStateDelta } from '@/lib/supabase/app-state'
 import { hasSupabaseBrowserConfig, hasSupabaseServerConfig } from '@/lib/supabase/config'
-import type { AppPersistenceSnapshot } from '@/lib/agents-store'
+import type { AppPersistencePatch, AppPersistenceSnapshot, EntityDeltaPatch } from '@/lib/agents-store'
 import { resolveAuthContextFromToken, saveUserProviderSettings } from '@/lib/supabase/auth'
 import { loadRelationalAppState } from '@/lib/supabase/relational-sync'
 import { normalizeProviderSettings } from '@/lib/provider-settings'
@@ -37,6 +37,16 @@ function applyOwnershipDefaults(state: AppPersistenceSnapshot, userId: string): 
   }
 }
 
+function mergeStatePatch(
+  currentState: AppPersistenceSnapshot | null,
+  patch: AppPersistencePatch
+): AppPersistenceSnapshot {
+  return {
+    ...(currentState || {}),
+    ...patch,
+  } as AppPersistenceSnapshot
+}
+
 function filterStateForUser(state: AppPersistenceSnapshot, userId: string): AppPersistenceSnapshot {
   const scopedClients = state.clients.filter((client) => client.ownerUserId === userId)
   const scopedClientIds = new Set(scopedClients.map((client) => client.id))
@@ -51,7 +61,6 @@ function filterStateForUser(state: AppPersistenceSnapshot, userId: string): AppP
       (artifact.missionId ? scopedMissionIds.has(artifact.missionId) : false)
   )
   const scopedConversations = state.conversations.filter((conversation) => conversation.ownerUserId === userId)
-
   return {
     ...state,
     clients: scopedClients,
@@ -163,27 +172,63 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ connected: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = (await request.json()) as { state?: AppPersistenceSnapshot }
+    const body = (await request.json()) as {
+      state?: AppPersistenceSnapshot
+      statePatch?: AppPersistencePatch
+      entityPatch?: EntityDeltaPatch
+      updatedAt?: string | null
+    }
 
-    if (!body?.state) {
+    if (!body?.state && !body?.statePatch && !body?.entityPatch) {
       return NextResponse.json({ error: 'Missing state payload' }, { status: 400 })
     }
 
     const currentRow = await loadSharedAppState()
-    const normalizedProviderSettings = normalizeProviderSettings(body.state.providerSettings)
+    if (body.updatedAt && currentRow?.updated_at && body.updatedAt !== currentRow.updated_at) {
+      return NextResponse.json(
+        {
+          connected: true,
+          error: 'State conflict detected. Please refresh and retry your change.',
+          updatedAt: currentRow.updated_at,
+        },
+        { status: 409 }
+      )
+    }
+
+    const incomingState =
+      body.state ||
+      mergeStatePatch(
+        currentRow?.state || null,
+        body.statePatch || {}
+      )
+    const normalizedProviderSettings = normalizeProviderSettings(
+      incomingState.providerSettings || currentRow?.state?.providerSettings
+    )
     await saveUserProviderSettings(auth.userId, normalizedProviderSettings)
     const nextIncomingState =
       auth.role === 'super_admin'
         ? {
-            ...body.state,
-            providerSettings: currentRow?.state?.providerSettings || body.state.providerSettings,
+            ...incomingState,
+            providerSettings: currentRow?.state?.providerSettings || incomingState.providerSettings,
           }
-        : body.state
+        : incomingState
     const nextState =
       auth.role === 'super_admin'
         ? nextIncomingState
         : mergeScopedState(currentRow?.state || null, nextIncomingState, auth.userId)
-    const row = await saveSharedAppState(nextState)
+    const row =
+      body.statePatch || body.entityPatch
+        ? await saveSharedAppStateDelta({
+            statePatch:
+              auth.role === 'super_admin'
+                ? {
+                    ...(body.statePatch || {}),
+                    providerSettings: currentRow?.state?.providerSettings || incomingState.providerSettings,
+                  }
+                : body.statePatch,
+            entityPatch: body.entityPatch,
+          })
+        : await saveSharedAppState(nextState)
 
     return NextResponse.json({
       connected: true,

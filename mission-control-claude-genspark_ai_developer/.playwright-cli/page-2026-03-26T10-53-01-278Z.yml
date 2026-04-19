@@ -1,0 +1,219 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e575]:
+    - banner [ref=e576]:
+      - img [ref=e580]
+      - generic [ref=e582]:
+        - button "Refresh latest app version" [ref=e583] [cursor=pointer]:
+          - img [ref=e584]
+        - button "Switch to dark mode" [ref=e589] [cursor=pointer]:
+          - img [ref=e590]
+        - button "Sign out" [ref=e592] [cursor=pointer]:
+          - img [ref=e593]
+        - paragraph [ref=e597]: 11:53
+    - generic [ref=e598]:
+      - navigation "Main navigation" [ref=e599]:
+        - generic [ref=e601]:
+          - generic [ref=e603]: MC
+          - generic [ref=e604]:
+            - paragraph [ref=e605]: Mission Control
+            - paragraph [ref=e606]: Agency HQ
+        - generic [ref=e607]:
+          - link "Dashboard" [ref=e608] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e610]
+            - generic [ref=e615]: Dashboard
+          - link "Virtual Office" [ref=e616] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e618]
+            - generic [ref=e622]: Virtual Office
+          - link "Agents" [ref=e623] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e625]
+            - generic [ref=e628]: Agents
+          - link "Clients" [ref=e629] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e631]
+            - generic [ref=e636]: Clients
+          - link "Tasks" [ref=e637] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e639]
+            - generic [ref=e642]: Tasks
+          - link "Pipeline" [ref=e643] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e645]
+            - generic [ref=e649]: Pipeline
+          - link "Skills" [ref=e650] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e652]
+            - generic [ref=e655]: Skills
+          - link "Runner" [ref=e656] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e658]
+            - generic [ref=e660]: Runner
+          - link "Analytics" [ref=e661] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e663]
+            - generic [ref=e665]: Analytics
+          - link "Outputs" [ref=e666] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e668]
+            - generic [ref=e671]: Outputs
+          - link "Users" [ref=e672] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e675]
+            - generic [ref=e677]: Users
+          - link "Settings" [ref=e678] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e680]
+            - generic [ref=e683]: Settings
+        - generic [ref=e685]:
+          - generic [ref=e687]: MC
+          - generic [ref=e688]:
+            - paragraph [ref=e689]: Agency Mode
+            - paragraph [ref=e690]: Iris · Online
+      - main [ref=e692]:
+        - generic [ref=e693]:
+          - generic [ref=e694]:
+            - generic [ref=e695]:
+              - heading "Users & Ownership" [level=1] [ref=e696]:
+                - img [ref=e697]
+                - text: Users & Ownership
+              - paragraph [ref=e699]: Admin control for members, client ownership, and task assignment.
+            - generic [ref=e700]:
+              - button "Refresh" [ref=e701] [cursor=pointer]:
+                - img [ref=e702]
+                - text: Refresh
+              - button "Backfill Legacy Ownership" [ref=e707] [cursor=pointer]:
+                - img [ref=e708]
+                - text: Backfill Legacy Ownership
+          - generic [ref=e712]:
+            - generic [ref=e713]:
+              - generic [ref=e714]:
+                - paragraph [ref=e715]: Current Admin
+                - paragraph [ref=e716]: codex-admin-qa@missioncontrol.local
+                - paragraph [ref=e717]: super_admin
+              - generic [ref=e718]:
+                - paragraph [ref=e719]: Active Users
+                - paragraph [ref=e720]: "3"
+              - generic [ref=e721]:
+                - paragraph [ref=e722]: Ownership Coverage
+                - paragraph [ref=e723]: 1/1 clients · 4/4 tasks
+            - generic [ref=e724]:
+              - generic [ref=e725]:
+                - img [ref=e726]
+                - heading "Workspace Users" [level=2] [ref=e731]
+              - generic [ref=e732]:
+                - generic [ref=e733]:
+                  - img [ref=e734]
+                  - heading "Create or Invite User" [level=3] [ref=e737]
+                - generic [ref=e738]:
+                  - combobox [ref=e739]:
+                    - option "Create directly" [selected]
+                    - option "Invite by email"
+                  - textbox "Full name" [ref=e740]
+                  - textbox "email@company.com" [ref=e741]
+                  - combobox [ref=e742]:
+                    - option "Member" [selected]
+                    - option "Super admin"
+                  - textbox "Temporary password" [ref=e743]
+                - button "Create User" [ref=e745] [cursor=pointer]:
+                  - img [ref=e746]
+                  - text: Create User
+              - generic [ref=e749]:
+                - generic [ref=e750]:
+                  - generic [ref=e751]:
+                    - generic [ref=e752]:
+                      - paragraph [ref=e753]: Codex QA Admin
+                      - paragraph [ref=e754]: codex-admin-qa@missioncontrol.local
+                    - generic [ref=e755]:
+                      - combobox [ref=e756]:
+                        - option "member"
+                        - option "super_admin" [selected]
+                      - button "Active" [ref=e757] [cursor=pointer]:
+                        - img [ref=e758]
+                        - text: Active
+                  - paragraph [ref=e770]: Confirmed · Last sign-in 3/26/2026, 11:52:26 AM
+                  - paragraph [ref=e771]: 0 clients · 0 tasks
+                - generic [ref=e772]:
+                  - generic [ref=e773]:
+                    - generic [ref=e774]:
+                      - paragraph [ref=e775]: moeadas@yahoo.com
+                      - paragraph [ref=e776]: moeadas@yahoo.com
+                    - generic [ref=e777]:
+                      - combobox [ref=e778]:
+                        - option "member"
+                        - option "super_admin" [selected]
+                      - button "Active" [ref=e779] [cursor=pointer]:
+                        - img [ref=e780]
+                        - text: Active
+                  - paragraph [ref=e792]: Confirmed · Last sign-in 3/26/2026, 10:28:05 AM
+                  - paragraph [ref=e793]: 1 clients · 4 tasks
+                - generic [ref=e794]:
+                  - generic [ref=e795]:
+                    - generic [ref=e796]:
+                      - paragraph [ref=e797]: Mohamed Adas
+                      - paragraph [ref=e798]: mabuadas@pinpoint.online
+                    - generic [ref=e799]:
+                      - combobox [ref=e800]:
+                        - option "member" [selected]
+                        - option "super_admin"
+                      - button "Active" [ref=e801] [cursor=pointer]:
+                        - img [ref=e802]
+                        - text: Active
+                  - paragraph [ref=e814]: Confirmed · Last sign-in 3/26/2026, 10:19:40 AM
+                  - paragraph [ref=e815]: 0 clients · 0 tasks
+            - generic [ref=e816]:
+              - generic [ref=e817]:
+                - heading "Client Ownership" [level=2] [ref=e818]
+                - generic [ref=e820]:
+                  - generic [ref=e821]:
+                    - paragraph [ref=e822]: Victory Genomics
+                    - paragraph [ref=e823]: Equine Genomics / Biotechnology
+                  - combobox [ref=e824]:
+                    - option "Unassigned"
+                    - option "codex-admin-qa@missioncontrol.local"
+                    - option "moeadas@yahoo.com" [selected]
+                    - option "mabuadas@pinpoint.online"
+              - generic [ref=e825]:
+                - heading "Task Ownership" [level=2] [ref=e826]
+                - generic [ref=e827]:
+                  - generic [ref=e828]:
+                    - generic [ref=e829]:
+                      - paragraph [ref=e830]: "Instagram Carousel: Equine Karyotyping"
+                      - paragraph [ref=e831]: completed · 100%
+                    - combobox [ref=e832]:
+                      - option "Unassigned"
+                      - option "codex-admin-qa@missioncontrol.local"
+                      - option "moeadas@yahoo.com" [selected]
+                      - option "mabuadas@pinpoint.online"
+                  - generic [ref=e833]:
+                    - generic [ref=e834]:
+                      - paragraph [ref=e835]: "Instagram Carousel: Equine Karyotyping"
+                      - paragraph [ref=e836]: completed · 100%
+                    - combobox [ref=e837]:
+                      - option "Unassigned"
+                      - option "codex-admin-qa@missioncontrol.local"
+                      - option "moeadas@yahoo.com" [selected]
+                      - option "mabuadas@pinpoint.online"
+                  - generic [ref=e838]:
+                    - generic [ref=e839]:
+                      - paragraph [ref=e840]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                      - paragraph [ref=e841]: queued · 0%
+                    - combobox [ref=e842]:
+                      - option "Unassigned"
+                      - option "codex-admin-qa@missioncontrol.local"
+                      - option "moeadas@yahoo.com" [selected]
+                      - option "mabuadas@pinpoint.online"
+                  - generic [ref=e843]:
+                    - generic [ref=e844]:
+                      - paragraph [ref=e845]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                      - paragraph [ref=e846]: review · 75%
+                    - combobox [ref=e847]:
+                      - option "Unassigned"
+                      - option "codex-admin-qa@missioncontrol.local"
+                      - option "moeadas@yahoo.com" [selected]
+                      - option "mabuadas@pinpoint.online"
+            - paragraph [ref=e849]: "Current shared data: 3 outputs and 1 conversations are already scoped in the backend. Client/task assignment cascades ownership to related outputs and conversations."
+    - button "Open Iris chat" [ref=e850] [cursor=pointer]:
+      - img [ref=e851]

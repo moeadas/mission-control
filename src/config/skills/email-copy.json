@@ -2,31 +2,133 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "email-copy",
   "name": "Email Copywriting",
-  "description": "Writes compelling email sequences, newsletters, and promotional emails that engage audiences, nurture leads, and drive conversions for advertising and marketing campaigns.",
+  "description": "Writes high-converting email campaigns, sequences, and newsletters with sharp positioning, strong subject lines, and clear funnel intent.",
   "category": "content",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when writing email drip campaigns, creating newsletters, drafting promotional emails, or developing email sequences for lead nurturing.",
-      "context": "You are an email copywriting specialist who writes emails that get opened, read, and acted upon. You understand email marketing best practices, personalisation, and how to write for different stages of the funnel.",
-      "instructions": "## Email Copywriting Workflow\n\n- [ ] 1. Define the email goal and audience\n- [ ] 2. Choose the email type (promotional, nurture, newsletter, announcement)\n- [ ] 3. Write a compelling subject line and preview text\n- [ ] 4. Write the body: hook → value → call to action\n- [ ] 5. Optimize for preview, CTAs, and mobile\n- [ ] 6. Proofread for clarity and tone\n\n## Key Inputs\n- Email Goal: {{email_goal}} (nurture, promote, inform, re-engage)\n- Audience: {{audience}}\n- Offer/Message: {{offer_message}}\n- Tone: {{tone}} (formal, casual, urgent, friendly)\n- CTA: {{cta}} (what action to drive)",
-      "output_template": "## Email Copy\n\n### Subject Line\n[Primary subject line]\n[Alternative subject line]\n\n### Preview Text\n[Email preview text — 40-90 characters]\n\n### Body\n[Email copy with hook, value proposition, and CTA]\n\n### CTA Button\n[Button text: e.g., 'Shop Now', 'Learn More']\n\n### Technical Notes\n- Segment: \n- Send time: \n- Personalization tokens:"
+      "trigger": "Use this skillany time writing promotional emails, nurture sequences, launches, newsletters, retention emails, re-engagement flows, or lifecycle email campaigns.",
+      "context": "You are a senior lifecycle copywriter creating email copy that gets opened, read, and acted on. You understand sequencing, audience intent, conversion psychology, scannability, and how to shape one email so it earns the next action.",
+      "instructions": "## Email Copywriting\n\n1. **Identify email job** — Identify email job\n   - ✓ Done when: Identify email job is completed to a high standard\n\n2. **Clarify audience state** — Clarify audience state\n   - ✓ Done when: Clarify audience state is completed to a high standard\n\n3. **Choose message angle** — Choose message angle\n   - ✓ Done when: Choose message angle is completed to a high standard\n\n4. **Create subject lines** — Create subject lines\n   - ✓ Done when: Create subject lines is completed to a high standard\n\n5. **Write scannable body** — Write scannable body\n   - ✓ Done when: Write scannable body is completed to a high standard\n\n6. **Tune CTA** — Tune CTA\n   - ✓ Done when: Tune CTA is completed to a high standard\n\n7. **Check sequence logic** — Check sequence logic\n   - ✓ Done when: Check sequence logic is completed to a high standard\n\n8. **QA tone** — QA tone\n   - ✓ Done when: QA tone is completed to a high standard\n\n## Key Inputs\n- email_goal: Goal of the email: nurture leads, promote offer, deliver news, re-engage inactive subscribers\n- audience: Target audience segment and their relationship to the brand\n- offer_message: The core message, offer, or content of the email\n- tone: Tone of voice: formal, casual, urgent, warm, professional\n- cta: Primary call-to-action: what you want the reader to do\n\n## When Not to Use\nThis skill overlaps with: landing-page-copy, direct-response-copy. Use those instead when: your email is part of a broader landing page or funnel sequence\n\n`email-copy` `email-marketing` `drip-campaign` `copywriting`",
+      "output_template": "## Email Copy Pack\n\n### 1. Messaging Strategy\n| Element | Decision |\n|---|---|\n| Email Goal | |\n| Audience Insight | |\n| Primary Angle | |\n| Core Offer / Message | |\n| Main CTA | |\n\n### 2. Subject Line Options\n1. \n2. \n3. \n\n### 3. Preview Text Options\n1. \n2. \n\n### 4. Primary Email Draft\n**Hook**\n\n**Body**\n\n**Proof / Value Block**\n\n**CTA**\n\n### 5. Alternate CTA Variations\n- \n- \n\n### 6. Sequence Extension (If Relevant)\n| Email | Role | Angle | CTA |\n|---|---|---|---|\n| 1 | | | |\n| 2 | | | |\n| 3 | | | |\n\n### 7. Optimization Notes\n- Suggested send timing:\n- Personalization tokens to use:\n- Segmentation notes:\n- A/B test suggestion:\n- Mobile-readability notes:"
     }
   },
   "variables": [
-    { "name": "email_goal", "type": "string", "required": true, "description": "Goal of the email: nurture leads, promote offer, deliver news, re-engage inactive subscribers" },
-    { "name": "audience", "type": "string", "required": true, "description": "Target audience segment and their relationship to the brand" },
-    { "name": "offer_message", "type": "string", "required": true, "description": "The core message, offer, or content of the email" },
-    { "name": "tone", "type": "string", "required": false, "description": "Tone of voice: formal, casual, urgent, warm, professional" },
-    { "name": "cta", "type": "string", "required": false, "description": "Primary call-to-action: what you want the reader to do" }
+    {
+      "name": "email_goal",
+      "type": "string",
+      "required": true,
+      "description": "Goal of the email: nurture leads, promote offer, deliver news, re-engage inactive subscribers"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience segment and their relationship to the brand"
+    },
+    {
+      "name": "offer_message",
+      "type": "string",
+      "required": true,
+      "description": "The core message, offer, or content of the email"
+    },
+    {
+      "name": "tone",
+      "type": "string",
+      "required": false,
+      "description": "Tone of voice: formal, casual, urgent, warm, professional"
+    },
+    {
+      "name": "cta",
+      "type": "string",
+      "required": false,
+      "description": "Primary call-to-action: what you want the reader to do"
+    }
   ],
+  "inputs": [
+    {
+      "name": "email_goal",
+      "type": "string",
+      "required": true,
+      "description": "Goal of the email: nurture leads, promote offer, deliver news, re-engage inactive subscribers"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience segment and their relationship to the brand"
+    },
+    {
+      "name": "offer_message",
+      "type": "string",
+      "required": true,
+      "description": "The core message, offer, or content of the email"
+    },
+    {
+      "name": "tone",
+      "type": "string",
+      "required": false,
+      "description": "Tone of voice: formal, casual, urgent, warm, professional"
+    },
+    {
+      "name": "cta",
+      "type": "string",
+      "required": false,
+      "description": "Primary call-to-action: what you want the reader to do"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Define goal", "action": "Clarify what action the email should drive", "verify": "Goal is specific and measurable" },
-      { "step": 2, "name": "Write subject line", "action": "Draft 2-3 subject line options", "verify": "Subject lines are specific and compelling" },
-      { "step": 3, "name": "Write body", "action": "Write the email with hook, value, and CTA", "verify": "Copy is clear, concise, and actionable" },
-      { "step": 4, "name": "Optimize", "action": "Check for mobile optimization and preview text", "verify": "Email renders well on mobile" }
+      {
+        "step": 1,
+        "name": "Identify email job",
+        "action": "Identify email job",
+        "verify": "Identify email job is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Clarify audience state",
+        "action": "Clarify audience state",
+        "verify": "Clarify audience state is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Choose message angle",
+        "action": "Choose message angle",
+        "verify": "Choose message angle is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Create subject lines",
+        "action": "Create subject lines",
+        "verify": "Create subject lines is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Write scannable body",
+        "action": "Write scannable body",
+        "verify": "Write scannable body is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Tune CTA",
+        "action": "Tune CTA",
+        "verify": "Tune CTA is completed to a high standard"
+      },
+      {
+        "step": 7,
+        "name": "Check sequence logic",
+        "action": "Check sequence logic",
+        "verify": "Check sequence logic is completed to a high standard"
+      },
+      {
+        "step": 8,
+        "name": "QA tone",
+        "action": "QA tone",
+        "verify": "QA tone is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -36,20 +138,28 @@
     }
   ],
   "checklist": [
-    "Subject line is specific, not generic",
-    "Preview text complements the subject",
-    "Email has one clear goal and CTA",
-    "Copy is scannable (short paragraphs, bullet points)",
-    "Personalization is used appropriately",
-    "Mobile rendering is considered"
+    "Identify email job is completed to a high standard",
+    "Clarify audience state is completed to a high standard",
+    "Choose message angle is completed to a high standard",
+    "Create subject lines is completed to a high standard",
+    "Write scannable body is completed to a high standard",
+    "Tune CTA is completed to a high standard",
+    "Check sequence logic is completed to a high standard",
+    "QA tone is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["content-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "echo"
+  ],
+  "pipelines": [
+    "content-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["email-copy", "email-marketing", "drip-campaign", "copywriting"],
-    "lastUpdated": "2026-03-24"
+    "tags": [],
+    "lastUpdated": "2026-03-30"
   }
 }

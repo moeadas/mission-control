@@ -8,17 +8,33 @@ import {
   ProviderError,
   inferPipeline,
 } from '@/lib/server/ai'
-import { buildTaskExecutionPlan } from '@/lib/task-output'
+import { buildTaskExecutionPlan, buildTaskTitleFromRequest } from '@/lib/task-output'
 import { executeAutonomousTask } from '@/lib/server/autonomous-task'
 import { buildArtifactHtml } from '@/lib/output-html'
 import { getSupabaseServerClient } from '@/lib/supabase/server'
+import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 import { normalizeProviderSettings, resolveFallbackRuntime, resolveTaskRuntime } from '@/lib/provider-settings'
+import { sanitizePromptProfile, sanitizePromptValue } from '@/lib/server/prompt-safety'
+import { validateDeliverableQuality } from '@/lib/output-quality'
+import { ensureTaskExecutionPersistence, insertTaskRun, upsertWorkflowExecutionState } from '@/lib/server/task-execution'
+import { loadConfigSkillCategories, mergeDbSkillsWithConfig } from '@/lib/server/skills-catalog'
+import { buildTaskChannelingPlan } from '@/lib/server/task-channeling'
+import { getConfigPipelines, mergeDatabasePipelines } from '@/lib/pipeline-loader'
 
 // DEBUG: Log incoming requests
 function debugLog(label: string, data: any) {
   if (process.env.NODE_ENV === 'development') {
     console.log(`[CHAT DEBUG] ${label}:`, JSON.stringify(data, null, 2).slice(0, 500))
   }
+}
+
+const TASK_KEYWORDS = /\b(create|make|build|draft|generate|write|produce|design|plan|schedule|audit|analyze|research|forecast|calendar|campaign|brief|copy|content calendar|media plan|budget|strategy|kpi|seo|competitor|carousel|caption|social post|hashtag|visual|banner|ad creative|launch plan|report)\b/i
+
+function isConversationalMessage(content: string): boolean {
+  if (TASK_KEYWORDS.test(content)) return false
+  if (content.trim().length < 80) return true
+  if (/^(who|what|how|why|when|where|can you|do you|tell me|explain|describe|show me)\b/i.test(content.trim())) return true
+  return false
 }
 
 function enforceArtifactTruth(responseText: string, artifacts: any[]) {
@@ -35,10 +51,18 @@ function enforceArtifactTruth(responseText: string, artifacts: any[]) {
 
   if (!claimsDelivery) return responseText
 
+  if (!artifacts?.length) return 'No completed or delivered file exists in the app yet. I can draft the output here and save it as an internal artifact, but I should not claim it has been exported, uploaded, or sent.'
+
   const hasDeliveredArtifact = artifacts.some((artifact) => artifact.status === 'delivered' || artifact.path || artifact.link)
   if (hasDeliveredArtifact) return responseText
 
   return 'No completed or delivered file exists in the app yet. I can draft the output here and save it as an internal artifact, but I should not claim it has been exported, uploaded, or sent.'
+}
+
+function getBearerToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || ''
+  if (!authHeader.toLowerCase().startsWith('bearer ')) return null
+  return authHeader.slice(7).trim()
 }
 
 function enforceDeliverableDraft(responseText: string, deliverableType: string) {
@@ -80,7 +104,7 @@ async function loadPipelines() {
         .order('name', { ascending: true })
 
       if (!error && data?.length) {
-        return data.map((row: any) => row.definition || {}).filter(Boolean)
+        return mergeDatabasePipelines(data.map((row: any) => row.definition || {}).filter(Boolean))
       }
     }
   } catch {
@@ -88,8 +112,7 @@ async function loadPipelines() {
   }
 
   try {
-    const modules = await import('@/config/pipelines/pipelines.json')
-    return modules.default.pipelines
+    return getConfigPipelines()
   } catch {
     return []
   }
@@ -110,25 +133,7 @@ async function loadSkills() {
         .order('name', { ascending: true })
 
       if (!error && data?.length) {
-        const categories = new Map<string, { id: string; name: string; skills: any[] }>()
-
-        for (const row of data) {
-          if (!categories.has(row.category)) {
-            categories.set(row.category, {
-              id: row.category,
-              name: row.category,
-              skills: [],
-            })
-          }
-
-          categories.get(row.category)?.skills.push({
-            id: row.id,
-            name: row.name,
-            description: row.description || '',
-          })
-        }
-
-        return Array.from(categories.values())
+        return mergeDbSkillsWithConfig(data)
       }
     }
   } catch {
@@ -136,21 +141,26 @@ async function loadSkills() {
   }
 
   try {
-    const modules = await import('@/config/skills/skills-library.json')
-    return modules.default.skillCategories
+    return loadConfigSkillCategories()
   } catch {
     return []
   }
 }
 
 export async function POST(req: NextRequest) {
+  let requestBody: any = null
   try {
-    const requestBody = await req.json()
+    const auth = await resolveAuthContextFromToken(getBearerToken(req))
+    if (!auth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    requestBody = await req.json()
     const {
       provider = 'ollama',
       model = 'minimax-m2.7:cloud',
       temperature = 0.7,
-      maxTokens = 1024,
+      maxTokens = 4096,
       messages,
       systemPrompt,
       providerSettings,
@@ -161,18 +171,127 @@ export async function POST(req: NextRequest) {
       missions = [],
       currentClientId,
       currentCampaignId,
+      missionId,
     } = requestBody
+
+    let canPersistMissionExecution = false
 
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: 'messages required' }, { status: 400 })
     }
 
-    // Load pipeline and skill context
-    const [pipelines, skillCategories] = await Promise.all([loadPipelines(), loadSkills()])
-
     const latestUser = [...messages].reverse().find((message) => message.role === 'user')
     const userContent = latestUser?.content || ''
+    const conversational = isConversationalMessage(userContent)
+    const deliverableType = conversational ? 'status-report' : inferDeliverableType(userContent)
+    const normalizedProviderSettings = normalizeProviderSettings(auth.providerSettings || providerSettings)
+    const selectedRuntime = resolveTaskRuntime({
+      settings: normalizedProviderSettings,
+      deliverableType,
+      requestedProvider: provider,
+      requestedModel: model,
+    })
+    let actualProvider = selectedRuntime.provider
+    let actualModel = selectedRuntime.model
+
+    debugLog('Provider payload', {
+      requestedProvider: provider,
+      requestedModel: model,
+      selectedProvider: selectedRuntime.provider,
+      selectedModel: selectedRuntime.model,
+      hasProviderSettings: Boolean(providerSettings),
+      conversational,
+    })
+
+    if (actualProvider === 'ollama' && normalizedProviderSettings?.ollama?.enabled === false) {
+      console.log('[CHAT ERROR] Ollama is disabled in providerSettings')
+      return NextResponse.json({ error: 'Ollama is unavailable right now. Make sure your local Ollama server is running.' }, { status: 503 })
+    }
+
+    if (conversational) {
+      const agentRoster = agents.slice(0, 10).map((agent: any) => `${agent.name} (${agent.role})`).join(', ')
+      const leanSystemPrompt = [
+        `ROLE: You are Iris, Chief of Staff at Mission Control — a virtual creative and digital media agency.`,
+        `PURPOSE: You help the agency owner manage their team, answer questions, and kick off tasks.`,
+        '',
+        `TEAM: ${agentRoster}.`,
+        clients.length ? `CLIENTS: ${clients.map((client: any) => client.name).join(', ')}.` : '',
+        missions.length ? `ACTIVE WORK: ${missions.slice(0, 5).map((mission: any) => mission.title).join(', ')}.` : '',
+        '',
+        `RESPONSE FORMAT: Short, warm, professional. 1-3 sentences for simple questions. Use markdown for lists.`,
+        '',
+        `RULES:`,
+        `1. Answer questions about the agency, team, clients, and capabilities directly.`,
+        `2. Never promise to route to or check with another agent in chat mode.`,
+        `3. When the user wants a deliverable, ask them to give the specific request and then execute it.`,
+        `4. For status questions, answer honestly based on what you know.`,
+      ]
+        .filter(Boolean)
+        .join('\n')
+
+      const recentMessages = messages.slice(-6)
+
+      try {
+        const responseText = await generateText({
+          provider: actualProvider,
+          model: actualModel,
+          temperature,
+          maxTokens: Math.min(maxTokens, 768),
+          messages: [
+            { role: 'system', content: leanSystemPrompt },
+            ...recentMessages.map((message: any) => ({ role: message.role, content: message.content })),
+          ],
+          ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
+          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
+          geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
+        })
+
+        if (!responseText?.trim()) {
+          return NextResponse.json(
+            { error: 'The model returned an empty response. Try rephrasing or starting a new chat.' },
+            { status: 503 }
+          )
+        }
+
+        return NextResponse.json({
+          response: responseText,
+          meta: {
+            routedAgentId: 'iris',
+            leadAgentId: 'iris',
+            collaboratorAgentIds: [],
+            assignedAgentIds: ['iris'],
+            clientId: null,
+            campaignId: null,
+            deliverableType: 'status-report',
+            pipelineId: null,
+            pipelineName: null,
+            qualityChecklist: [],
+            handoffNotes: '',
+            executionSteps: [],
+            quality: null,
+            executionPrompt: '',
+            renderedHtml: null,
+            provider: actualProvider,
+            model: actualModel,
+            fallbackUsed: false,
+            conversational: true,
+          },
+        })
+      } catch (err: any) {
+        console.error('[CHAT] Conversational error:', err?.message || err)
+        const status =
+          err instanceof ProviderError
+            ? err.status && Number.isFinite(err.status)
+              ? err.status
+              : 503
+            : 500
+        return NextResponse.json({ error: getFriendlyProviderError(err) }, { status })
+      }
+    }
+
+    // Load pipeline and skill context
+    const [pipelines, skillCategories] = await Promise.all([loadPipelines(), loadSkills()])
 
     const routing = inferRoutingContext({
       content: userContent,
@@ -183,21 +302,6 @@ export async function POST(req: NextRequest) {
     // Infer which pipeline matches this request
     const pipelineHint = inferPipeline(userContent, pipelines)
     const pipelineDefinition = pipelineHint ? pipelines.find((pipeline: any) => pipeline.id === pipelineHint.id) || null : null
-    const deliverableType = inferDeliverableType(userContent)
-    const normalizedProviderSettings = normalizeProviderSettings(providerSettings)
-    const selectedRuntime = resolveTaskRuntime({
-      settings: normalizedProviderSettings,
-      deliverableType,
-      requestedProvider: provider,
-      requestedModel: model,
-    })
-    debugLog('Provider payload', {
-      requestedProvider: provider,
-      requestedModel: model,
-      selectedProvider: selectedRuntime.provider,
-      selectedModel: selectedRuntime.model,
-      hasProviderSettings: Boolean(providerSettings),
-    })
     const routedAgent = agents.find((agent: any) => agent.id === routing.routedAgentId)
     const scopedClient =
       clients.find((client: any) => client.id === routing.clientId || client.id === currentClientId) ||
@@ -205,25 +309,36 @@ export async function POST(req: NextRequest) {
 
     const clientContext = scopedClient
       ? [
-          `Name: ${scopedClient.name}`,
-          `Industry: ${scopedClient.industry}`,
-          scopedClient.description ? `Overview: ${scopedClient.description}` : '',
-          scopedClient.missionStatement ? `Mission: ${scopedClient.missionStatement}` : '',
-          scopedClient.brandPromise ? `Brand promise: ${scopedClient.brandPromise}` : '',
-          scopedClient.targetAudiences ? `Audience: ${scopedClient.targetAudiences}` : '',
-          scopedClient.productsAndServices ? `Products: ${scopedClient.productsAndServices}` : '',
-          scopedClient.usp ? `USP: ${scopedClient.usp}` : '',
-          scopedClient.keyMessages ? `Key messages: ${scopedClient.keyMessages}` : '',
-          scopedClient.toneOfVoice ? `Tone of voice: ${scopedClient.toneOfVoice}` : '',
-          scopedClient.strategicPriorities ? `Strategic priorities: ${scopedClient.strategicPriorities}` : '',
-          scopedClient.notes ? `Notes: ${scopedClient.notes}` : '',
+          `Name: ${sanitizePromptValue(scopedClient.name)}`,
+          `Industry: ${sanitizePromptValue(scopedClient.industry)}`,
+          scopedClient.description ? `Overview: ${sanitizePromptValue(scopedClient.description)}` : '',
+          scopedClient.missionStatement ? `Mission: ${sanitizePromptValue(scopedClient.missionStatement)}` : '',
+          scopedClient.brandPromise ? `Brand promise: ${sanitizePromptValue(scopedClient.brandPromise)}` : '',
+          scopedClient.targetAudiences ? `Audience: ${sanitizePromptValue(scopedClient.targetAudiences)}` : '',
+          scopedClient.productsAndServices ? `Products: ${sanitizePromptValue(scopedClient.productsAndServices)}` : '',
+          scopedClient.usp ? `USP: ${sanitizePromptValue(scopedClient.usp)}` : '',
+          scopedClient.keyMessages ? `Key messages: ${sanitizePromptValue(scopedClient.keyMessages)}` : '',
+          scopedClient.toneOfVoice ? `Tone of voice: ${sanitizePromptValue(scopedClient.toneOfVoice)}` : '',
+          scopedClient.strategicPriorities ? `Strategic priorities: ${sanitizePromptValue(scopedClient.strategicPriorities)}` : '',
+          scopedClient.notes ? `Notes: ${sanitizePromptValue(scopedClient.notes)}` : '',
+          Array.isArray(scopedClient.knowledgeAssets) && scopedClient.knowledgeAssets.length
+            ? `Knowledge assets:\n${scopedClient.knowledgeAssets
+                .slice(0, 8)
+                .map(
+                  (asset: any) =>
+                    `- ${sanitizePromptValue(asset.title)} (${sanitizePromptValue(asset.type)})` +
+                    `${asset.summary ? `: ${sanitizePromptValue(asset.summary)}` : ''}` +
+                    `${asset.extractedInsights ? ` | Insights: ${sanitizePromptValue(asset.extractedInsights)}` : ''}`
+                )
+                .join('\n')}`
+            : '',
         ]
           .filter(Boolean)
           .join('\n')
       : ''
 
     const clientProfile = scopedClient
-      ? {
+      ? sanitizePromptProfile({
           brand_name: scopedClient.name,
           niche: scopedClient.industry,
           industry: scopedClient.industry,
@@ -245,7 +360,7 @@ export async function POST(req: NextRequest) {
           platforms: 'Instagram, LinkedIn',
           content_goal: 'Awareness and lead generation',
           campaign_duration: '30 days',
-        }
+        })
       : undefined
 
     const executionPlan = buildTaskExecutionPlan({
@@ -254,14 +369,69 @@ export async function POST(req: NextRequest) {
       routedAgentId: routing.routedAgentId,
       pipelinePhases: pipelineHint?.phases,
     })
+    const channelingPlan = buildTaskChannelingPlan({
+      request: userContent,
+      deliverableType,
+      routedAgentId: executionPlan.leadAgentId || routing.routedAgentId,
+      agents,
+      skillCategories,
+      pipeline: pipelineDefinition,
+    })
 
     const executionPrompt = buildExecutionPrompt({
       userRequest: userContent,
       deliverableType,
       routedAgentName: agents.find((agent: any) => agent.id === executionPlan.leadAgentId)?.name || routedAgent?.name,
+      routedAgentSpecialty: agents.find((agent: any) => agent.id === executionPlan.leadAgentId)?.specialty || routedAgent?.specialty,
+      collaboratorAgents: channelingPlan.collaboratorAgentIds.map((id) => agents.find((agent: any) => agent.id === id)).filter(Boolean),
       clientName: scopedClient?.name,
       clientContext,
+      clientIndustry: scopedClient?.industry,
+      clientToneOfVoice: scopedClient?.toneOfVoice,
+      clientTargetAudiences: scopedClient?.targetAudiences,
+      clientBrandPromise: scopedClient?.brandPromise,
+      clientKeyMessages: scopedClient?.keyMessages,
+      pipelineName: pipelineHint?.name || undefined,
     })
+
+    const missionSnapshot = Array.isArray(missions)
+      ? missions.find((mission: any) => mission?.id === missionId)
+      : null
+
+    if (missionId) {
+      try {
+        await ensureTaskExecutionPersistence({
+          taskId: missionId,
+          auth,
+          title: missionSnapshot?.title || buildTaskTitleFromRequest(userContent, deliverableType),
+          summary: missionSnapshot?.summary || userContent,
+          deliverableType,
+          ownerUserId: missionSnapshot?.ownerUserId || auth.userId,
+          assignedBy: missionSnapshot?.assignedBy || 'iris',
+          clientId: missionSnapshot?.clientId || routing.clientId || currentClientId || null,
+          campaignId: missionSnapshot?.campaignId || currentCampaignId || null,
+          leadAgentId: channelingPlan.leadAgentId,
+          collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
+          assignedAgentIds: channelingPlan.assignedAgentIds,
+          pipelineId: pipelineHint?.id || missionSnapshot?.pipelineId || null,
+          pipelineName: pipelineHint?.name || missionSnapshot?.pipelineName || null,
+          skillAssignments: channelingPlan.selectedSkillsByAgent,
+          orchestrationTrace: channelingPlan.orchestrationTrace,
+          qualityChecklist: executionPlan.qualityChecklist,
+          handoffNotes: executionPlan.handoffNotes,
+          status: 'in_progress',
+          priority: missionSnapshot?.priority || 'medium',
+          progress: Math.max(missionSnapshot?.progress || 0, 8),
+          complexity: missionSnapshot?.complexity,
+          channelingConfidence: missionSnapshot?.channelingConfidence || channelingPlan.confidence,
+          createdAt: missionSnapshot?.createdAt,
+          updatedAt: new Date().toISOString(),
+        })
+        canPersistMissionExecution = true
+      } catch (error) {
+        console.warn('[CHAT] Task execution persistence bootstrap failed:', error)
+      }
+    }
 
     // Build pipeline context for Iris
     const pipelineContext = pipelineHint
@@ -319,11 +489,17 @@ export async function POST(req: NextRequest) {
       pipelinesSummary,
       skillsContext,
       `Execution plan:
-Lead agent: ${executionPlan.leadAgentId}
-Supporting agents: ${executionPlan.collaboratorAgentIds.join(', ') || 'none'}
+Lead agent: ${channelingPlan.leadAgentId}
+Supporting agents: ${channelingPlan.collaboratorAgentIds.join(', ') || 'none'}
+Assigned skills by agent:
+${Object.entries(channelingPlan.selectedSkillsByAgent)
+  .map(([agentId, skills]) => `- ${agentId}: ${skills.join(', ') || 'none'}`)
+  .join('\n')}
 Quality checklist:
 - ${executionPlan.qualityChecklist.join('\n- ')}
-Handoff notes: ${executionPlan.handoffNotes}`,
+Handoff notes: ${executionPlan.handoffNotes}
+Orchestration trace:
+- ${channelingPlan.orchestrationTrace.join('\n- ')}`,
       `Execution prompt:\n${executionPrompt}`,
       agentMemories?.iris?.roleSummary ? `Iris memory:\n${agentMemories.iris.roleSummary}` : '',
       Array.isArray(agentMemories?.iris?.userPreferences) && agentMemories.iris.userPreferences.length
@@ -354,19 +530,37 @@ Handoff notes: ${executionPlan.handoffNotes}`,
 
     let responseText = ''
     let executionSteps: any[] = []
-    let actualProvider = selectedRuntime.provider
-    let actualModel = selectedRuntime.model
+    let qualityResult: { ok: boolean; score: number; issues: string[] } | null = null
     let fallbackUsed = false
-
     debugLog('Calling generateText', { provider: actualProvider, model: actualModel, ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl })
 
-    // Check if Ollama is enabled before attempting
-    if (actualProvider === 'ollama' && normalizedProviderSettings?.ollama?.enabled === false) {
-      console.log('[CHAT ERROR] Ollama is disabled in providerSettings')
-      return NextResponse.json({ error: 'Ollama is unavailable right now. Make sure your local Ollama server is running.' }, { status: 503 })
-    }
-
     try {
+      if (missionId && canPersistMissionExecution) {
+        await upsertWorkflowExecutionState({
+          taskId: missionId,
+          pipelineId: pipelineDefinition?.id || null,
+          status: 'active',
+          currentPhase: pipelineDefinition?.phases?.[0]?.name || 'Execution',
+          progress: 5,
+          context: {
+            source: 'chat',
+            startedBy: auth.userId,
+            request: userContent,
+          },
+        })
+        await insertTaskRun({
+          taskId: missionId,
+          agentId: channelingPlan.leadAgentId || null,
+          stage: 'chat-request',
+          status: 'in_progress',
+          inputPayload: {
+            deliverableType,
+            pipelineId: pipelineDefinition?.id || null,
+          },
+          startedAt: new Date().toISOString(),
+        })
+      }
+
       if (deliverableType !== 'status-report') {
         const result = await executeAutonomousTask({
           request: userContent,
@@ -375,20 +569,78 @@ Handoff notes: ${executionPlan.handoffNotes}`,
           temperature,
           maxTokens,
           ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
+          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
           geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
           deliverableType,
           executionPrompt,
           clientContext,
           clientProfile,
           agents,
-          leadAgentId: executionPlan.leadAgentId,
-          collaboratorAgentIds: executionPlan.collaboratorAgentIds,
+          leadAgentId: channelingPlan.leadAgentId,
+          collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
+          selectedSkillsByAgent: channelingPlan.selectedSkillsByAgent,
           qualityChecklist: executionPlan.qualityChecklist,
           pipeline: pipelineDefinition,
           skillCategories,
+          hooks: missionId && canPersistMissionExecution
+            ? {
+                onPhaseStart: async ({ phase, progress }) => {
+                  await upsertWorkflowExecutionState({
+                    taskId: missionId,
+                    pipelineId: pipelineDefinition?.id || null,
+                    status: 'active',
+                    currentPhase: phase.name,
+                    progress,
+                    context: { source: 'chat', phaseId: phase.id },
+                  })
+                },
+                onActivityComplete: async ({ phase, activity, agent, runtime, summary, outputIds, progress }) => {
+                  await insertTaskRun({
+                    taskId: missionId,
+                    agentId: agent.id,
+                    stage: `${phase.id}:${activity.id}`,
+                    status: 'completed',
+                    inputPayload: { phaseId: phase.id, activityId: activity.id, outputIds },
+                    outputPayload: { summary, provider: runtime.provider, model: runtime.model },
+                    startedAt: new Date().toISOString(),
+                    completedAt: new Date().toISOString(),
+                  })
+                  await upsertWorkflowExecutionState({
+                    taskId: missionId,
+                    pipelineId: pipelineDefinition?.id || null,
+                    status: 'active',
+                    currentPhase: phase.name,
+                    progress,
+                    context: { source: 'chat', phaseId: phase.id, activityId: activity.id },
+                  })
+                },
+                onActivityFailure: async ({ phase, activity, agent, runtime, progress, error, outputPayload }) => {
+                  await insertTaskRun({
+                    taskId: missionId,
+                    agentId: agent.id,
+                    stage: `${phase.id}:${activity.id}`,
+                    status: 'failed',
+                    inputPayload: { phaseId: phase.id, activityId: activity.id },
+                    outputPayload: { provider: runtime.provider, model: runtime.model, ...(outputPayload || {}) },
+                    errorMessage: error,
+                    startedAt: new Date().toISOString(),
+                    completedAt: new Date().toISOString(),
+                  })
+                  await upsertWorkflowExecutionState({
+                    taskId: missionId,
+                    pipelineId: pipelineDefinition?.id || null,
+                    status: 'paused',
+                    currentPhase: phase.name,
+                    progress,
+                    context: { source: 'chat', phaseId: phase.id, activityId: activity.id, error },
+                  })
+                },
+              }
+            : undefined,
         })
         responseText = result.response
         executionSteps = result.executionSteps
+        qualityResult = result.qualityResult
       } else {
         responseText = await generateText({
           provider: actualProvider,
@@ -397,6 +649,7 @@ Handoff notes: ${executionPlan.handoffNotes}`,
           maxTokens,
           messages: [...chatMessages],
           ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
+          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
           geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
         })
       }
@@ -424,20 +677,78 @@ Handoff notes: ${executionPlan.handoffNotes}`,
           temperature,
           maxTokens,
           ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
+          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
           geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
           deliverableType,
           executionPrompt,
           clientContext,
           clientProfile,
           agents,
-          leadAgentId: executionPlan.leadAgentId,
-          collaboratorAgentIds: executionPlan.collaboratorAgentIds,
+          leadAgentId: channelingPlan.leadAgentId,
+          collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
+          selectedSkillsByAgent: channelingPlan.selectedSkillsByAgent,
           qualityChecklist: executionPlan.qualityChecklist,
           pipeline: pipelineDefinition,
           skillCategories,
+          hooks: missionId && canPersistMissionExecution
+            ? {
+                onPhaseStart: async ({ phase, progress }) => {
+                  await upsertWorkflowExecutionState({
+                    taskId: missionId,
+                    pipelineId: pipelineDefinition?.id || null,
+                    status: 'active',
+                    currentPhase: phase.name,
+                    progress,
+                    context: { source: 'chat-fallback', phaseId: phase.id },
+                  })
+                },
+                onActivityComplete: async ({ phase, activity, agent, runtime, summary, outputIds, progress }) => {
+                  await insertTaskRun({
+                    taskId: missionId,
+                    agentId: agent.id,
+                    stage: `${phase.id}:${activity.id}`,
+                    status: 'completed',
+                    inputPayload: { phaseId: phase.id, activityId: activity.id, outputIds },
+                    outputPayload: { summary, provider: runtime.provider, model: runtime.model },
+                    startedAt: new Date().toISOString(),
+                    completedAt: new Date().toISOString(),
+                  })
+                  await upsertWorkflowExecutionState({
+                    taskId: missionId,
+                    pipelineId: pipelineDefinition?.id || null,
+                    status: 'active',
+                    currentPhase: phase.name,
+                    progress,
+                    context: { source: 'chat-fallback', phaseId: phase.id, activityId: activity.id },
+                  })
+                },
+                onActivityFailure: async ({ phase, activity, agent, runtime, progress, error, outputPayload }) => {
+                  await insertTaskRun({
+                    taskId: missionId,
+                    agentId: agent.id,
+                    stage: `${phase.id}:${activity.id}`,
+                    status: 'failed',
+                    inputPayload: { phaseId: phase.id, activityId: activity.id },
+                    outputPayload: { provider: runtime.provider, model: runtime.model, ...(outputPayload || {}) },
+                    errorMessage: error,
+                    startedAt: new Date().toISOString(),
+                    completedAt: new Date().toISOString(),
+                  })
+                  await upsertWorkflowExecutionState({
+                    taskId: missionId,
+                    pipelineId: pipelineDefinition?.id || null,
+                    status: 'paused',
+                    currentPhase: phase.name,
+                    progress,
+                    context: { source: 'chat-fallback', phaseId: phase.id, activityId: activity.id, error },
+                  })
+                },
+              }
+            : undefined,
         })
         responseText = result.response
         executionSteps = result.executionSteps
+        qualityResult = result.qualityResult
       } else {
         responseText = await generateText({
           provider: actualProvider,
@@ -446,6 +757,7 @@ Handoff notes: ${executionPlan.handoffNotes}`,
           maxTokens,
           messages: [...chatMessages],
           ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
+          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
           geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
         })
       }
@@ -453,15 +765,50 @@ Handoff notes: ${executionPlan.handoffNotes}`,
 
     responseText = enforceArtifactTruth(responseText, artifacts)
     responseText = enforceDeliverableDraft(responseText, deliverableType)
+    if (deliverableType !== 'status-report' && !qualityResult) {
+      qualityResult = validateDeliverableQuality(deliverableType, responseText, userContent)
+    }
+    if (missionId && canPersistMissionExecution) {
+      await insertTaskRun({
+        taskId: missionId,
+        agentId: channelingPlan.leadAgentId || null,
+        stage: 'final-assembly',
+        status: qualityResult?.ok === false ? 'blocked' : 'completed',
+        outputPayload: {
+          qualityScore: qualityResult?.score,
+          qualityIssues: qualityResult?.issues || [],
+          provider: actualProvider,
+          model: actualModel,
+        },
+        startedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+      })
+      await upsertWorkflowExecutionState({
+        taskId: missionId,
+        pipelineId: pipelineDefinition?.id || null,
+        status: qualityResult?.ok === false ? 'paused' : 'completed',
+        currentPhase: pipelineDefinition?.phases?.at(-1)?.name || 'Quality Control',
+        progress: qualityResult?.ok === false ? 82 : 100,
+        context: {
+          source: fallbackUsed ? 'chat-fallback' : 'chat',
+          quality: qualityResult,
+          completedAt: new Date().toISOString(),
+        },
+      })
+    }
     const renderedHtml = buildArtifactHtml(responseText)
 
     return NextResponse.json({
       response: responseText,
       meta: {
         routedAgentId: routing.routedAgentId,
-        leadAgentId: executionPlan.leadAgentId,
-        collaboratorAgentIds: executionPlan.collaboratorAgentIds,
-        assignedAgentIds: executionPlan.assignedAgentIds,
+        leadAgentId: channelingPlan.leadAgentId,
+        collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
+        assignedAgentIds: channelingPlan.assignedAgentIds,
+        selectedSkillsByAgent: channelingPlan.selectedSkillsByAgent,
+        orchestrationTrace: channelingPlan.orchestrationTrace,
+        confidence: channelingPlan.confidence,
+        resolvedDeliverableType: channelingPlan.resolvedDeliverableType,
         clientId: routing.clientId || currentClientId || null,
         campaignId: currentCampaignId || null,
         deliverableType,
@@ -470,6 +817,7 @@ Handoff notes: ${executionPlan.handoffNotes}`,
         qualityChecklist: executionPlan.qualityChecklist,
         handoffNotes: executionPlan.handoffNotes,
         executionSteps,
+        quality: qualityResult,
         executionPrompt,
         renderedHtml,
         provider: actualProvider,
@@ -479,6 +827,31 @@ Handoff notes: ${executionPlan.handoffNotes}`,
     })
   } catch (err: any) {
     console.error('[/api/chat]', err)
+    if (requestBody?.missionId) {
+      try {
+        const supabase = getSupabaseServerClient()
+        const { data: existingTask } = supabase
+          ? await supabase.from('tasks').select('id').eq('id', requestBody.missionId).maybeSingle()
+          : { data: null }
+        if (existingTask?.id) {
+          await insertTaskRun({
+            taskId: requestBody.missionId,
+            stage: 'task-execution',
+            status: 'failed',
+            errorMessage: err instanceof Error ? err.message : 'Chat execution failed.',
+            startedAt: new Date().toISOString(),
+            completedAt: new Date().toISOString(),
+          })
+          await upsertWorkflowExecutionState({
+            taskId: requestBody.missionId,
+            status: 'paused',
+            currentPhase: 'Execution',
+            progress: 10,
+            context: { error: err instanceof Error ? err.message : 'Chat execution failed.' },
+          })
+        }
+      } catch {}
+    }
     const status =
       err instanceof ProviderError
         ? err.status && Number.isFinite(err.status)

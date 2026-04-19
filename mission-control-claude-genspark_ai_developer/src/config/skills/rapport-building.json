@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "rapport-building",
+  "name": "Rapport Building",
+  "description": "Creates strong personal connections with clients and stakeholders to build trust, foster open communication, and establish long-term professional relationships.",
+  "category": "client-management",
+  "difficulty": "beginner",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when starting a new client relationship, rebuilding a strained relationship, preparing for an important meeting, or building long-term partnership trust.",
+      "context": "You are a rapport-building specialist who helps establish genuine connections with clients. You understand that strong relationships are the foundation of successful agency-client partnerships.",
+      "instructions": "## Rapport Building Workflow\n\n- [ ] 1. Research the stakeholder: background, interests, communication style\n- [ ] 2. Find common ground and shared interests\n- [ ] 3. Demonstrate genuine interest and curiosity\n- [ ] 4. Build trust through consistency and reliability\n- [ ] 5. Navigate difficult moments with empathy\n- [ ] 6. Maintain the relationship over time\n\n## Key Inputs\n- Stakeholder: {{stakeholder}}\n- Relationship Stage: {{relationship_stage}} (new, existing, strained)\n- Context: {{context}}",
+      "output_template": "## Rapport Building Plan\n\n### Stakeholder Profile\n| Element | Details |\n|---------|---------|\n| Name | |\n| Role | |\n| Communication Style | |\n| Personal Interests | |\n| Professional Goals | |\n\n### Common Ground\n| Area | Details |\n|------|---------|\n| Shared Interests | |\n| Shared Experiences | |\n| Shared Goals | |\n\n### Approach\n- [ ] How to demonstrate genuine interest\n- [ ] Conversation starters\n- [ ] Key things to remember and follow up on\n\n### Relationship Goals\n| Goal | Timeline |\n|------|----------|\n| | |"
+    }
+  },
+  "variables": [
+    { "name": "stakeholder", "type": "string", "required": true, "description": "Client or stakeholder name and role" },
+    { "name": "relationship_stage", "type": "string", "required": false, "description": "Current stage of the relationship: new, established, strained" },
+    { "name": "context", "type": "string", "required": false, "description": "Context: upcoming meeting, project kickoff, ongoing partnership" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Research", "action": "Learn about the person's background and interests", "verify": "Information is accurate" },
+      { "step": 2, "name": "Find common ground", "action": "Identify shared interests or experiences", "verify": "Common ground is genuine" },
+      { "step": 3, "name": "Connect authentically", "action": "Demonstrate genuine interest in the person", "verify": "Connection feels authentic" },
+      { "step": 4, "name": "Maintain", "action": "Follow up and nurture the relationship over time", "verify": "Relationship is sustained" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Stakeholder: New client VP Marketing, previously worked at Nike. Relationship stage: new (just onboarded). Context: preparing for kickoff meeting.",
+      "output": "Research: VP was a college athlete, worked on the Jordan brand at Nike, is a startup investor on the side. Approach: open with curiosity about her investment thesis, reference her sports background, find common ground on building brands vs. running performance campaigns. Follow-up: take notes on family and hobbies for future conversations."
+    }
+  ],
+  "checklist": [
+    "Stakeholder's background and interests are researched",
+    "Communication style is identified",
+    "Common ground is identified and genuine",
+    "Approach is tailored to the individual",
+    "Follow-up items are noted and acted upon",
+    "Relationship is maintained over time"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["client-management-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["rapport-building", "client-relations", "relationship-management", "trust"],
+    "lastUpdated": "2026-03-24"
+  }
+}

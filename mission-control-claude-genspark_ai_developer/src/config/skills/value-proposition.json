@@ -1,0 +1,58 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "value-proposition",
+  "name": "Value Proposition Development",
+  "description": "Creating compelling value propositions that differentiate brands, resonate with audiences, and drive business results. The foundation of every effective marketing strategy.",
+  "category": "strategy",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when developing brand positioning, creating campaign strategies, differentiating from competitors, or articulating why {{brand_name}} is the right choice.",
+      "context": "You are a value proposition specialist who helps brands articulate what makes them different and why it matters. You connect brand strengths to customer needs in ways that drive choice.",
+      "instructions": "## Value Proposition Workflow\n\n- [ ] 1. Understand target audience and their needs\n- [ ] 2. Map brand/product benefits and attributes\n- [ ] 3. Identify competitive differentiation\n- [ ] 4. Connect differentiators to customer value\n- [ ] 5. Craft compelling value statement\n- [ ] 6. Test and refine\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Target Audience: {{audience}}\n- Key Alternatives: {{alternatives}}\n- Product/Service: {{offering}}\n- Market Context: {{context}}",
+      "output_template": "## Value Proposition\n\n### Target Audience\n| Attribute | Description |\n|-----------|-------------|\n| Segment | |\n| Key Need | |\n| Decision Criteria | |\n\n### Benefit Mapping\n| Customer Need | Brand Benefit | Proof Point |\n|--------------|---------------|-------------|\n| | | |\n\n### Competitive Differentiation\n| Factor | Us | Competitor A | Competitor B |\n|--------|----|--------------|--------------|\n| | | | |\n\n### Value Statement\n**For** [target audience]\n**Who** [need/situation]\n**{{brand_name}} is a** [category]\n**That** [key benefit]\n**Unlike** [competitors]\n**We** [differentiation]\n\n### Supporting Proof Points\n| Claim | Evidence |\n|-------|---------|\n| | |\n\n### Messaging Hierarchy\n| Level | Message |\n|-------|---------|\n| Tagline | |\n| Value Prop | |\n| Proof Points | |\n\n### Brand Differentiation\n**What makes us different:**\n\n**Why it matters to customers:**\n\n**How it creates value:**"
+    }
+  },
+  "variables": [
+    { "name": "brand_name", "type": "string", "required": true, "description": "Brand name" },
+    { "name": "audience", "type": "string", "required": true, "description": "Target audience" },
+    { "name": "alternatives", "type": "string", "required": false, "description": "Key competitors or alternatives" },
+    { "name": "offering", "type": "string", "required": false, "description": "Product or service" },
+    { "name": "context", "type": "string", "required": false, "description": "Market context" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Understand audience", "action": "Map customer needs and decision criteria", "verify": "Needs are clear" },
+      { "step": 2, "name": "Map benefits", "action": "Connect features to customer benefits", "verify": "Benefits are meaningful" },
+      { "step": 3, "name": "Find differentiation", "action": "Identify what sets brand apart", "verify": "Differentiation is real" },
+      { "step": 4, "name": "Connect to value", "action": "Link differentiators to customer value", "verify": "Value is clear" },
+      { "step": 5, "name": "Craft statement", "action": "Write compelling value proposition", "verify": "Statement is crisp" },
+      { "step": 6, "name": "Test", "action": "Validate with audience feedback", "verify": "Resonates" }
+    ]
+  },
+  "examples": [
+    { "input": "Develop value proposition for a challenger brand in the crowded project management SaaS space.", "output": "Complete value proposition with differentiation strategy and messaging framework." },
+    { "input": "Refresh value proposition for an established insurance brand targeting millennial customers.", "output": "Modernized value proposition with customer insight-driven differentiation." }
+  ],
+  "checklist": [
+    "Target audience deeply understood",
+    "Customer needs clearly articulated",
+    "Brand benefits mapped to needs",
+    "Competitive differentiation is real",
+    "Value connection is clear",
+    "Statement is specific, not generic",
+    "Proof points support claims",
+    "Differentiation is sustainable",
+    "Messaging tested with audience"
+  ],
+  "tools": ["document", "presentation"],
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["value-proposition", "positioning", "differentiation", "brand-strategy", "messaging"],
+    "lastUpdated": "2026-03-24"
+  }
+}

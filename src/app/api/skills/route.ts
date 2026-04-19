@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
-import skillsLibrary from '@/config/skills/skills-library.json'
+import { loadConfigSkillCategories, mergeDbSkillsWithConfig } from '@/lib/server/skills-catalog'
 
 function getBearerToken(request: NextRequest) {
   const authHeader = request.headers.get('authorization') || ''
@@ -19,41 +19,9 @@ async function getAgencyId() {
   return data.id as string
 }
 
-function buildFallbackSkills() {
-  const categories = Array.isArray(skillsLibrary.skillCategories) ? skillsLibrary.skillCategories : []
-  return categories.flatMap((category: any) =>
-    (Array.isArray(category.skills) ? category.skills : []).map((skill: any) => ({
-      id: skill.id,
-      name: skill.name || skill.id,
-      description: skill.description || '',
-      category: category.id,
-      difficulty: 'intermediate',
-      freedom: 'medium',
-      prompts: {
-        en: {
-          trigger: '',
-          context: '',
-          instructions: '',
-          output_template: '',
-        },
-      },
-      variables: [],
-      inputs: [],
-      outputs: [],
-      workflow: { steps: [] },
-      tools: [],
-      agents: [],
-      pipelines: [],
-      checklist: [],
-      examples: [],
-      metadata: {
-        author: 'Mission Control',
-        version: '1.0',
-        lastUpdated: new Date().toISOString().split('T')[0],
-        difficulty: 'intermediate',
-      },
-    }))
-  )
+async function buildFallbackSkills() {
+  const categories = await loadConfigSkillCategories()
+  return categories.flatMap((category) => category.skills)
 }
 
 export async function GET(request: NextRequest) {
@@ -63,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     const supabase = getSupabaseServerClient()
     const agencyId = await getAgencyId()
-    if (!supabase || !agencyId) return NextResponse.json(buildFallbackSkills())
+    if (!supabase || !agencyId) return NextResponse.json(await buildFallbackSkills())
 
     const { data, error } = await supabase
       .from('skills')
@@ -74,34 +42,8 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json(
-      (data || []).map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        description: row.description || '',
-        category: row.category,
-        difficulty: row.metadata?.difficulty || 'intermediate',
-        freedom: row.metadata?.freedom || 'medium',
-        prompts: row.prompts || {
-          en: {
-            trigger: '',
-            context: '',
-            instructions: '',
-            output_template: '',
-          },
-        },
-        variables: row.metadata?.variables || [],
-        inputs: row.metadata?.inputs || [],
-        outputs: row.metadata?.outputs || [],
-        workflow: row.metadata?.workflow || { steps: [] },
-        tools: row.metadata?.tools || [],
-        agents: row.metadata?.agents || [],
-        pipelines: row.metadata?.pipelines || [],
-        checklist: Array.isArray(row.checklist) ? row.checklist : [],
-        examples: Array.isArray(row.examples) ? row.examples : [],
-        metadata: row.metadata || {},
-      }))
-    )
+    const categories = await mergeDbSkillsWithConfig(data || [])
+    return NextResponse.json(categories.flatMap((category) => category.skills))
   } catch (error) {
     console.error('Failed to load skills:', error)
     return NextResponse.json({ error: 'Failed to load skills' }, { status: 500 })

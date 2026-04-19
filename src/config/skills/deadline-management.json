@@ -8,9 +8,9 @@
   "freedom": "low",
   "prompts": {
     "en": {
-      "trigger": "Use when managing multiple deadlines across a project or program — to track what's due, flag delays early, and ensure work is delivered on time without surprises.",
+      "trigger": "Use this skillany time managing multiple deadlines across a project or program — to track what's due, flag delays early, and ensure work is delivered on time without surprises.",
       "context": "You are a deadline manager who tracks commitments across teams, anticipates delays before they happen, and ensures everything is delivered on time through proactive communication and escalation.",
-      "instructions": "## Deadline Management Workflow\n\n- [ ] 1. Capture all deadlines: List every deliverable and its due date\n- [ ] 2. Assess risk: Which deadlines are at risk based on current progress?\n- [ ] 3. Prioritize: Focus on at-risk items first\n- [ ] 4. Follow up: Proactively check status with owners\n- [ ] 5. Escalate: Flag at-risk deadlines to stakeholders early\n- [ ] 6. Adjust: Help find solutions when deadlines are at risk\n- [ ] 7. Confirm delivery: Track actual vs. committed delivery dates\n\n## Key Inputs\n- Project: {{project_name}}\n- All deadlines: {{deadlines}}\n- Current progress: {{current_progress}}\n- At-risk items: {{at_risk_items}}",
+      "instructions": "## Deadline Management\n\n1. **Deadline Capture** — List all deliverables and deadlines\n   - ✓ Done when: No deadlines are missing from the register\n\n2. **Risk Assessment** — Assess which deadlines are at risk\n   - ✓ Done when: Risk assessment is realistic\n\n3. **Proactive Follow-Up** — Check in with owners on at-risk items\n   - ✓ Done when: Status is current and accurate\n\n4. **Escalation** — Flag at-risk deadlines to stakeholders\n   - ✓ Done when: Escalation is timely and clear\n\n5. **Delivery Confirmation** — Track actual vs. committed dates\n   - ✓ Done when: Delivery performance is measured\n\n## Key Inputs\n- project_name: Project being managed\n- deadlines: List of all deliverables and deadlines\n- current_progress: Current progress on deliverables\n- at_risk_items: Items currently at risk",
       "output_template": "## Deadline Tracker: {{project_name}}\n\n### Overview\n| Field | Value |\n|-------|-------|\n| Total deliverables | |\n| On track | |\n| At risk | |\n| Delivered | |\n| Date | {{date}} |\n\n### Deadline Register\n| Deliverable | Owner | Due date | Status | Progress | Risk |\n|-------------|-------|---------|--------|---------|------|\n| | | | ✅/⚠️/❌ | | |\n\n### At-Risk Items\n| Deliverable | Due date | Risk reason | Mitigation | Owner |\n|-------------|---------|------------|-----------|-------|\n| | | | | |\n\n### This Week's Deliveries\n| Deliverable | Due date | Owner | Status |\n|-------------|---------|-------|--------|\n| | | | |\n\n### Escalation Log\n| Date | Item | Escalated to | Decision |\n|------|------|-------------|---------|\n| | | | |\n\n### Delivery Performance\n| Metric | Value |\n|--------|-------|\n| On-time rate (all time) | |\n| On-time rate (last 30 days) | |\n| Average delay (days) | |\n\n### Actions This Week\n| Action | Owner | By when |\n|--------|-------|---------|\n| | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Items currently at risk"
     }
   ],
+  "inputs": [
+    {
+      "name": "project_name",
+      "type": "string",
+      "required": true,
+      "description": "Project being managed"
+    },
+    {
+      "name": "deadlines",
+      "type": "string",
+      "required": false,
+      "description": "List of all deliverables and deadlines"
+    },
+    {
+      "name": "current_progress",
+      "type": "string",
+      "required": false,
+      "description": "Current progress on deliverables"
+    },
+    {
+      "name": "at_risk_items",
+      "type": "string",
+      "required": false,
+      "description": "Items currently at risk"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,31 @@
     }
   ],
   "checklist": [
-    "All deadlines are captured in the register",
-    "Risk assessment is current and realistic",
-    "At-risk items are flagged and escalated",
-    "Mitigation plans are in place for at-risk items",
-    "Escalations are documented",
-    "Delivery performance is tracked"
+    "No deadlines are missing from the register",
+    "Risk assessment is realistic",
+    "Status is current and accurate",
+    "Escalation is timely and clear",
+    "Delivery performance is measured"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["project-management"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "piper"
+  ],
+  "pipelines": [
+    "project-management"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["project-management", "deadlines", "delivery", "tracking"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "project-management",
+      "deadlines",
+      "delivery",
+      "tracking"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

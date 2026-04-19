@@ -3,10 +3,11 @@
 import React from 'react'
 import { useAgentsStore } from '@/lib/agents-store'
 import { Card } from '@/components/ui/Card'
-import { Bot, CheckCircle2, TrendingUp, Plus, Building2, Target, Zap } from 'lucide-react'
+import { Bot, CheckCircle2, TrendingUp, Plus, Building2, Target, Zap, Flame, ShieldAlert, Swords } from 'lucide-react'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { useRouter } from 'next/navigation'
 import { DELIVERABLE_LABELS } from '@/lib/bot-animations'
+import { getLiveMissionSnapshots } from '@/lib/live-ops'
 
 export function MetricsCards() {
   const agents = useAgentsStore((state) => state.agents)
@@ -135,7 +136,16 @@ export function QuickActions() {
 
   const actions = [
     {
-      label: 'Add Agent',
+      label: 'Launch Mission',
+      sub: 'Start a fresh client objective',
+      icon: Target,
+      color: '#ff7c42',
+      onClick: () => createMissionFromPrompt('Create a new high-priority mission with a clear objective and specialist routing'),
+      hoverBg: 'rgba(255, 124, 66, 0.1)',
+      hoverBorder: 'rgba(255, 124, 66, 0.3)',
+    },
+    {
+      label: 'Power Up Team',
       sub: 'Bring a new agent online',
       icon: Bot,
       color: '#9b6dff',
@@ -144,22 +154,13 @@ export function QuickActions() {
       hoverBorder: 'rgba(155, 109, 255, 0.3)',
     },
     {
-      label: 'Virtual Office',
+      label: 'Open War Room',
       sub: 'See the team in action',
       icon: Building2,
       color: '#00d4aa',
       onClick: () => router.push('/office'),
       hoverBg: 'rgba(0, 212, 170, 0.1)',
       hoverBorder: 'rgba(0, 212, 170, 0.3)',
-    },
-    {
-      label: 'New Mission',
-      sub: 'Create a task from scratch',
-      icon: Target,
-      color: '#ff7c42',
-      onClick: () => createMissionFromPrompt('Draft a new client-ready mission from dashboard quick actions'),
-      hoverBg: 'rgba(255, 124, 66, 0.1)',
-      hoverBorder: 'rgba(255, 124, 66, 0.3)',
     },
   ]
 
@@ -205,6 +206,107 @@ export function QuickActions() {
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
+              </div>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export function CommandQuestDeck() {
+  const missions = useAgentsStore((state) => state.missions)
+  const artifacts = useAgentsStore((state) => state.artifacts)
+  const setActiveMission = useAgentsStore((state) => state.setActiveMission)
+  const router = useRouter()
+  const liveMissions = getLiveMissionSnapshots({ missions, artifacts }).slice(0, 3)
+
+  const quests = [
+    liveMissions[0]
+      ? {
+          id: liveMissions[0].mission.id,
+          title: liveMissions[0].mission.title,
+          subtitle: liveMissions[0].nextAction,
+          reward: liveMissions[0].rewardLabel,
+          tone: liveMissions[0].urgencyTone,
+          icon: liveMissions[0].urgencyTone === 'high' ? ShieldAlert : liveMissions[0].urgencyTone === 'medium' ? Flame : Swords,
+          action: () => {
+            setActiveMission(liveMissions[0].mission.id)
+            router.push(`/tasks/${liveMissions[0].mission.id}`)
+          },
+        }
+      : null,
+    {
+      id: 'office',
+      title: 'Check the squad floor',
+      subtitle: 'Look for overloaded rooms, blockers, and rescue opportunities.',
+      reward: 'Ops visibility boost',
+      tone: 'low' as const,
+      icon: Building2,
+      action: () => router.push('/office'),
+    },
+    {
+      id: 'launch',
+      title: 'Spin up a fresh mission',
+      subtitle: 'Give Iris a new objective and let the routing engine build the squad.',
+      reward: 'Momentum bonus',
+      tone: 'medium' as const,
+      icon: Target,
+      action: () => router.push('/tasks'),
+    },
+  ].filter(Boolean) as Array<{
+    id: string
+    title: string
+    subtitle: string
+    reward: string
+    tone: 'low' | 'medium' | 'high'
+    icon: any
+    action: () => void
+  }>
+
+  const toneColors = {
+    high: '#ff7c42',
+    medium: '#ffd166',
+    low: '#4f8ef7',
+  }
+
+  return (
+    <div className="card-surface p-5">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="text-xs font-mono text-[var(--text-dim)] uppercase tracking-wider">Command Quests</h3>
+          <p className="text-[11px] text-[var(--text-dim)] mt-1">Next-best actions with visible reward and urgency.</p>
+        </div>
+        <span className="text-[11px] font-mono text-[var(--accent-blue)]">Daily loop</span>
+      </div>
+      <div className="space-y-3">
+        {quests.map((quest) => {
+          const Icon = quest.icon
+          const color = toneColors[quest.tone]
+          return (
+            <button
+              key={quest.id}
+              onClick={quest.action}
+              className="w-full rounded-2xl border p-4 text-left transition-all hover:-translate-y-0.5"
+              style={{
+                borderColor: `${color}40`,
+                background: `linear-gradient(135deg, ${color}14, rgba(18,20,26,0.9))`,
+              }}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${color}18`, color }}>
+                    <Icon size={18} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">{quest.title}</p>
+                    <p className="text-[11px] text-[var(--text-secondary)] mt-1">{quest.subtitle}</p>
+                  </div>
+                </div>
+                <span className="rounded-full px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.18em]" style={{ background: `${color}1e`, color }}>
+                  {quest.reward}
+                </span>
               </div>
             </button>
           )
@@ -319,10 +421,12 @@ export function AgentStrip() {
 export function MissionQueue() {
   const missions = useAgentsStore((state) => state.missions)
   const clients = useAgentsStore((state) => state.clients)
+  const artifacts = useAgentsStore((state) => state.artifacts)
   const activeMissionId = useAgentsStore((state) => state.activeMissionId)
   const setActiveMission = useAgentsStore((state) => state.setActiveMission)
   const updateMission = useAgentsStore((state) => state.updateMission)
   const router = useRouter()
+  const liveMissions = getLiveMissionSnapshots({ missions, artifacts })
 
   const statusColor: Record<string, string> = {
     queued: '#ffd166',
@@ -346,7 +450,8 @@ export function MissionQueue() {
       </div>
 
       <div className="space-y-3">
-        {missions.slice(0, 4).map((mission) => {
+        {liveMissions.slice(0, 4).map((liveMission) => {
+          const mission = liveMission.mission
           const client = clients.find((item) => item.id === mission.clientId)
           return (
             <div
@@ -371,6 +476,9 @@ export function MissionQueue() {
                       {mission.status.replace('_', ' ')}
                     </span>
                   </p>
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-2">
+                    {liveMission.nextAction}
+                  </p>
                 </div>
                 <span
                   className="badge flex-shrink-0 mt-0.5"
@@ -392,6 +500,18 @@ export function MissionQueue() {
                     background: statusColor[mission.status],
                   }}
                 />
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="badge" style={{ background: 'rgba(79,142,247,0.12)', color: '#4f8ef7' }}>
+                  {liveMission.rewardLabel}
+                </span>
+                <span className="badge" style={{ background: 'rgba(255,209,102,0.12)', color: '#ffd166' }}>
+                  {mission.complexity || 'medium'} complexity
+                </span>
+                <span className="badge" style={{ background: 'rgba(0,212,170,0.12)', color: '#00d4aa' }}>
+                  {mission.channelingConfidence || 'medium'} confidence
+                </span>
               </div>
 
               {/* Action buttons */}

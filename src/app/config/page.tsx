@@ -29,11 +29,11 @@ const CONFIG_SECTIONS = [
   {
     id: 'agent-roles',
     name: 'Agent Roles',
-    description: 'Configure agent methodologies, tools, and responsibilities. Edit agent prompts and assign skills.',
-    file: 'src/config/agents/*.json',
+    description: 'Configure each agent through a dedicated architecture folder with core config, soul, rules, memory, handoffs, and skill selection.',
+    file: 'src/config/agents/<agent-id>/',
     icon: Wrench,
     color: '#00d4aa',
-    badge: 'JSON editor',
+    badge: 'Folder architecture',
     category: 'Agents & Tools',
   },
   {

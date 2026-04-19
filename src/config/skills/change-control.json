@@ -8,9 +8,9 @@
   "freedom": "low",
   "prompts": {
     "en": {
-      "trigger": "Use when a change request is raised against an active project — to evaluate its impact, get proper approval, and ensure it is implemented without disrupting delivery.",
+      "trigger": "Use this skillany time a change request is raised against an active project — to evaluate its impact, get proper approval, and ensure it is implemented without disrupting delivery.",
       "context": "You are a project manager who governs change requests through a formal process that protects the project baseline while remaining flexible to legitimate business needs.",
-      "instructions": "## Change Control Workflow\n\n- [ ] 1. Log the change: Document the request formally with date, requestor, and description\n- [ ] 2. Assess impact: Evaluate impact on timeline, budget, resources, and quality\n- [ ] 3. Quantify cost: Estimate additional time, cost, and resource impact\n- [ ] 4. Get approval: Route to appropriate decision-maker (client or internal)\n- [ ] 5. Communicate: Inform all stakeholders of approved changes\n- [ ] 6. Update baseline: Adjust project plan, schedule, and budget\n- [ ] 7. Implement: Execute the change and track it\n\n## Key Inputs\n- Change description: {{change_description}}\n- Requestor: {{requestor}}\n- Current project status: {{project_status}}\n- Impact assessment: {{impact_assessment}}",
+      "instructions": "## Change Control\n\n1. **Change Logging** — Document the change request formally\n   - ✓ Done when: Change is logged with all required details\n\n2. **Impact Analysis** — Assess impact across all dimensions\n   - ✓ Done when: Impact is quantified, not just described\n\n3. **Approval** — Route to appropriate decision-maker\n   - ✓ Done when: Decision is documented and communicated\n\n4. **Baseline Update** — Update project plan if approved\n   - ✓ Done when: All stakeholders have updated information\n\n5. **Implementation** — Execute the change\n   - ✓ Done when: Change is tracked and delivered\n\n## Key Inputs\n- change_description: Description of the change being requested\n- requestor: Person or party requesting the change\n- project_status: Current status of the project\n- impact_assessment: Initial impact assessment of the change",
       "output_template": "## Change Request: {{change_description}}\n\n### Change Log\n| Field | Value |\n|-------|-------|\n| Change ID | |\n| Date submitted | |\n| Requestor | |\n| Project | |\n\n### Change Description\n**What is being changed:**\n**Why this change is needed:**\n**Alternatives considered:**\n\n### Impact Assessment\n| Dimension | Impact | Details |\n|-----------|--------|---------|\n| Timeline | | |\n| Budget | | |\n| Resources | | |\n| Quality | | |\n| Scope | | |\n\n### Cost-Benefit Analysis\n**Cost of change:**\n**Benefit of change:**\n**Risk of not changing:**\n\n### Approval\n| Decision | Name | Role | Date |\n|----------|------|------|------|\n| Submitted to | | | |\n| Approved/Rejected | | | |\n\n### Revised Project Plan\n| Element | Before | After | Delta |\n|---------|--------|-------|-------|\n| Timeline | | | |\n| Budget | | | |\n| Scope | | | |\n\n### Communication\n**Who was informed:**\n**When:**\n**How:**"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Initial impact assessment of the change"
     }
   ],
+  "inputs": [
+    {
+      "name": "change_description",
+      "type": "string",
+      "required": true,
+      "description": "Description of the change being requested"
+    },
+    {
+      "name": "requestor",
+      "type": "string",
+      "required": true,
+      "description": "Person or party requesting the change"
+    },
+    {
+      "name": "project_status",
+      "type": "string",
+      "required": false,
+      "description": "Current status of the project"
+    },
+    {
+      "name": "impact_assessment",
+      "type": "string",
+      "required": false,
+      "description": "Initial impact assessment of the change"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,30 @@
     }
   ],
   "checklist": [
-    "Change is logged with date, requestor, and full description",
-    "Impact is assessed across all dimensions (time, budget, scope, quality)",
-    "Cost of change is quantified",
-    "Approval is documented",
-    "All stakeholders are informed",
-    "Project baseline is updated"
+    "Change is logged with all required details",
+    "Impact is quantified, not just described",
+    "Decision is documented and communicated",
+    "All stakeholders have updated information",
+    "Change is tracked and delivered"
   ],
-  "tools": ["document", "spreadsheet"],
-  "agents": ["nova"],
-  "pipelines": ["project-management"],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "piper"
+  ],
+  "pipelines": [
+    "project-management"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["project-management", "change-control", "scope-management"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "project-management",
+      "change-control",
+      "scope-management"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

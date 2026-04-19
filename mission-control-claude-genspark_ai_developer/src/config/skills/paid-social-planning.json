@@ -1,0 +1,132 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "paid-social-planning",
+  "name": "Paid Social Planning",
+  "description": "Plans paid social media campaigns across platforms including audience targeting, ad formats, budget allocation, bidding strategy, and creative testing frameworks.",
+  "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when planning paid social campaigns, setting up audience targeting, defining ad structures, or creating testing frameworks for social advertising.",
+      "context": "You are a paid social specialist who plans and structures social advertising campaigns for maximum ROI. You understand platform-specific targeting, auction dynamics, creative best practices, and testing methodologies.",
+      "instructions": "## Paid Social Planning Workflow\n\nPlan a paid social campaign:\n\n- [ ] 1. **Campaign objective**: Map business goal to platform objective (awareness, traffic, conversions, leads)\n- [ ] 2. **Audience architecture**: Build targeting layers \u2014 core audiences, custom audiences (CRM, website), lookalikes\n- [ ] 3. **Platform selection**: Allocate budget across {{platforms}} based on audience and objective fit\n- [ ] 4. **Ad structure**: Design campaign > ad set > ad hierarchy with proper isolation for testing\n- [ ] 5. **Creative strategy**: Define ad formats, messaging variations, and creative testing framework\n- [ ] 6. **Budget & bidding**: Set daily/lifetime budgets, bid strategies (lowest cost, cost cap, bid cap)\n- [ ] 7. **Placement strategy**: Select placements (feed, stories, reels, audience network) by performance\n- [ ] 8. **Testing plan**: Design creative/audience/placement A/B tests with statistical significance targets\n\n## Key Inputs\n- Client: {{client_name}}\n- Platforms: {{platforms}}\n- Budget: {{budget}}\n- Objective: {{campaign_objective}}\n- Audience: {{target_audience}}",
+      "output_template": "## Paid Social Plan: {{client_name}}\n\n### Campaign Structure\n| Campaign | Objective | Platform | Budget | Duration |\n|----------|-----------|----------|--------|----------|\n| | | | | |\n\n### Audience Architecture\n| Ad Set | Targeting Type | Audience Size | Priority |\n|--------|---------------|---------------|----------|\n| Prospecting - Core | Interest / Demo | | High |\n| Prospecting - LAL | Lookalike 1-3% | | High |\n| Retargeting - Site | Custom - 30d visitors | | Medium |\n| Retargeting - Engaged | Custom - engagement | | Medium |\n\n### Budget Allocation\n| Platform | Budget | % | Objective | Est. CPA |\n|----------|--------|---|-----------|----------|\n| | | | | |\n\n### Creative Strategy\n| Format | Platforms | Variations | Message Angle |\n|--------|-----------|------------|---------------|\n| | | | |\n\n### Testing Framework\n| Test | Variable | Control | Variant | Budget | Duration |\n|------|----------|---------|---------|--------|----------|\n| | Creative / Audience / Placement | | | | 2 weeks min |"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "platforms",
+      "type": "string",
+      "required": true,
+      "description": "Social ad platforms (Meta, TikTok, Snapchat, LinkedIn, X)"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Total paid social budget"
+    },
+    {
+      "name": "campaign_objective",
+      "type": "string",
+      "required": true,
+      "description": "Campaign objective (awareness, traffic, conversions, leads)"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience description"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Set Objectives",
+        "action": "Map business goals to platform objectives",
+        "verify": "Objectives are measurable"
+      },
+      {
+        "step": 2,
+        "name": "Build Audiences",
+        "action": "Create targeting layers",
+        "verify": "Audiences cover prospecting and retargeting"
+      },
+      {
+        "step": 3,
+        "name": "Platform Allocation",
+        "action": "Distribute budget by platform",
+        "verify": "Allocation matches audience and objective"
+      },
+      {
+        "step": 4,
+        "name": "Ad Structure",
+        "action": "Design campaign hierarchy",
+        "verify": "Structure supports testing and optimization"
+      },
+      {
+        "step": 5,
+        "name": "Creative Strategy",
+        "action": "Define formats and messaging",
+        "verify": "Creative varies by audience and platform"
+      },
+      {
+        "step": 6,
+        "name": "Budget & Bidding",
+        "action": "Set budgets and bid strategies",
+        "verify": "Bids align with efficiency targets"
+      },
+      {
+        "step": 7,
+        "name": "Testing Plan",
+        "action": "Design structured A/B tests",
+        "verify": "Tests have clear hypotheses and metrics"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Plan a paid social campaign for a food delivery app targeting millennials in Dubai and Abu Dhabi with AED 100K monthly budget across Meta and TikTok.",
+      "output": "Meta (60%): prospecting with interest/LAL targeting, retargeting site visitors. TikTok (40%): spark ads with creator content. Creative testing: 3 video lengths x 2 hooks per platform. Bidding: cost cap at AED 25 CPA."
+    }
+  ],
+  "checklist": [
+    "Campaign objectives map to platform objectives",
+    "Audience layers cover prospecting and retargeting",
+    "Budget allocation is justified per platform",
+    "Ad structure supports clean testing",
+    "Creative strategy varies by audience and format",
+    "Bidding strategy matches efficiency targets",
+    "Testing framework has clear hypotheses"
+  ],
+  "tools": [
+    "analytics",
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "media-plan"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "media",
+      "planning",
+      "paid-social-planning"
+    ],
+    "lastUpdated": "2026-03-27"
+  }
+}

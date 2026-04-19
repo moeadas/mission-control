@@ -1,0 +1,116 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - img [ref=e8]
+      - generic [ref=e10]:
+        - button "Refresh latest app version" [ref=e11] [cursor=pointer]:
+          - img [ref=e12]
+        - button "Switch to light mode" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - button "Sign out" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - paragraph [ref=e29]: 11:50
+    - generic [ref=e30]:
+      - navigation "Main navigation" [ref=e31]:
+        - generic [ref=e33]:
+          - generic [ref=e35]: MC
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Mission Control
+            - paragraph [ref=e38]: Agency HQ
+        - generic [ref=e39]:
+          - link "Dashboard" [ref=e40] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e42]
+            - generic [ref=e47]: Dashboard
+          - link "Virtual Office" [ref=e48] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e50]
+            - generic [ref=e54]: Virtual Office
+          - link "Agents" [ref=e55] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e57]
+            - generic [ref=e60]: Agents
+          - link "Clients" [ref=e61] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e63]
+            - generic [ref=e68]: Clients
+          - link "Tasks" [ref=e69] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e71]
+            - generic [ref=e74]: Tasks
+          - link "Analytics" [ref=e75] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e77]
+            - generic [ref=e79]: Analytics
+          - link "Outputs" [ref=e80] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e82]
+            - generic [ref=e85]: Outputs
+        - generic [ref=e87]:
+          - generic [ref=e89]: MC
+          - generic [ref=e90]:
+            - paragraph [ref=e91]: Agency Mode
+            - paragraph [ref=e92]: Iris · Online
+      - main [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - heading "Users & Ownership" [level=1] [ref=e98]:
+                - img [ref=e99]
+                - text: Users & Ownership
+              - paragraph [ref=e101]: Admin control for members, client ownership, and task assignment.
+            - generic [ref=e102]:
+              - button "Refresh" [ref=e103] [cursor=pointer]:
+                - img [ref=e104]
+                - text: Refresh
+              - button "Backfill Legacy Ownership" [ref=e109] [cursor=pointer]:
+                - img [ref=e110]
+                - text: Backfill Legacy Ownership
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - generic [ref=e116]:
+                - paragraph [ref=e117]: Current Admin
+                - paragraph [ref=e118]: Unknown
+                - paragraph [ref=e119]: Not loaded
+              - generic [ref=e120]:
+                - paragraph [ref=e121]: Active Users
+                - paragraph [ref=e122]: "0"
+              - generic [ref=e123]:
+                - paragraph [ref=e124]: Ownership Coverage
+                - paragraph [ref=e125]: 0/1 clients · 0/0 tasks
+            - generic [ref=e126]:
+              - generic [ref=e127]:
+                - img [ref=e128]
+                - heading "Workspace Users" [level=2] [ref=e133]
+              - generic [ref=e134]:
+                - generic [ref=e135]:
+                  - img [ref=e136]
+                  - heading "Create or Invite User" [level=3] [ref=e139]
+                - generic [ref=e140]:
+                  - combobox [ref=e141]:
+                    - option "Create directly" [selected]
+                    - option "Invite by email"
+                  - textbox "Full name" [ref=e142]
+                  - textbox "email@company.com" [ref=e143]
+                  - combobox [ref=e144]:
+                    - option "Member" [selected]
+                    - option "Super admin"
+                  - textbox "Temporary password" [ref=e145]
+                - button "Create User" [ref=e147] [cursor=pointer]:
+                  - img [ref=e148]
+                  - text: Create User
+              - paragraph [ref=e151]: Loading users…
+            - generic [ref=e152]:
+              - generic [ref=e153]:
+                - heading "Client Ownership" [level=2] [ref=e154]
+                - generic [ref=e156]:
+                  - generic [ref=e157]:
+                    - paragraph [ref=e158]: Victory Genomics
+                    - paragraph [ref=e159]: Equine Genomics / Biotechnology
+                  - combobox [ref=e160]:
+                    - option "Unassigned" [selected]
+              - heading "Task Ownership" [level=2] [ref=e162]
+            - paragraph [ref=e164]: "Current shared data: 0 outputs and 0 conversations are already scoped in the backend. Client/task assignment cascades ownership to related outputs and conversations."
+    - button "Open Iris chat" [ref=e165] [cursor=pointer]:
+      - img [ref=e166]

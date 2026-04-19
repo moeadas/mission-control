@@ -14,12 +14,14 @@ import {
   ProviderSettings,
   ThemeMode,
 } from './types'
-import { DEFAULT_AGENTS } from './agent-templates'
+import { CONFIG_AGENTS } from './agents-from-config'
 import { Client, DEFAULT_CLIENTS } from './client-data'
 import { maskApiKey } from './providers'
-import { DEFAULT_PROVIDER_SETTINGS, normalizeProviderSettings } from './provider-settings'
+import { DEFAULT_PROVIDER_SETTINGS, normalizeProviderSettings, stripProviderSecrets } from './provider-settings'
 import { AgentMemory, appendAgentMemoryNote, buildDefaultAgentMemories, mergeAgentMemories } from './agent-memory'
 import { buildTaskTitleFromRequest } from './task-output'
+import { inferDeliverableTypeFromText, getDeliverableSpec } from './deliverables'
+import type { IrisPendingBrief } from './iris-briefing'
 
 export interface ChatMessage {
   id: string
@@ -40,10 +42,14 @@ export interface ChatMessage {
     executionPrompt?: string
     pipelineId?: string | null
     pipelineName?: string | null
+    selectedSkillsByAgent?: Record<string, string[]>
+    orchestrationTrace?: string[]
     qualityChecklist?: string[]
     handoffNotes?: string
     executionSteps?: ArtifactExecutionStep[]
     renderedHtml?: string
+    confidence?: 'high' | 'medium' | 'low'
+    resolvedDeliverableType?: string
     provider?: AIProvider
     model?: string
     fallbackUsed?: boolean
@@ -76,6 +82,18 @@ export interface AppPersistenceSnapshot {
   agencySettings: AgencySettings
   providerSettings: ProviderSettings
   agentMemories: Record<string, AgentMemory>
+  pendingBriefs: Record<string, IrisPendingBrief>
+}
+
+export type AppPersistencePatch = Partial<AppPersistenceSnapshot>
+
+export type EntityCollectionKey = 'agents' | 'clients' | 'missions' | 'artifacts' | 'conversations'
+
+export type EntityDeltaPatch = {
+  [K in EntityCollectionKey]?: {
+    upserts: AppPersistenceSnapshot[K]
+    deletes: string[]
+  }
 }
 
 const nowIso = () => new Date().toISOString()
@@ -83,7 +101,7 @@ const DEFAULT_PROVIDER_MODEL: Record<AIProvider, Agent['model']> = {
   ollama: 'llama3.2:latest',
   gemini: 'gemini-2.5-flash',
 }
-const VALID_DIVISIONS = new Set<Agent['division']>(['orchestration', 'client-services', 'creative', 'media', 'research'])
+const VALID_DIVISIONS = new Set<Agent['division']>(['orchestration', 'client-services', 'creative', 'media', 'research', 'strategy', 'analytics', 'communications', 'production'])
 const VALID_SPECIALTIES = new Set<Agent['specialty']>([
   'strategy',
   'creative',
@@ -96,6 +114,13 @@ const VALID_SPECIALTIES = new Set<Agent['specialty']>([
   'client',
   'seo',
   'research',
+  'data-analytics',
+  'communications',
+  'content-production',
+  'event-management',
+  'operations',
+  'ux-design',
+  'brand',
 ])
 const VALID_STATUSES = new Set<Agent['status']>(['active', 'idle', 'paused'])
 const VALID_PROVIDERS = new Set<AIProvider>(['ollama', 'gemini'])
@@ -118,6 +143,7 @@ export function createAppPersistenceSnapshot(
     | 'agencySettings'
     | 'providerSettings'
     | 'agentMemories'
+    | 'pendingBriefs'
   >
 ): AppPersistenceSnapshot {
   return {
@@ -131,23 +157,51 @@ export function createAppPersistenceSnapshot(
     agencySettings: state.agencySettings,
     providerSettings: state.providerSettings,
     agentMemories: state.agentMemories,
+    pendingBriefs: {},
+  }
+}
+
+function createLocalPersistenceSnapshot(
+  state: Pick<
+    AgentsState,
+    | 'agents'
+    | 'activities'
+    | 'campaigns'
+    | 'clients'
+    | 'missions'
+    | 'artifacts'
+    | 'conversations'
+    | 'agencySettings'
+    | 'providerSettings'
+    | 'agentMemories'
+    | 'pendingBriefs'
+  >
+): AppPersistenceSnapshot {
+  return {
+    ...createAppPersistenceSnapshot(state),
+    artifacts: state.artifacts.map((artifact) => ({
+      ...artifact,
+      content: undefined,
+      renderedHtml: undefined,
+      sourcePrompt: undefined,
+      executionSteps: Array.isArray(artifact.executionSteps)
+        ? artifact.executionSteps.map((step) => ({ ...step, summary: step.summary.slice(0, 240) }))
+        : [],
+    })),
+    conversations: state.conversations.map((conversation) => ({
+      ...conversation,
+      messages: conversation.messages.slice(-6).map((message) => ({
+        ...message,
+        content: message.content.length > 500 ? `${message.content.slice(0, 497)}...` : message.content,
+      })),
+    })),
+    providerSettings: stripProviderSecrets(state.providerSettings),
+    pendingBriefs: state.pendingBriefs,
   }
 }
 
 function inferMissionDeliverableType(prompt: string): Mission['deliverableType'] {
-  const lower = prompt.toLowerCase()
-  if (lower.includes('carousel') || lower.includes('caption') || lower.includes('social post') || lower.includes('campaign content')) return 'campaign-copy'
-  if (lower.includes('content calendar')) return 'content-calendar'
-  if (lower.includes('media plan')) return 'media-plan'
-  if (lower.includes('budget')) return 'budget-sheet'
-  if (lower.includes('kpi') || lower.includes('forecast')) return 'kpi-forecast'
-  if (lower.includes('seo audit')) return 'seo-audit'
-  if (lower.includes('research') || lower.includes('competitor')) return 'research-brief'
-  if (lower.includes('campaign strategy')) return 'campaign-strategy'
-  if (lower.includes('strategy') || lower.includes('positioning') || lower.includes('messaging')) return 'strategy-brief'
-  if (lower.includes('visual') || lower.includes('design') || lower.includes('creative asset')) return 'creative-asset'
-  if (lower.includes('brief')) return 'client-brief'
-  return 'status-report'
+  return inferDeliverableTypeFromText(prompt)
 }
 
 function inferDivision(agent: Partial<Agent> & Record<string, any>): Agent['division'] {
@@ -308,99 +362,65 @@ function normalizePersistedState(persistedState: any) {
   }
 }
 
-const IRIS_AGENT: Agent = {
-  id: 'iris',
-  name: 'Iris',
-  role: 'Agency Operations Lead',
-  division: 'orchestration',
-  specialty: 'client',
-  unit: 'orchestration',
-  color: '#a78bfa',
-  accentColor: 'purple',
-  avatar: 'bot-purple',
-  systemPrompt: `You are Iris, the personal assistant and operations lead for Mission Control, a virtual creative and digital media agency.
+function mergeHydratedMission(localMission: Mission | undefined, incomingMission: Mission): Mission {
+  if (!localMission) return incomingMission
 
-## YOUR TEAM — 10 SPECIALISTS
+  const incomingAssignedAgentIds = Array.isArray(incomingMission.assignedAgentIds) ? incomingMission.assignedAgentIds : []
+  const localAssignedAgentIds = Array.isArray(localMission.assignedAgentIds) ? localMission.assignedAgentIds : []
 
-You coordinate a team of 10 agents across 4 divisions:
-
-**Orchestration:**
-- **Iris (you)** — Agency Ops Lead. Triage, route, and synthesize. Own the big picture.
-
-**Client Services:**
-- **Sage** — Client Services Director. Client relationships, presentations, briefings, contract negotiation, stakeholder management, account health.
-- **Piper** — Project/Traffic Manager. Timelines, scheduling, resourcing, delivery tracking, traffic coordination.
-- **Maya** — Brand & Campaign Strategist. Positioning, brand strategy, campaign frameworks, messaging architecture, go-to-market.
-
-**Creative:**
-- **Finn** — Creative Director. Campaign concepts, creative direction, art direction, creative quality.
-- **Echo** — Copy & Content Lead. Campaign copy, content calendars, scripts, CTAs, platform-native content, brand voice.
-- **Lyra** — Visual Production Lead. Visual systems, design direction, creative asset production, brand consistency across channels.
-
-**Media:**
-- **Dex** — Performance & Media Ops. Spreadsheet planning, budget pacing, KPI operations, reporting, pacing schedules.
-
-**Research:**
-- **Atlas** — Research & SEO Lead. Competitor research, SEO audits, audience insights, trend analysis, market research.
-
-## ROUTING RULES
-
-When a user asks for work, identify the right specialist and explicitly say: "I'll route this to [Agent Name]."
-
-Use these signals to pick the right agent:
-- **Brief, campaign strategy, positioning, messaging, brand direction** → Maya
-- **Creative concepts, art direction, visual quality** → Finn  
-- **Copy, content calendars, social posts, scripts, CTAs** → Echo
-- **Visual assets, design systems, creative production** → Lyra
-- **Media plans, budget allocation, channel strategy, KPIs** → Dex (ops) or Atlas (planning)
-- **Competitor research, SEO audits, audience insights, market research** → Atlas
-- **Project schedules, timelines, delivery tracking, resourcing** → Piper
-- **Client relationships, presentations, negotiations, account health** → Sage
-- **When unsure** → Synthesize yourself, then route to the best fit.
-
-## PIPELINES — Structured Multi-Phase Workflows
-
-The agency runs 6 structured pipelines. Match the request to the pipeline:
-
-1. **content-calendar** — "content calendar," "posting schedule," "social content plan," "editorial calendar"
-2. **campaign-brief** — "campaign brief," "brief for campaign," "launch brief," "strategy brief"  
-3. **ad-creative** — "ad creative," "ad variations," "creative assets," "banner ads," "display ads"
-4. **seo-audit** — "SEO audit," "search optimization," "website SEO," "keyword research"
-5. **competitor-research** — "competitor analysis," "competitive intel," "market research," "competitor scan"
-6. **media-plan** — "media plan," "channel plan," "budget allocation," "media strategy," "KPI forecast"
-
-To run a pipeline, direct the user to /app/pipeline where they can select the client and language.
-
-## SKILLS LIBRARY
-
-Agents draw from a shared Skills Library with 150+ skills across 7 categories: Strategy, Creative, Project Management, Media, Research, Client Services, Operations. Each skill has detailed prompts and instructions. When delegating, mention which skill(s) the agent should use.
-
-## OPERATING PRINCIPLES
-
-- Clarify the real client problem before acting
-- Default to short, precise answers unless the user asks for more
-- Keep momentum high — delivery-focused, notVerbose
-- Never start with "Great question" or filler
-- When routing, say: "I'll route this to [Agent]"
-- Stay warm, organized, and impossible to fluster`,
-  provider: 'ollama',
-  model: 'minimax-m2.7:cloud',
-  temperature: 0.7,
-  maxTokens: 1536,
-  tools: ['web-search', 'analytics'],
-  skills: ['task-triaging', 'workflow-design', 'cross-functional-coordination', 'priority-management', 'stakeholder-communication', 'status-reporting', 'agenda-setting', 'meeting-facilitation', 'bottleneck-identification', 'resource-optimization', 'account-management-framework', 'tool-integration', 'documentation'],
-  responsibilities: ['Triage requests', 'Delegate across divisions', 'Synthesize final agency output'],
-  primaryOutputs: ['status-report', 'client-brief'],
-  status: 'active',
-  currentTask: 'Coordinating active missions across the agency',
-  lastActive: nowIso(),
-  workload: 76,
-  position: { x: 470, y: 70, room: 'orchestration' },
-  bio: 'Operations lead and personal assistant who routes work across the agency.',
-  methodology: '',
+  return {
+    ...localMission,
+    ...incomingMission,
+    assignedAgentIds: incomingAssignedAgentIds.length ? incomingAssignedAgentIds : localAssignedAgentIds,
+    leadAgentId: incomingMission.leadAgentId || localMission.leadAgentId,
+    collaboratorAgentIds:
+      Array.isArray(incomingMission.collaboratorAgentIds) && incomingMission.collaboratorAgentIds.length
+        ? incomingMission.collaboratorAgentIds
+        : localMission.collaboratorAgentIds || [],
+    progress: Math.max(incomingMission.progress || 0, localMission.progress || 0),
+    handoffNotes: incomingMission.handoffNotes || localMission.handoffNotes,
+    orchestrationTrace:
+      Array.isArray(incomingMission.orchestrationTrace) && incomingMission.orchestrationTrace.length
+        ? incomingMission.orchestrationTrace
+        : localMission.orchestrationTrace || [],
+    updatedAt:
+      new Date(incomingMission.updatedAt || 0).getTime() >= new Date(localMission.updatedAt || 0).getTime()
+        ? incomingMission.updatedAt
+        : localMission.updatedAt,
+  }
 }
 
-const ALL_DEFAULT_AGENTS = [IRIS_AGENT, ...DEFAULT_AGENTS]
+function shouldPreserveLocalMissionDuringHydrate(mission: Mission) {
+  if (!['queued', 'in_progress', 'paused', 'review'].includes(mission.status)) return false
+  const ageMs = Date.now() - new Date(mission.updatedAt || mission.createdAt || 0).getTime()
+  return Number.isFinite(ageMs) && ageMs <= 30 * 60 * 1000
+}
+
+function mergeHydratedMissions(localMissions: Mission[], incomingMissions: Mission[]) {
+  const byId = new Map(localMissions.map((mission) => [mission.id, mission]))
+  const merged = incomingMissions.map((mission) => mergeHydratedMission(byId.get(mission.id), mission))
+  const mergedIds = new Set(merged.map((mission) => mission.id))
+  const preservedLocal = localMissions.filter(
+    (mission) => !mergedIds.has(mission.id) && shouldPreserveLocalMissionDuringHydrate(mission)
+  )
+  return [...merged, ...preservedLocal].sort(
+    (a, b) => new Date(b.updatedAt || b.createdAt).getTime() - new Date(a.updatedAt || a.createdAt).getTime()
+  )
+}
+
+const ALL_DEFAULT_AGENTS = CONFIG_AGENTS.map((agent) => ({
+  ...agent,
+  status: agent.id === 'iris' ? 'active' : agent.status,
+  currentTask: agent.id === 'iris' ? 'Coordinating active missions across the agency' : agent.currentTask,
+  lastActive: agent.lastActive || nowIso(),
+  workload: typeof agent.workload === 'number' ? agent.workload : agent.id === 'iris' ? 76 : 0,
+  tools: [...agent.tools],
+  skills: [...agent.skills],
+  responsibilities: [...agent.responsibilities],
+  primaryOutputs: [...agent.primaryOutputs],
+  position: { ...agent.position },
+}))
+const IRIS_AGENT = ALL_DEFAULT_AGENTS.find((agent) => agent.id === 'iris') || ALL_DEFAULT_AGENTS[0]
 
 const INITIAL_CAMPAIGNS: Campaign[] = []
 
@@ -459,6 +479,7 @@ interface AgentsState {
   activeConversationId: string | null
   isIrisOpen: boolean
   chatStatus: 'idle' | 'thinking' | 'streaming' | 'error'
+  pendingBriefs: Record<string, IrisPendingBrief>
   appStateReady: boolean
   currentUser: AuthenticatedUser | null
 
@@ -496,7 +517,7 @@ interface AgentsState {
   updateProviderSettings: (provider: keyof ProviderSettings, updates: Partial<ProviderSettings[keyof ProviderSettings]>) => void
   saveGeminiKey: (apiKey: string) => void
   hydrateAppState: (
-    payload: Partial<Pick<AgentsState, 'agents' | 'campaigns' | 'clients' | 'missions' | 'artifacts' | 'agencySettings' | 'providerSettings' | 'agentMemories'>>
+    payload: Partial<Pick<AgentsState, 'agents' | 'campaigns' | 'clients' | 'missions' | 'artifacts' | 'agencySettings' | 'providerSettings' | 'agentMemories' | 'pendingBriefs'>>
   ) => void
   hydrateAgentPhotos: (photos: Record<string, string>) => void
   rememberAgentWork: (
@@ -523,6 +544,8 @@ interface AgentsState {
   setActiveConversation: (id: string) => void
   addAssistantMessage: (conversationId: string, content: string, agentId?: string, meta?: ChatMessage['meta']) => void
   clearConversation: (id: string) => void
+  setPendingBrief: (conversationId: string, brief: IrisPendingBrief) => void
+  clearPendingBrief: (conversationId: string) => void
 }
 
 export const useAgentsStore = create<AgentsState>()(
@@ -547,6 +570,7 @@ export const useAgentsStore = create<AgentsState>()(
       activeConversationId: null,
       isIrisOpen: false,
       chatStatus: 'idle',
+      pendingBriefs: {},
       appStateReady: false,
       currentUser: null,
 
@@ -690,9 +714,14 @@ export const useAgentsStore = create<AgentsState>()(
 
       createMissionFromPrompt: (prompt, options) => {
         const deliverableType = inferMissionDeliverableType(prompt)
+        const spec = getDeliverableSpec(deliverableType)
         const title = buildTaskTitleFromRequest(prompt, deliverableType)
         const missionId = uuidv4()
-        const assignedAgentIds = options?.assignedAgentIds?.length ? options.assignedAgentIds : ['iris']
+        const leadAgentId = spec.defaultLead && spec.defaultLead !== 'iris' ? spec.defaultLead : undefined
+        const collaboratorAgentIds = spec.defaultCollaborators || []
+        const assignedAgentIds = options?.assignedAgentIds?.length
+          ? options.assignedAgentIds
+          : Array.from(new Set(['iris', ...(leadAgentId ? [leadAgentId] : []), ...collaboratorAgentIds]))
         const mission: Mission = {
           id: missionId,
           ownerUserId: get().currentUser?.id,
@@ -701,9 +730,25 @@ export const useAgentsStore = create<AgentsState>()(
           deliverableType,
           status: 'queued',
           priority: 'medium',
+          complexity: getDeliverableSpec(deliverableType).complexity,
+          channelingConfidence: deliverableType === 'general-task' ? 'medium' : deliverableType === 'status-report' ? 'low' : 'medium',
           campaignId: options?.campaignId,
           clientId: options?.clientId,
           assignedAgentIds,
+          leadAgentId,
+          collaboratorAgentIds,
+          handoffNotes: leadAgentId
+            ? `Lead specialist locked: ${leadAgentId}.${collaboratorAgentIds.length ? ` Support: ${collaboratorAgentIds.join(', ')}.` : ''}`
+            : 'Iris is preparing the best squad for this mission.',
+          orchestrationTrace: [
+            `Deliverable identified: ${spec.label}.`,
+            leadAgentId
+              ? `Initial lead specialist: ${leadAgentId}.`
+              : 'Iris is triaging this request.',
+            collaboratorAgentIds.length
+              ? `Initial support: ${collaboratorAgentIds.join(', ')}.`
+              : 'No support specialists locked yet.',
+          ],
           assignedBy: 'iris',
           createdAt: nowIso(),
           updatedAt: nowIso(),
@@ -731,23 +776,55 @@ export const useAgentsStore = create<AgentsState>()(
 
       addArtifact: (artifactData) => {
         const id = uuidv4()
+        const now = nowIso()
         const artifact: Artifact = {
           ...artifactData,
           ownerUserId: artifactData.ownerUserId || get().currentUser?.id,
           id,
-          createdAt: nowIso(),
-          updatedAt: nowIso(),
+          createdAt: now,
+          updatedAt: now,
         }
-        set((state) => ({ artifacts: [artifact, ...state.artifacts] }))
+        set((state) => ({
+          artifacts: [artifact, ...state.artifacts],
+          missions: artifact.missionId
+            ? state.missions.map((mission) =>
+                mission.id === artifact.missionId
+                  ? {
+                      ...mission,
+                      updatedAt: now,
+                      progress: Math.max(mission.progress || 0, 88),
+                    }
+                  : mission
+              )
+            : state.missions,
+        }))
         return id
       },
 
       updateArtifact: (id, updates) =>
-        set((state) => ({
-          artifacts: state.artifacts.map((artifact) =>
-            artifact.id === id ? { ...artifact, ...updates, updatedAt: nowIso() } : artifact
-          ),
-        })),
+        set((state) => {
+          const now = nowIso()
+          const existing = state.artifacts.find((artifact) => artifact.id === id)
+          const nextArtifacts = state.artifacts.map((artifact) =>
+            artifact.id === id ? { ...artifact, ...updates, updatedAt: now } : artifact
+          )
+
+          return {
+            artifacts: nextArtifacts,
+            missions:
+              existing?.missionId
+                ? state.missions.map((mission) =>
+                    mission.id === existing.missionId
+                      ? {
+                          ...mission,
+                          updatedAt: now,
+                          progress: Math.max(mission.progress || 0, 88),
+                        }
+                      : mission
+                  )
+                : state.missions,
+          }
+        }),
 
       updateAgencySettings: (updates) =>
         set((state) => ({ agencySettings: { ...state.agencySettings, ...updates } })),
@@ -786,9 +863,9 @@ export const useAgentsStore = create<AgentsState>()(
             agents: normalized.agents || state.agents,
             campaigns: normalized.campaigns || state.campaigns,
             clients: normalized.clients || state.clients,
-            missions: normalized.missions || state.missions,
+            missions: normalized.missions ? mergeHydratedMissions(state.missions, normalized.missions) : state.missions,
             artifacts: normalized.artifacts || state.artifacts,
-            conversations: normalized.conversations || state.conversations,
+            conversations: state.conversations,
             agencySettings: normalized.agencySettings ? { ...state.agencySettings, ...normalized.agencySettings } : state.agencySettings,
             providerSettings: normalized.providerSettings
               ? normalizeProviderSettings({
@@ -797,11 +874,16 @@ export const useAgentsStore = create<AgentsState>()(
                   routing: { ...state.providerSettings.routing, ...normalized.providerSettings.routing },
                   ollama: { ...state.providerSettings.ollama, ...normalized.providerSettings.ollama },
                   gemini: { ...state.providerSettings.gemini, ...normalized.providerSettings.gemini },
+                  mcp: {
+                    ...state.providerSettings.mcp,
+                    ...normalized.providerSettings.mcp,
+                  },
                 })
               : state.providerSettings,
             agentMemories: normalized.agentMemories
               ? mergeAgentMemories(normalized.agentMemories, normalized.agents || state.agents)
               : state.agentMemories,
+            pendingBriefs: state.pendingBriefs,
             appStateReady: true,
           }
         }),
@@ -819,8 +901,10 @@ export const useAgentsStore = create<AgentsState>()(
         })),
 
       openIris: () => {
-        let convId = get().activeConversationId
-        if (!convId) convId = get().createConversation('Chat with Iris')
+        const state = get()
+        let convId = state.activeConversationId
+        const hasConversation = convId ? state.conversations.some((conversation) => conversation.id === convId) : false
+        if (!convId || !hasConversation) convId = get().createConversation('Chat with Iris')
         set({ isIrisOpen: true, activeConversationId: convId })
       },
 
@@ -852,7 +936,12 @@ export const useAgentsStore = create<AgentsState>()(
           }
         }),
 
-      setActiveConversation: (id) => set({ activeConversationId: id, isIrisOpen: true }),
+      setActiveConversation: (id) =>
+        set((state) => {
+          const hasConversation = state.conversations.some((conversation) => conversation.id === id)
+          if (!hasConversation) return state
+          return { ...state, activeConversationId: id, isIrisOpen: true }
+        }),
 
       sendMessage: (conversationId, content, role = 'user', agentId, meta) => {
         const message: ChatMessage = { id: uuidv4(), role, content, timestamp: nowIso(), agentId, meta }
@@ -904,11 +993,29 @@ export const useAgentsStore = create<AgentsState>()(
           conversations: state.conversations.map((conversation) =>
             conversation.id === id ? { ...conversation, messages: [] } : conversation
           ),
+          pendingBriefs: state.pendingBriefs[id]
+            ? Object.fromEntries(Object.entries(state.pendingBriefs).filter(([conversationId]) => conversationId !== id))
+            : state.pendingBriefs,
+        })),
+
+      setPendingBrief: (conversationId, brief) =>
+        set((state) => ({
+          pendingBriefs: {
+            ...state.pendingBriefs,
+            [conversationId]: brief,
+          },
+        })),
+
+      clearPendingBrief: (conversationId) =>
+        set((state) => ({
+          pendingBriefs: Object.fromEntries(
+            Object.entries(state.pendingBriefs).filter(([id]) => id !== conversationId)
+          ),
         })),
     }),
     {
       name: 'moes-mission-control',
-      version: 5,
+      version: 6,
       migrate: (persistedState: any, version) => {
         if (!persistedState) return persistedState
         if (version < 2) {
@@ -936,7 +1043,7 @@ export const useAgentsStore = create<AgentsState>()(
         return normalizePersistedState(persistedState)
       },
       partialize: (state) => ({
-        ...createAppPersistenceSnapshot(state),
+        ...createLocalPersistenceSnapshot(state),
       }),
     }
   )

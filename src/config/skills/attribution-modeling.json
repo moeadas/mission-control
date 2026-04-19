@@ -8,9 +8,9 @@
   "freedom": "low",
   "prompts": {
     "en": {
-      "trigger": "Use when analyzing marketing attribution, choosing attribution models, or reporting on channel effectiveness across the customer journey.",
+      "trigger": "Use this skillany time analyzing marketing attribution, choosing attribution models, or reporting on channel effectiveness across the customer journey.",
       "context": "You are a marketing analytics specialist with expertise in attribution modeling, multi-touch journey analysis, and channel ROI measurement.",
-      "instructions": "## Attribution Modeling Workflow\n\nAnalyze marketing attribution:\n\n- [ ] 1. Journey mapping: Map the typical customer journey for {{customer_type}}\n- [ ] 2. Data collection: Gather touchpoint data across {{channels}}\n- [ ] 3. Model selection: Choose attribution approach ({{attribution_model}})\n- [ ] 4. Channel analysis: Evaluate each channel's contribution\n- [ ] 5. Budget implications: Model budget shifts based on findings\n- [ ] 6. Reporting: Present findings with actionable recommendations\n\n## Inputs\n- Customer type: {{customer_type}}\n- Channels: {{channels}}\n- Time period: {{time_period}}\n- Model: {{attribution_model}}",
+      "instructions": "## Attribution Modeling\n\n1. **Journey Mapping** — Document typical customer touchpoint journey\n   - ✓ Done when: Journey reflects actual customer behavior\n\n2. **Data Collection** — Gather touchpoint data from all channels\n   - ✓ Done when: Data is complete and accurate\n\n3. **Model Selection** — Choose attribution approach based on business model\n   - ✓ Done when: Model choice is justified\n\n4. **Channel Analysis** — Calculate attribution scores per channel\n   - ✓ Done when: Scores are calculated consistently\n\n5. **Budget Modeling** — Model impact of reallocation scenarios\n   - ✓ Done when: Recommendations are data-supported\n\n## Key Inputs\n- client_name: Client or brand name\n- customer_type: Type of customer or transaction\n- channels: Marketing channels to analyze\n- time_period: Analysis time period\n- attribution_model: Primary attribution model\n- total_budget: Total marketing budget",
       "output_template": "## Attribution Analysis: {{client_name}}\n\n### Analysis Overview\n| Parameter | Value |\n|-----------|-------|\n| Customer type | {{customer_type}} |\n| Time period | {{time_period}} |\n| Attribution model | {{attribution_model}} |\n| Channels analyzed | {{channels}} |\n\n### Channel Attribution Scores\n| Channel | Last-click | First-click | Linear | Data-driven |\n|---------|------------|-------------|--------|--------------|\n| Paid Search | | | | |\n| Paid Social | | | | |\n| Organic | | | | |\n| Email | | | | |\n| Display | | | | |\n| Direct | | | | |\n\n### Key Findings\n1. [Most influential awareness channel]\n2. [Key conversion driver]\n3. [Underweighted channel opportunity]\n4. [Overweighted channel inefficiency]\n\n### Budget Reallocation Recommendations\n| Channel | Current % | Recommended % | Change | Expected Impact |\n|---------|-----------|---------------|--------|------------------|\n| | | | | |\n\n### Model Methodology Notes\n[Explain attribution assumptions and limitations]"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Total marketing budget"
     }
   ],
+  "inputs": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "customer_type",
+      "type": "string",
+      "required": true,
+      "description": "Type of customer or transaction"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Marketing channels to analyze"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": true,
+      "description": "Analysis time period"
+    },
+    {
+      "name": "attribution_model",
+      "type": "string",
+      "required": true,
+      "description": "Primary attribution model"
+    },
+    {
+      "name": "total_budget",
+      "type": "string",
+      "required": false,
+      "description": "Total marketing budget"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,12 +132,11 @@
     }
   ],
   "checklist": [
-    "Customer journey map reflects actual behavior",
-    "Attribution model choice is justified",
-    "Channel scores are calculated consistently",
-    "Data gaps are acknowledged",
-    "Recommendations consider business constraints",
-    "Report is understandable by stakeholders"
+    "Journey reflects actual customer behavior",
+    "Data is complete and accurate",
+    "Model choice is justified",
+    "Scores are calculated consistently",
+    "Recommendations are data-supported"
   ],
   "tools": [
     "spreadsheet",
@@ -118,6 +156,6 @@
       "media",
       "roi"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

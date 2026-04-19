@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when conducting a category analysis to understand how a market is structured, who the key players are, and where opportunities exist for a brand to compete or lead.",
+      "trigger": "Use this skillany time conducting a category analysis to understand how a market is structured, who the key players are, and where opportunities exist for a brand to compete or lead.",
       "context": "You are a market researcher who conducts rigorous category analysis to understand market structure, competitive forces, and white space opportunities for strategic decision-making.",
-      "instructions": "## Category Analysis Workflow\n\n- [ ] 1. Define category boundaries: What products/services are in and out\n- [ ] 2. Map market structure: Fragmented, consolidated, monopolistic\n- [ ] 3. Identify key players: Market leaders, challengers, niche players\n- [ ] 4. Analyze trends: What's changing in how the category is defined or delivered?\n- [ ] 5. Assess growth: Category growth rate, margin structure, seasonality\n- [ ] 6. Consumer behavior: How do buyers choose within this category?\n- [ ] 7. Identify opportunities: White space, underserved needs, emerging segments\n\n## Key Inputs\n- Category: {{category_name}}\n- Geographic scope: {{geography}}\n- Client/brand: {{brand_name}}\n- Competitors: {{competitors}}",
+      "instructions": "## Category Analysis\n\n1. **Category Definition** — Clearly define what is and isn't in the category\n   - ✓ Done when: Category boundaries are clear and defensible\n\n2. **Structure Analysis** — Assess market structure and concentration\n   - ✓ Done when: Structure type is correctly identified\n\n3. **Player Mapping** — Map key players and their positions\n   - ✓ Done when: Players are accurately characterized\n\n4. **Trend Analysis** — Identify and assess category trends\n   - ✓ Done when: Trends are current and evidenced\n\n5. **Opportunity Identification** — Find white space and underserved needs\n   - ✓ Done when: Opportunities are real and ownable\n\n## Key Inputs\n- category_name: Category being analyzed\n- geography: Geographic scope of analysis\n- brand_name: Brand context for the analysis\n- competitors: Key competitors to focus on",
       "output_template": "## Category Analysis: {{category_name}}\n\n### Category Definition\n**Scope:**\n**Value chain position:**\n**Category boundaries (in/out):**\n\n### Market Structure\n**Structure type:** Fragmented / Consolidating / Concentrated / Emerging\n**Market size:**\n**Growth rate:**\n\n### Key Players\n| Player | Market share | Strengths | Weaknesses | Strategy |\n|--------|-------------|-----------|------------|---------|\n| | | | | |\n\n### Competitive Dynamics\n**Rivalry intensity:**\n**Key success factors:**\n**Barriers to entry:**\n\n### Category Trends\n| Trend | Implication |\n|-------|-----------|\n| | |\n\n### Consumer Behavior\n**How buyers choose:**\n**Decision criteria:**\n**Purchase frequency:**\n\n### Opportunity Areas\n| Opportunity | Type | Viability |\n|------------|------|----------|\n| | | |\n\n### Strategic Recommendations\n| Recommendation | Rationale | Priority |\n|---------------|----------|----------|\n| | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Key competitors to focus on"
     }
   ],
+  "inputs": [
+    {
+      "name": "category_name",
+      "type": "string",
+      "required": true,
+      "description": "Category being analyzed"
+    },
+    {
+      "name": "geography",
+      "type": "string",
+      "required": false,
+      "description": "Geographic scope of analysis"
+    },
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": false,
+      "description": "Brand context for the analysis"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Key competitors to focus on"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,19 +108,31 @@
     }
   ],
   "checklist": [
-    "Category boundaries are clearly defined",
-    "Market structure is accurately assessed",
-    "All key players are identified and profiled",
-    "Trends are current and relevant",
-    "Opportunities are evidenced and viable"
+    "Category boundaries are clear and defensible",
+    "Structure type is correctly identified",
+    "Players are accurately characterized",
+    "Trends are current and evidenced",
+    "Opportunities are real and ownable"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["market-research"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "market-research"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["research", "market-analysis", "category", "competitive"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "research",
+      "market-analysis",
+      "category",
+      "competitive"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }
