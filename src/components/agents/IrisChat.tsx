@@ -619,11 +619,12 @@ export function IrisChat() {
   )
 
   const handleBriefProgress = useCallback(
-    async (conversationId: string, answer: string) => {
-      const currentBriefEntry = pendingBriefRef.current
-      if (!currentBriefEntry || currentBriefEntry.conversationId !== conversationId) return false
+    async (conversationId: string, answer: string, briefOverride?: IrisPendingBrief) => {
+      const currentBrief =
+        briefOverride ||
+        (pendingBriefRef.current?.conversationId === conversationId ? pendingBriefRef.current.brief : null)
+      if (!currentBrief) return false
 
-      const currentBrief = currentBriefEntry.brief
       const currentField = getBriefQuestion(currentBrief)?.field
       const updatedBrief = applyBriefAnswer(currentBrief, answer, currentField)
       if (!isBriefComplete(updatedBrief)) {
@@ -662,14 +663,16 @@ export function IrisChat() {
       const fullMessage = attachmentContent.trim()
         ? `${userMsg}\n\n[Attached files context]\n${attachmentContent.trim()}`
         : userMsg
+      const briefEntryBeforeSend = pendingBriefRef.current
+      const activeBriefForConversation =
+        briefEntryBeforeSend?.conversationId === conversationId ? briefEntryBeforeSend.brief : null
 
       setError(null)
       setActiveConversation(conversationId)
       sendMessage(conversationId, userMsg)
 
-      const currentBriefEntry = pendingBriefRef.current
-      if (currentBriefEntry && currentBriefEntry.conversationId === conversationId) {
-        await handleBriefProgress(conversationId, userMsg)
+      if (activeBriefForConversation) {
+        await handleBriefProgress(conversationId, userMsg, activeBriefForConversation)
         return
       }
 
@@ -697,8 +700,12 @@ export function IrisChat() {
 
   const handleBriefOptionClick = useCallback(async (option: string) => {
     if (!activeBriefQuestion || chatStatus !== 'idle') return
-    await submitUserMessage(option)
-  }, [activeBriefQuestion, chatStatus, submitUserMessage])
+    if (!activeConversationId || !activePendingBrief) return
+
+    setError(null)
+    sendMessage(activeConversationId, option)
+    await handleBriefProgress(activeConversationId, option, activePendingBrief)
+  }, [activeBriefQuestion, activeConversationId, activePendingBrief, chatStatus, handleBriefProgress, sendMessage])
 
   const clearPendingBriefFlow = useCallback(() => {
     if (!activeConversationId) return

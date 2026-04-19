@@ -61,7 +61,6 @@ function filterStateForUser(state: AppPersistenceSnapshot, userId: string): AppP
       (artifact.missionId ? scopedMissionIds.has(artifact.missionId) : false)
   )
   const scopedConversations = state.conversations.filter((conversation) => conversation.ownerUserId === userId)
-
   return {
     ...state,
     clients: scopedClients,

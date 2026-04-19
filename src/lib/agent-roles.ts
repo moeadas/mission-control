@@ -1,5 +1,5 @@
 import { DeliverableType } from '@/lib/types'
-import { getDeliverableSpec } from '@/lib/deliverables'
+import { getDeliverableAgentDefaults, getDeliverableSpec } from '@/lib/deliverables'
 
 export const ROLE_AGENT_MAP: Record<string, string[]> = {
   'client-services': ['sage', 'piper'],
@@ -34,58 +34,25 @@ export function pickAgentForRole<T extends { id: string }>(agents: T[], role?: s
 export function getDeliverableAgentPlan(deliverableType: DeliverableType, request: string, routedAgentId?: string) {
   const lower = request.toLowerCase()
   const spec = getDeliverableSpec(deliverableType)
+  const defaults = getDeliverableAgentDefaults(deliverableType)
+
+  const basePlan = {
+    leadAgentId: routedAgentId || defaults.leadAgentId || spec.defaultLead || 'iris',
+    collaboratorAgentIds: [...defaults.collaboratorAgentIds],
+  }
 
   switch (deliverableType) {
-    case 'short-form-copy':
-      return { leadAgentId: 'echo', collaboratorAgentIds: ['maya'] }
     case 'campaign-copy':
       return {
-        leadAgentId: 'echo',
-        collaboratorAgentIds: lower.includes('carousel') || lower.includes('instagram') ? ['maya', 'lyra'] : ['maya'],
+        ...basePlan,
+        collaboratorAgentIds:
+          lower.includes('carousel') || lower.includes('instagram')
+            ? Array.from(new Set([...basePlan.collaboratorAgentIds, 'lyra']))
+            : basePlan.collaboratorAgentIds,
       }
-    case 'email-campaign':
-      return { leadAgentId: 'echo', collaboratorAgentIds: ['maya', 'nova'] }
-    case 'blog-article':
-      return { leadAgentId: 'echo', collaboratorAgentIds: ['atlas', 'maya'] }
-    case 'website-copy':
-      return { leadAgentId: 'echo', collaboratorAgentIds: ['maya', 'lyra'] }
-    case 'video-script':
-      return { leadAgentId: 'echo', collaboratorAgentIds: ['lyra', 'maya'] }
-    case 'presentation':
-      return { leadAgentId: 'sage', collaboratorAgentIds: ['maya', 'lyra', 'echo'] }
-    case 'content-calendar':
-      return { leadAgentId: 'echo', collaboratorAgentIds: ['maya', 'nova', 'lyra'] }
-    case 'strategy-brief':
-    case 'campaign-strategy':
-      return { leadAgentId: 'maya', collaboratorAgentIds: ['sage', 'atlas'] }
-    case 'brand-guidelines':
-      return { leadAgentId: 'lyra', collaboratorAgentIds: ['maya', 'echo'] }
-    case 'creative-asset':
-      return { leadAgentId: 'lyra', collaboratorAgentIds: ['finn', 'echo'] }
-    case 'media-plan':
-      return { leadAgentId: 'nova', collaboratorAgentIds: ['dex', 'maya'] }
-    case 'event-plan':
-      return { leadAgentId: 'nova', collaboratorAgentIds: ['maya', 'sage', 'echo'] }
-    case 'budget-sheet':
-    case 'kpi-forecast':
-      return { leadAgentId: 'dex', collaboratorAgentIds: ['nova'] }
-    case 'data-analysis':
-      return { leadAgentId: 'dex', collaboratorAgentIds: ['atlas', 'nova'] }
-    case 'seo-audit':
-    case 'research-brief':
-      return { leadAgentId: 'atlas', collaboratorAgentIds: ['maya'] }
-    case 'ui-audit':
-      return { leadAgentId: 'finn', collaboratorAgentIds: ['lyra', 'echo', 'dex'] }
     case 'client-brief':
-      return { leadAgentId: 'sage', collaboratorAgentIds: ['maya', 'piper'] }
-    case 'pr-comms':
-      return { leadAgentId: 'sage', collaboratorAgentIds: ['echo', 'maya'] }
-    case 'general-task':
-      return { leadAgentId: 'maya', collaboratorAgentIds: ['atlas'] }
+      return { ...basePlan, collaboratorAgentIds: Array.from(new Set(['maya', 'piper'])) }
     default:
-      return {
-        leadAgentId: routedAgentId || spec.defaultLead || 'iris',
-        collaboratorAgentIds: spec.defaultCollaborators || [],
-      }
+      return basePlan
   }
 }

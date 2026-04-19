@@ -62,6 +62,8 @@ interface SkillRef {
   outputTemplate?: string
   checklist?: string[]
   workflowSteps?: Array<{ step?: number; name?: string; action?: string; verify?: string }>
+  variables?: Array<{ name?: string; description?: string; required?: boolean }>
+  examples?: Array<{ title?: string; prompt?: string; output?: string }>
 }
 
 interface ExecutionHooks {
@@ -344,6 +346,8 @@ function buildSkillLookup(skillCategories: any[]) {
         outputTemplate: skill.prompts?.en?.output_template || '',
         checklist: Array.isArray(skill.checklist) ? skill.checklist : [],
         workflowSteps: Array.isArray(skill.workflow?.steps) ? skill.workflow.steps : [],
+        variables: Array.isArray(skill.variables) ? skill.variables : [],
+        examples: Array.isArray(skill.examples) ? skill.examples : [],
       })
     }
   }
@@ -366,22 +370,52 @@ function agentSkillsContextFromIds(agent: RuntimeAgent, skillLookup: Map<string,
   parts.push(
     assignedSkills.length
       ? assignedSkills
-          .map((skill) =>
-            [
+          .map((skill, index) => {
+            const isPrimarySkill = index === 0
+            return [
               `- ${skill.name}${skill.description ? `: ${skill.description}` : ''}`,
-              skill.instructions ? `  Instructions: ${truncate(skill.instructions, 420)}` : '',
-              skill.outputTemplate ? `  Output template: ${truncate(skill.outputTemplate, 220)}` : '',
-              skill.checklist?.length ? `  Checklist: ${skill.checklist.slice(0, 4).join(' | ')}` : '',
+              skill.instructions
+                ? `  Instructions: ${isPrimarySkill ? skill.instructions.trim() : truncate(skill.instructions, 700)}`
+                : '',
+              skill.outputTemplate
+                ? `  Output template: ${isPrimarySkill ? skill.outputTemplate.trim() : truncate(skill.outputTemplate, 360)}`
+                : '',
+              skill.variables?.length
+                ? `  Variables: ${skill.variables
+                    .slice(0, isPrimarySkill ? 8 : 4)
+                    .map((variable) =>
+                      variable?.name
+                        ? `${variable.name}${variable.required ? ' (required)' : ''}${variable.description ? `: ${truncate(variable.description, 120)}` : ''}`
+                        : ''
+                    )
+                    .filter(Boolean)
+                    .join(' | ')}`
+                : '',
+              skill.checklist?.length
+                ? `  Checklist: ${skill.checklist.slice(0, isPrimarySkill ? 8 : 4).join(' | ')}`
+                : '',
               skill.workflowSteps?.length
                 ? `  Workflow: ${skill.workflowSteps
-                    .slice(0, 3)
-                    .map((step) => step.name || step.action || `Step ${step.step || '?'}`)
+                    .slice(0, isPrimarySkill ? 5 : 3)
+                    .map((step) => {
+                      const label = step.name || step.action || `Step ${step.step || '?'}`
+                      return isPrimarySkill && step.verify
+                        ? `${label} (verify: ${truncate(step.verify, 140)})`
+                        : label
+                    })
                     .join(' -> ')}`
+                : '',
+              skill.examples?.length
+                ? `  Examples: ${skill.examples
+                    .slice(0, isPrimarySkill ? 2 : 1)
+                    .map((example) => example.title || truncate(example.output || example.prompt || '', 160))
+                    .filter(Boolean)
+                    .join(' | ')}`
                 : '',
             ]
               .filter(Boolean)
               .join('\n')
-          )
+          })
           .join('\n\n')
       : 'No explicit skills assigned.'
   )

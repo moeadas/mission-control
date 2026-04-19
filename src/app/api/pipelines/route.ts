@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import pipelinesConfig from '@/config/pipelines/pipelines.json'
+import { getConfigPipelines, mergeDatabasePipelines } from '@/lib/pipeline-loader'
 import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
     const supabase = getSupabaseServerClient()
     const agencyId = await getAgencyId()
-    if (!supabase || !agencyId) return NextResponse.json(pipelinesConfig.pipelines || [])
+    if (!supabase || !agencyId) return NextResponse.json(getConfigPipelines())
 
     const { data, error } = await supabase
       .from('pipelines')
@@ -35,7 +35,9 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error
 
-    return NextResponse.json((data || []).map((row: any) => row.definition || {}))
+    return NextResponse.json(
+      mergeDatabasePipelines((data || []).map((row: any) => row.definition || {}).filter(Boolean))
+    )
   } catch (error) {
     console.error('Failed to load pipelines:', error)
     return NextResponse.json({ error: 'Failed to load pipelines' }, { status: 500 })

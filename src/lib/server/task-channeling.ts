@@ -1,7 +1,7 @@
 import { ChannelingConfidence, DeliverableType } from '@/lib/types'
 import { getDeliverableAgentPlan } from '@/lib/agent-roles'
 import { getAuditExecutionProfile } from '@/lib/audit-capabilities'
-import { getDeliverableSpec } from '@/lib/deliverables'
+import { getDeliverableChannelingProfile, getDeliverableSpec } from '@/lib/deliverables'
 
 type RuntimeAgent = {
   id: string
@@ -57,204 +57,17 @@ interface ChannelingDeliverableSpec {
   simpleVariantPatterns?: RegExp[]
 }
 
-const CHANNELING_SPECS: Record<DeliverableType, ChannelingDeliverableSpec> = {
-  'content-calendar': {
-    id: 'content-calendar',
-    defaultLead: 'echo',
-    defaultCollaborators: ['maya', 'nova', 'lyra'],
-    skillBoostPatterns: [/calendar|content|platform-native|social|campaign|copywriting|headline|scheduling/],
-    skillPenaltyPatterns: [/operations|documentation|knowledge|resource|capacity|waterfall|meeting|delegation|scope|process/],
-    complexity: 'high',
-  },
-  'campaign-copy': {
-    id: 'campaign-copy',
-    defaultLead: 'echo',
-    defaultCollaborators: ['maya'],
-    skillBoostPatterns: [/copywriting|copy|headline|content|social|email|landing-page|cta|brand-voice|tone-adaptation|persuasion|caption|campaign/],
-    skillPenaltyPatterns: [/operations|quality|documentation|knowledge|resource|capacity|waterfall|meeting|delegation|scope|process/],
-    complexity: 'medium',
-    simpleVariantPatterns: [/\b(linkedin post|instagram post|social post|single post|caption)\b/],
-  },
-  'short-form-copy': {
-    id: 'short-form-copy',
-    defaultLead: 'echo',
-    defaultCollaborators: ['maya'],
-    skillBoostPatterns: [/short-form|headline|cta|tagline|brand-voice|tone|copywriting/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|media|budget/],
-    complexity: 'low',
-  },
-  'email-campaign': {
-    id: 'email-campaign',
-    defaultLead: 'echo',
-    defaultCollaborators: ['maya', 'nova'],
-    skillBoostPatterns: [/email|campaign-copywriting|headline|cta|automation|journey|sequence|drip/],
-    skillPenaltyPatterns: [/operations|documentation|waterfall|meeting|delegation/],
-    complexity: 'medium',
-  },
-  'blog-article': {
-    id: 'blog-article',
-    defaultLead: 'echo',
-    defaultCollaborators: ['atlas', 'maya'],
-    skillBoostPatterns: [/content|copywriting|headline|long-form|narrative|seo|keyword|research|thought/],
-    skillPenaltyPatterns: [/operations|scheduling|media|budget|calendar/],
-    complexity: 'medium',
-  },
-  'website-copy': {
-    id: 'website-copy',
-    defaultLead: 'echo',
-    defaultCollaborators: ['maya', 'lyra'],
-    skillBoostPatterns: [/copywriting|headline|cta|web|landing|conversion|ux|persuasion|brand-voice/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling/],
-    complexity: 'medium',
-  },
-  'video-script': {
-    id: 'video-script',
-    defaultLead: 'echo',
-    defaultCollaborators: ['lyra', 'maya'],
-    skillBoostPatterns: [/narrative|storytelling|copywriting|script|video|storyboard|hook/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|budget/],
-    complexity: 'medium',
-  },
-  presentation: {
-    id: 'presentation',
-    defaultLead: 'sage',
-    defaultCollaborators: ['maya', 'lyra', 'echo'],
-    skillBoostPatterns: [/stakeholder|narrative|presentation|communication|strategy|positioning|messaging|visual|design|headline|copywriting/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo/],
-    complexity: 'high',
-  },
-  'strategy-brief': {
-    id: 'strategy-brief',
-    defaultLead: 'maya',
-    defaultCollaborators: ['atlas', 'sage'],
-    skillBoostPatterns: [/strategy|positioning|value-proposition|market-segmentation|go-to-market|brand|messaging|persona|audience|campaign-planning|deep-research/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword/],
-    complexity: 'high',
-  },
-  'campaign-strategy': {
-    id: 'campaign-strategy',
-    defaultLead: 'maya',
-    defaultCollaborators: ['nova', 'echo', 'atlas'],
-    skillBoostPatterns: [/campaign-planning|strategy|positioning|audience|messaging|channel|media|organic-social|paid|calendar|deep-research/],
-    skillPenaltyPatterns: [/operations|documentation|waterfall|meeting|delegation/],
-    complexity: 'high',
-  },
-  'brand-guidelines': {
-    id: 'brand-guidelines',
-    defaultLead: 'lyra',
-    defaultCollaborators: ['maya', 'echo'],
-    skillBoostPatterns: [/visual|design|brand|identity|storytelling|positioning|messaging|tone|voice|art-direction|brand-consistency/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|media|budget/],
-    complexity: 'high',
-  },
-  'research-brief': {
-    id: 'research-brief',
-    defaultLead: 'atlas',
-    defaultCollaborators: ['maya', 'echo'],
-    skillBoostPatterns: [/deep-research|research|insight|seo|competitive|market|consumer|audience|benchmark|trend|analysis/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling/],
-    complexity: 'high',
-  },
-  'seo-audit': {
-    id: 'seo-audit',
-    defaultLead: 'atlas',
-    defaultCollaborators: ['echo', 'nova'],
-    skillBoostPatterns: [/seo|keyword|research|report|competitive|insight|technical|audit|search|content/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|visual|design/],
-    complexity: 'high',
-  },
-  'data-analysis': {
-    id: 'data-analysis',
-    defaultLead: 'dex',
-    defaultCollaborators: ['atlas', 'nova'],
-    skillBoostPatterns: [/research|data|analysis|insight|market|competitive|performance|analytics|reporting|kpi/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|copywriting|visual|design/],
-    complexity: 'high',
-  },
-  'creative-asset': {
-    id: 'creative-asset',
-    defaultLead: 'lyra',
-    defaultCollaborators: ['echo', 'finn'],
-    skillBoostPatterns: [/visual|design|art-direction|creative|reference-image|template|brand-template|brand-guidelines|brand-consistency|illustration/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword|budget/],
-    complexity: 'medium',
-  },
-  'ui-audit': {
-    id: 'ui-audit',
-    defaultLead: 'finn',
-    defaultCollaborators: ['lyra', 'echo', 'dex'],
-    skillBoostPatterns: [/ux|ui|design|visual|quality|copy|conversion|audit|usability|accessibility|heuristic/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword|budget|media/],
-    complexity: 'high',
-  },
-  'client-brief': {
-    id: 'client-brief',
-    defaultLead: 'sage',
-    defaultCollaborators: ['maya', 'echo'],
-    skillBoostPatterns: [/stakeholder|narrative|communication|briefing|onboarding|presentation|strategy|positioning/],
-    skillPenaltyPatterns: [/operations|scheduling|seo|keyword|budget|media/],
-    complexity: 'medium',
-  },
-  'pr-comms': {
-    id: 'pr-comms',
-    defaultLead: 'sage',
-    defaultCollaborators: ['echo', 'maya'],
-    skillBoostPatterns: [/stakeholder|narrative|communication|negotiation|presentation|media|press|public-relations|crisis/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword|budget/],
-    complexity: 'medium',
-  },
-  'media-plan': {
-    id: 'media-plan',
-    defaultLead: 'nova',
-    defaultCollaborators: ['dex', 'maya'],
-    skillBoostPatterns: [/media|channel|budget|reach|frequency|kpi|paid|organic|allocation|forecast|performance/],
-    skillPenaltyPatterns: [/operations|documentation|calendar|copywriting|visual|design/],
-    complexity: 'high',
-  },
-  'event-plan': {
-    id: 'event-plan',
-    defaultLead: 'nova',
-    defaultCollaborators: ['maya', 'sage', 'echo'],
-    skillBoostPatterns: [/channel|media|calendar|planning|event|scheduling|stakeholder|communication|content|copywriting/],
-    skillPenaltyPatterns: [/seo|keyword|ui|ux|design|visual/],
-    complexity: 'high',
-  },
-  'budget-sheet': {
-    id: 'budget-sheet',
-    defaultLead: 'dex',
-    defaultCollaborators: ['nova', 'maya'],
-    skillBoostPatterns: [/budget|forecast|kpi|pacing|spreadsheet|data|financial|allocation|analytics/],
-    skillPenaltyPatterns: [/copywriting|visual|design|narrative|seo/],
-    complexity: 'medium',
-  },
-  'kpi-forecast': {
-    id: 'kpi-forecast',
-    defaultLead: 'dex',
-    defaultCollaborators: ['atlas', 'nova'],
-    skillBoostPatterns: [/kpi|forecast|projection|data|analytics|performance|metric|benchmark|reporting/],
-    skillPenaltyPatterns: [/copywriting|visual|design|narrative|seo|calendar/],
-    complexity: 'medium',
-  },
-  'general-task': {
-    id: 'general-task',
-    defaultLead: 'maya',
-    defaultCollaborators: ['atlas'],
-    skillBoostPatterns: [/strategy|positioning|messaging|audience|research|insight/],
-    skillPenaltyPatterns: [],
-    complexity: 'medium',
-  },
-  'status-report': {
-    id: 'status-report',
-    defaultLead: 'iris',
-    defaultCollaborators: [],
-    skillBoostPatterns: [/task|workflow|coordination|priority/],
-    skillPenaltyPatterns: [],
-    complexity: 'low',
-  },
-}
-
 function getChannelingSpec(deliverableType: DeliverableType): ChannelingDeliverableSpec {
-  return CHANNELING_SPECS[deliverableType] || CHANNELING_SPECS['general-task']
+  const profile = getDeliverableChannelingProfile(deliverableType)
+  return {
+    id: profile.id,
+    defaultLead: profile.leadAgentId,
+    defaultCollaborators: profile.collaboratorAgentIds,
+    skillBoostPatterns: profile.skillBoostPatterns,
+    skillPenaltyPatterns: profile.skillPenaltyPatterns,
+    complexity: profile.complexity,
+    simpleVariantPatterns: profile.simpleVariantPatterns,
+  }
 }
 
 export interface TaskChannelingPlan {

@@ -13,6 +13,19 @@ export interface DeliverableSpec {
   priority: number
 }
 
+export interface DeliverableAgentDefaults {
+  leadAgentId: string
+  collaboratorAgentIds: string[]
+}
+
+export interface DeliverableChannelingProfile extends DeliverableAgentDefaults {
+  id: DeliverableType
+  complexity: DeliverableComplexity
+  skillBoostPatterns: RegExp[]
+  skillPenaltyPatterns: RegExp[]
+  simpleVariantPatterns?: RegExp[]
+}
+
 export const DELIVERABLE_REGISTRY: DeliverableSpec[] = [
   {
     id: 'content-calendar',
@@ -325,6 +338,134 @@ export const DELIVERABLE_REGISTRY: DeliverableSpec[] = [
 
 export function getDeliverableSpec(id: string): DeliverableSpec {
   return DELIVERABLE_REGISTRY.find((spec) => spec.id === id) || DELIVERABLE_REGISTRY.find((spec) => spec.id === 'status-report')!
+}
+
+export function getDeliverableAgentDefaults(id: DeliverableType): DeliverableAgentDefaults {
+  const spec = getDeliverableSpec(id)
+  return {
+    leadAgentId: spec.defaultLead,
+    collaboratorAgentIds: [...spec.defaultCollaborators],
+  }
+}
+
+const DELIVERABLE_CHANNELING_OVERRIDES: Partial<
+  Record<
+    DeliverableType,
+    Pick<DeliverableChannelingProfile, 'skillBoostPatterns' | 'skillPenaltyPatterns' | 'simpleVariantPatterns'>
+  >
+> = {
+  'content-calendar': {
+    skillBoostPatterns: [/calendar|content|platform-native|social|campaign|copywriting|headline|scheduling/],
+    skillPenaltyPatterns: [/operations|documentation|knowledge|resource|capacity|waterfall|meeting|delegation|scope|process/],
+  },
+  'campaign-copy': {
+    skillBoostPatterns: [/copywriting|copy|headline|content|social|email|landing-page|cta|brand-voice|tone-adaptation|persuasion|caption|campaign/],
+    skillPenaltyPatterns: [/operations|quality|documentation|knowledge|resource|capacity|waterfall|meeting|delegation|scope|process/],
+    simpleVariantPatterns: [/\b(linkedin post|instagram post|social post|single post|caption)\b/],
+  },
+  'short-form-copy': {
+    skillBoostPatterns: [/short-form|headline|cta|tagline|brand-voice|tone|copywriting/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|media|budget/],
+  },
+  'email-campaign': {
+    skillBoostPatterns: [/email|campaign-copywriting|headline|cta|automation|journey|sequence|drip/],
+    skillPenaltyPatterns: [/operations|documentation|waterfall|meeting|delegation/],
+  },
+  'blog-article': {
+    skillBoostPatterns: [/content|copywriting|headline|long-form|narrative|seo|keyword|research|thought/],
+    skillPenaltyPatterns: [/operations|scheduling|media|budget|calendar/],
+  },
+  'website-copy': {
+    skillBoostPatterns: [/copywriting|headline|cta|web|landing|conversion|ux|persuasion|brand-voice/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling/],
+  },
+  'video-script': {
+    skillBoostPatterns: [/narrative|storytelling|copywriting|script|video|storyboard|hook/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|budget/],
+  },
+  presentation: {
+    skillBoostPatterns: [/stakeholder|narrative|presentation|communication|strategy|positioning|messaging|visual|design|headline|copywriting/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo/],
+  },
+  'strategy-brief': {
+    skillBoostPatterns: [/strategy|positioning|value-proposition|market-segmentation|go-to-market|brand|messaging|persona|audience|campaign-planning|deep-research/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword/],
+  },
+  'campaign-strategy': {
+    skillBoostPatterns: [/campaign-planning|strategy|positioning|audience|messaging|channel|media|organic-social|paid|calendar|deep-research/],
+    skillPenaltyPatterns: [/operations|documentation|waterfall|meeting|delegation/],
+  },
+  'brand-guidelines': {
+    skillBoostPatterns: [/visual|design|brand|identity|storytelling|positioning|messaging|tone|voice|art-direction|brand-consistency/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|media|budget/],
+  },
+  'research-brief': {
+    skillBoostPatterns: [/deep-research|research|insight|seo|competitive|market|consumer|audience|benchmark|trend|analysis/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling/],
+  },
+  'seo-audit': {
+    skillBoostPatterns: [/seo|keyword|research|report|competitive|insight|technical|audit|search|content/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|visual|design/],
+  },
+  'data-analysis': {
+    skillBoostPatterns: [/research|data|analysis|insight|market|competitive|performance|analytics|reporting|kpi/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|copywriting|visual|design/],
+  },
+  'creative-asset': {
+    skillBoostPatterns: [/visual|design|art-direction|creative|reference-image|template|brand-template|brand-guidelines|brand-consistency|illustration/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword|budget/],
+  },
+  'ui-audit': {
+    skillBoostPatterns: [/ux|ui|design|visual|quality|copy|conversion|audit|usability|accessibility|heuristic/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword|budget|media/],
+  },
+  'client-brief': {
+    skillBoostPatterns: [/stakeholder|narrative|communication|briefing|onboarding|presentation|strategy|positioning/],
+    skillPenaltyPatterns: [/operations|scheduling|seo|keyword|budget|media/],
+  },
+  'pr-comms': {
+    skillBoostPatterns: [/stakeholder|narrative|communication|negotiation|presentation|media|press|public-relations|crisis/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|scheduling|seo|keyword|budget/],
+  },
+  'media-plan': {
+    skillBoostPatterns: [/media|channel|budget|reach|frequency|kpi|paid|organic|allocation|forecast|performance/],
+    skillPenaltyPatterns: [/operations|documentation|calendar|copywriting|visual|design/],
+  },
+  'event-plan': {
+    skillBoostPatterns: [/channel|media|calendar|planning|event|scheduling|stakeholder|communication|content|copywriting/],
+    skillPenaltyPatterns: [/seo|keyword|ui|ux|design|visual/],
+  },
+  'budget-sheet': {
+    skillBoostPatterns: [/budget|forecast|kpi|pacing|spreadsheet|data|financial|allocation|analytics/],
+    skillPenaltyPatterns: [/copywriting|visual|design|narrative|seo/],
+  },
+  'kpi-forecast': {
+    skillBoostPatterns: [/kpi|forecast|projection|data|analytics|performance|metric|benchmark|reporting/],
+    skillPenaltyPatterns: [/copywriting|visual|design|narrative|seo|calendar/],
+  },
+  'general-task': {
+    skillBoostPatterns: [/strategy|positioning|messaging|audience|research|insight/],
+    skillPenaltyPatterns: [],
+  },
+  'status-report': {
+    skillBoostPatterns: [/task|workflow|coordination|priority/],
+    skillPenaltyPatterns: [],
+  },
+}
+
+export function getDeliverableChannelingProfile(id: DeliverableType): DeliverableChannelingProfile {
+  const spec = getDeliverableSpec(id)
+  const overrides = DELIVERABLE_CHANNELING_OVERRIDES[id] || DELIVERABLE_CHANNELING_OVERRIDES['general-task']!
+
+  return {
+    id: spec.id,
+    leadAgentId: spec.defaultLead,
+    collaboratorAgentIds: [...spec.defaultCollaborators],
+    complexity: spec.complexity,
+    skillBoostPatterns: overrides.skillBoostPatterns,
+    skillPenaltyPatterns: overrides.skillPenaltyPatterns,
+    simpleVariantPatterns: overrides.simpleVariantPatterns,
+  }
 }
 
 export function isSubstantiveRequest(message: string): boolean {

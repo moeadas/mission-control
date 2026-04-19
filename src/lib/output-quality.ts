@@ -1,4 +1,5 @@
 import { DeliverableType } from '@/lib/types'
+import { getDeliverableSpec } from '@/lib/deliverables'
 
 export interface DeliverableQualityResult {
   ok: boolean
@@ -16,6 +17,18 @@ function isSimpleSocialPostRequest(request: string) {
 
 function hasSection(text: string, section: string) {
   return new RegExp(`^##\\s+${section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'im').test(text)
+}
+
+function extractSectionBodies(text: string) {
+  const sections = Array.from(text.matchAll(/^##\s+(.+?)\s*$/gm))
+  return sections.map((section, index) => {
+    const start = (section.index || 0) + section[0].length
+    const end = index + 1 < sections.length ? sections[index + 1].index || text.length : text.length
+    return {
+      title: section[1].trim(),
+      body: text.slice(start, end).trim(),
+    }
+  })
 }
 
 export function validateDeliverableQuality(
@@ -80,6 +93,27 @@ export function validateDeliverableQuality(
     }
   }
 
+  if (/\b(tbd|to be determined|placeholder|lorem ipsum)\b/i.test(trimmed)) {
+    issues.push('Output still contains placeholder copy such as TBD or lorem ipsum.')
+  }
+
+  if (/\{\{[^}]+\}\}/.test(trimmed)) {
+    issues.push('Output still contains unreplaced template variables.')
+  }
+
+  if (/\[(insert|add|replace|client name|brand name)[^\]]*\]/i.test(trimmed)) {
+    issues.push('Output still contains bracketed template instructions.')
+  }
+
+  const sections = extractSectionBodies(trimmed)
+  const spec = getDeliverableSpec(deliverableType)
+  if (spec.complexity === 'high') {
+    const thinSection = sections.find((section) => section.body.replace(/\s+/g, ' ').trim().length < 80)
+    if (thinSection) {
+      issues.push(`Section "${thinSection.title}" is too thin for a high-complexity deliverable.`)
+    }
+  }
+
   if (deliverableType === 'content-calendar' && !/\|.+\|.+\|/.test(trimmed)) {
     issues.push('Content calendar is missing a table layout.')
   }
@@ -88,7 +122,7 @@ export function validateDeliverableQuality(
     issues.push('Short-form copy output is too long for the intended use case.')
   }
 
-  const score = Math.max(0, 100 - issues.length * 15)
+  const score = Math.max(0, 100 - issues.length * 12)
   return {
     ok: issues.length === 0,
     score,

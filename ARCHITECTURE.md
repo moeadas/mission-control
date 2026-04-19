@@ -873,9 +873,11 @@ Pipeline and skill editing surfaces now use a shared editor theme layer from `sr
 - `/api/state` now performs optimistic concurrency checks using the last known `updatedAt` value and returns `409 Conflict` if a stale browser tab tries to overwrite a newer shared-state snapshot
 - `src/components/ClientShell.tsx` now skips redundant `/api/state` writes when the serialized persistence snapshot has not actually changed
 - `src/components/ClientShell.tsx` now sends top-level `statePatch` payloads for changed collections/settings instead of always posting the full snapshot, which reduces unnecessary sync volume even though the server still stores a merged shared snapshot
-- `conversations` and `pendingBriefs` are intentionally excluded from shared-state hydration/sync for live chat reliability:
-  - `conversations` stay local during active chat updates so the server cannot overwrite in-progress intake UI
-  - `pendingBriefs` are kept local-only for server sync, but still persisted in the browser store so the brief can recover after a component remount
+- `conversations` are intentionally excluded from shared-state hydration/sync for live chat reliability:
+  - conversation message churn stays local during active chat updates so the server cannot overwrite in-progress intake UI
+- `pendingBriefs` remain local-only for shared server sync:
+  - the live briefing flow is restored from local Zustand persistence after remounts
+  - this avoids reintroducing the old shared-state race where briefing could snap back to an earlier question
 - Browser local persistence now stores a lighter snapshot:
   - artifact bodies, HTML, and source prompts are stripped
   - execution-step summaries are truncated
@@ -1019,16 +1021,23 @@ Pipeline and skill editing surfaces now use a shared editor theme layer from `sr
 - `src/app/api/chat/route.ts` loads:
   - pipelines from Supabase first, config fallback second
   - skills from Supabase first, config fallback second
-- `src/lib/pipeline-execution.ts` now:
-  - validates required client fields
-  - validates unresolved `{{template_variables}}`
-  - injects assigned skill context for the executing agent
-  - injects client knowledge-asset context
-  - respects pipeline batching settings
+- `src/app/pipeline/run/page.tsx` and `src/app/api/pipeline/run/route.ts` now launch the same tracked server-side task lifecycle as Iris:
+  - the runner page creates a real `tasks` record
+  - execution is queued through `/api/tasks/[id]/execution` semantics
+  - live progress is polled from persisted `workflow_instances` + `task_runs`
+  - the page no longer acts as a disconnected local pipeline engine
+- `src/lib/pipeline-execution.ts` is now a compatibility layer for:
+  - route matching
+  - client-field validation
+  - pipeline task scaffolding for the runner UI
+  - mapping persisted execution state back into runner task cards
 - `src/lib/server/autonomous-task.ts` now:
   - builds per-agent skill context
   - runs pipeline activities through the assigned role/agent mapping
   - records per-activity execution metadata for auditability
+- Lead-skill injection is now deeper:
+  - the top-ranked skill includes full instructions and output template
+  - variable hints, richer checklist detail, workflow verification hints, and examples are exposed for primary skills instead of being reduced to tiny fragments
 - This means the live generation path now actually uses:
   - pipeline definitions
   - assigned agent skills
@@ -1066,6 +1075,17 @@ Access at: http://localhost:3000
 
 - `IrisChat` now distinguishes between conversational chat and task intake: greetings, questions, and normal back-and-forth stay in the chat thread only, while explicit work requests open missions and persist deliverables as artifacts.
 - The Iris chat shell self-heals stale conversation state: if the active conversation id points to a missing thread, it creates a fresh chat automatically before sending so messages never vanish into an invalid local session reference.
+- `pendingBriefs` stay out of shared app-state sync and relational persistence:
+  - they are recovered from local browser persistence after remounts
+  - cross-device pending-brief recovery still needs a safer dedicated persistence design rather than the shared-state sync loop
+- Deliverable routing defaults are now centralized through `src/lib/deliverables.ts` compatibility helpers:
+  - `agent-roles.ts` reads registry defaults instead of maintaining a fully separate lead/collaborator matrix
+  - `task-channeling.ts` now derives lead, collaborator, and complexity defaults from the same deliverable registry and only keeps skill-pattern overrides
+- `output-quality.ts` now adds semantic checks on top of structural section checks:
+  - placeholder markers like `TBD`
+  - unreplaced `{{variables}}`
+  - bracketed template instructions such as `[Insert client name]`
+  - underdeveloped sections on high-complexity deliverables
 - The imported `mission-control-claude-genspark_ai_developer` variant was merged selectively rather than copied wholesale:
   - `ClientShell`, `TopBar`, and `AgentEditor` now memoize the Supabase browser client to avoid client-side hydration instability
   - the app shell now exposes a skip-to-content link and stronger focus-visible states on shared buttons
