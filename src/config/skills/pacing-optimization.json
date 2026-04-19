@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when reviewing or optimizing campaign pacing — ensuring consistent spend delivery, avoiding early burnout or underdelivery, and maximizing performance throughout the flight period.",
+      "trigger": "Use this skillany time reviewing or optimizing campaign pacing — ensuring consistent spend delivery, avoiding early burnout or underdelivery, and maximizing performance throughout the flight period.",
       "context": "You are a media strategist who manages campaign pacing to ensure efficient budget utilization and consistent performance delivery across the entire campaign period.",
-      "instructions": "## Pacing Optimization Workflow\n\nOptimize campaign pacing and delivery:\n\n- [ ] 1. Delivery analysis: Assess current spend pace vs. expected pace\n- [ ] 2. Burn rate review: Identify if campaigns are over or under-delivering\n- [ ] 3. Pacing diagnosis: Understand why pacing issues are occurring\n- [ ] 4. Adjustment planning: Plan bid/budget adjustments to correct pace\n- [ ] 5. Dayparting review: Assess if scheduling adjustments help\n- [ ] 6. Audience pacing: Check if pacing varies across audiences\n- [ ] 7. Implementation: Apply changes with monitoring plan\n\n## Key Inputs\n- Campaign: {{campaign_name}}\n- Budget: {{budget}}\n- Flight dates: {{flight_dates}}\n- Delivery target: {{delivery_target}}",
+      "instructions": "## Pacing Optimization\n\n1. **Delivery Analysis** — Compare current spend to expected pace\n   - ✓ Done when: Variance is quantified\n\n2. **Burn Rate Review** — Assess daily burn rate against remaining budget and days\n   - ✓ Done when: Future trajectory is clear\n\n3. **Root Cause Analysis** — Diagnose why pacing issues are occurring\n   - ✓ Done when: Root cause is understood\n\n4. **Adjustment Planning** — Plan specific bid and budget changes\n   - ✓ Done when: Changes are logical and sufficient\n\n5. **Implementation** — Apply changes with clear monitoring plan\n   - ✓ Done when: Changes are tracked\n\n6. **Outcome Monitoring** — Monitor delivery post-adjustment\n   - ✓ Done when: Pacing is improving\n\n## Key Inputs\n- campaign_name: Campaign being analyzed\n- budget: Total campaign budget\n- flight_dates: Campaign start and end dates\n- delivery_target: Expected delivery target (e.g., 100% spend)",
       "output_template": "## Pacing Optimization: {{campaign_name}}\n\n### Campaign Overview\n| Field | Value |\n|-------|-------|\n| Total budget | {{budget}} |\n| Flight dates | {{flight_dates}} |\n| Days elapsed | |\n| Days remaining | |\n| % of period elapsed | |\n\n### Spend Analysis\n| Metric | Expected (at this point) | Actual | Variance |\n|--------|------------------------|--------|----------|\n| Spend | | | |\n| Impressions | | | |\n| Clicks | | | |\n| Conversions | | | |\n\n### Delivery Status\n| Status | Assessment |\n|--------|------------|\n| 🟢 On pace | Spend is within 10% of expected |\n| 🟡 Slightly ahead/behind | 10-20% variance |\n| 🔴 Significantly off pace | >20% variance |\n\n### Burn Rate Analysis\n| Metric | Value |\n|--------|-------|\n| Daily budget (total) | |\n| Actual daily spend | |\n| Daily pace | |\n\n### Pacing Issues Identified\n\n| Issue | Severity | Root Cause |\n|-------|----------|------------|\n| | | |\n\n### Recommended Adjustments\n\n#### Budget Changes\n| Campaign/Ad Set | Current Budget | Recommended | Rationale |\n|----------------|---------------|-------------|-----------|\n| | | | |\n\n#### Bid Changes\n| Campaign/Ad Set | Current Bid | Recommended | Rationale |\n|----------------|-------------|-------------|-----------|\n| | | | |\n\n#### Dayparting Adjustments\n| Day/Hour | Current | Recommended | Rationale |\n|---------|---------|-------------|-----------|\n| | | | |\n\n### Implementation Plan\n| Change | Priority | When | Owner |\n|--------|----------|------|-------|\n| | | | |\n\n### Expected Outcome\n| Metric | Current trajectory | Expected post-change |\n|--------|-------------------|---------------------|\n| Final delivery % | | |\n| Final spend | | |\n| ROAS impact | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Expected delivery target (e.g., 100% spend)"
     }
   ],
+  "inputs": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign being analyzed"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Total campaign budget"
+    },
+    {
+      "name": "flight_dates",
+      "type": "string",
+      "required": true,
+      "description": "Campaign start and end dates"
+    },
+    {
+      "name": "delivery_target",
+      "type": "string",
+      "required": false,
+      "description": "Expected delivery target (e.g., 100% spend)"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,21 +114,19 @@
     }
   ],
   "checklist": [
-    "Delivery variance is accurately calculated",
-    "Burn rate and trajectory are clear",
-    "Root cause of pacing issue is understood",
-    "Adjustments are specific and sufficient",
-    "Changes are implemented with monitoring plan",
-    "Final delivery outcome is estimated"
+    "Variance is quantified",
+    "Future trajectory is clear",
+    "Root cause is understood",
+    "Changes are logical and sufficient",
+    "Changes are tracked",
+    "Pacing is improving"
   ],
   "tools": [
     "spreadsheet",
     "analytics",
     "ad-platform"
   ],
-  "agents": [
-    "dex"
-  ],
+  "agents": [],
   "pipelines": [
     "optimization"
   ],
@@ -115,6 +140,6 @@
       "optimization",
       "media"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

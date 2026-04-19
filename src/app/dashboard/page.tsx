@@ -2,18 +2,22 @@
 
 import React from 'react'
 import { ClientShell } from '@/components/ClientShell'
-import { MetricsCards, QuickActions, AgentStrip, MissionQueue } from '@/components/dashboard/MetricsCards'
+import { MetricsCards, QuickActions, AgentStrip, MissionQueue, CommandQuestDeck } from '@/components/dashboard/MetricsCards'
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed'
 import { useAgentsStore } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { useRouter } from 'next/navigation'
+import { buildAgentLeaderboard } from '@/lib/live-ops'
+import { AgentLeaderboardPanel } from '@/components/analytics/AgentLeaderboardPanel'
 
 export default function DashboardPage() {
   const agents = useAgentsStore((state) => state.agents)
   const missions = useAgentsStore((state) => state.missions)
   const clients = useAgentsStore((state) => state.clients)
+  const artifacts = useAgentsStore((state) => state.artifacts)
   const router = useRouter()
   const activeTasks = missions.filter((task) => !['completed', 'cancelled'].includes(task.status))
+  const leaderboard = buildAgentLeaderboard({ agents, missions, artifacts })
 
   const statusColors: Record<string, string> = {
     queued: '#fbbf24',
@@ -87,8 +91,15 @@ export default function DashboardPage() {
               <ActivityFeed />
             </div>
             <div className="space-y-5">
+              <CommandQuestDeck />
               <QuickActions />
               <MissionQueue />
+              <AgentLeaderboardPanel
+                entries={leaderboard}
+                compact
+                title="Leaderboard"
+                subtitle="Top performers this week across lead work and support contributions."
+              />
 
               {/* Active Tasks Preview */}
               <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-2xl p-5 overflow-hidden">

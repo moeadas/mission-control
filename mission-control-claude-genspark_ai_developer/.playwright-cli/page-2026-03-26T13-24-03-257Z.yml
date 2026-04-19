@@ -1,0 +1,201 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e16]:
+    - banner [ref=e17]:
+      - img [ref=e21]
+      - generic [ref=e23]:
+        - button "Refresh latest app version" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - button "Switch to light mode" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+        - button "Sign out" [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+        - paragraph [ref=e42]: 14:24
+    - generic [ref=e43]:
+      - navigation "Main navigation" [ref=e44]:
+        - generic [ref=e46]:
+          - generic [ref=e48]: MC
+          - generic [ref=e49]:
+            - paragraph [ref=e50]: Mission Control
+            - paragraph [ref=e51]: Agency HQ
+        - generic [ref=e52]:
+          - link "Dashboard" [ref=e53] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e56]
+            - generic [ref=e61]: Dashboard
+          - link "Virtual Office" [ref=e62] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e64]
+            - generic [ref=e68]: Virtual Office
+          - link "Agents" [ref=e69] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e71]
+            - generic [ref=e74]: Agents
+          - link "Clients" [ref=e75] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e77]
+            - generic [ref=e82]: Clients
+          - link "Tasks" [ref=e83] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e85]
+            - generic [ref=e88]: Tasks
+          - link "Pipeline" [ref=e89] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e91]
+            - generic [ref=e95]: Pipeline
+          - link "Skills" [ref=e96] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e98]
+            - generic [ref=e101]: Skills
+          - link "Runner" [ref=e102] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e104]
+            - generic [ref=e106]: Runner
+          - link "Analytics" [ref=e107] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e109]
+            - generic [ref=e111]: Analytics
+          - link "Outputs" [ref=e112] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e114]
+            - generic [ref=e117]: Outputs
+          - link "Users" [ref=e118] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e120]
+            - generic [ref=e122]: Users
+          - link "Settings" [ref=e123] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e125]
+            - generic [ref=e128]: Settings
+        - generic [ref=e130]:
+          - generic [ref=e132]: MC
+          - generic [ref=e133]:
+            - paragraph [ref=e134]: Agency Mode
+            - paragraph [ref=e135]: Iris · Online
+      - main [ref=e137]:
+        - generic [ref=e139]:
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - heading "Command Center" [level=1] [ref=e143]
+              - paragraph [ref=e144]: 1 agents active·1 clients·0 tasks running
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - generic "Iris — active" [ref=e147]:
+                  - img "Iris" [ref=e152]
+                - generic "Lyra — idle" [ref=e153]:
+                  - img "Lyra" [ref=e158]
+                - generic "Piper — idle" [ref=e159]:
+                  - img "Piper" [ref=e164]
+                - generic "Sage — idle" [ref=e165]:
+                  - img "Sage" [ref=e170]
+                - generic "Maya — idle" [ref=e171]:
+                  - img "Maya" [ref=e176]
+                - generic "Finn — idle" [ref=e177]:
+                  - img "Finn" [ref=e182]
+              - button "All agents →" [ref=e184] [cursor=pointer]
+          - generic [ref=e185]:
+            - generic [ref=e187]:
+              - generic [ref=e188]:
+                - paragraph [ref=e189]: Active Agents
+                - generic [ref=e190]:
+                  - generic [ref=e191]: "1"
+                  - generic [ref=e192]: /10
+              - img [ref=e194]
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - paragraph [ref=e200]: Running Tasks
+                - generic [ref=e201]:
+                  - generic [ref=e202]: "0"
+                  - generic [ref=e203]: /0
+              - img [ref=e205]
+            - generic [ref=e210]:
+              - generic [ref=e211]:
+                - paragraph [ref=e212]: Completed
+                - generic [ref=e214]: "0"
+              - img [ref=e216]
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - paragraph [ref=e222]: On Task
+                - generic [ref=e224]: "10"
+              - img [ref=e226]
+            - generic [ref=e230]:
+              - generic [ref=e231]:
+                - paragraph [ref=e232]: Open Missions
+                - generic [ref=e233]:
+                  - generic [ref=e234]: "0"
+                  - generic [ref=e235]: /0
+              - img [ref=e237]
+          - generic [ref=e239]:
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - generic [ref=e242]:
+                  - generic [ref=e243]:
+                    - heading "Active Team" [level=3] [ref=e244]
+                    - paragraph [ref=e245]: 1 active · 9 idle
+                  - button "View all →" [ref=e246] [cursor=pointer]
+                - button "Iris Iris Agency" [ref=e248] [cursor=pointer]:
+                  - img "Iris" [ref=e254]
+                  - generic [ref=e260]:
+                    - paragraph [ref=e261]: Iris
+                    - paragraph [ref=e262]: Agency
+              - generic [ref=e263]:
+                - generic [ref=e265]:
+                  - heading "Live Activity" [level=3] [ref=e268]
+                  - generic [ref=e269]: 2 events
+                - generic [ref=e270]:
+                  - generic [ref=e271]:
+                    - img "Iris" [ref=e277]
+                    - generic [ref=e278]:
+                      - generic [ref=e279]:
+                        - generic [ref=e280]: Iris
+                        - generic [ref=e281]: started
+                        - generic [ref=e282]: — routed launch narrative mission
+                      - paragraph [ref=e283]: Assigned Sage and Maya to shape Victory Genomics messaging.
+                    - generic [ref=e286]: 2026-03-26 14:23
+                  - generic [ref=e287]:
+                    - img "Atlas" [ref=e293]
+                    - generic [ref=e294]:
+                      - generic [ref=e295]:
+                        - generic [ref=e296]: Atlas
+                        - generic [ref=e297]: thinking
+                        - generic [ref=e298]: — surfaced competitor intelligence
+                      - paragraph [ref=e299]: Found recurring weak spots in panel-testing competitors versus whole-genome positioning.
+                    - generic [ref=e300]:
+                      - img [ref=e301]
+                      - generic [ref=e303]: 2026-03-26 14:23
+            - generic [ref=e304]:
+              - generic [ref=e305]:
+                - heading "Quick Actions" [level=3] [ref=e306]
+                - generic [ref=e307]:
+                  - button "Add Agent Bring a new agent online" [ref=e308] [cursor=pointer]:
+                    - img [ref=e310]
+                    - generic [ref=e313]:
+                      - generic [ref=e314]: Add Agent
+                      - text: Bring a new agent online
+                    - img [ref=e316]
+                  - button "Virtual Office See the team in action" [ref=e318] [cursor=pointer]:
+                    - img [ref=e320]
+                    - generic [ref=e324]:
+                      - generic [ref=e325]: Virtual Office
+                      - text: See the team in action
+                    - img [ref=e327]
+                  - button "New Mission Create a task from scratch" [ref=e329] [cursor=pointer]:
+                    - img [ref=e331]
+                    - generic [ref=e335]:
+                      - generic [ref=e336]: New Mission
+                      - text: Create a task from scratch
+                    - img [ref=e338]
+              - generic [ref=e340]:
+                - generic [ref=e341]:
+                  - heading "Mission Queue" [level=3] [ref=e342]
+                  - generic [ref=e343]: 0 active
+                - generic [ref=e345]:
+                  - generic [ref=e346]: 🚀
+                  - paragraph [ref=e347]: No missions tracked yet
+              - generic [ref=e348]:
+                - generic [ref=e349]:
+                  - heading "In Progress" [level=3] [ref=e350]
+                  - button "View all →" [ref=e351] [cursor=pointer]
+                - paragraph [ref=e354]: All quiet — no active tasks
+    - button "Open Iris chat" [ref=e355] [cursor=pointer]:
+      - img [ref=e356]

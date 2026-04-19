@@ -1,0 +1,122 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "client-relationship-management",
+  "name": "Client Relationship Management",
+  "description": "Builds and maintains strong, long-term client relationships through regular communication, satisfaction tracking, upsell identification, and proactive issue management.",
+  "category": "client-services",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when managing ongoing client relationships — regular check-ins, satisfaction surveys, upsell opportunities, renewal conversations, or conflict resolution.",
+      "context": "You are a client success manager focused on building trust, expanding accounts, and ensuring clients feel valued and heard throughout the engagement.",
+      "instructions": "## Client Relationship Management Workflow\n\nMaintain and strengthen client relationships:\n\n- [ ] 1. Relationship health check: Review recent performance and sentiment signals\n- [ ] 2. Check-in scheduling: Conduct regular cadence calls (weekly/monthly/quarterly)\n- [ ] 3. Satisfaction tracking: Monitor NPS, feedback, and engagement levels\n- [ ] 4. Issue surfacing: Proactively identify and address concerns before they escalate\n- [ ] 5. Upsell identification: Identify natural expansion opportunities\n- [ ] 6. Renewal planning: Prepare for contract renewals with value summary\n- [ ] 7. Relationship documentation: Log key interactions and client preferences\n\n## Key Inputs\n- Client: {{client_name}}\n- Relationship health: {{health_status}}\n- Contract expiry: {{renewal_date}}\n- Recent performance: {{performance_summary}}",
+      "output_template": "## Client Relationship: {{client_name}}\n\n### Relationship Health\n| Signal | Status | Trend |\n|--------|--------|-------|\n| Satisfaction score | | |\n| Engagement level | | |\n| Support tickets | | |\n| Renewal risk | | |\n| Upsell potential | | |\n\n### Recent Performance Snapshot\n| Metric | This Period | vs Prior |\n|--------|-------------|----------|\n| Spend | | |\n| Results | | |\n| Quality score | | |\n\n### Check-in Log\n| Date | Type | Notes | Action Items |\n|------|------|-------|-------------|\n| | | | |\n\n### Active Issues\n| Issue | Severity | Status | Owner |\n|-------|----------|--------|-------|\n| | | | |\n\n### Upsell Opportunities\n| Opportunity | Value | Fit Score | Next Step |\n|-------------|-------|-----------|-----------|\n| | | | |\n\n### Renewal Preparation\n| Milestone | Date | Status |\n|-----------|------|--------|\n| Value summary drafted | | |\n| Renewal conversation scheduled | | |\n| Contract drafted | | |\n| Signed | | |\n\n### Client Preferences (Living Document)\n**Communication style:**\n**Preferred channels:**\n**Decision-making process:**\n**Key motivators:**\n**Pet peeves:**\n**Birthdays/important dates:**"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client brand or company name"
+    },
+    {
+      "name": "health_status",
+      "type": "string",
+      "required": true,
+      "description": "Current relationship health rating"
+    },
+    {
+      "name": "renewal_date",
+      "type": "string",
+      "required": false,
+      "description": "Contract renewal or expiry date"
+    },
+    {
+      "name": "performance_summary",
+      "type": "string",
+      "required": false,
+      "description": "Recent campaign or account performance summary"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Health Review",
+        "action": "Assess relationship health signals across all touchpoints",
+        "verify": "Clear picture of current state"
+      },
+      {
+        "step": 2,
+        "name": "Check-in Execution",
+        "action": "Run structured relationship check-in call or message",
+        "verify": "Client feels heard and valued"
+      },
+      {
+        "step": 3,
+        "name": "Issue Resolution",
+        "action": "Address any surfaced concerns with action plan",
+        "verify": "Issues resolved or actively managed"
+      },
+      {
+        "step": 4,
+        "name": "Upsell Evaluation",
+        "action": "Assess expansion opportunities within account",
+        "verify": "Opportunities are genuine, not pushy"
+      },
+      {
+        "step": 5,
+        "name": "Documentation",
+        "action": "Log all relevant relationship data and preferences",
+        "verify": "Team has up-to-date context"
+      },
+      {
+        "step": 6,
+        "name": "Renewal Planning",
+        "action": "Prepare value summary and renewal approach",
+        "verify": "Renewal conversation well-briefed"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Manage TechStart account — 8 months into 12-month contract. Performance strong but client has been disengaged lately. Renewal in 4 months.",
+      "output": "CRM summary with health assessment, re-engagement plan, upsell assessment, and renewal preparation timeline"
+    }
+  ],
+  "checklist": [
+    "Regular check-ins scheduled and documented",
+    "Issues surfaced and resolved proactively",
+    "Client preferences documented and shared with team",
+    "Upsell opportunities identified and evaluated",
+    "Renewal plan in place with sufficient lead time",
+    "Relationship notes kept current in CRM",
+    "NPS or satisfaction data tracked over time"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet",
+    "crm"
+  ],
+  "agents": [
+    "nova",
+    "echo"
+  ],
+  "pipelines": [
+    "account-management"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "client-services",
+      "crm",
+      "relationship",
+      "retention",
+      "upsell"
+    ],
+    "lastUpdated": "2026-03-24"
+  }
+}

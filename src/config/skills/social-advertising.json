@@ -8,25 +8,103 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when launching social ad campaigns, optimizing Meta or LinkedIn campaigns, selecting audience targeting for social platforms, or comparing social advertising performance across platforms.",
+      "trigger": "Use this skillany time launching social ad campaigns, optimizing meta or linkedin campaigns, selecting audience targeting for social platforms, or comparing social advertising performance across platforms.",
       "context": "You are a social advertising specialist with expertise across major social platforms. You create targeted campaigns that reach audiences where they spend time and drive meaningful business outcomes.",
-      "instructions": "## Social Advertising Workflow\n\n- [ ] 1. Define campaign objective (awareness, consideration, conversion)\n- [ ] 2. Select platform(s) based on audience and objective\n- [ ] 3. Build audience targeting: demographics, interests, behaviors, lookalikes\n- [ ] 4. Select creative formats (feed, stories, reels, carousel)\n- [ ] 5. Set up campaign structure: campaigns, ad sets, ads\n- [ ] 6. Configure bidding and budget\n- [ ] 7. Launch, monitor, and optimize\n\n## Key Inputs\n- Platform(s): {{platforms}} (Meta, LinkedIn, TikTok, X, etc.)\n- Campaign Objective: {{campaign_objective}}\n- Target Audience: {{target_audience}}\n- Budget: {{budget}}\n- Creative Formats: {{creative_formats}}",
+      "instructions": "## Social Advertising\n\n1. **Select platform** — Choose platforms based on audience and objectives\n   - ✓ Done when: Platform aligns with target audience\n\n2. **Build audience** — Define targeting parameters and custom/lookalike audiences\n   - ✓ Done when: Audience is specific and large enough\n\n3. **Create ads** — Develop platform-native creative in appropriate formats\n   - ✓ Done when: Creative is optimized for platform\n\n4. **Optimize** — Adjust targeting, creative, and bids based on performance data\n   - ✓ Done when: Optimizations are grounded in data\n\n## Key Inputs\n- platforms: Social platforms to advertise on: Meta, LinkedIn, TikTok, X, Pinterest, etc.\n- campaign_objective: Campaign goal: brand awareness, reach, engagement, lead generation, conversions\n- target_audience: Audience targeting parameters: demographics, interests, custom audiences\n- budget: Campaign budget and spend schedule\n- creative_formats: Ad formats to use: feed, stories, reels, carousel, lead forms",
       "output_template": "## Social Advertising Campaign Plan\n\n### Campaign Overview\n| Parameter | Value |\n|-----------|-------|\n| Platform(s) | |\n| Objective | |\n| Budget | |\n| Duration | |\n\n### Audience Targeting\n| Targeting Level | Parameters |\n|-----------------|-----------|\n| Core Audience | |\n| Custom Audience | |\n| Lookalike Audience | |\n\n### Creative Plan\n| Format | Dimensions | Copy Approach | Visual Direction |\n|--------|-----------|--------------|-----------------|\n| | | | |\n\n### Bidding & Budget\n- Bid Strategy: \n- Daily Budget: \n- Auction Insights: \n\n### Performance Targets\n| Metric | Target |\n|--------|--------|\n| Reach | |\n| CPM | |\n| CTR | |\n| CPC | |\n| CPA | |"
     }
   },
   "variables": [
-    { "name": "platforms", "type": "string", "required": true, "description": "Social platforms to advertise on: Meta, LinkedIn, TikTok, X, Pinterest, etc." },
-    { "name": "campaign_objective", "type": "string", "required": true, "description": "Campaign goal: brand awareness, reach, engagement, lead generation, conversions" },
-    { "name": "target_audience", "type": "string", "required": true, "description": "Audience targeting parameters: demographics, interests, custom audiences" },
-    { "name": "budget", "type": "string", "required": true, "description": "Campaign budget and spend schedule" },
-    { "name": "creative_formats", "type": "string", "required": false, "description": "Ad formats to use: feed, stories, reels, carousel, lead forms" }
+    {
+      "name": "platforms",
+      "type": "string",
+      "required": true,
+      "description": "Social platforms to advertise on: Meta, LinkedIn, TikTok, X, Pinterest, etc."
+    },
+    {
+      "name": "campaign_objective",
+      "type": "string",
+      "required": true,
+      "description": "Campaign goal: brand awareness, reach, engagement, lead generation, conversions"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Audience targeting parameters: demographics, interests, custom audiences"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Campaign budget and spend schedule"
+    },
+    {
+      "name": "creative_formats",
+      "type": "string",
+      "required": false,
+      "description": "Ad formats to use: feed, stories, reels, carousel, lead forms"
+    }
   ],
+  "inputs": [
+    {
+      "name": "platforms",
+      "type": "string",
+      "required": true,
+      "description": "Social platforms to advertise on: Meta, LinkedIn, TikTok, X, Pinterest, etc."
+    },
+    {
+      "name": "campaign_objective",
+      "type": "string",
+      "required": true,
+      "description": "Campaign goal: brand awareness, reach, engagement, lead generation, conversions"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Audience targeting parameters: demographics, interests, custom audiences"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Campaign budget and spend schedule"
+    },
+    {
+      "name": "creative_formats",
+      "type": "string",
+      "required": false,
+      "description": "Ad formats to use: feed, stories, reels, carousel, lead forms"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Select platform", "action": "Choose platforms based on audience and objectives", "verify": "Platform aligns with target audience" },
-      { "step": 2, "name": "Build audience", "action": "Define targeting parameters and custom/lookalike audiences", "verify": "Audience is specific and large enough" },
-      { "step": 3, "name": "Create ads", "action": "Develop platform-native creative in appropriate formats", "verify": "Creative is optimized for platform" },
-      { "step": 4, "name": "Optimize", "action": "Adjust targeting, creative, and bids based on performance data", "verify": "Optimizations are grounded in data" }
+      {
+        "step": 1,
+        "name": "Select platform",
+        "action": "Choose platforms based on audience and objectives",
+        "verify": "Platform aligns with target audience"
+      },
+      {
+        "step": 2,
+        "name": "Build audience",
+        "action": "Define targeting parameters and custom/lookalike audiences",
+        "verify": "Audience is specific and large enough"
+      },
+      {
+        "step": 3,
+        "name": "Create ads",
+        "action": "Develop platform-native creative in appropriate formats",
+        "verify": "Creative is optimized for platform"
+      },
+      {
+        "step": 4,
+        "name": "Optimize",
+        "action": "Adjust targeting, creative, and bids based on performance data",
+        "verify": "Optimizations are grounded in data"
+      }
     ]
   },
   "examples": [
@@ -36,20 +114,29 @@
     }
   ],
   "checklist": [
-    "Platform selection matches where audience is active",
-    "Audience targeting is specific (not too broad)",
-    "Creative is optimized for each platform's format and specs",
-    "Tracking pixels or SDKs are properly configured",
-    "Frequency cap is set to prevent ad fatigue",
-    "Creative rotation is configured for testing"
+    "Platform aligns with target audience",
+    "Audience is specific and large enough",
+    "Creative is optimized for platform",
+    "Optimizations are grounded in data"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["media-pipeline"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [],
+  "pipelines": [
+    "media-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["social-advertising", "facebook-ads", "meta-ads", "linkedin-ads", "tiktok-ads"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "social-advertising",
+      "facebook-ads",
+      "meta-ads",
+      "linkedin-ads",
+      "tiktok-ads"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

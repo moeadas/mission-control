@@ -1,0 +1,351 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e6]
+  - generic [ref=e7]:
+    - banner [ref=e8]:
+      - img [ref=e12]
+      - generic [ref=e14]:
+        - button "Refresh latest app version" [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Switch to dark mode" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+        - button "Sign out" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - paragraph [ref=e29]: 22:22
+    - generic [ref=e30]:
+      - navigation "Main navigation" [ref=e31]:
+        - generic [ref=e33]:
+          - generic [ref=e35]: MC
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Mission Control
+            - paragraph [ref=e38]: Agency HQ
+        - generic [ref=e39]:
+          - link "Dashboard" [ref=e40] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e42]
+            - generic [ref=e47]: Dashboard
+          - link "Virtual Office" [ref=e48] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e50]
+            - generic [ref=e54]: Virtual Office
+          - link "Agents" [ref=e55] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e57]
+            - generic [ref=e60]: Agents
+          - link "Clients" [ref=e61] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e63]
+            - generic [ref=e68]: Clients
+          - link "Tasks" [ref=e69] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e72]
+            - generic [ref=e75]: Tasks
+          - link "Pipeline" [ref=e76] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e78]
+            - generic [ref=e82]: Pipeline
+          - link "Skills" [ref=e83] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e85]
+            - generic [ref=e88]: Skills
+          - link "Runner" [ref=e89] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e91]
+            - generic [ref=e93]: Runner
+          - link "Analytics" [ref=e94] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e96]
+            - generic [ref=e98]: Analytics
+          - link "Outputs" [ref=e99] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e101]
+            - generic [ref=e104]: Outputs
+          - link "Users" [ref=e105] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e107]
+            - generic [ref=e109]: Users
+          - link "Settings" [ref=e110] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e112]
+            - generic [ref=e115]: Settings
+        - generic [ref=e117]:
+          - generic [ref=e119]: MC
+          - generic [ref=e120]:
+            - paragraph [ref=e121]: Agency Mode
+            - paragraph [ref=e122]: Iris · Online
+      - main [ref=e124]:
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - generic [ref=e127]:
+              - link "Back to tasks" [ref=e128] [cursor=pointer]:
+                - /url: /tasks
+                - img [ref=e129]
+                - text: Back to tasks
+              - generic [ref=e131]:
+                - 'heading "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [level=1] [ref=e132]'
+                - generic [ref=e133]: blocked
+              - paragraph [ref=e134]: General Ops · Campaign Copy
+            - generic [ref=e135]:
+              - button "Pause" [ref=e136] [cursor=pointer]
+              - button "Retry Run" [ref=e137] [cursor=pointer]
+              - button "Cancel" [ref=e138] [cursor=pointer]
+              - button "Complete" [ref=e139] [cursor=pointer]
+              - button "Delete" [ref=e140] [cursor=pointer]:
+                - img [ref=e141]
+                - text: Delete
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - generic [ref=e147]:
+                - generic [ref=e148]:
+                  - img [ref=e149]
+                  - heading "Task Request" [level=2] [ref=e153]
+                - paragraph [ref=e154]: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping.
+              - generic [ref=e155]:
+                - generic [ref=e156]:
+                  - generic [ref=e157]:
+                    - 'heading "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [level=2] [ref=e158]'
+                    - paragraph [ref=e159]: Campaign Copy · HTML
+                  - generic [ref=e160]: draft
+                - generic [ref=e161]:
+                  - button "Generate DOCX" [ref=e162] [cursor=pointer]:
+                    - img [ref=e163]
+                    - text: Generate DOCX
+                  - button "Generate PDF" [ref=e166] [cursor=pointer]:
+                    - img [ref=e167]
+                    - text: Generate PDF
+                  - button "Mark Ready" [ref=e170] [cursor=pointer]
+                  - button "Mark Delivered" [ref=e171] [cursor=pointer]
+                - article [ref=e174]:
+                  - heading "Victory Genomics – Equine Karyotyping Instagram Carousel" [level=1] [ref=e176]
+                  - generic [ref=e177]:
+                    - generic [ref=e178]:
+                      - 'heading "Campaign Objective: Drive awareness and inquiries for Victory Genomics'' equine karyotyping service through educational, trust-building carousel content." [level=2] [ref=e179]':
+                        - strong [ref=e180]: "Campaign Objective:"
+                        - text: Drive awareness and inquiries for Victory Genomics' equine karyotyping service through educational, trust-building carousel content.
+                      - paragraph [ref=e182]:
+                        - strong [ref=e183]: "Target Audience:"
+                        - text: Horse breeders, owners, and equine health professionals seeking genetic clarity for breeding decisions.
+                    - generic [ref=e184]:
+                      - heading "Carousel Copy" [level=2] [ref=e185]
+                      - generic [ref=e186]:
+                        - heading "Slide 1 – Hook" [level=3] [ref=e187]
+                        - paragraph [ref=e188]:
+                          - strong [ref=e189]: "Visual Direction:"
+                          - text: High-contrast split—half chromosome karyotype imagery, half stunning horse portrait. Bold white text overlay.
+                        - paragraph [ref=e190]:
+                          - strong [ref=e191]: "Text:"
+                        - paragraph [ref=e192]:
+                          - text: ">"
+                          - strong [ref=e193]: Your horse's genetic blueprint is hiding something.
+                        - paragraph [ref=e194]: ">"
+                        - paragraph [ref=e195]: "> Most owners never see it. Breeders can't afford to miss it."
+                        - paragraph [ref=e196]: ">"
+                        - paragraph [ref=e197]: "> 👇 Here's why karyotyping changes everything."
+                        - heading "Slide 2 – Problem" [level=3] [ref=e198]
+                        - paragraph [ref=e199]:
+                          - strong [ref=e200]: "Visual Direction:"
+                          - text: Subtle shift to muted tones. Warning/alert visual cue. Clean iconography of genetic warning signs.
+                        - paragraph [ref=e201]:
+                          - strong [ref=e202]: "Text:"
+                        - paragraph [ref=e203]:
+                          - text: ">"
+                          - strong [ref=e204]: Without genetic screening, you're breeding blind.
+                        - paragraph [ref=e205]: ">"
+                        - paragraph [ref=e206]: "> ❌ Hereditary defects going undetected"
+                        - paragraph [ref=e207]: "> ❌ Chromosomal abnormalities causing infertility"
+                        - paragraph [ref=e208]: "> ❌ Costly breeding mistakes that could have been prevented"
+                        - paragraph [ref=e209]: "> ❌ Lost value in horses with hidden genetic issues"
+                        - paragraph [ref=e210]: ">"
+                        - paragraph [ref=e211]: "> The problem? You can't see chromosomes with your eyes."
+                        - heading "Slide 3 – Solution" [level=3] [ref=e212]
+                        - paragraph [ref=e213]:
+                          - strong [ref=e214]: "Visual Direction:"
+                          - text: Clean, clinical yet warm. Victory Genomics branding prominent. Chromosome imagery becomes central hero visual—colorized karyotype against dark background.
+                        - paragraph [ref=e215]:
+                          - strong [ref=e216]: "Text:"
+                        - paragraph [ref=e217]:
+                          - text: ">"
+                          - strong [ref=e218]: Meet equine karyotyping.
+                        - paragraph [ref=e219]: ">"
+                        - paragraph [ref=e220]: "> A simple test that maps your horse's chromosomes—46 pairs that tell the real genetic story."
+                        - paragraph [ref=e221]: ">"
+                        - paragraph [ref=e222]: "> ✅ Detects chromosomal abnormalities"
+                        - paragraph [ref=e223]: "> ✅ Confirms genetic health"
+                        - paragraph [ref=e224]: "> ✅ Validates breeding potential"
+                        - paragraph [ref=e225]: ">"
+                        - paragraph [ref=e226]: "> Science-backed. Results you can act on."
+                        - heading "Slide 4 – Process" [level=3] [ref=e227]
+                        - paragraph [ref=e228]:
+                          - strong [ref=e229]: "Visual Direction:"
+                          - text: Three-panel layout. Step-by-step visual flow with icons. Feels effortless, not clinical.
+                        - paragraph [ref=e230]:
+                          - strong [ref=e231]: "Text:"
+                        - paragraph [ref=e232]:
+                          - text: ">"
+                          - strong [ref=e233]: "Three steps to genetic clarity:"
+                        - paragraph [ref=e234]: ">"
+                        - paragraph [ref=e235]:
+                          - text: ">"
+                          - strong [ref=e236]: 1. Order your kit
+                        - paragraph [ref=e237]: "> Simple sample collection—hair or blood."
+                        - paragraph [ref=e238]: ">"
+                        - paragraph [ref=e239]:
+                          - text: ">"
+                          - strong [ref=e240]: 2. Send to our lab
+                        - paragraph [ref=e241]: "> Prepaid shipping. Real-time tracking."
+                        - paragraph [ref=e242]: ">"
+                        - paragraph [ref=e243]:
+                          - text: ">"
+                          - strong [ref=e244]: 3. Receive results
+                        - paragraph [ref=e245]: "> Detailed report in your inbox within 5-7 business days."
+                        - paragraph [ref=e246]: ">"
+                        - paragraph [ref=e247]: "> No vet visit required. No confusion."
+                        - heading "Slide 5 – Benefits" [level=3] [ref=e248]
+                        - paragraph [ref=e249]:
+                          - strong [ref=e250]: "Visual Direction:"
+                          - text: Aspirational imagery—healthy horses in show settings, breeding operations, performance arenas. Warm, confident tones.
+                        - paragraph [ref=e251]:
+                          - strong [ref=e252]: "Text:"
+                        - paragraph [ref=e253]:
+                          - text: ">"
+                          - strong [ref=e254]: "What you gain with Victory Genomics:"
+                        - paragraph [ref=e255]: ">"
+                        - paragraph [ref=e256]:
+                          - text: "> 🐴"
+                          - strong [ref=e257]: Breeding confidence
+                          - text: — Make informed pairing decisions
+                        - paragraph [ref=e258]:
+                          - text: "> 💰"
+                          - strong [ref=e259]: Financial protection
+                          - text: — Avoid costly mistakes
+                        - paragraph [ref=e260]:
+                          - text: "> 🏥"
+                          - strong [ref=e261]: Health certainty
+                          - text: — Know your horse's genetic reality
+                        - paragraph [ref=e262]:
+                          - text: "> 📋"
+                          - strong [ref=e263]: Verification
+                          - text: — Prove lineage integrity for registries
+                        - paragraph [ref=e264]: ">"
+                        - paragraph [ref=e265]: "> The blueprint is there. We just read it for you."
+                        - heading "Slide 6 – CTA" [level=3] [ref=e266]
+                        - paragraph [ref=e267]:
+                          - strong [ref=e268]: "Visual Direction:"
+                          - text: Victory Genomics branding center frame. Bold, clean CTA button concept. Warm, inviting.
+                        - paragraph [ref=e269]:
+                          - strong [ref=e270]: "Text:"
+                        - paragraph [ref=e271]:
+                          - text: ">"
+                          - strong [ref=e272]: Ready to see your horse's full genetic story?
+                        - paragraph [ref=e273]: ">"
+                        - paragraph [ref=e274]: "> 🔬 Visit victorygenomics.com/equine"
+                        - paragraph [ref=e275]: "> 📞 Or message us to get started"
+                        - paragraph [ref=e276]: ">"
+                        - paragraph [ref=e277]:
+                          - text: ">"
+                          - strong [ref=e278]: First test? Ask about our breedership introductory pricing.
+                        - paragraph [ref=e279]: ">"
+                        - paragraph [ref=e280]: "> #EquineHealth #HorseBreeding #GeneticTesting #VictoryGenomics #Karyotype #EquineScience #HorseGenetics #BreederLife #AnimalHealth #PrecisionMedicine"
+                    - generic [ref=e281]:
+                      - heading "Caption (for carousel post)" [level=2] [ref=e282]
+                      - generic [ref=e283]:
+                        - paragraph [ref=e284]: "> 🔬 Your horse's chromosomes tell a story only genetic science can read."
+                        - paragraph [ref=e285]: ">"
+                        - paragraph [ref=e286]: "> Most horse owners and breeders never look beneath the surface—but those who do unlock a level of confidence that changes everything: breeding decisions, health management, and long-term value."
+                        - paragraph [ref=e287]: ">"
+                        - paragraph [ref=e288]: "> Victory Genomics makes equine karyotyping accessible, clear, and actionable. No jargon. No confusion. Just answers."
+                        - paragraph [ref=e289]: ">"
+                        - paragraph [ref=e290]: "> Tap the link in bio to learn more or get started. 🐴⬆️"
+                    - generic [ref=e291]:
+                      - heading "Hashtag Recommendations" [level=2] [ref=e292]
+                      - generic [ref=e293]:
+                        - paragraph [ref=e294]: "```"
+                        - paragraph [ref=e295]: "#"
+                - generic [ref=e296]:
+                  - paragraph [ref=e297]: Task Brief
+                  - paragraph [ref=e298]: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping.
+                - generic [ref=e299]:
+                  - paragraph [ref=e300]: Autonomous Execution
+                  - generic [ref=e301]:
+                    - generic [ref=e302]:
+                      - generic [ref=e303]:
+                        - paragraph [ref=e304]: Maya · Maya handoff
+                        - generic [ref=e305]: completed
+                      - paragraph [ref=e306]: "# Specialist Handoff: Victory Genomics – Equine Karyotyping Instagram Carousel --- ## Specialist Angle **Strategic Positioning:** Position Victory Genomics as the authoritative yet approachable leader in equine genetic diagnostics. The carousel should function as both educational content and trust-building material—answering \"what is karyotyping?\" while subtly communicating why Victory Genomics is the preferred choice. **Messaging Hierarchy:** 1. **Hook:** Disrupt the scroll with a provocative question or startling"
+                    - generic [ref=e307]:
+                      - generic [ref=e308]:
+                        - paragraph [ref=e309]: Lyra · Lyra handoff
+                        - generic [ref=e310]: completed
+                      - paragraph [ref=e311]: "## Specialist Angle **Equine karyotyping** sits at a compelling intersection—scientific precision meets the passionate world of horse breeding and ownership. The visual opportunity here is positioning Victory Genomics as the authority that transforms complex genetic data into actionable breeding decisions. The carousel should feel **clinical yet approachable**, using the inherent visual drama of chromosome imagery (colorful karyotypes, horse portraits) to create stop-scroll impact while maintaining scientific credibility. --- ## Recommendations ### Slide Structure 1. **Hook slide**: Bold claim or question about genetic potential—lead with the \"why should horse owners care\" angle 2. **Problem slide**: What issues arise without genetic screening (hereditary defects, breeding mistakes) 3. **Solution slide**: Introduce karyotyping as the answer 4. **Process slide**: Simplified visual of how it works (non-technical, 2-3 steps max) 5. **Benefit slide**: Specific outcomes (health certainty, breeding optimization, breed verification) 6. **CTA slide**: Clear"
+                    - generic [ref=e312]:
+                      - generic [ref=e313]:
+                        - paragraph [ref=e314]: Echo · Echo final assembly
+                        - generic [ref=e315]: completed
+                      - paragraph [ref=e316]: Lead agent assembled the final deliverable from pipeline steps, skill-based handoffs, and client context.
+                      - generic [ref=e317]:
+                        - generic [ref=e318]: provider:ollama
+                        - generic [ref=e319]: model:minimax-m2.7:cloud
+                    - generic [ref=e320]:
+                      - generic [ref=e321]:
+                        - paragraph [ref=e322]: Iris · Quality control pass
+                        - generic [ref=e323]: warning
+                      - paragraph [ref=e324]: "Quality gate flagged issues (55/100): Missing required section: Objective. | Missing required section: Audience. | Missing required section: Core Message."
+                      - generic [ref=e325]:
+                        - paragraph [ref=e326]: "Missing required section: Objective."
+                        - paragraph [ref=e327]: "Missing required section: Audience."
+                        - paragraph [ref=e328]: "Missing required section: Core Message."
+            - generic [ref=e329]:
+              - generic [ref=e330]:
+                - heading "Task Summary" [level=3] [ref=e331]
+                - generic [ref=e332]:
+                  - paragraph [ref=e333]: "Client: General Ops"
+                  - paragraph [ref=e334]: "Type: Campaign Copy"
+                  - paragraph [ref=e335]: "Lead: Iris"
+                  - paragraph [ref=e336]: "Progress: 20%"
+                  - paragraph [ref=e337]: "Created: 3/25/2026, 9:56:18 PM"
+                  - paragraph [ref=e338]: "Updated: 3/26/2026, 10:22:07 PM"
+              - generic [ref=e339]:
+                - heading "Execution State" [level=3] [ref=e340]
+                - generic [ref=e341]:
+                  - paragraph [ref=e342]: "Workflow: paused"
+                  - paragraph [ref=e343]: "Current phase: Quality Control"
+                  - paragraph [ref=e344]: "Progress: 82%"
+                - generic [ref=e347]:
+                  - generic [ref=e348]:
+                    - generic [ref=e349]:
+                      - paragraph [ref=e350]: final-assembly
+                      - generic [ref=e351]: blocked
+                    - paragraph [ref=e352]: 3/26/2026, 9:57:27 PM
+                  - generic [ref=e353]:
+                    - generic [ref=e354]:
+                      - paragraph [ref=e355]: task-execution
+                      - generic [ref=e356]: in_progress
+                    - paragraph [ref=e357]: 3/26/2026, 9:56:35 PM
+              - generic [ref=e358]:
+                - generic [ref=e359]:
+                  - img [ref=e360]
+                  - heading "Assigned Team" [level=3] [ref=e363]
+                - generic [ref=e364]:
+                  - generic [ref=e365]:
+                    - paragraph [ref=e366]: Echo
+                    - paragraph [ref=e367]: Copy & Content Lead
+                  - generic [ref=e368]:
+                    - paragraph [ref=e369]: Iris
+                    - paragraph [ref=e370]: Agency Operations Lead
+                  - generic [ref=e371]:
+                    - paragraph [ref=e372]: Lyra
+                    - paragraph [ref=e373]: Visual Production Lead
+                  - generic [ref=e374]:
+                    - paragraph [ref=e375]: Maya
+                    - paragraph [ref=e376]: Brand & Campaign Strategist
+              - generic [ref=e377]:
+                - heading "Execution Plan" [level=3] [ref=e378]
+                - paragraph [ref=e379]: "Quality gate failed: Missing required section: Objective. | Missing required section: Audience. | Missing required section: Core Message."
+                - generic [ref=e380]:
+                  - paragraph [ref=e382]: 1. Confirm objective, audience, and client message hierarchy
+                  - paragraph [ref=e384]: 2. Build hook and cover-slide angle
+                  - paragraph [ref=e386]: 3. Draft slide-by-slide copy with scientific clarity
+                  - paragraph [ref=e388]: 4. Add caption, CTA, and hashtags
+                  - paragraph [ref=e390]: 5. Review tone, readability, and claim safety
+                  - paragraph [ref=e392]: 6. Add design direction for production handoff
+    - button "Open Iris chat" [ref=e393] [cursor=pointer]:
+      - img [ref=e394]

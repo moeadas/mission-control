@@ -8,24 +8,91 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when starting a new project, setting campaign timelines, communicating performance results, managing scope changes, or when expectations have drifted from reality.",
+      "trigger": "Use this skillany time starting a new project, setting campaign timelines, communicating performance results, managing scope changes, or when expectations have drifted from reality.",
       "context": "You are an expectation management specialist who helps clients and stakeholders have accurate, aligned expectations. You communicate clearly about what is and isn't realistic, and you prevent the surprises that damage trust.",
-      "instructions": "## Expectation Management Workflow\n\n- [ ] 1. Understand what the stakeholder expects (vs. what is realistic)\n- [ ] 2. Assess the gap between expectations and reality\n- [ ] 3. Prepare data-backed context to frame the conversation\n- [ ] 4. Communicate the realistic picture proactively\n- [ ] 5. Negotiate aligned expectations with clear commitments\n- [ ] 6. Document agreements and follow up in writing\n- [ ] 7. Monitor and gently reset if expectations drift again\n\n## Key Inputs\n- Stakeholder: {{stakeholder}}\n- Current Expectation: {{current_expectation}}\n- Reality/Constraints: {{reality_constraints}}\n- Communication Context: {{communication_context}}",
+      "instructions": "## Expectation Management\n\n1. **Diagnose gap** — Identify exactly where expectations diverge from reality\n   - ✓ Done when: Gap is specific and quantified\n\n2. **Prepare context** — Gather data to support the conversation\n   - ✓ Done when: Data is accurate and credible\n\n3. **Communicate proactively** — Have the conversation before the gap causes problems\n   - ✓ Done when: Communication is timely and honest\n\n4. **Document agreement** — Confirm aligned expectations in writing\n   - ✓ Done when: Agreement is clear and signed off\n\n## Key Inputs\n- stakeholder: Who has the expectation: client, manager, stakeholder\n- current_expectation: What the stakeholder currently expects: timeline, budget, performance\n- reality_constraints: What is realistic given constraints: data, budget, timeline, market conditions\n- communication_context: Context for the conversation: initial project setup, mid-project update, post-mortem",
       "output_template": "## Expectation Alignment\n\n### Current State\n| Element | Expectation | Reality | Gap |\n|---------|------------|---------|-----|\n| Timeline | | | |\n| Budget | | | |\n| Performance | | | |\n| Scope | | | |\n\n### Recommended Approach\n- [ ] How to communicate the gap\n- [ ] What to offer as an alternative\n\n### Aligned Agreement\n| Element | Agreed Value | Owner | Date |\n|---------|-------------|-------|------|\n| | | | |\n\n### Follow-up Plan\n- [ ] ..."
     }
   },
   "variables": [
-    { "name": "stakeholder", "type": "string", "required": true, "description": "Who has the expectation: client, manager, stakeholder" },
-    { "name": "current_expectation", "type": "string", "required": true, "description": "What the stakeholder currently expects: timeline, budget, performance" },
-    { "name": "reality_constraints", "type": "string", "required": true, "description": "What is realistic given constraints: data, budget, timeline, market conditions" },
-    { "name": "communication_context", "type": "string", "required": false, "description": "Context for the conversation: initial project setup, mid-project update, post-mortem" }
+    {
+      "name": "stakeholder",
+      "type": "string",
+      "required": true,
+      "description": "Who has the expectation: client, manager, stakeholder"
+    },
+    {
+      "name": "current_expectation",
+      "type": "string",
+      "required": true,
+      "description": "What the stakeholder currently expects: timeline, budget, performance"
+    },
+    {
+      "name": "reality_constraints",
+      "type": "string",
+      "required": true,
+      "description": "What is realistic given constraints: data, budget, timeline, market conditions"
+    },
+    {
+      "name": "communication_context",
+      "type": "string",
+      "required": false,
+      "description": "Context for the conversation: initial project setup, mid-project update, post-mortem"
+    }
   ],
+  "inputs": [
+    {
+      "name": "stakeholder",
+      "type": "string",
+      "required": true,
+      "description": "Who has the expectation: client, manager, stakeholder"
+    },
+    {
+      "name": "current_expectation",
+      "type": "string",
+      "required": true,
+      "description": "What the stakeholder currently expects: timeline, budget, performance"
+    },
+    {
+      "name": "reality_constraints",
+      "type": "string",
+      "required": true,
+      "description": "What is realistic given constraints: data, budget, timeline, market conditions"
+    },
+    {
+      "name": "communication_context",
+      "type": "string",
+      "required": false,
+      "description": "Context for the conversation: initial project setup, mid-project update, post-mortem"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Diagnose gap", "action": "Identify exactly where expectations diverge from reality", "verify": "Gap is specific and quantified" },
-      { "step": 2, "name": "Prepare context", "action": "Gather data to support the conversation", "verify": "Data is accurate and credible" },
-      { "step": 3, "name": "Communicate proactively", "action": "Have the conversation before the gap causes problems", "verify": "Communication is timely and honest" },
-      { "step": 4, "name": "Document agreement", "action": "Confirm aligned expectations in writing", "verify": "Agreement is clear and signed off" }
+      {
+        "step": 1,
+        "name": "Diagnose gap",
+        "action": "Identify exactly where expectations diverge from reality",
+        "verify": "Gap is specific and quantified"
+      },
+      {
+        "step": 2,
+        "name": "Prepare context",
+        "action": "Gather data to support the conversation",
+        "verify": "Data is accurate and credible"
+      },
+      {
+        "step": 3,
+        "name": "Communicate proactively",
+        "action": "Have the conversation before the gap causes problems",
+        "verify": "Communication is timely and honest"
+      },
+      {
+        "step": 4,
+        "name": "Document agreement",
+        "action": "Confirm aligned expectations in writing",
+        "verify": "Agreement is clear and signed off"
+      }
     ]
   },
   "examples": [
@@ -35,20 +102,29 @@
     }
   ],
   "checklist": [
-    "Expectation gap is quantified before the conversation",
-    "Conversation happens proactively, not reactively",
-    "Data and context support the realistic picture",
-    "Alternative is offered, not just a 'no'",
-    "Agreement is documented in writing",
-    "Expectations are monitored going forward"
+    "Gap is specific and quantified",
+    "Data is accurate and credible",
+    "Communication is timely and honest",
+    "Agreement is clear and signed off"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["client-management-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "sage"
+  ],
+  "pipelines": [
+    "client-management-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["expectation-management", "client-management", "communication", "scope"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "expectation-management",
+      "client-management",
+      "communication",
+      "scope"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

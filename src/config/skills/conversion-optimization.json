@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when improving conversion rates at any funnel stage — landing pages, sign-up flows, checkout, or lead forms — to turn more visitors into leads and customers.",
+      "trigger": "Use this skillany time improving conversion rates at any funnel stage — landing pages, sign-up flows, checkout, or lead forms — to turn more visitors into leads and customers.",
       "context": "You are a conversion rate optimization specialist who uses data, user research, and A/B testing to systematically improve conversion rates at every funnel stage.",
-      "instructions": "## Conversion Optimization Workflow\n\n- [ ] 1. Define goal: What conversion are we optimizing? (form fill, sign-up, purchase)\n- [ ] 2. Audit current performance: Baseline conversion rate, traffic, drop-off points\n- [ ] 3. Identify friction: Where do users abandon? What causes hesitation?\n- [ ] 4. Generate hypotheses: What changes might improve conversion?\n- [ ] 5. Prioritize: Rank hypotheses by impact and effort\n- [ ] 6. Test: Design and run A/B tests or implement changes\n- [ ] 7. Analyze: Did the change work? What did we learn?\n- [ ] 8. Iterate: Apply winning changes and continue testing\n\n## Key Inputs\n- Page/flow: {{page_or_flow}}\n- Current conversion rate: {{current_conversion_rate}}\n- Traffic volume: {{traffic_volume}}\n- Funnel stage: {{funnel_stage}}",
+      "instructions": "## Conversion Optimization\n\n1. **Baseline Audit** — Establish current conversion rate and drop-off points\n   - ✓ Done when: Baseline is accurate and documented\n\n2. **Friction Identification** — Identify where and why users abandon\n   - ✓ Done when: Friction points are evidenced\n\n3. **Hypothesis Generation** — Generate testable hypotheses\n   - ✓ Done when: Hypotheses are specific and falsifiable\n\n4. **Prioritization** — Rank hypotheses by impact and effort\n   - ✓ Done when: Highest priority items are clear\n\n5. **Testing** — Design and run A/B tests\n   - ✓ Done when: Tests are statistically valid\n\n6. **Iteration** — Apply winning changes and continue testing\n   - ✓ Done when: Conversion rate is improving\n\n## Key Inputs\n- page_or_flow: Page or flow being optimized\n- current_conversion_rate: Current conversion rate\n- traffic_volume: Monthly or weekly traffic volume\n- funnel_stage: Funnel stage being optimized\n\n## When Not to Use\nThis skill overlaps with: funnel-analysis, roi-analysis. Use those instead when: you have a specific underperforming campaign or channel to fix\n\n`analytics` `CRO` `conversion-optimization` `A/B-testing`",
       "output_template": "## Conversion Optimization Plan: {{page_or_flow}}\n\n### Funnel Overview\n| Field | Value |\n|-------|-------|\n| Page/Flow | {{page_or_flow}} |\n| Current conversion rate | {{current_conversion_rate}} |\n| Traffic volume | {{traffic_volume}} |\n| Funnel stage | {{funnel_stage}} |\n| Date | {{date}} |\n\n### Funnel Drop-off Analysis\n| Step | Visitors entering | Visitors completing | Drop-off rate | Drop-off reason |\n|------|-----------------|-------------------|---------------|----------------|\n| | | | | |\n\n### Friction Points Identified\n| Friction point | Stage | Severity | Evidence |\n|--------------|-------|----------|---------|\n| | | | |\n\n### Hypotheses to Test\n| Hypothesis | Change | Impact estimate | Effort | Priority |\n|-----------|--------|----------------|-------|----------|\n| | | | | |\n\n### A/B Test Design\n| Test | Control | Variant | Hypothesis | Sample size | Duration |\n|------|---------|---------|-----------|------------|---------|\n| | | | | | |\n\n### Results\n| Test | Conversion lift | Statistical significance | Decision |\n|------|---------------|------------------------|----------|\n| | | | |\n\n### Implemented Changes\n| Change | Implemented | Impact | Next steps |\n|--------|-----------|-------|-----------|\n| | | | |\n\n### Conversion Funnel Goal\n| Metric | Current | Target | Gap |\n|--------|---------|--------|-----|\n| | | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Funnel stage being optimized"
     }
   ],
+  "inputs": [
+    {
+      "name": "page_or_flow",
+      "type": "string",
+      "required": true,
+      "description": "Page or flow being optimized"
+    },
+    {
+      "name": "current_conversion_rate",
+      "type": "string",
+      "required": false,
+      "description": "Current conversion rate"
+    },
+    {
+      "name": "traffic_volume",
+      "type": "string",
+      "required": false,
+      "description": "Monthly or weekly traffic volume"
+    },
+    {
+      "name": "funnel_stage",
+      "type": "string",
+      "required": false,
+      "description": "Funnel stage being optimized"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,20 +114,27 @@
     }
   ],
   "checklist": [
-    "Baseline conversion rate is accurately measured",
-    "Drop-off points are identified with evidence",
-    "Hypotheses are specific and testable",
-    "A/B tests are statistically valid",
-    "Results are correctly interpreted",
-    "Winning changes are implemented and documented"
+    "Baseline is accurate and documented",
+    "Friction points are evidenced",
+    "Hypotheses are specific and falsifiable",
+    "Highest priority items are clear",
+    "Tests are statistically valid",
+    "Conversion rate is improving"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["analytics"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "dex"
+  ],
+  "pipelines": [
+    "analytics"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["analytics", "CRO", "conversion-optimization", "A/B-testing"],
-    "lastUpdated": "2026-03-24"
+    "tags": [],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -1,16 +1,16 @@
 {
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "roas-optimization",
-  "name": " ROAS Optimization",
+  "name": "ROAS Optimization",
   "description": "Optimizes Return on Ad Spend (ROAS) by identifying underperforming campaigns, reallocating budget, adjusting bidding, and refining audience and creative strategies.",
   "category": "analytics",
   "difficulty": "intermediate",
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when optimizing ROAS for a campaign or account — identifying low-performing areas, reallocating budget, adjusting bidding, and testing changes to improve return.",
+      "trigger": "Use this skillany time optimizing roas for a campaign or account — identifying low-performing areas, reallocating budget, adjusting bidding, and testing changes to improve return.",
       "context": "You are a media optimization specialist focused on maximizing return on ad spend by making data-driven decisions about budget allocation, bidding, and targeting.",
-      "instructions": "## ROAS Optimization Workflow\n\nOptimize ROAS systematically:\n\n- [ ] 1. Current state analysis: Establish current ROAS by channel, campaign, and audience\n- [ ] 2. Benchmark setting: Define target ROAS and acceptable ranges\n- [ ] 3. Underperformer identification: Find campaigns and audiences below benchmark\n- [ ] 4. Budget reallocation: Shift spend from low-ROAS to high-ROAS areas\n- [ ] 5. Bidding optimization: Adjust bids and bidding strategies\n- [ ] 6. Audience refinement: Test more precise targeting for underperformers\n- [ ] 7. Creative testing: Address creative fatigue or relevance issues\n- [ ] 8. Test and validate: Implement controlled tests for proposed changes\n\n## Key Inputs\n- Account: {{account_name}}\n- Target ROAS: {{target_roas}}\n- Constraints: {{constraints}}",
+      "instructions": "## ROAS Optimization\n\n1. **Current State Analysis** — Map ROAS across all campaigns and channels\n   - ✓ Done when: Clear picture of what's working\n\n2. **Underperformer Identification** — Identify campaigns below target ROAS\n   - ✓ Done when: Root causes understood\n\n3. **Budget Reallocation** — Plan budget shifts from low to high performers\n   - ✓ Done when: Reallocation is logical and respects constraints\n\n4. **Bidding Optimization** — Adjust bids and bidding strategies\n   - ✓ Done when: Changes are data-supported\n\n5. **Audience Refinement** — Refine targeting for underperforming campaigns\n   - ✓ Done when: Refinements are tested, not assumed\n\n6. **Test Validation** — Implement controlled tests for optimization hypotheses\n   - ✓ Done when: Changes validated before full rollout\n\n7. **Outcome Tracking** — Monitor ROAS post-optimization changes\n   - ✓ Done when: Improvement is measurable\n\n## Key Inputs\n- account_name: Account or campaign to optimize\n- target_roas: Target ROAS\n- constraints: Any constraints (minimum spend, pacing requirements)",
       "output_template": "## ROAS Optimization: {{account_name}}\n\n### Current State\n| Channel | Spend | Revenue | ROAS | vs Target |\n|---------|-------|---------|------|----------|\n| | | | | |\n\n### Target ROAS: {{target_roas}}\n\n### ROAS Analysis\n\n**Above-target performers (Scale):**\n| Campaign | Spend | ROAS | Scale potential |\n|---------|-------|------|----------------|\n| | | | |\n\n**Near-target performers (Optimize):**\n| Campaign | Spend | ROAS | Gap to target | Optimization approach |\n|---------|-------|------|--------------|---------------------|\n| | | | | |\n\n**Below-target performers (Reallocate or Pause):**\n| Campaign | Spend | ROAS | Decision | Reason |\n|---------|-------|------|----------|-------|\n| | | | Scale/Reallocate/Pause | |\n\n### Budget Reallocation Plan\n\n| From (Campaign) | Amount | To (Campaign) | Expected ROAS Impact |\n|----------------|--------|---------------|---------------------|\n| | | | |\n\n**Net change in ROAS:**\n\n### Bidding Adjustments\n| Campaign | Current bid strategy | Recommended change | Expected impact |\n|----------|---------------------|-------------------|----------------|\n| | | | |\n\n### Audience Refinements\n| Campaign | Current audience | Issue | Recommended targeting |\n|----------|-----------------|------|---------------------|\n| | | | |\n\n### Creative Recommendations\n| Campaign | Issue | Recommendation |\n|----------|-------|---------------|\n| | | |\n\n### Test Plan\n| Test | Hypothesis | Expected impact | Implementation |\n|------|-----------|----------------|---------------|\n| | | | |\n\n### Implementation Timeline\n| Action | Priority | When |\n|--------|----------|------|\n| | | |\n\n### Expected Outcome\n| Metric | Current | Post-optimization |\n|--------|---------|-------------------|\n| Overall ROAS | | |\n| Total spend | | |\n| Total revenue | | |"
     }
   },
@@ -34,6 +34,27 @@
       "description": "Any constraints (minimum spend, pacing requirements)"
     }
   ],
+  "inputs": [
+    {
+      "name": "account_name",
+      "type": "string",
+      "required": true,
+      "description": "Account or campaign to optimize"
+    },
+    {
+      "name": "target_roas",
+      "type": "string",
+      "required": true,
+      "description": "Target ROAS"
+    },
+    {
+      "name": "constraints",
+      "type": "string",
+      "required": false,
+      "description": "Any constraints (minimum spend, pacing requirements)"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,13 +108,13 @@
     }
   ],
   "checklist": [
-    "ROAS analysis is comprehensive across all campaigns",
-    "Underperformers are diagnosed, not just identified",
-    "Budget reallocation is logical and respects constraints",
-    "Bids are adjusted based on data, not intuition",
-    "Audience refinements are tested",
-    "Expected ROAS improvement is quantified",
-    "Changes are tracked and validated"
+    "Clear picture of what's working",
+    "Root causes understood",
+    "Reallocation is logical and respects constraints",
+    "Changes are data-supported",
+    "Refinements are tested, not assumed",
+    "Changes validated before full rollout",
+    "Improvement is measurable"
   ],
   "tools": [
     "spreadsheet",
@@ -115,6 +136,6 @@
       "optimization",
       "media"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

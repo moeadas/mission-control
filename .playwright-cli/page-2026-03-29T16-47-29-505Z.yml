@@ -1,0 +1,1038 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e6]
+  - generic [ref=e7]:
+    - link "Skip to main content" [ref=e8] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e9]:
+      - img [ref=e13]
+      - generic [ref=e15]:
+        - button "Refresh latest app version" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+        - button "Switch to dark mode" [ref=e22] [cursor=pointer]:
+          - img [ref=e23]
+        - button "Sign out" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - paragraph [ref=e30]: 18:47
+    - generic [ref=e31]:
+      - navigation "Main navigation" [ref=e32]:
+        - generic [ref=e34]:
+          - generic [ref=e36]: MC
+          - generic [ref=e37]:
+            - paragraph [ref=e38]: Mission Control
+            - paragraph [ref=e39]: Agency HQ
+        - generic [ref=e40]:
+          - link "Dashboard" [ref=e41] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e43]
+            - generic [ref=e48]: Dashboard
+          - link "Virtual Office" [ref=e49] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e51]
+            - generic [ref=e55]: Virtual Office
+          - link "Agents" [ref=e56] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e58]
+            - generic [ref=e61]: Agents
+          - link "Clients" [ref=e62] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e64]
+            - generic [ref=e69]: Clients
+          - link "Tasks" [ref=e70] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e72]
+            - generic [ref=e75]: Tasks
+          - link "Pipeline" [ref=e76] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e78]
+            - generic [ref=e82]: Pipeline
+          - link "Skills" [ref=e83] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e85]
+            - generic [ref=e88]: Skills
+          - link "Runner" [ref=e89] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e91]
+            - generic [ref=e93]: Runner
+          - link "Analytics" [ref=e94] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e96]
+            - generic [ref=e98]: Analytics
+          - link "Outputs" [ref=e99] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e102]
+            - generic [ref=e105]: Outputs
+          - link "Users" [ref=e106] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e108]
+            - generic [ref=e110]: Users
+          - link "Settings" [ref=e111] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e113]
+            - generic [ref=e116]: Settings
+        - generic [ref=e118]:
+          - generic [ref=e120]: MC
+          - generic [ref=e121]:
+            - paragraph [ref=e122]: Agency Mode
+            - paragraph [ref=e123]: Iris · Online
+      - main [ref=e125]:
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - heading "Outputs" [level=1] [ref=e129]:
+                - img [ref=e130]
+                - text: Outputs
+              - paragraph [ref=e133]: Central registry for briefs, plans, KPI sheets, and creative production outputs
+            - generic [ref=e135]: 10 saved outputs
+          - generic [ref=e136]:
+            - combobox [ref=e137]:
+              - option "All clients" [selected]
+              - option "Victory Genomics"
+            - combobox [ref=e138]:
+              - option "All statuses" [selected]
+              - option "Draft"
+              - option "Ready"
+              - option "Delivered"
+          - generic [ref=e140]:
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]:
+                  - generic [ref=e144]:
+                    - 'heading "Content Task: a short Instagram post for Victory Genomics about the prices of the D..." [level=3] [ref=e145]'
+                    - generic [ref=e146]: draft
+                    - generic [ref=e147]: campaign-copy
+                    - generic [ref=e148]: document
+                  - paragraph [ref=e149]: "Victory Genomics · Content Task: a short Instagram post for Victory Genomics about the prices of the D... · Echo"
+                - generic [ref=e150]:
+                  - button "Draft" [ref=e151] [cursor=pointer]
+                  - button "Ready" [ref=e152] [cursor=pointer]
+                  - button "Delivered" [ref=e153] [cursor=pointer]
+              - generic [ref=e154]:
+                - button "Generate DOCX" [ref=e155] [cursor=pointer]:
+                  - img [ref=e156]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e159] [cursor=pointer]:
+                  - img [ref=e160]
+                  - text: Generate PDF
+              - article [ref=e165]:
+                - heading "Victory Genomics Instagram Post" [level=1] [ref=e167]
+                - generic [ref=e168]:
+                  - generic [ref=e169]:
+                    - heading "Objective" [level=2] [ref=e170]
+                    - paragraph [ref=e172]: Introduce Victory Genomics' whole genome sequencing pricing to the equine community, positioning it as access to premium science—not a commodity purchase—while driving qualified inquiries from horse owners, breeders, trainers, and bloodstock agents.
+                  - generic [ref=e173]:
+                    - heading "Audience" [level=2] [ref=e174]
+                    - list [ref=e176]:
+                      - listitem [ref=e177]: Horse owners seeking deeper understanding of their horse's genetics
+                      - listitem [ref=e178]: Breeders and bloodstock agents making investment decisions
+                      - listitem [ref=e179]: Trainers optimizing performance programs
+                      - listitem [ref=e180]: Veterinary professionals exploring genomic tools
+                  - generic [ref=e181]:
+                    - heading "Key Message" [level=2] [ref=e182]
+                    - paragraph [ref=e184]: Premium whole genome sequencing for horses is now accessible—but this is not a budget option. This is human-grade science at a transformative cost point that delivers lifetime value through updated results as discoveries emerge.
+                  - generic [ref=e185]:
+                    - heading "Hook Options" [level=2] [ref=e186]
+                    - list [ref=e188]:
+                      - listitem [ref=e189]:
+                        - strong [ref=e190]: "Data-driven hook:"
+                        - text: "\"Your horse's genome contains 2.8 billion base pairs. Now you can read every single one.\""
+                      - listitem [ref=e191]:
+                        - strong [ref=e192]: "Exclusivity hook:"
+                        - text: "\"Human-grade genomics. Equine-tier pricing. Finally.\""
+                      - listitem [ref=e193]:
+                        - strong [ref=e194]: "ROI hook:"
+                        - text: "\"The most consequential investment you'll make in your horse costs less than one month of training.\""
+                  - generic [ref=e195]:
+                    - heading "Primary Copy" [level=2] [ref=e196]
+                    - generic [ref=e197]:
+                      - paragraph [ref=e198]:
+                        - strong [ref=e199]: "Option A (Value-forward):"
+                      - paragraph [ref=e200]: There's more to your horse than meets the eye.
+                      - paragraph [ref=e201]:
+                        - text: Whole genome sequencing unlocks the complete genetic story—every variant, every trait, every insight that makes your horse
+                        - emphasis [ref=e202]: your horse.
+                      - paragraph [ref=e203]: And it comes with lifetime updates as science evolves.
+                      - paragraph [ref=e204]: Human-grade science. Equine pricing. Starting at [price].
+                      - paragraph [ref=e205]: Your horse's genome is worth knowing.
+                      - paragraph [ref=e206]: 🔗 Link in bio to learn more.
+                  - generic [ref=e207]:
+                    - heading "Supporting Variants" [level=2] [ref=e208]
+                    - generic [ref=e209]:
+                      - paragraph [ref=e210]:
+                        - strong [ref=e211]: "Option B (Community/Exclusive tone):"
+                      - paragraph [ref=e212]: Most DNA tests give you a fraction of the picture.
+                      - paragraph [ref=e213]: Victory Genomics gives you the whole genome—and keeps giving. New discoveries, new variants, updated results for the lifetime of your horse.
+                      - paragraph [ref=e214]: This is what premium equine genomics looks like.
+                      - paragraph [ref=e215]: Starting at [price].
+                      - paragraph [ref=e216]: Join the horses who know more.
+                      - paragraph [ref=e217]:
+                        - strong [ref=e218]: "Option C (Commercial/ROI tone):"
+                      - paragraph [ref=e219]: When you're making breeding decisions, training choices, or investment calls—wouldn't you want the full picture?
+                      - paragraph [ref=e220]: Whole genome sequencing gives you every variant, every trait, every data point.
+                      - paragraph [ref=e221]: One test. Lifetime updates. Starting at [price].
+                      - paragraph [ref=e222]: Don't manage your horses on partial information.
+                  - generic [ref=e223]:
+                    - heading "CTA" [level=2] [ref=e224]
+                    - generic [ref=e225]:
+                      - paragraph [ref=e226]: Link in bio to explore pricing and order your kit.
+                      - paragraph [ref=e227]:
+                        - strong [ref=e228]: "Suggested Hashtags:"
+                      - paragraph [ref=e229]: "#EquineGenomics #HorseGenetics #WholeGenomeSequencing #VictoryGenomics #PerformanceHorses #BreederLife #EquineScience #HorseHealth #GenomicTesting #PremiumEquine"
+                      - paragraph [ref=e230]:
+                        - strong [ref=e231]: "Design Direction:"
+                      - paragraph [ref=e232]: Clean, scientific aesthetic with imagery of horses in motion or portrait shots. White or deep navy background with gold or teal accents. Price callout should feel premium—not discounted. Avoid "sale," "deal," or "discount" language.
+              - generic [ref=e233]:
+                - generic [ref=e234]:
+                  - paragraph [ref=e235]: Execution Prompt
+                  - paragraph [ref=e236]: "Lead specialist: Echo Client: Victory Genomics Deliverable type: campaign-copy Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the final copy deliverable, not a brief. Output sections in this exact order: ## Objective ## Audience ## Key Message ## Hook Options ## Primary Copy ## Supporting Variants ## CTA Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: Write a short Instagram post for Victory Genomics about the prices of the DNA tests."
+                - generic [ref=e237]:
+                  - generic [ref=e238]:
+                    - paragraph [ref=e239]: Output Metadata
+                    - paragraph [ref=e240]: "Primary format: HTML"
+                  - paragraph [ref=e241]: "Saved with quality warnings: Missing required section: Core Message."
+              - generic [ref=e242]:
+                - paragraph [ref=e243]: Autonomous Execution
+                - generic [ref=e244]:
+                  - generic [ref=e245]:
+                    - generic [ref=e246]:
+                      - paragraph [ref=e247]: Maya · Maya handoff
+                      - generic [ref=e248]: completed
+                    - paragraph [ref=e249]: "## Specialist Angle Position Victory Genomics' pricing as access to **premium, human-grade equine science** at a transformative cost point—not as \"affordable\" or \"budget.\" The angle should feel like joining an exclusive, scientifically rigorous community rather than purchasing a commodity. Emphasize lifetime value: one test, continuously updated results. On Instagram, lead with curiosity (the price reveal) but anchor in prestige. ## Recommendations - **Hook**: Open with intrigue, not a number. Something like: *\"What if unlocking your horse's entire genetic story cost less than a month of training?\"* - **Price framing**: Present as investment, not expense. Compare to industry alternatives or typical equine costs (feed, veterinary bills, training) to anchor value. - **Tone**: Confident, scientific, yet accessible. Avoid condescension toward horse owners—acknowledge their expertise while positioning the brand as the translator of deeper science. - **CTA**: Drive to link in bio or \"DM for details\" to capture intent without cluttering caption. - **Visual direction**: Clean, minimal. Consider a split-screen or overlay showing a horse's genome visualization alongside a price callout. Avoid stock imagery—equine photography should feel documentary-grade, not stock. - **Hashtags**: Blend branded (#VictoryGenomics), niche (#EquineGenetics, #HorseDNA), and aspirational (#PrecisionMedicine, #ScienceOfHorses). ## Quality Risks - **Price accuracy**: All pricing must be verified with client before posting. Never estimate or imply pricing not confirmed. - **Claim safety**: Do not st..."
+                  - generic [ref=e250]:
+                    - generic [ref=e251]:
+                      - paragraph [ref=e252]: Lyra · Lyra handoff
+                      - generic [ref=e253]: completed
+                    - paragraph [ref=e254]: "## Specialist Angle **Hook strategy:** Lead with value framing, not price anchors. The copy should position the pricing as access to human-grade science at an equine-tier cost—avoid sounding discount-friendly or budget-tier. The audience (breeders, bloodstock agents) are commercially minded; lead with ROI, not affordability. **Tone:** Authoritative but approachable. Scientific credibility with equine-world warmth. Avoid clinical detachment or overly salesy urgency. **Caption architecture:** Hook line → Value statement → Price reveal (if applicable) → Brand promise reinforcement → Soft CTA → Hashtag cluster --- ## Recommendations **Format:** Single-image carousel or static post. Carousel preferred if showing tiered pricing—each slide = one test tier with key benefit. **Visual direction:** Clean, premium equine aesthetic. Suggest deep navy or forest green backgrounds with gold or cream typography to signal biotech luxury. Equine imagery (close-up of eye, mane, or genomic abstract) as hero visual—avoid generic stock. **Copy specifics:** - Lead with curiosity: *\"What if one test told you everything?\"* - Follow with exclusivity framing: *\"Whole genome sequencing. Not SNP panels. Not guesswork.\"* - Include social proof signal if available (e.g., testimonials, results shipped, horses tested) - CTA: Direct to link in bio or \"DM for pricing\" — avoid hard \"buy now\" on platform **Hashtag cluster:** 5–8 tags mixing reach (#equine, #horses, #genomics) with niche (#equestrian, #horsegenetics, #horsetraining, #horsebreeder). Add 1–2 branded tags. --- ## Quality Risks | Risk..."
+                  - generic [ref=e255]:
+                    - generic [ref=e256]:
+                      - paragraph [ref=e257]: Echo · Echo final assembly
+                      - generic [ref=e258]: completed
+                    - paragraph [ref=e259]: Lead agent assembled the final deliverable from pipeline steps, skill-based handoffs, and client context.
+                    - generic [ref=e260]:
+                      - generic [ref=e261]: provider:ollama
+                      - generic [ref=e262]: model:minimax-m2.7:cloud
+                  - generic [ref=e263]:
+                    - generic [ref=e264]:
+                      - paragraph [ref=e265]: Iris · Quality control pass
+                      - generic [ref=e266]: warning
+                    - paragraph [ref=e267]: "Quality gate flagged issues (85/100): Missing required section: Core Message."
+                    - paragraph [ref=e269]: "Missing required section: Core Message."
+            - generic [ref=e270]:
+              - generic [ref=e271]:
+                - generic [ref=e272]:
+                  - generic [ref=e273]:
+                    - 'heading "Task: i want a short content on Instaram for Victory genomics about a speca..." [level=3] [ref=e274]'
+                    - generic [ref=e275]: draft
+                    - generic [ref=e276]: status-report
+                    - generic [ref=e277]: document
+                  - paragraph [ref=e278]: "Victory Genomics · Task: i want a short content on Instaram for Victory genomics about a speca... · Echo"
+                - generic [ref=e279]:
+                  - button "Draft" [ref=e280] [cursor=pointer]
+                  - button "Ready" [ref=e281] [cursor=pointer]
+                  - button "Delivered" [ref=e282] [cursor=pointer]
+              - generic [ref=e283]:
+                - button "Generate DOCX" [ref=e284] [cursor=pointer]:
+                  - img [ref=e285]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e288] [cursor=pointer]:
+                  - img [ref=e289]
+                  - text: Generate PDF
+              - article [ref=e294]:
+                - heading "Victory Genomics Instagram Post — 30% Discount" [level=1] [ref=e296]
+                - generic [ref=e298]:
+                  - 'heading "Option 1: Straight & Strong" [level=2] [ref=e299]':
+                    - strong [ref=e300]: "Option 1: Straight & Strong"
+                  - generic [ref=e301]:
+                    - paragraph [ref=e302]:
+                      - text: 🦴
+                      - strong [ref=e303]: 30% OFF every DNA test — because your horse deserves the full picture.
+                    - paragraph [ref=e304]: Whole genome sequencing for Arabians, Thoroughbreds & Anglo-Arabians. One test. Lifetime updates. No panel. No shortcuts.
+                    - paragraph [ref=e305]: 📅 Limited time only.
+                    - paragraph [ref=e306]: 🔗 Link in bio to claim your discount.
+                    - paragraph [ref=e307]:
+                      - strong [ref=e308]: There's more to your horse than meets the eye.
+                    - paragraph [ref=e309]:
+                      - strong [ref=e310]: "Option 2: Urgency + Emotion"
+                    - paragraph [ref=e311]: ⏰ This won't last.
+                    - paragraph [ref=e312]: Take 30% off all Victory Genomics DNA tests — including Arabian VGnome, Thoroughbred VGnome & VGenius consults.
+                    - paragraph [ref=e313]: Why wait to know every variant, every variant, every genetic story locked in your horse's DNA?
+                    - paragraph [ref=e314]: 🛒 Shop now — link in bio.
+                    - paragraph [ref=e315]:
+                      - strong [ref=e316]: One test. One lifetime. Updated forever.
+                    - paragraph [ref=e317]:
+                      - strong [ref=e318]: "Option 3: Story-style hook"
+                    - paragraph [ref=e319]:
+                      - text: What if one test told you
+                      - emphasis [ref=e320]: everything
+                      - text: — health risks, heritage, performance traits — and kept learning as science evolves?
+                    - paragraph [ref=e321]: Now it's 30% off.
+                    - paragraph [ref=e322]: 🐴 Your horse's full genome story starts here.
+                    - paragraph [ref=e323]:
+                      - strong [ref=e324]: Link in bio.
+                    - paragraph [ref=e325]: Want me to adjust the tone, add a carousel caption, or create multiple variations for A/B testing?
+              - generic [ref=e326]:
+                - generic [ref=e327]:
+                  - paragraph [ref=e328]: Execution Prompt
+                  - paragraph [ref=e329]: "Lead specialist: Echo Client: Victory Genomics Deliverable type: status-report Client context: Name: Victory Genomics Industry: Equine Genomics / Biotechnology Overview: Global equine genomics company offering whole genome sequencing for horses, positioned at the intersection of human-grade genomic science and the equine industry. Mission: Unlock the full genetic story of every horse through whole genome sequencing and translate that science into simple, actionable insight. Core belief: \"There's more to your horse than meets the eye.\" Brand promise: One test for the entirety of a horse’s life, with updated results delivered as new variants and discoveries emerge. Audience: Horse owners, breeders, trainers, bloodstock agents, veterinary professionals, and stables/farms that want better-informed decisions around health, heritage, performance, and breeding. Products: Arabian VGnome, Thoroughbred VGnome, Anglo-Arabian VGnome, VGenius bespoke consultative genomics, and paid genetic counseling. USP: World’s only equine DNA testing company using whole genome sequencing rather than panel testing; one-test-for-life model; breed-specific reporting; human-grade security and quality standards; in-house discovery and ongoing customer updates. Key messages: There’s more to your horse than meets the eye. One test for the entirety of your horse’s life. The world’s only whole genome sequencing for horses. Updated results pushed in hours. 20,000 genes. 5.5 million variants. 4 billion letters of DNA. We’re a discovery company, not just a testing company. Tone of voice: Scientific authority balanced with passionate accessibility. Confident, educational, emotionally connected to horse owners, action-oriented, and reassuring on privacy and security. Strategic priorities: Build category education around whole genome sequencing versus panel tests, reinforce premium one-test-for-life positioning, create breed-specific messaging, and arm sales/partner teams with stronger competitive comparison content. Notes: High-value premium biotech/equine client. Messaging should always protect scientific credibility while staying understandable for horse owners and breeders. Knowledge assets: - Victory Genomics Brand Briefing (doc): Master internal brand, product, audience, competitor, and messaging reference for Victory Genomics. | Insights: Use as the core knowledge source for positioning, audience segmentation, product messaging, competitive claims, objection handling, and brand voice. Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the actual draft deliverable itself, with clear sections and no routing boilerplate. Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: i want a short content on Instaram for Victory genomics about a specal 30% discount on all dna tests"
+                - generic [ref=e330]:
+                  - generic [ref=e331]:
+                    - paragraph [ref=e332]: Output Metadata
+                    - paragraph [ref=e333]: "Primary format: HTML"
+                  - paragraph [ref=e334]: "Lead agent owns the draft and final assembly: echo. No supporting specialists are required for this task. Original request focus: i want a short content on Instaram for Victory genomics about a specal 30% discount on all dna tests"
+            - generic [ref=e335]:
+              - generic [ref=e336]:
+                - generic [ref=e337]:
+                  - generic [ref=e338]:
+                    - 'heading "Content Task: a short instagram post for Victory Genomics about the prices of the d..." [level=3] [ref=e339]'
+                    - generic [ref=e340]: draft
+                    - generic [ref=e341]: campaign-copy
+                    - generic [ref=e342]: document
+                  - paragraph [ref=e343]: "Victory Genomics · Content Task: a short instagram post for Victory Genomics about the prices of the d... · Echo"
+                - generic [ref=e344]:
+                  - button "Draft" [ref=e345] [cursor=pointer]
+                  - button "Ready" [ref=e346] [cursor=pointer]
+                  - button "Delivered" [ref=e347] [cursor=pointer]
+              - generic [ref=e348]:
+                - button "Generate DOCX" [ref=e349] [cursor=pointer]:
+                  - img [ref=e350]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e353] [cursor=pointer]:
+                  - img [ref=e354]
+                  - text: Generate PDF
+              - article [ref=e359]:
+                - heading "Victory Genomics | One Test. One Price. Every Answer." [level=1] [ref=e361]
+                - generic [ref=e362]:
+                  - generic [ref=e363]:
+                    - heading "Objective" [level=2] [ref=e364]
+                    - paragraph [ref=e366]: Introduce Victory Genomics pricing in a way that reframes cost as investment—positioning whole genome sequencing as accessible entry into lifelong genetic discovery rather than a one-time purchase.
+                  - generic [ref=e367]:
+                    - heading "Audience" [level=2] [ref=e368]
+                    - paragraph [ref=e370]: Horse owners, breeders, and trainers seeking comprehensive genetic insight. Audience is passionate about equine health and performance but may be unfamiliar with the depth of whole genome sequencing versus basic SNP tests.
+                  - generic [ref=e371]:
+                    - heading "Core Message" [level=2] [ref=e372]
+                    - paragraph [ref=e374]: One test. One price. Lifetime value. Victory Genomics delivers complete whole genome sequencing—not a snapshot, but the full picture—updated as science evolves, with no surprise fees or retesting costs.
+                  - generic [ref=e375]:
+                    - heading "Hook Options" [level=2] [ref=e376]
+                    - list [ref=e378]:
+                      - listitem [ref=e379]:
+                        - strong [ref=e380]: "\"What if one test could answer every question—now and forever?\""
+                      - listitem [ref=e381]:
+                        - strong [ref=e382]: "\"Most equine DNA tests check 200 markers. We read all 2.8 billion.\""
+                      - listitem [ref=e383]:
+                        - strong [ref=e384]: "\"Your horse's complete genetic story. One price. Lifetime updates.\""
+                      - listitem [ref=e385]:
+                        - strong [ref=e386]: "\"Stop paying for fragments. Unlock the whole genome.\""
+                  - generic [ref=e387]:
+                    - heading "Carousel Cover Headline" [level=2] [ref=e388]
+                    - generic [ref=e389]:
+                      - paragraph [ref=e390]:
+                        - strong [ref=e391]: "\"One Test. Every Answer. For Life.\""
+                      - paragraph [ref=e392]:
+                        - text: "Subtext:"
+                        - emphasis [ref=e393]: Whole genome sequencing for horses — not a snapshot, but the complete picture.
+                  - generic [ref=e394]:
+                    - heading "Slide-by-Slide Carousel Copy" [level=2] [ref=e395]
+                    - generic [ref=e396]:
+                      - paragraph [ref=e397]:
+                        - strong [ref=e398]: "Slide 1: The Hook"
+                      - paragraph [ref=e399]:
+                        - text: 🧬
+                        - emphasis [ref=e400]: Most DNA tests read a few hundred markers.
+                      - paragraph [ref=e401]:
+                        - emphasis [ref=e402]: We read 2.8 billion.
+                      - paragraph [ref=e403]:
+                        - emphasis [ref=e404]: Introducing whole genome sequencing for horses — one test for the entirety of your horse's life.
+                      - paragraph [ref=e405]:
+                        - strong [ref=e406]: "Slide 2: The Comparison"
+                      - paragraph [ref=e407]:
+                        - text: ❌
+                        - strong [ref=e408]: Basic SNP Tests
+                      - list [ref=e409]:
+                        - listitem [ref=e410]: Check ~200–500 genetic variants
+                        - listitem [ref=e411]: One-time results
+                        - listitem [ref=e412]: Limited discovery potential
+                      - paragraph [ref=e413]:
+                        - text: ✅
+                        - strong [ref=e414]: Victory Genomics WGS
+                      - list [ref=e415]:
+                        - listitem [ref=e416]: Complete genome sequencing
+                        - listitem [ref=e417]: Updated findings as science advances
+                        - listitem [ref=e418]: One price, lifetime value
+                      - paragraph [ref=e419]:
+                        - strong [ref=e420]: "Slide 3: The Pricing Reveal"
+                      - paragraph [ref=e421]:
+                        - strong [ref=e422]: One test. One price. No hidden fees.
+                      - paragraph [ref=e423]: Whole genome sequencing for horses — the most comprehensive genetic test available.
+                      - paragraph [ref=e424]:
+                        - emphasis [ref=e425]: Starting at [price] for complete sequencing and lifetime updates.
+                      - paragraph [ref=e426]:
+                        - strong [ref=e427]: "Slide 4: The Value Stack"
+                      - paragraph [ref=e428]: 🔹 Complete genome map — not a snippet
+                      - paragraph [ref=e429]: 🔹 New discoveries added automatically
+                      - paragraph [ref=e430]: 🔹 Health, performance, and ancestry insights
+                      - paragraph [ref=e431]: 🔹 One purchase. Your horse's entire genetic story.
+                      - paragraph [ref=e432]:
+                        - strong [ref=e433]: "Slide 5: The Future Included"
+                      - paragraph [ref=e434]: Science doesn't stand still — and neither do we.
+                      - paragraph [ref=e435]: When researchers discover new genetic links, your results update. No retest. No extra cost. Just more answers.
+                      - paragraph [ref=e436]:
+                        - strong [ref=e437]: "Slide 6: The CTA Slide"
+                      - paragraph [ref=e438]:
+                        - strong [ref=e439]: Unlock your horse's full genetic potential.
+                      - paragraph [ref=e440]: 👉 Link in bio to order your Victory Genomics test today.
+                  - generic [ref=e441]:
+                    - heading "Caption" [level=2] [ref=e442]
+                    - generic [ref=e443]:
+                      - paragraph [ref=e444]: Your horse's genome contains 2.8 billion base pairs of information.
+                      - paragraph [ref=e445]: Most DNA tests read a few hundred. We read them all.
+                      - paragraph [ref=e446]: Introducing whole genome sequencing from Victory Genomics — the most comprehensive equine genetic test available. One test. One price. Lifetime updates as new discoveries emerge.
+                      - paragraph [ref=e447]: There's more to your horse than meets the eye. Let's find it together. 🐴🔬
+                  - generic [ref=e448]:
+                    - heading "CTA" [level=2] [ref=e449]
+                    - paragraph [ref=e451]:
+                      - strong [ref=e452]: Order Your Test → Link in Bio
+                  - generic [ref=e453]:
+                    - heading "Hashtag Suggestions" [level=2] [ref=e454]
+                    - paragraph [ref=e456]: "#EquineGenomics #HorseDNA #WholeGenomeSequencing #HorseHealth #EquineScience #VictoryGenomics #HorseBreeding #EquineWellness #GeneticTesting #HorseGenetics #OneTestForLife"
+                  - generic [ref=e457]:
+                    - heading "Design Direction Notes" [level=2] [ref=e458]
+                    - list [ref=e460]:
+                      - listitem [ref=e461]:
+                        - strong [ref=e462]: "Color Palette:"
+                        - text: Deep navy/charcoal background with gold or teal accents — premium science meets equine warmth
+                      - listitem [ref=e463]:
+                        - strong [ref=e464]: "Typography:"
+                        - text: Clean sans-serif for data; elegant serif or script accent for headlines
+                      - listitem [ref=e465]:
+                        - strong [ref=e466]: "Imagery:"
+                        - text: High-quality horse portrait (close eye or face) as hero image; subtle DNA helix or genomic pattern overlay at low opacity
+                      - listitem [ref=e467]:
+                        - strong [ref=e468]: "Icons:"
+                        - text: Minimal line icons for bullet points; avoid clinical imagery
+                      - listitem [ref=e469]:
+                        - strong [ref=e470]: "Slide Pacing:"
+                        - text: Generous white space; never crowd text — aim for 3-second readability per slide
+                      - listitem [ref=e471]:
+                        - strong [ref=e472]: "Mobile-First:"
+                        - text: All text must be legible at 4"–6" screen size without zooming
+              - generic [ref=e473]:
+                - generic [ref=e474]:
+                  - paragraph [ref=e475]: Execution Prompt
+                  - paragraph [ref=e476]: "Lead specialist: Echo Client: Victory Genomics Deliverable type: campaign-copy Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the final client-ready social deliverable, not a brief. Write with scientific clarity, strong hooks, and platform-native structure. Output sections in this exact order: ## Objective ## Audience ## Core Message ## Hook Options ## Carousel Cover Headline ## Slide-by-Slide Carousel Copy ## Caption ## CTA ## Hashtag Suggestions ## Design Direction Notes Make every slide concise and readable on mobile. Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: write a short instagram post for Victory Genomics about the prices of the dna tests"
+                - generic [ref=e477]:
+                  - generic [ref=e478]:
+                    - paragraph [ref=e479]: Output Metadata
+                    - paragraph [ref=e480]: "Primary format: HTML"
+                  - paragraph [ref=e481]: "Lead agent owns the draft and final assembly: echo. Supporting agents align on message, quality, and specialist checks before output is marked ready: maya, lyra. Original request focus: write a short instagram post for Victory Genomics about the prices of the dna tests"
+              - generic [ref=e482]:
+                - paragraph [ref=e483]: Autonomous Execution
+                - generic [ref=e484]:
+                  - generic [ref=e485]:
+                    - generic [ref=e486]:
+                      - paragraph [ref=e487]: Maya · Maya handoff
+                      - generic [ref=e488]: completed
+                    - paragraph [ref=e489]: "## Specialist Angle **Core Message Framing:** Position pricing as accessible entry into \"one test for life\" value—not a cost, but an investment that pays compounding dividends as new discoveries emerge. The price point should feel like unlocking premium science, not paying for a commodity test. **Content Hook:** Lead with the \"one test, lifetime updates\" differentiator to reframe price perception. A buyer paying $X knows they'll never need to retest—a single cost, infinite returns. **Tone Calibration:** Scientific authority meets equine passion. Not cold biotech marketing, but confident, warm expertise. The audience is emotionally invested in their horses—this copy should honor that while making the value case clear. --- ## Recommendations **Caption Structure:** 1. **Hook (1-2 lines):** Challenge the \"just another test\" assumption 2. **Value Proof (2-3 lines):** Why Victory Genomics pricing differs—whole genome sequencing, never expires, science advances included 3. **Social Proof/Norm (1 line):** Implied community of serious horse people 4. **CTA (1 line):** Direct to link/bio with clear next step **Visual Direction:** - Clean product shot of report or genomic visualization - Overlay text for price anchor (if public) or \"from $X\" range - Muted earth tones with biotech blue accents—sophisticated, not clinical **Hashtag Cluster:** - Brand: #VictoryGenomics #WholeGenomeSequencing - Category: #EquineGenetics #HorseHealth #PerformanceHorses - Audience: #HorseBreeders #Bloodstock #EquestrianLife - Aspiration: #KnowYourHorse #ScienceOfHorses **Character Target:** 150-..."
+                  - generic [ref=e490]:
+                    - generic [ref=e491]:
+                      - paragraph [ref=e492]: Lyra · Lyra handoff
+                      - generic [ref=e493]: completed
+                    - paragraph [ref=e494]: "## Specialist Angle As the visual production lead, the core angle here is **clarity meets credibility**. Victory Genomics operates in a space where \"professional-grade science\" meets \"passionate horse owners\"—the visual treatment must convey scientific authority without feeling cold or corporate. The post should feel premium but accessible, emphasizing that genomic insight is now within reach for the equine community. Key visual positioning considerations: - **Science-forward but warm**: Avoid overly clinical aesthetics; lean into the emotional bond between horses and their people - **Pricing = accessibility**: Frame pricing in a way that positions Victory as democratizing equine genomics, not as luxury-only - **Longevity promise**: The \"one test for life\" concept should be visually reinforced—avoid anything that looks like a one-off transaction ## Recommendations **Tone**: Confident, transparent, empowering. Lead with curiosity (\"There's more to your horse than meets the eye\") and close with the pricing reveal as a natural next step. **Copy structure**: - Hook: A compelling question or statement that creates urgency without pressure - Body: Clear, simple explanation of what the test covers - Pricing: Straightforward presentation—no hidden costs, no qualifiers buried - CTA: Low-friction, action-oriented **Visual direction**: - Clean layout with high-contrast text for price callout - Equine imagery (horse eye, coat detail, or motion) for emotional resonance - Consider a \"before/after\" framing: traditional assessments vs. genomic insight - Platform adaptation: Square..."
+                  - generic [ref=e495]:
+                    - generic [ref=e496]:
+                      - paragraph [ref=e497]: Echo · Echo final assembly
+                      - generic [ref=e498]: completed
+                    - paragraph [ref=e499]: Lead agent assembled the final deliverable from pipeline steps, skill-based handoffs, and client context.
+                    - generic [ref=e500]:
+                      - generic [ref=e501]: provider:ollama
+                      - generic [ref=e502]: model:minimax-m2.7:cloud
+                  - generic [ref=e503]:
+                    - generic [ref=e504]:
+                      - paragraph [ref=e505]: Iris · Quality control pass
+                      - generic [ref=e506]: completed
+                    - paragraph [ref=e507]: Quality gate passed (100/100). 1. Confirm objective, audience, and client message hierarchy | 2. Build hook and cover-slide angle | 3. Draft slide-by-slide copy with scientific clarity | 4. Add caption, CTA, and hashtags | 5. Review tone, readability, and claim safety | 6. Add design direction for production handoff
+            - generic [ref=e508]:
+              - generic [ref=e509]:
+                - generic [ref=e510]:
+                  - generic [ref=e511]:
+                    - 'heading "Content Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e512]'
+                    - generic [ref=e513]: draft
+                    - generic [ref=e514]: campaign-copy
+                    - generic [ref=e515]: document
+                  - paragraph [ref=e516]: "Victory Genomics · Content Task: a linkedin post for victory genomics about the process of dna testing... · Echo"
+                - generic [ref=e517]:
+                  - button "Draft" [ref=e518] [cursor=pointer]
+                  - button "Ready" [ref=e519] [cursor=pointer]
+                  - button "Delivered" [ref=e520] [cursor=pointer]
+              - generic [ref=e521]:
+                - button "Generate DOCX" [ref=e522] [cursor=pointer]:
+                  - img [ref=e523]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e526] [cursor=pointer]:
+                  - img [ref=e527]
+                  - text: Generate PDF
+              - article [ref=e532]:
+                - heading "Victory Genomics LinkedIn Post — DNA Testing Process Awareness" [level=1] [ref=e534]
+                - generic [ref=e535]:
+                  - generic [ref=e536]:
+                    - heading "Objective" [level=2] [ref=e537]
+                    - paragraph [ref=e539]: Position Victory Genomics as the trusted authority on equine whole genome sequencing by walking the audience through the testing process in an accessible, confidence-building way.
+                  - generic [ref=e540]:
+                    - heading "Audience" [level=2] [ref=e541]
+                    - paragraph [ref=e543]: Horse owners, breeders, trainers, bloodstock agents, and veterinary professionals who are curious about genomic technology but may not fully understand what whole genome sequencing involves or why it matters.
+                  - generic [ref=e544]:
+                    - heading "Key Message" [level=2] [ref=e545]
+                    - paragraph [ref=e547]: Whole genome sequencing is simpler than you think—and more powerful than you know. Victory Genomics translates complex genomic science into clear, actionable insight for every horse's lifetime.
+                  - generic [ref=e548]:
+                    - heading "Hook Options" [level=2] [ref=e549]
+                    - generic [ref=e550]:
+                      - paragraph [ref=e551]:
+                        - strong [ref=e552]: "Option A:"
+                      - paragraph [ref=e553]: Your horse's DNA holds 3 billion letters of information. Here's what it takes to read them all—and why it matters for your horse's future.
+                      - paragraph [ref=e554]:
+                        - strong [ref=e555]: "Option B:"
+                      - paragraph [ref=e556]: Most DNA tests scan less than 1% of your horse's genome. We sequence 100%. Here's what that difference means for every horse you care for.
+                      - paragraph [ref=e557]:
+                        - strong [ref=e558]: "Option C:"
+                      - paragraph [ref=e559]: From sample to insight, here's exactly how whole genome sequencing works—and why most tests miss the full story.
+                  - generic [ref=e560]:
+                    - heading "Primary Copy" [level=2] [ref=e561]
+                    - generic [ref=e562]:
+                      - paragraph [ref=e563]:
+                        - strong [ref=e564]: Your horse's genome contains more than 3 billion base pairs of data.
+                      - paragraph [ref=e565]: Most commercially available equine tests analyze a tiny fraction of that—a handful of specific genetic markers linked to known conditions.
+                      - paragraph [ref=e566]: Victory Genomics does something different.
+                      - paragraph [ref=e567]:
+                        - text: We sequence your horse's
+                        - strong [ref=e568]: entire genome
+                        - text: —every chromosome, every gene, every base pair.
+                      - paragraph [ref=e569]: "Here's what that process looks like:"
+                      - paragraph [ref=e570]:
+                        - strong [ref=e571]: 1. Sample Collection
+                      - paragraph [ref=e572]: A simple hair root or blood sample contains cells packed with your horse's DNA. The sample is shipped to our lab using standard protocols that any vet or owner can follow.
+                      - paragraph [ref=e573]:
+                        - strong [ref=e574]: 2. Laboratory Sequencing
+                      - paragraph [ref=e575]: Our sequencing technology reads the full genome—producing a complete, high-resolution map of your horse's unique genetic code. This isn't a test for a list of traits. It's a full readout.
+                      - paragraph [ref=e576]:
+                        - strong [ref=e577]: 3. Bioinformatics Analysis
+                      - paragraph [ref=e578]: Raw sequence data is processed through our equine-specific annotation pipeline. Every variant is cross-referenced against the latest genomic research and databases.
+                      - paragraph [ref=e579]:
+                        - strong [ref=e580]: 4. Continuous Interpretation
+                      - paragraph [ref=e581]: This is where Victory stands apart. Your horse's results aren't a one-time report. As science advances—as new variants are discovered, as research evolves—your horse's existing sequence is re-analyzed. You receive updated findings automatically.
+                      - paragraph [ref=e582]:
+                        - strong [ref=e583]: 5. Actionable Insight
+                      - paragraph [ref=e584]: Complex data becomes clear guidance. Health risks, trait carriers, breed composition, performance potential—translated into plain language for owners, trainers, and vets alike.
+                      - paragraph [ref=e585]: One test. Your horse's entire genetic story. Updated for life.
+                      - paragraph [ref=e586]: There's more to your horse than meets the eye. We make sure you see all of it.
+                  - generic [ref=e587]:
+                    - heading "CTA" [level=2] [ref=e588]
+                    - generic [ref=e589]:
+                      - paragraph [ref=e590]:
+                        - strong [ref=e591]: Ready to sequence your horse's full genome?
+                      - paragraph [ref=e592]: "[Learn how it works / Request a test kit]"
+                      - paragraph [ref=e593]:
+                        - emphasis [ref=e594]: Link in comments
+                  - generic [ref=e595]:
+                    - heading "Supporting Notes" [level=2] [ref=e596]
+                    - list [ref=e598]:
+                      - listitem [ref=e599]:
+                        - strong [ref=e600]: "Post length:"
+                        - text: Approximately 400 words—ideal for LinkedIn engagement without overwhelming readers.
+                      - listitem [ref=e601]:
+                        - strong [ref=e602]: "Tone:"
+                        - text: Authoritative but accessible. Positions Victory Genomics as both scientifically rigorous and practically useful.
+                      - listitem [ref=e603]:
+                        - strong [ref=e604]: "Format:"
+                        - text: Line breaks and numbered steps ensure scannability on mobile.
+                      - listitem [ref=e605]:
+                        - strong [ref=e606]: "Hashtag recommendations:"
+                        - text: "#EquineGenomics #HorseHealth #PrecisionMedicine #EquineScience #VictoryGenomics #WholeGenomeSequencing #EquineBreeding #AnimalBiotechnology"
+              - generic [ref=e607]:
+                - generic [ref=e608]:
+                  - paragraph [ref=e609]: Execution Prompt
+                  - paragraph [ref=e610]: "Lead specialist: Echo Client: Victory Genomics Deliverable type: campaign-copy Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the final copy deliverable, not a brief. Output sections in this exact order: ## Objective ## Audience ## Key Message ## Hook Options ## Primary Copy ## Supporting Variants ## CTA Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post"
+                - generic [ref=e611]:
+                  - generic [ref=e612]:
+                    - paragraph [ref=e613]: Output Metadata
+                    - paragraph [ref=e614]: "Primary format: HTML"
+                  - paragraph [ref=e615]: "Saved with quality warnings: Missing required section: Core Message."
+              - generic [ref=e616]:
+                - paragraph [ref=e617]: Autonomous Execution
+                - generic [ref=e618]:
+                  - generic [ref=e619]:
+                    - generic [ref=e620]:
+                      - paragraph [ref=e621]: Maya · Maya handoff
+                      - generic [ref=e622]: completed
+                    - paragraph [ref=e623]: "## Specialist Angle **Perspective:** Science democratizer meets equine passion. The post should bridge the gap between sophisticated genomic technology and the everyday horse owner's curiosity—making the invisible (DNA) feel tangible and valuable. Position Victory Genomics as the trusted translator between cutting-edge science and practical horse knowledge. **Tone:** Authoritative but approachable. Clinical credibility with warmth. Think: the knowledgeable friend who also happens to have a PhD. **Core tension to resolve:** Whole genome sequencing is complex; the post must illuminate without oversimplifying or alienating. --- ## Recommendations 1. **Lead with wonder, not process.** Open with an emotional or curiosity hook (e.g., \"Your horse carries a story written in 2.4 billion base pairs\") before diving into the \"how.\" 2. **Simplify the science without sanitizing it.** Name the key steps—sample collection, DNA extraction, whole genome sequencing, variant analysis—but use analogies (e.g., \"reading the entire instruction manual vs. skimming chapter headings\") to make SNP panels vs. WGS tangible. 3. **Differentiate explicitly.** Highlight the \"one test, lifetime updates\" promise early. This is the key competitive distinction—many horse owners may not know whole genome sequencing differs from basic genetic panels. 4. **Include a subtle CTA or soft engagement prompt.** Ask a question (\"Did you know...?\" or \"What would you want to know about your horse's genetics?\") to boost LinkedIn algorithm engagement without sounding salesy. 5. **Hashtag cluster:** #EquineGenomi..."
+                  - generic [ref=e624]:
+                    - generic [ref=e625]:
+                      - paragraph [ref=e626]: Echo · Echo final assembly
+                      - generic [ref=e627]: completed
+                    - paragraph [ref=e628]: Lead agent assembled the final deliverable from pipeline steps, skill-based handoffs, and client context.
+                    - generic [ref=e629]:
+                      - generic [ref=e630]: provider:ollama
+                      - generic [ref=e631]: model:minimax-m2.7:cloud
+                  - generic [ref=e632]:
+                    - generic [ref=e633]:
+                      - paragraph [ref=e634]: Iris · Quality control pass
+                      - generic [ref=e635]: warning
+                    - paragraph [ref=e636]: "Quality gate flagged issues (85/100): Missing required section: Core Message."
+                    - paragraph [ref=e638]: "Missing required section: Core Message."
+            - generic [ref=e639]:
+              - generic [ref=e640]:
+                - generic [ref=e641]:
+                  - generic [ref=e642]:
+                    - 'heading "Task: i want an istagram post forr victory genomics about hertiage dna test..." [level=3] [ref=e643]'
+                    - generic [ref=e644]: draft
+                    - generic [ref=e645]: status-report
+                    - generic [ref=e646]: document
+                  - paragraph [ref=e647]: "Victory Genomics · Task: i want an istagram post forr victory genomics about hertiage dna test... · Iris"
+                - generic [ref=e648]:
+                  - button "Draft" [ref=e649] [cursor=pointer]
+                  - button "Ready" [ref=e650] [cursor=pointer]
+                  - button "Delivered" [ref=e651] [cursor=pointer]
+              - generic [ref=e652]:
+                - button "Generate DOCX" [ref=e653] [cursor=pointer]:
+                  - img [ref=e654]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e657] [cursor=pointer]:
+                  - img [ref=e658]
+                  - text: Generate PDF
+              - article [ref=e663]:
+                - generic [ref=e665]:
+                  - heading "I'll route this to Echo, our Copy & Content Lead." [level=2] [ref=e666]
+                  - generic [ref=e667]:
+                    - paragraph [ref=e668]:
+                      - strong [ref=e669]: Instagram Post for Victory Genomics — Heritage DNA Test
+                    - paragraph [ref=e670]:
+                      - emphasis [ref=e671]: Draft (formal, educational, general awareness)
+                    - paragraph [ref=e672]:
+                      - strong [ref=e673]: "Caption:"
+                    - paragraph [ref=e674]: "# Heritage in Every Strand: The Science Behind Your Horse's Lineage"
+                    - paragraph [ref=e675]: Every horse carries a genetic story written over centuries. 🐴
+                    - paragraph [ref=e676]: Heritage DNA testing goes beyond pedigree papers — it reveals the deep lineage markers, breed signatures, and genetic lineage patterns that define your horse's unique ancestry.
+                    - paragraph [ref=e677]: At Victory Genomics, our Whole Genome Sequencing decodes over 5.5 million genetic variants, giving you answers no panel test can provide.
+                    - paragraph [ref=e678]: ✅ Understand your horse's true genetic heritage
+                    - paragraph [ref=e679]: ✅ Confirm breed ancestry with precision
+                    - paragraph [ref=e680]: ✅ Make informed breeding decisions backed by science
+                    - paragraph [ref=e681]: There's more to your horse than meets the eye.
+                    - paragraph [ref=e682]:
+                      - emphasis [ref=e683]: Have questions about heritage DNA testing? Drop them below 👇
+                    - paragraph [ref=e684]: "#VictoryGenomics #HorseGenetics #HeritageDNA #EquineGenomics #WholeGenomeSequencing #HorseBreeding #DNATesting #EquineScience #HorseOwners #BreedIntegrity"
+                    - paragraph [ref=e685]:
+                      - strong [ref=e686]: "Image suggestion:"
+                      - text: Clean, high-resolution close-up of a horse's head ormane, overlaid with subtle DNA helix graphic or world map lineage visual. Minimalist brand palette (dark navy + gold/cream accents).
+                    - paragraph [ref=e687]:
+                      - emphasis [ref=e688]: This is a draft — ready for your review. Let me know if you'd like Echo to adjust tone, length, or add a CTA.
+              - generic [ref=e689]:
+                - generic [ref=e690]:
+                  - paragraph [ref=e691]: Execution Prompt
+                  - paragraph [ref=e692]: "Lead specialist: Iris Client: Victory Genomics Deliverable type: status-report Client context: Name: Victory Genomics Industry: Equine Genomics / Biotechnology Overview: Global equine genomics company offering whole genome sequencing for horses, positioned at the intersection of human-grade genomic science and the equine industry. Mission: Unlock the full genetic story of every horse through whole genome sequencing and translate that science into simple, actionable insight. Core belief: \"There's more to your horse than meets the eye.\" Brand promise: One test for the entirety of a horse’s life, with updated results delivered as new variants and discoveries emerge. Audience: Horse owners, breeders, trainers, bloodstock agents, veterinary professionals, and stables/farms that want better-informed decisions around health, heritage, performance, and breeding. Products: Arabian VGnome, Thoroughbred VGnome, Anglo-Arabian VGnome, VGenius bespoke consultative genomics, and paid genetic counseling. USP: World’s only equine DNA testing company using whole genome sequencing rather than panel testing; one-test-for-life model; breed-specific reporting; human-grade security and quality standards; in-house discovery and ongoing customer updates. Key messages: There’s more to your horse than meets the eye. One test for the entirety of your horse’s life. The world’s only whole genome sequencing for horses. Updated results pushed in hours. 20,000 genes. 5.5 million variants. 4 billion letters of DNA. We’re a discovery company, not just a testing company. Tone of voice: Scientific authority balanced with passionate accessibility. Confident, educational, emotionally connected to horse owners, action-oriented, and reassuring on privacy and security. Strategic priorities: Build category education around whole genome sequencing versus panel tests, reinforce premium one-test-for-life positioning, create breed-specific messaging, and arm sales/partner teams with stronger competitive comparison content. Notes: High-value premium biotech/equine client. Messaging should always protect scientific credibility while staying understandable for horse owners and breeders. Knowledge assets: - Victory Genomics Brand Briefing (doc): Master internal brand, product, audience, competitor, and messaging reference for Victory Genomics. | Insights: Use as the core knowledge source for positioning, audience segmentation, product messaging, competitive claims, objection handling, and brand voice. Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the actual draft deliverable itself, with clear sections and no routing boilerplate. Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: i want an istagram post forr victory genomics about hertiage dna test. need it formal, educational for general awareness"
+                - generic [ref=e693]:
+                  - generic [ref=e694]:
+                    - paragraph [ref=e695]: Output Metadata
+                    - paragraph [ref=e696]: "Primary format: HTML"
+                  - paragraph [ref=e697]: "Lead agent owns the draft and final assembly: iris. No supporting specialists are required for this task. Original request focus: i want an istagram post forr victory genomics about hertiage dna test. need it formal, educational for general awareness"
+            - generic [ref=e698]:
+              - generic [ref=e699]:
+                - generic [ref=e700]:
+                  - generic [ref=e701]:
+                    - 'heading "Task: i want a facebook post for Victory genomics about the lifetime update..." [level=3] [ref=e702]'
+                    - generic [ref=e703]: draft
+                    - generic [ref=e704]: status-report
+                    - generic [ref=e705]: document
+                  - paragraph [ref=e706]: "Victory Genomics · Task: i want a facebook post for Victory genomics about the lifetime update... · Iris"
+                - generic [ref=e707]:
+                  - button "Draft" [ref=e708] [cursor=pointer]
+                  - button "Ready" [ref=e709] [cursor=pointer]
+                  - button "Delivered" [ref=e710] [cursor=pointer]
+              - generic [ref=e711]:
+                - button "Generate DOCX" [ref=e712] [cursor=pointer]:
+                  - img [ref=e713]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e716] [cursor=pointer]:
+                  - img [ref=e717]
+                  - text: Generate PDF
+              - article [ref=e722]:
+                - 'heading "Facebook Post — Victory Genomics: Lifetime DNA Report Updates" [level=1] [ref=e724]'
+                - generic [ref=e725]:
+                  - generic [ref=e726]:
+                    - heading "---" [level=2] [ref=e727]
+                    - paragraph [ref=e729]: No content available.
+                  - generic [ref=e730]:
+                    - heading "Post Copy" [level=2] [ref=e731]
+                    - generic [ref=e732]:
+                      - paragraph [ref=e733]:
+                        - strong [ref=e734]: 🧬 Your horse's DNA story doesn't end at the test.
+                      - paragraph [ref=e735]: "Here's something most owners don't know: most DNA tests give you one snapshot — and that's it."
+                      - paragraph [ref=e736]: Victory Genomics works differently.
+                      - paragraph [ref=e737]:
+                        - text: When you sequence your horse's full genome with us, you don't just get results once.
+                        - strong [ref=e738]: You get results for life.
+                      - paragraph [ref=e739]: As our in-house research team uncovers new genetic variants and discoveries — and we do, every week — your report updates automatically. No re-testing. No extra kits. Just better answers as science moves forward.
+                      - paragraph [ref=e740]:
+                        - strong [ref=e741]: That's the power of whole genome sequencing versus panel testing.
+                      - paragraph [ref=e742]: Panel tests look for a fixed list of known markers. We sequence all 20,000+ genes and 5.5 million variants in your horse's DNA — then keep watching the science so your report keeps getting smarter.
+                      - paragraph [ref=e743]: One test. One sample. A lifetime of evolving insight.
+                      - paragraph [ref=e744]:
+                        - strong [ref=e745]: Because there's more to your horse than meets the eye — and that story deepens over time.
+                  - generic [ref=e746]:
+                    - heading "Post Details" [level=2] [ref=e747]
+                    - generic [ref=e748]:
+                      - table [ref=e750]:
+                        - rowgroup [ref=e751]:
+                          - row "Element Spec" [ref=e752]:
+                            - columnheader "Element" [ref=e753]
+                            - columnheader "Spec" [ref=e754]
+                        - rowgroup [ref=e755]:
+                          - row "Platform Facebook" [ref=e756]:
+                            - cell "Platform" [ref=e757]:
+                              - strong [ref=e758]: Platform
+                            - cell "Facebook" [ref=e759]
+                          - row "Goal General awareness + education" [ref=e760]:
+                            - cell "Goal" [ref=e761]:
+                              - strong [ref=e762]: Goal
+                            - cell "General awareness + education" [ref=e763]
+                          - row "CTA Link to website or \"Learn more in comments\"" [ref=e764]:
+                            - cell "CTA" [ref=e765]:
+                              - strong [ref=e766]: CTA
+                            - cell "Link to website or \"Learn more in comments\"" [ref=e767]
+                          - 'row "Suggested hashtags #EquineGenomics #HorseHealth #VictoryGenomics #WholeGenomeSequencing #KnowYourHorse #ForLifeResults" [ref=e768]':
+                            - cell "Suggested hashtags" [ref=e769]:
+                              - strong [ref=e770]: Suggested hashtags
+                            - 'cell "#EquineGenomics #HorseHealth #VictoryGenomics #WholeGenomeSequencing #KnowYourHorse #ForLifeResults" [ref=e771]'
+                          - row "Image suggestion Infographic showing \"Then vs. Now\" — one-test model vs. traditional panel retesting; or a visual of a horse with layered DNA strands fading into the future" [ref=e772]:
+                            - cell "Image suggestion" [ref=e773]:
+                              - strong [ref=e774]: Image suggestion
+                            - cell "Infographic showing \"Then vs. Now\" — one-test model vs. traditional panel retesting; or a visual of a horse with layered DNA strands fading into the future" [ref=e775]
+                      - paragraph [ref=e776]:
+                        - strong [ref=e777]: Ready to post as-is, or want me to adjust the tone or length?
+              - generic [ref=e778]:
+                - generic [ref=e779]:
+                  - paragraph [ref=e780]: Execution Prompt
+                  - paragraph [ref=e781]: "Lead specialist: Iris Client: Victory Genomics Deliverable type: status-report Client context: Name: Victory Genomics Industry: Equine Genomics / Biotechnology Overview: Global equine genomics company offering whole genome sequencing for horses, positioned at the intersection of human-grade genomic science and the equine industry. Mission: Unlock the full genetic story of every horse through whole genome sequencing and translate that science into simple, actionable insight. Core belief: \"There's more to your horse than meets the eye.\" Brand promise: One test for the entirety of a horse’s life, with updated results delivered as new variants and discoveries emerge. Audience: Horse owners, breeders, trainers, bloodstock agents, veterinary professionals, and stables/farms that want better-informed decisions around health, heritage, performance, and breeding. Products: Arabian VGnome, Thoroughbred VGnome, Anglo-Arabian VGnome, VGenius bespoke consultative genomics, and paid genetic counseling. USP: World’s only equine DNA testing company using whole genome sequencing rather than panel testing; one-test-for-life model; breed-specific reporting; human-grade security and quality standards; in-house discovery and ongoing customer updates. Key messages: There’s more to your horse than meets the eye. One test for the entirety of your horse’s life. The world’s only whole genome sequencing for horses. Updated results pushed in hours. 20,000 genes. 5.5 million variants. 4 billion letters of DNA. We’re a discovery company, not just a testing company. Tone of voice: Scientific authority balanced with passionate accessibility. Confident, educational, emotionally connected to horse owners, action-oriented, and reassuring on privacy and security. Strategic priorities: Build category education around whole genome sequencing versus panel tests, reinforce premium one-test-for-life positioning, create breed-specific messaging, and arm sales/partner teams with stronger competitive comparison content. Notes: High-value premium biotech/equine client. Messaging should always protect scientific credibility while staying understandable for horse owners and breeders. Knowledge assets: - Victory Genomics Brand Briefing (doc): Master internal brand, product, audience, competitor, and messaging reference for Victory Genomics. | Insights: Use as the core knowledge source for positioning, audience segmentation, product messaging, competitive claims, objection handling, and brand voice. Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the actual draft deliverable itself, with clear sections and no routing boilerplate. Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: i want a facebook post for Victory genomics about the lifetime updates of the dna reports they offer. make it for general awareness and as educational tone"
+                - generic [ref=e782]:
+                  - generic [ref=e783]:
+                    - paragraph [ref=e784]: Output Metadata
+                    - paragraph [ref=e785]: "Primary format: HTML"
+                  - paragraph [ref=e786]: "Lead agent owns the draft and final assembly: iris. No supporting specialists are required for this task. Original request focus: i want a facebook post for Victory genomics about the lifetime updates of the dna reports they offer. make it for general awareness and as educational tone"
+            - generic [ref=e787]:
+              - generic [ref=e788]:
+                - generic [ref=e789]:
+                  - generic [ref=e790]:
+                    - 'heading "Task: 1. single 2.heritage 3.awareness 4. educational" [level=3] [ref=e791]'
+                    - generic [ref=e792]: draft
+                    - generic [ref=e793]: status-report
+                    - generic [ref=e794]: document
+                  - paragraph [ref=e795]: General ops · Unlinked mission · Iris
+                - generic [ref=e796]:
+                  - button "Draft" [ref=e797] [cursor=pointer]
+                  - button "Ready" [ref=e798] [cursor=pointer]
+                  - button "Delivered" [ref=e799] [cursor=pointer]
+              - generic [ref=e800]:
+                - button "Generate DOCX" [ref=e801] [cursor=pointer]:
+                  - img [ref=e802]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e805] [cursor=pointer]:
+                  - img [ref=e806]
+                  - text: Generate PDF
+              - article [ref=e811]:
+                - generic [ref=e813]:
+                  - heading "Here's a draft for you:" [level=2] [ref=e814]
+                  - generic [ref=e815]:
+                    - paragraph [ref=e816]:
+                      - text: ✨
+                      - strong [ref=e817]: "The Arabian Horse: Where Heritage Meets Beauty"
+                      - text: ✨
+                    - paragraph [ref=e818]:
+                      - text: For centuries, the Arabian horse has been celebrated not only for its grace and spirit, but for a beauty that runs bone-deep — literally. At Victory Genomics, we study the genetics behind those iconic dished faces, flowing manes, and statuesque silhouettes. Understanding the science doesn't take away from the magic — it deepens our appreciation for a breed shaped by millennia of careful breeding. Because when you know the
+                      - emphasis [ref=e819]: why
+                      - text: behind the beauty, you can preserve it for generations to come. 🐴🔬
+                    - paragraph [ref=e820]: "#ArabianHorses #EquineGenetics #VictoryGenomics #Heritage #HorseBreeding #EquineScience"
+                    - paragraph [ref=e821]: Want me to adjust the tone, length, or add/remove any hashtags?
+              - generic [ref=e822]:
+                - generic [ref=e823]:
+                  - paragraph [ref=e824]: Execution Prompt
+                  - paragraph [ref=e825]: No execution prompt stored.
+                - generic [ref=e826]:
+                  - generic [ref=e827]:
+                    - paragraph [ref=e828]: Output Metadata
+                    - paragraph [ref=e829]: "Primary format: HTML"
+                  - paragraph [ref=e830]: Generated by Iris
+            - generic [ref=e831]:
+              - generic [ref=e832]:
+                - generic [ref=e833]:
+                  - generic [ref=e834]:
+                    - 'heading "Task: need an instagram post for vg about the importance of beauty arabian ..." [level=3] [ref=e835]'
+                    - generic [ref=e836]: draft
+                    - generic [ref=e837]: status-report
+                    - generic [ref=e838]: document
+                  - paragraph [ref=e839]: "General ops · Task: need an instagram post for vg about the importance of beauty arabian ... · Iris"
+                - generic [ref=e840]:
+                  - button "Draft" [ref=e841] [cursor=pointer]
+                  - button "Ready" [ref=e842] [cursor=pointer]
+                  - button "Delivered" [ref=e843] [cursor=pointer]
+              - generic [ref=e844]:
+                - button "Generate DOCX" [ref=e845] [cursor=pointer]:
+                  - img [ref=e846]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e849] [cursor=pointer]:
+                  - img [ref=e850]
+                  - text: Generate PDF
+              - article [ref=e855]:
+                - generic [ref=e857]:
+                  - heading "Happy to help with that! To make sure I nail this, a few quick questions:" [level=2] [ref=e858]
+                  - generic [ref=e859]:
+                    - list [ref=e860]:
+                      - listitem [ref=e861]:
+                        - strong [ref=e862]: Format
+                        - text: — Single image post, carousel, or Reel caption?
+                      - listitem [ref=e863]:
+                        - strong [ref=e864]: Key message
+                        - text: — What angle do you want? (e.g., heritage, ingredients, efficacy, luxury, etc.)
+                      - listitem [ref=e865]:
+                        - strong [ref=e866]: Target audience
+                        - text: — VG's existing followers, new prospects, or general awareness?
+                      - listitem [ref=e867]:
+                        - strong [ref=e868]: Tone
+                        - text: — Inspirational, educational, luxurious, scientific-backed?
+                    - paragraph [ref=e869]: Give me those details and I'll get the copy drafted! 🐴✨
+              - generic [ref=e870]:
+                - generic [ref=e871]:
+                  - paragraph [ref=e872]: Execution Prompt
+                  - paragraph [ref=e873]: No execution prompt stored.
+                - generic [ref=e874]:
+                  - generic [ref=e875]:
+                    - paragraph [ref=e876]: Output Metadata
+                    - paragraph [ref=e877]: "Primary format: HTML"
+                  - paragraph [ref=e878]: Generated by Iris
+            - generic [ref=e879]:
+              - generic [ref=e880]:
+                - generic [ref=e881]:
+                  - generic [ref=e882]:
+                    - 'heading "Task: hi" [level=3] [ref=e883]'
+                    - generic [ref=e884]: draft
+                    - generic [ref=e885]: status-report
+                    - generic [ref=e886]: document
+                  - paragraph [ref=e887]: General ops · Unlinked mission · Iris
+                - generic [ref=e888]:
+                  - button "Draft" [ref=e889] [cursor=pointer]
+                  - button "Ready" [ref=e890] [cursor=pointer]
+                  - button "Delivered" [ref=e891] [cursor=pointer]
+              - generic [ref=e892]:
+                - button "Generate DOCX" [ref=e893] [cursor=pointer]:
+                  - img [ref=e894]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e897] [cursor=pointer]:
+                  - img [ref=e898]
+                  - text: Generate PDF
+              - article [ref=e903]:
+                - generic [ref=e905]:
+                  - heading "Hey! 👋 I'm Iris, Agency Ops Lead at Mission Control." [level=2] [ref=e906]
+                  - generic [ref=e907]:
+                    - paragraph [ref=e908]: We have an active content task for Victory Genomics — an Instagram carousel on Equine Karyotype, currently in draft.
+                    - paragraph [ref=e909]: "What can I help you with? I can:"
+                    - list [ref=e910]:
+                      - listitem [ref=e911]: Check task status or team workload
+                      - listitem [ref=e912]: Route a new brief, campaign, or content request
+                      - listitem [ref=e913]: Start a pipeline (campaign brief, media plan, SEO audit, etc.)
+                      - listitem [ref=e914]: Walk you through any current projects
+              - generic [ref=e915]:
+                - generic [ref=e916]:
+                  - paragraph [ref=e917]: Execution Prompt
+                  - paragraph [ref=e918]: "Lead specialist: Iris Client: not specified Deliverable type: status-report Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the actual draft deliverable itself, with clear sections and no routing boilerplate. Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: hi"
+                - generic [ref=e919]:
+                  - generic [ref=e920]:
+                    - paragraph [ref=e921]: Output Metadata
+                    - paragraph [ref=e922]: "Primary format: HTML"
+                  - paragraph [ref=e923]: "Lead agent owns the draft and final assembly: iris. No supporting specialists are required for this task. Original request focus: hi"
+            - generic [ref=e924]:
+              - generic [ref=e925]:
+                - generic [ref=e926]:
+                  - generic [ref=e927]:
+                    - 'heading "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [level=3] [ref=e928]'
+                    - generic [ref=e929]: draft
+                    - generic [ref=e930]: campaign-copy
+                    - generic [ref=e931]: document
+                  - paragraph [ref=e932]: "Victory Genomics · Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp... · Echo"
+                - generic [ref=e933]:
+                  - button "Draft" [ref=e934] [cursor=pointer]
+                  - button "Ready" [ref=e935] [cursor=pointer]
+                  - button "Delivered" [ref=e936] [cursor=pointer]
+              - generic [ref=e937]:
+                - button "Generate DOCX" [ref=e938] [cursor=pointer]:
+                  - img [ref=e939]
+                  - text: Generate DOCX
+                - button "Generate PDF" [ref=e942] [cursor=pointer]:
+                  - img [ref=e943]
+                  - text: Generate PDF
+              - article [ref=e948]:
+                - heading "Victory Genomics Equine Karyotyping Instagram Carousel" [level=1] [ref=e950]
+                - generic [ref=e951]:
+                  - generic [ref=e952]:
+                    - heading "Objective" [level=2] [ref=e953]
+                    - paragraph [ref=e955]: Educate horse owners and breeders on equine karyotyping as a critical tool for uncovering chromosomal health issues that impact fertility, pregnancy viability, and foal health—while positioning Victory Genomics' whole genome sequencing as the superior alternative to traditional karyotyping panel tests.
+                  - generic [ref=e956]:
+                    - heading "Audience" [level=2] [ref=e957]
+                    - generic [ref=e958]:
+                      - paragraph [ref=e959]: "Primary: Horse owners, breeders, and bloodstock agents focused on breeding soundness and reproductive success."
+                      - paragraph [ref=e960]: "Secondary: Trainers and veterinary professionals seeking advanced genomic insights for their clients."
+                  - generic [ref=e961]:
+                    - heading "Core Message" [level=2] [ref=e962]
+                    - paragraph [ref=e964]: Karyotyping reveals the chromosomal blueprint invisible to the naked eye—but traditional methods only capture part of the picture. Victory Genomics' whole genome sequencing delivers the complete chromosomal story, plus 20,000 genes, 5.5 million variants, and actionable insights that update for your horse's entire lifetime.
+                  - generic [ref=e965]:
+                    - heading "Hook Options" [level=2] [ref=e966]
+                    - list [ref=e968]:
+                      - listitem [ref=e969]:
+                        - strong [ref=e970]: "Visual Hook:"
+                        - text: "\"You see a healthy mare. Her chromosomes might tell a different story.\""
+                      - listitem [ref=e971]:
+                        - strong [ref=e972]: "Stat Hook:"
+                        - text: "\"65 chromosomes. Millions of possible variations. Only one test tells you everything.\""
+                      - listitem [ref=e973]:
+                        - strong [ref=e974]: "Question Hook:"
+                        - text: "\"What can't you see in your horse's pedigree, conformation, or performance?\""
+                      - listitem [ref=e975]:
+                        - strong [ref=e976]: "Bold Claim Hook:"
+                        - text: "\"Most chromosomal issues go undetected until breeding fails. Here's why—and how to change that.\""
+                  - generic [ref=e977]:
+                    - heading "Carousel Cover Headline" [level=2] [ref=e978]
+                    - generic [ref=e979]:
+                      - paragraph [ref=e980]:
+                        - strong [ref=e981]: "\"There's More to Your Horse Than Meets the Eye—Especially at the Chromosome Level\""
+                      - paragraph [ref=e982]: "Subhead: \"Karyotyping 101: What every breeder needs to know about chromosomal health.\""
+                  - generic [ref=e983]:
+                    - heading "Slide-by-Slide Carousel Copy" [level=2] [ref=e984]
+                    - generic [ref=e985]:
+                      - paragraph [ref=e986]:
+                        - strong [ref=e987]: Slide 1 — Hook
+                      - paragraph [ref=e988]:
+                        - strong [ref=e989]: "The Question Every Breeder Should Ask:"
+                      - paragraph [ref=e990]:
+                        - emphasis [ref=e991]: "\"What can't you see in your horse's DNA?\""
+                      - paragraph [ref=e992]: Visual inspection. Pedigree papers. Performance records.
+                      - paragraph [ref=e993]: But there's a layer of genetic information most owners never access—the chromosome level.
+                      - paragraph [ref=e994]: ⚠️ Chromosomal abnormalities can silently impact fertility, pregnancy viability, and foal health—without any visible signs.
+                      - paragraph [ref=e995]:
+                        - strong [ref=e996]: Slide 2 — What Is a Karyotype?
+                      - paragraph [ref=e997]:
+                        - strong [ref=e998]: The Genetic Blueprint You've Never Seen
+                      - paragraph [ref=e999]: A karyotype is a snapshot of your horse's chromosomes—the 64 paired structures that carry every gene.
+                      - paragraph [ref=e1000]: "It reveals:"
+                      - paragraph [ref=e1001]: ✓ Chromosomal number abnormalities
+                      - paragraph [ref=e1002]: ✓ Structural rearrangements (translocations)
+                      - paragraph [ref=e1003]: ✓ Sex chromosome patterns
+                      - paragraph [ref=e1004]: ✓ Mosaic conditions
+                      - paragraph [ref=e1005]: Think of it as a chromosomal headcount and structural map.
+                      - paragraph [ref=e1006]:
+                        - strong [ref=e1007]: Slide 3 — Why Chromosomes Matter for Breeding
+                      - paragraph [ref=e1008]:
+                        - strong [ref=e1009]: When 64 Should Be 64—and When It Isn't
+                      - paragraph [ref=e1010]: "Chromosomal issues can cause:"
+                      - paragraph [ref=e1011]: • Reduced fertility or infertility
+                      - paragraph [ref=e1012]: • Early embryonic loss
+                      - paragraph [ref=e1013]: • Viable foals
+              - generic [ref=e1014]:
+                - generic [ref=e1015]:
+                  - paragraph [ref=e1016]: Execution Prompt
+                  - paragraph [ref=e1017]: "Lead specialist: Echo Client: Victory Genomics Deliverable type: campaign-copy Client context: Name: Victory Genomics Industry: Equine Genomics / Biotechnology Overview: Global equine genomics company offering whole genome sequencing for horses, positioned at the intersection of human-grade genomic science and the equine industry. Mission: Unlock the full genetic story of every horse through whole genome sequencing and translate that science into simple, actionable insight. Core belief: \"There's more to your horse than meets the eye.\" Brand promise: One test for the entirety of a horse’s life, with updated results delivered as new variants and discoveries emerge. Audience: Horse owners, breeders, trainers, bloodstock agents, veterinary professionals, and stables/farms that want better-informed decisions around health, heritage, performance, and breeding. Products: Arabian VGnome, Thoroughbred VGnome, Anglo-Arabian VGnome, VGenius bespoke consultative genomics, and paid genetic counseling. USP: World’s only equine DNA testing company using whole genome sequencing rather than panel testing; one-test-for-life model; breed-specific reporting; human-grade security and quality standards; in-house discovery and ongoing customer updates. Key messages: There’s more to your horse than meets the eye. One test for the entirety of your horse’s life. The world’s only whole genome sequencing for horses. Updated results pushed in hours. 20,000 genes. 5.5 million variants. 4 billion letters of DNA. We’re a discovery company, not just a testing company. Tone of voice: Scientific authority balanced with passionate accessibility. Confident, educational, emotionally connected to horse owners, action-oriented, and reassuring on privacy and security. Strategic priorities: Build category education around whole genome sequencing versus panel tests, reinforce premium one-test-for-life positioning, create breed-specific messaging, and arm sales/partner teams with stronger competitive comparison content. Notes: High-value premium biotech/equine client. Messaging should always protect scientific credibility while staying understandable for horse owners and breeders. Format the final output for direct rendering in the app. Use this exact structure style: - First line must be a single H1 in the form \"# [Deliverable Title]\". - Every major section must use \"## Section Name\". - Use bullets for concise lists and pipe tables when a schedule, plan, or calendar is more useful. - Do not wrap the answer in code fences. - Do not use internal notes, analysis labels, or project-management boilerplate. Produce the final client-ready social deliverable, not a brief. Write with scientific clarity, strong hooks, and platform-native structure. Output sections in this exact order: ## Objective ## Audience ## Core Message ## Hook Options ## Carousel Cover Headline ## Slide-by-Slide Carousel Copy ## Caption ## CTA ## Hashtag Suggestions ## Design Direction Notes Make every slide concise and readable on mobile. Do not answer with \"task routed\", \"lead agent\", \"status\", \"delivery\", or project-management boilerplate when the user asked for a deliverable. Produce the actual draft output itself unless the user explicitly asked for planning only. Assume the task starts now. Do not describe that you will do the work later. Do the work in the answer. Make the result specific to the client, industry, audience, and product context provided. Do not invent file paths, exports, delivery actions, inbox sends, or deadlines unless explicitly provided in context. Use only real agent names from context. Do not invent team members. If work is still a draft, say it is a draft. User request: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping."
+                - generic [ref=e1018]:
+                  - generic [ref=e1019]:
+                    - paragraph [ref=e1020]: Output Metadata
+                    - paragraph [ref=e1021]: "Primary format: HTML"
+                  - paragraph [ref=e1022]: "Lead agent owns the draft and final assembly: echo. Supporting agents align on message, quality, and specialist checks before output is marked ready: maya, lyra. Original request focus: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping."
+              - generic [ref=e1023]:
+                - paragraph [ref=e1024]: Autonomous Execution
+                - generic [ref=e1025]:
+                  - generic [ref=e1026]:
+                    - generic [ref=e1027]:
+                      - paragraph [ref=e1028]: Maya · Maya handoff
+                      - generic [ref=e1029]: completed
+                    - paragraph [ref=e1030]: "# Specialist Handoff: Victory Genomics Equine Karyotyping Carousel ## Specialist Angle **Core Insight:** Most horse owners don't know that chromosomal abnormalities (like translocations, mosaicism, or aneuploidy) can silently impact fertility, pregnancy viability, and foal health—often without any visible signs. Karyotyping is the definitive diagnostic tool for these structural chromosomal issues,"
+                  - generic [ref=e1031]:
+                    - generic [ref=e1032]:
+                      - paragraph [ref=e1033]: Lyra · Lyra handoff
+                      - generic [ref=e1034]: completed
+                    - paragraph [ref=e1035]: "## Specialist Angle **Core Narrative Hook:** \"There's more to your horse than meets the eye\" at the chromosome level. Position karyotyping as the foundational genomic insight that reveals what can't be seen—chromosomal health, sex chromosome patterns, and abnormalities that affect breeding decisions and performance potential. **Content Pillar:** Educational(category education) — educating the audience on what karyotyping is and why it matters before introducing Victory Genomics' superior WGS approach. **Strategic Angle:** Demystify chromosomal analysis. Most horse owners don't know karyotyping exists or understand its implications for breeding soundness, fertility, and health screening. This carousel positions Victory Genomics as the trusted translator of complex science into actionable insight. --- ## Recommendations **Slide Architecture:** 1. **Hook Slide:** Bold statement challenging assumptions about what visual inspection reveals (\"You see a bay mare. Her chromosomes tell a different story.\") 2. **"
+                  - generic [ref=e1036]:
+                    - generic [ref=e1037]:
+                      - paragraph [ref=e1038]: Echo · Echo final assembly
+                      - generic [ref=e1039]: completed
+                    - paragraph [ref=e1040]: Lead agent assembled the final deliverable from pipeline steps, skill-based handoffs, and client context.
+                  - generic [ref=e1041]:
+                    - generic [ref=e1042]:
+                      - paragraph [ref=e1043]: Iris · Quality control pass
+                      - generic [ref=e1044]: completed
+                    - paragraph [ref=e1045]: 1. Confirm objective, audience, and client message hierarchy | 2. Build hook and cover-slide angle | 3. Draft slide-by-slide copy with scientific clarity | 4. Add caption, CTA, and hashtags | 5. Review tone, readability, and claim safety | 6. Add design direction for production handoff
+    - button "Open Iris chat" [ref=e1046] [cursor=pointer]:
+      - img [ref=e1047]
+    - generic [ref=e1049]:
+      - button "Hide live task tracker" [expanded] [ref=e1051] [cursor=pointer]:
+        - img [ref=e1052]
+        - generic [ref=e1059]: Live Tasks
+        - generic [ref=e1060]: "5"
+      - generic [ref=e1061]:
+        - generic [ref=e1062]:
+          - generic [ref=e1063]:
+            - generic [ref=e1064]:
+              - img [ref=e1065]
+              - text: Task Tracker
+            - paragraph [ref=e1072]: Follow routing, team activity, and saved outputs without keeping Iris open.
+          - button "Close task tracker" [ref=e1073] [cursor=pointer]:
+            - img [ref=e1074]
+        - generic [ref=e1077]:
+          - generic [ref=e1078]:
+            - 'button "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · 18:47" [ref=e1079] [cursor=pointer]':
+              - paragraph [ref=e1080]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+              - paragraph [ref=e1081]: General Ops · 18:47
+            - 'button "Task: i want a short content on Instaram for Victory genomics about a speca... Victory Genomics · 18:47" [ref=e1082] [cursor=pointer]':
+              - paragraph [ref=e1083]: "Task: i want a short content on Instaram for Victory genomics about a speca..."
+              - paragraph [ref=e1084]: Victory Genomics · 18:47
+            - 'button "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · 18:47" [ref=e1085] [cursor=pointer]':
+              - paragraph [ref=e1086]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+              - paragraph [ref=e1087]: General Ops · 18:47
+            - 'button "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp... Victory Genomics · 18:47" [ref=e1088] [cursor=pointer]':
+              - paragraph [ref=e1089]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+              - paragraph [ref=e1090]: Victory Genomics · 18:47
+            - 'button "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · 18:47" [ref=e1091] [cursor=pointer]':
+              - paragraph [ref=e1092]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+              - paragraph [ref=e1093]: General Ops · 18:47
+          - generic [ref=e1094]:
+            - generic [ref=e1095]:
+              - generic [ref=e1096]:
+                - paragraph [ref=e1097]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+                - paragraph [ref=e1098]: General Ops · Direct execution
+              - generic [ref=e1099]: blocked
+            - generic [ref=e1101]:
+              - generic [ref=e1102]: Progress
+              - generic [ref=e1103]: 10%
+            - generic [ref=e1106]:
+              - generic [ref=e1111]:
+                - paragraph [ref=e1112]: Analyzing
+                - paragraph [ref=e1113]: Iris is interpreting the request and framing the work.
+              - generic [ref=e1118]:
+                - paragraph [ref=e1119]: Routing
+                - paragraph [ref=e1120]: "Lead: Iris"
+              - generic [ref=e1125]:
+                - paragraph [ref=e1126]: Executing
+                - paragraph [ref=e1127]: Ollama model error — the conversation may be too long for the model's context window. Try starting a new chat, or switch to a model with a larger context in Settings.
+              - generic [ref=e1131]:
+                - paragraph [ref=e1132]: Saved
+                - paragraph [ref=e1133]: Waiting for the final saved output.
+            - generic [ref=e1134]:
+              - paragraph [ref=e1135]: Active team
+              - generic [ref=e1137]:
+                - img [ref=e1138]
+                - text: Iris
+            - generic [ref=e1140]:
+              - paragraph [ref=e1141]: Skills in play
+              - generic [ref=e1143]: Skill selection appears once routing is complete.
+            - generic [ref=e1144]:
+              - paragraph [ref=e1145]: Live execution
+              - generic [ref=e1147]:
+                - paragraph [ref=e1148]: System · task execution
+                - paragraph [ref=e1149]: failed
+            - generic [ref=e1150]:
+              - paragraph [ref=e1151]: Updated 29 Mar, 18:47
+              - link "Open task" [ref=e1152] [cursor=pointer]:
+                - /url: /tasks/c7dab690-7066-4011-bd60-b73f772ff1ca
+                - text: Open task
+                - img [ref=e1153]

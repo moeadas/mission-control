@@ -8,9 +8,9 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when a brand wants to create a new category, redefine an existing one, or become the defining player in an emerging space — to build category leadership rather than competing within someone else's rules.",
+      "trigger": "Use this skillany time a brand wants to create a new category, redefine an existing one, or become the defining player in an emerging space — to build category leadership rather than competing within someone else's rules.",
       "context": "You are a category strategist who helps brands create or reshape categories to achieve first-mover advantage and become the default choice within a newly defined space.",
-      "instructions": "## Category Design Workflow\n\n- [ ] 1. Identify category opportunity: Find an underserved or poorly defined space\n- [ ] 2. Define the category: Name it, scope it, establish its rules\n- [ ] 3. Build the brand-category bond: Make the brand synonymous with the category\n- [ ] 4. Educate the market: Create demand for the category itself\n- [ ] 5. Defend the category: Build moats against competitors\n- [ ] 6. Grow the category: Expand total addressable market\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Current market: {{current_market}}\n- Category opportunity: {{category_opportunity}}\n- Target audience: {{target_audience}}",
+      "instructions": "## Category Design\n\n1. **Opportunity Identification** — Find underserved or poorly defined space\n   - ✓ Done when: Opportunity is real and sized\n\n2. **Category Definition** — Name and define the new category\n   - ✓ Done when: Category is clear and ownable\n\n3. **Brand-Category Bond** — Build the brand as synonymous with the category\n   - ✓ Done when: Brand is positioned as category leader\n\n4. **Market Education** — Create demand for the category itself\n   - ✓ Done when: Market understands the category value\n\n5. **Defense Planning** — Build moats against competitors\n   - ✓ Done when: Category is defensible\n\n## Key Inputs\n- brand_name: Brand seeking category leadership\n- current_market: Current market context\n- category_opportunity: The category opportunity being pursued\n- target_audience: Primary target audience for category",
       "output_template": "## Category Design: {{brand_name}}\n\n### Category Opportunity\n**Current state:**\n**Opportunity identified:**\n**Why now:**\n\n### Proposed Category\n**Category name:**\n**Category definition:**\n**What it replaces/substitutes:**\n**Scope:**\n\n### Category Architecture\n**Category promise:**\n**Category rules:**\n**Success criteria for category:**\n\n### Brand-Category Bond\n**Brand's role in category:**\n**How to own category mental availability:**\n**Category creator vs. fast follower risk:**\n\n### Market Education Strategy\n| Tactic | Audience | Message |\n|--------|----------|--------|\n| | | |\n\n### Competitive Response Plan\n**How competitors might respond:**\n**Defensive moves:**\n\n### Category Growth Roadmap\n| Phase | Timeframe | Goal |\n|-------|-----------|------|\n| Creation | | |\n| Adoption | | |\n| Leadership | | |\n| Defense | | |\n\n### Success Metrics\n| Metric | Target |\n|--------|--------|\n| Category awareness | |\n| Category market share | |\n| Category revenue | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Primary target audience for category"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand seeking category leadership"
+    },
+    {
+      "name": "current_market",
+      "type": "string",
+      "required": true,
+      "description": "Current market context"
+    },
+    {
+      "name": "category_opportunity",
+      "type": "string",
+      "required": true,
+      "description": "The category opportunity being pursued"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": false,
+      "description": "Primary target audience for category"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,32 @@
     }
   ],
   "checklist": [
-    "Category opportunity is real and sized",
-    "Category is clearly defined and named",
-    "Brand is positioned as the category creator",
-    "Market education strategy is concrete",
-    "Competitive defense is planned",
-    "Category growth roadmap is actionable"
+    "Opportunity is real and sized",
+    "Category is clear and ownable",
+    "Brand is positioned as category leader",
+    "Market understands the category value",
+    "Category is defensible"
   ],
-  "tools": ["document", "spreadsheet", "presentation"],
-  "agents": ["nova"],
-  "pipelines": ["strategy"],
+  "tools": [
+    "document",
+    "spreadsheet",
+    "presentation"
+  ],
+  "agents": [
+    "maya"
+  ],
+  "pipelines": [
+    "strategy"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["strategy", "category-design", "positioning", "innovation"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "strategy",
+      "category-design",
+      "positioning",
+      "innovation"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -19,6 +19,24 @@ export const DEFAULT_PROVIDER_SETTINGS: ProviderSettings = {
     maskedKey: '',
     availableModels: ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'],
   },
+  mcp: {
+    browserInspector: {
+      enabled: false,
+      endpoint: '',
+    },
+    seoCrawler: {
+      enabled: false,
+      endpoint: '',
+    },
+    searchConsole: {
+      enabled: false,
+      endpoint: '',
+    },
+    accessibilityProbe: {
+      enabled: false,
+      endpoint: '',
+    },
+  },
 }
 
 export const THINKING_DELIVERABLE_TYPES = new Set([
@@ -26,8 +44,14 @@ export const THINKING_DELIVERABLE_TYPES = new Set([
   'campaign-strategy',
   'research-brief',
   'seo-audit',
+  'ui-audit',
   'client-brief',
   'kpi-forecast',
+  'brand-guidelines',
+  'presentation',
+  'data-analysis',
+  'event-plan',
+  'media-plan',
 ])
 
 export function normalizeProviderSettings(input?: Partial<ProviderSettings> | null): ProviderSettings {
@@ -57,6 +81,24 @@ export function normalizeProviderSettings(input?: Partial<ProviderSettings> | nu
         Array.isArray(input?.gemini?.availableModels) && input?.gemini?.availableModels.length
           ? input!.gemini!.availableModels
           : DEFAULT_PROVIDER_SETTINGS.gemini.availableModels,
+    },
+    mcp: {
+      browserInspector: {
+        ...DEFAULT_PROVIDER_SETTINGS.mcp.browserInspector,
+        ...(input?.mcp?.browserInspector || {}),
+      },
+      seoCrawler: {
+        ...DEFAULT_PROVIDER_SETTINGS.mcp.seoCrawler,
+        ...(input?.mcp?.seoCrawler || {}),
+      },
+      searchConsole: {
+        ...DEFAULT_PROVIDER_SETTINGS.mcp.searchConsole,
+        ...(input?.mcp?.searchConsole || {}),
+      },
+      accessibilityProbe: {
+        ...DEFAULT_PROVIDER_SETTINGS.mcp.accessibilityProbe,
+        ...(input?.mcp?.accessibilityProbe || {}),
+      },
     },
   }
 }
@@ -160,6 +202,6 @@ export function stripProviderSecrets(settings: ProviderSettings) {
       ...settings.gemini,
       apiKey: '',
     },
+    mcp: settings.mcp,
   }
 }
-

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "visual-leadership",
+  "name": "Visual Leadership",
+  "description": "Guiding creative teams on visual standards and aesthetics that align with brand strategy. Set the visual direction that elevates creative work and maintains brand integrity across all outputs.",
+  "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when establishing visual direction for teams, guiding aesthetic decisions, setting brand visual standards, or reviewing creative work for brand consistency for {{brand_name}}.",
+      "context": "You are a visual leadership specialist who helps teams understand and apply visual standards. You bridge strategy and aesthetics, ensuring creative work serves brand goals while pushing creative boundaries.",
+      "instructions": "## Visual Leadership Workflow\n\n- [ ] 1. Define visual strategy aligned with brand\n- [ ] 2. Establish visual standards and guidelines\n- [ ] 3. Communicate direction to creative teams\n- [ ] 4. Review and guide creative decisions\n- [ ] 5. Provide constructive creative feedback\n- [ ] 6. Evolve standards with brand growth\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Visual Strategy: {{strategy}}\n- Current Aesthetic: {{aesthetic}}\n- Target Audience: {{audience}}\n- Competitive Landscape: {{competition}}",
+      "output_template": "## Visual Leadership\n\n### Visual Strategy\n| Element | Direction |\n|---------|----------|\n| Brand Personality | |\n| Aesthetic Pillars | |\n| Color Direction | |\n| Typography Direction | |\n| Imagery Style | |\n\n### Visual Standards\n| Element | Standard |\n|---------|---------|\n| Primary Colors | |\n| Secondary Colors | |\n| Typefaces | |\n| Imagery Style | |\n| Iconography | |\n| Motion Style | |\n\n### Aesthetic Examples\n| Category | Example | Why |\n|----------|---------|----|\n| Inspiration | | |\n| Reference | | |\n| Direction | | |\n\n### Team Guidance\n| Topic | Direction |\n|-------|----------|\n| What to do | |\n| What to avoid | |\n| When to escalate | |\n\n### Review Criteria\n| Element | Check |\n|---------|-------|\n| Brand alignment | ☐ |\n| Aesthetic consistency | ☐ |\n| Technical quality | ☐ |\n| Strategic fit | ☐ |\n| Audience appropriateness | ☐ |\n\n### Feedback Framework\n| Level | Type | When |\n|-------|------|------|\n| Approve | Ready to proceed | |\n| Revise | Minor changes needed | |\n| Redirect | Significant changes | |\n| Reject | Start over | |"
+    }
+  },
+  "variables": [
+    { "name": "brand_name", "type": "string", "required": true, "description": "Brand name" },
+    { "name": "strategy", "type": "string", "required": true, "description": "Brand strategy and positioning" },
+    { "name": "aesthetic", "type": "string", "required": false, "description": "Current visual aesthetic" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience" },
+    { "name": "competition", "type": "string", "required": false, "description": "Competitive visual landscape" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define strategy", "action": "Connect visuals to brand strategy", "verify": "Strategy is clear" },
+      { "step": 2, "name": "Set standards", "action": "Create visual guidelines", "verify": "Standards are usable" },
+      { "step": 3, "name": "Communicate", "action": "Share direction with teams", "verify": "Teams understand" },
+      { "step": 4, "name": "Review work", "action": "Evaluate creative against standards", "verify": "Feedback is clear" },
+      { "step": 5, "name": "Give feedback", "action": "Provide constructive guidance", "verify": "Feedback is actionable" },
+      { "step": 6, "name": "Evolve", "action": "Update standards as brand grows", "verify": "Standards stay current" }
+    ]
+  },
+  "examples": [
+    { "input": "Set visual leadership direction for a new DTC brand entering the premium fitness market.", "output": "Visual strategy with aesthetic pillars, standards, and team guidance." },
+    { "input": "Review creative team output for a fashion brand and provide direction to maintain consistency as team scales.", "output": "Visual standards review with specific feedback framework and guidance." }
+  ],
+  "checklist": [
+    "Visual strategy aligned with brand",
+    "Standards are clear and usable",
+    "Teams trained on direction",
+    "Review criteria established",
+    "Feedback is constructive and specific",
+    "Escalation path clear",
+    "Standards evolve with brand",
+    "Consistency maintained across work"
+  ],
+  "tools": ["document", "presentation"],
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["visual-leadership", "creative-direction", "brand-standards", "aesthetics", "design"],
+    "lastUpdated": "2026-03-24"
+  }
+}

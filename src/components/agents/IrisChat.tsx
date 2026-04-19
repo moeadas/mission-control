@@ -1,12 +1,22 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useAgentsStore, ChatMessage } from '@/lib/agents-store'
 import { AgentBot } from '@/components/agents/AgentBot'
 import { clsx } from 'clsx'
 import { getModelLabel, getProviderLabel } from '@/lib/providers'
 import { Paperclip, Send, Sparkles, X, Image, FileText, File, CheckCircle2, AlertCircle, Loader2, Plus, MessageSquare } from 'lucide-react'
 import { buildTaskTitleFromRequest } from '@/lib/task-output'
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
+import { getDeliverableSpec, inferDeliverableTypeFromText, isSubstantiveRequest } from '@/lib/deliverables'
+import {
+  applyBriefAnswer,
+  composeBriefedRequest,
+  createPendingBrief,
+  getBriefQuestion,
+  isBriefComplete,
+  type IrisPendingBrief,
+} from '@/lib/iris-briefing'
 
 const IRIS = {
   id: 'iris',
@@ -49,6 +59,66 @@ function looksLikeSavedDeliverable(content: string) {
   return true
 }
 
+function passesQualityGate(meta?: ChatMessage['meta']) {
+  const quality = (meta as any)?.quality
+  if (!quality) return true
+  return quality.ok !== false
+}
+
+function isLikelyDeliverableResponse(content: string) {
+  const trimmed = content.trim()
+  if (!trimmed) return false
+
+  const lower = trimmed.toLowerCase()
+  const invalidPatterns = [
+    'task routed to',
+    'lead agent',
+    'status: in progress',
+    'delivery:',
+    'next steps:',
+    'i have not drafted the deliverable yet',
+    'no completed or delivered file exists',
+    'iris could not complete that request',
+    'chat request failed',
+  ]
+
+  if (invalidPatterns.some((pattern) => lower.includes(pattern))) return false
+  return trimmed.length >= 80
+}
+
+function buildAssignmentNote(meta?: ChatMessage['meta']) {
+  if (!meta?.leadAgentId) return ''
+
+  const collaborators = meta.collaboratorAgentIds?.length
+    ? `Support: ${meta.collaboratorAgentIds.join(', ')}`
+    : 'Support: none'
+  const pipeline = meta.pipelineName ? `Pipeline: ${meta.pipelineName}` : 'Pipeline: direct execution'
+  const confidence = (meta as any)?.confidence ? `Confidence: ${(meta as any).confidence}` : ''
+
+  return [`Lead: ${meta.leadAgentId}`, collaborators, pipeline, confidence].filter(Boolean).join(' · ')
+}
+
+function shouldOpenMissionForMessage(message: string) {
+  const trimmed = message.trim()
+  if (!trimmed) return false
+
+  const casualOnlyPatterns = [
+    /^hi[.!? ]*$/i,
+    /^hey[.!? ]*$/i,
+    /^hello[.!? ]*$/i,
+    /^yo[.!? ]*$/i,
+    /^thanks?[.!? ]*$/i,
+    /^ok[.!? ]*$/i,
+    /^test(ing)?[.!? ]*$/i,
+    /^why[.!? ]*$/i,
+  ]
+
+  if (casualOnlyPatterns.some((pattern) => pattern.test(trimmed))) return false
+  const inferred = inferDeliverableTypeFromText(trimmed)
+  if (inferred !== 'status-report') return true
+  return isSubstantiveRequest(trimmed)
+}
+
 async function requestChat(
   payload: Record<string, unknown>,
   onChunk: (text: string) => void,
@@ -56,14 +126,29 @@ async function requestChat(
   onError: (err: string) => void
 ) {
   try {
+    const supabase = getSupabaseBrowserClient()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    if (!session?.access_token) {
+      onError('Your session is not ready or has expired. Please sign in again and retry.')
+      return
+    }
     const response = await fetch('/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
       body: JSON.stringify(payload),
     })
     const data = await response.json()
     if (!response.ok) {
       onError(data.error || 'Request failed')
+      return
+    }
+    if (!data.response || !String(data.response).trim()) {
+      onError('Iris did not return a usable response. Check provider settings and retry.')
       return
     }
     onChunk(data.response || '')
@@ -95,22 +180,77 @@ export function IrisChat() {
   const providerSettings = useAgentsStore((state) => state.providerSettings)
   const agencySettings = useAgentsStore((state) => state.agencySettings)
   const agentMemories = useAgentsStore((state) => state.agentMemories)
+  const pendingBriefs = useAgentsStore((state) => state.pendingBriefs)
+  const setPendingBriefInStore = useAgentsStore((state) => state.setPendingBrief)
+  const clearPendingBriefInStore = useAgentsStore((state) => state.clearPendingBrief)
   const chatStatus = useAgentsStore((state) => state.chatStatus)
   const setChatStatus = useAgentsStore((state) => state.setChatStatus)
   const rememberAgentWork = useAgentsStore((state) => state.rememberAgentWork)
-
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [attachments, setAttachments] = useState<File[]>([])
   const [attachedText, setAttachedText] = useState<string>('')
+  const [pendingBriefState, setPendingBriefState] = useState<{ conversationId: string; brief: IrisPendingBrief } | null>(null)
+  const pendingBriefRef = useRef<{ conversationId: string; brief: IrisPendingBrief } | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const activeBriefRef = useRef<HTMLDivElement>(null)
 
   const activeConv = conversations.find((conversation) => conversation.id === activeConversationId)
   const irisAgent = agents.find((agent) => agent.id === 'iris')
   const activeMission = missions.find((mission) => mission.id === activeMissionId)
+  const storePendingBrief = activeConversationId ? pendingBriefs[activeConversationId] || null : null
+  const activePendingBrief = useMemo(
+    () => (pendingBriefState?.conversationId === activeConversationId ? pendingBriefState.brief : null),
+    [activeConversationId, pendingBriefState]
+  )
+  const activeBriefQuestion = useMemo(
+    () => (activePendingBrief ? getBriefQuestion(activePendingBrief) : null),
+    [activePendingBrief]
+  )
+
+  const setPendingBrief = useCallback((conversationId: string, brief: IrisPendingBrief) => {
+    const next = { conversationId, brief }
+    pendingBriefRef.current = next
+    setPendingBriefState(next)
+    setPendingBriefInStore(conversationId, brief)
+  }, [setPendingBriefInStore])
+
+  const clearPendingBrief = useCallback((conversationId: string) => {
+    clearPendingBriefInStore(conversationId)
+    if (pendingBriefRef.current?.conversationId === conversationId) {
+      pendingBriefRef.current = null
+      setPendingBriefState(null)
+    }
+  }, [clearPendingBriefInStore])
+
+  useEffect(() => {
+    if (!activeConversationId) {
+      pendingBriefRef.current = null
+      setPendingBriefState(null)
+      return
+    }
+
+    if (storePendingBrief) {
+      const next = { conversationId: activeConversationId, brief: storePendingBrief }
+      const current = pendingBriefRef.current
+      if (
+        current?.conversationId !== next.conversationId ||
+        JSON.stringify(current.brief) !== JSON.stringify(next.brief)
+      ) {
+        pendingBriefRef.current = next
+        setPendingBriefState(next)
+      }
+      return
+    }
+
+    if (pendingBriefRef.current?.conversationId === activeConversationId || pendingBriefState?.conversationId === activeConversationId) {
+      pendingBriefRef.current = null
+      setPendingBriefState(null)
+    }
+  }, [activeConversationId, pendingBriefState?.conversationId, storePendingBrief])
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
@@ -118,8 +258,88 @@ export function IrisChat() {
   }, [activeConv?.messages.length, chatStatus])
 
   useEffect(() => {
+    if (!activeBriefQuestion) return
+    requestAnimationFrame(() => {
+      activeBriefRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    })
+  }, [activeBriefQuestion?.field])
+
+  useEffect(() => {
+    if (!isIrisOpen) return
+    if (activeConv) return
+    const fallbackConversationId = conversations[0]?.id
+    if (fallbackConversationId) {
+      setActiveConversation(fallbackConversationId)
+    }
+  }, [activeConv, conversations, isIrisOpen, setActiveConversation])
+
+  useEffect(() => {
     if (isIrisOpen) setTimeout(() => inputRef.current?.focus(), 300)
   }, [isIrisOpen])
+
+  useEffect(() => {
+    if (!activeMissionId) return
+    if (chatStatus === 'idle') return
+
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout> | null = null
+
+    const pollExecution = async () => {
+      try {
+        const supabase = getSupabaseBrowserClient()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        if (!session?.access_token || cancelled) return
+
+        const response = await fetch(`/api/tasks/${activeMissionId}/execution`, {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          cache: 'no-store',
+        })
+
+        if (!response.ok || cancelled) return
+        const payload = await response.json()
+        const workflow = payload?.workflow
+        const runs = Array.isArray(payload?.runs) ? payload.runs : []
+
+        if (workflow) {
+          const nextStatus =
+            workflow.status === 'active'
+              ? 'in_progress'
+              : workflow.status === 'paused'
+                ? 'paused'
+                : workflow.status === 'completed'
+                  ? 'review'
+                  : undefined
+
+          const latestRun = runs[0]
+          const phaseNote = workflow.current_phase ? `Current phase: ${workflow.current_phase}` : undefined
+          const latestRunNote = latestRun?.stage ? `Latest activity: ${latestRun.stage}` : undefined
+
+          updateMission(activeMissionId, {
+            progress: Math.max(workflow.progress || 0, 8),
+            status: nextStatus as any,
+            handoffNotes: [phaseNote, latestRunNote].filter(Boolean).join('\n') || undefined,
+          })
+        }
+      } catch {
+        // Keep polling lightweight and silent in the chat shell.
+      } finally {
+        if (!cancelled) {
+          timer = setTimeout(pollExecution, 2000)
+        }
+      }
+    }
+
+    timer = setTimeout(pollExecution, 1200)
+
+    return () => {
+      cancelled = true
+      if (timer) clearTimeout(timer)
+    }
+  }, [activeMissionId, chatStatus, updateMission])
 
   // Extract text from files
   const extractFileText = async (file: File): Promise<string> => {
@@ -152,156 +372,339 @@ export function IrisChat() {
     setAttachments(prev => prev.filter((_, i) => i !== index))
   }
 
+  const runTaskRequest = useCallback(
+    async (conversationId: string, requestText: string) => {
+      let createdMissionId: string | null = shouldOpenMissionForMessage(requestText)
+        ? createMissionFromPrompt(requestText, {
+            clientId: activeMission?.clientId,
+            campaignId: activeMission?.campaignId,
+          })
+        : null
+
+      if (createdMissionId) {
+        updateMission(createdMissionId, {
+          status: 'in_progress',
+          progress: 8,
+          handoffNotes: 'Iris is analysing the request and preparing the task plan.',
+          orchestrationTrace: ['Iris is analysing the request and preparing the execution plan.'],
+        })
+      }
+
+      setChatStatus('thinking')
+      let fullResponse = ''
+      let receivedFirstChunk = false
+
+      await requestChat(
+        {
+          provider: irisAgent?.provider || agencySettings.defaultProvider,
+          model: irisAgent?.model || agencySettings.defaultModel,
+          temperature: irisAgent?.temperature || 0.7,
+          maxTokens: irisAgent?.maxTokens || 4096,
+          messages: [...(activeConv?.messages || []), { role: 'user', content: requestText }],
+          systemPrompt: irisAgent?.systemPrompt,
+          providerSettings,
+          agentMemories,
+          artifacts: artifacts.slice(0, 12),
+          agents: agents.map((agent) => ({
+            id: agent.id,
+            name: agent.name,
+            specialty: agent.specialty,
+            role: agent.role,
+            skills: agent.skills,
+            tools: agent.tools,
+            systemPrompt: agent.systemPrompt,
+            provider: agent.provider,
+            model: agent.model,
+          })),
+          clients: clients.map((client) => ({
+            id: client.id,
+            name: client.name,
+            industry: client.industry,
+            description: client.description,
+            missionStatement: client.missionStatement,
+            brandPromise: client.brandPromise,
+            targetAudiences: client.targetAudiences,
+            productsAndServices: client.productsAndServices,
+            usp: client.usp,
+            keyMessages: client.keyMessages,
+            toneOfVoice: client.toneOfVoice,
+            strategicPriorities: client.strategicPriorities,
+            notes: client.notes,
+            knowledgeAssets: client.knowledgeAssets,
+          })),
+          missions: missions.slice(0, 8),
+          currentClientId: activeMission?.clientId,
+          currentCampaignId: activeMission?.campaignId,
+          missionId: createdMissionId || undefined,
+        },
+        (chunk) => {
+          fullResponse += chunk
+          setChatStatus('streaming')
+          if (createdMissionId && !receivedFirstChunk) {
+            receivedFirstChunk = true
+            updateMission(createdMissionId, {
+              status: 'in_progress',
+              progress: 42,
+              handoffNotes: 'Specialists are working on the deliverable.',
+            })
+          }
+          upsertAssistantDraft(conversationId, fullResponse, 'iris', { missionId: createdMissionId || undefined })
+        },
+        (meta) => {
+          if (!createdMissionId && meta?.deliverableType && meta.deliverableType !== 'status-report') {
+            createdMissionId = createMissionFromPrompt(requestText, {
+              clientId: meta?.clientId || activeMission?.clientId,
+              campaignId: meta?.campaignId || activeMission?.campaignId,
+            })
+          }
+
+          const missionForArtifact = (createdMissionId ? missions.find((mission) => mission.id === createdMissionId) : null) || activeMission
+          const deliverableType = (meta?.deliverableType as any) || missionForArtifact?.deliverableType || 'status-report'
+          const taskTitle = buildTaskTitleFromRequest(requestText, deliverableType)
+          const passedQualityGate = passesQualityGate(meta)
+          const hasUsableDeliverable = looksLikeSavedDeliverable(fullResponse) && passedQualityGate
+          const shouldPersistArtifact =
+            deliverableType !== 'status-report' &&
+            isLikelyDeliverableResponse(fullResponse) &&
+            passedQualityGate
+          const artifactId = hasUsableDeliverable
+            ? addArtifact({
+                title: taskTitle,
+                deliverableType,
+                status: 'draft',
+                format: 'html',
+                content: fullResponse,
+                renderedHtml: meta?.renderedHtml,
+                sourcePrompt: meta?.executionPrompt,
+                notes:
+                  (meta as any)?.quality?.ok === false
+                    ? `Quality gate flagged issues: ${((meta as any)?.quality?.issues || []).join(' | ')}`
+                    : meta?.handoffNotes || 'Generated by Iris',
+                clientId: meta?.clientId || activeMission?.clientId,
+                campaignId: meta?.campaignId || activeMission?.campaignId,
+                missionId: createdMissionId || undefined,
+                agentId: meta?.leadAgentId || meta?.routedAgentId || 'iris',
+                executionSteps: meta?.executionSteps || [],
+              })
+            : shouldPersistArtifact
+              ? addArtifact({
+                  title: taskTitle,
+                  deliverableType,
+                  status: 'draft',
+                  format: 'html',
+                  content: fullResponse,
+                  renderedHtml: meta?.renderedHtml,
+                  sourcePrompt: meta?.executionPrompt,
+                  notes:
+                    (meta as any)?.quality?.ok === false
+                      ? `Saved with quality warnings: ${((meta as any)?.quality?.issues || []).join(' | ')}`
+                      : meta?.handoffNotes || 'Generated by Iris',
+                  clientId: meta?.clientId || activeMission?.clientId,
+                  campaignId: meta?.campaignId || activeMission?.campaignId,
+                  missionId: createdMissionId || undefined,
+                  agentId: meta?.leadAgentId || meta?.routedAgentId || 'iris',
+                  executionSteps: meta?.executionSteps || [],
+                })
+              : undefined
+
+          addAssistantMessage(conversationId, fullResponse, meta?.routedAgentId || 'iris', {
+            ...meta,
+            missionId: createdMissionId || undefined,
+            artifactId,
+            handoffNotes: [meta?.handoffNotes, buildAssignmentNote(meta)].filter(Boolean).join('\n'),
+          })
+
+          if (createdMissionId) {
+            const resolvedDeliverableType = ((meta as any)?.resolvedDeliverableType || deliverableType) as any
+            updateMission(createdMissionId, {
+              title: taskTitle,
+              summary: requestText,
+              deliverableType: resolvedDeliverableType,
+              status: shouldPersistArtifact ? 'review' : 'blocked',
+              progress: shouldPersistArtifact ? 92 : 15,
+              complexity: getDeliverableSpec(resolvedDeliverableType).complexity,
+              channelingConfidence:
+                (meta as any)?.confidence ||
+                (resolvedDeliverableType === 'general-task' ? 'medium' : resolvedDeliverableType === 'status-report' ? 'low' : 'medium'),
+              assignedAgentIds: meta?.assignedAgentIds?.length ? meta.assignedAgentIds : meta?.routedAgentId && meta.routedAgentId !== 'iris' ? ['iris', meta.routedAgentId] : ['iris'],
+              leadAgentId: meta?.leadAgentId || meta?.routedAgentId || 'iris',
+              collaboratorAgentIds: meta?.collaboratorAgentIds || [],
+              pipelineId: meta?.pipelineId || undefined,
+              pipelineName: meta?.pipelineName || undefined,
+              skillAssignments: meta?.selectedSkillsByAgent || {},
+              orchestrationTrace: meta?.orchestrationTrace || [],
+              qualityChecklist: meta?.qualityChecklist || [],
+              handoffNotes: shouldPersistArtifact
+                ? [meta?.handoffNotes, buildAssignmentNote(meta)].filter(Boolean).join('\n') || undefined
+                : (meta as any)?.quality?.ok === false
+                  ? `Quality gate failed: ${((meta as any)?.quality?.issues || []).join(' | ')}`
+                  : 'Iris did not return a usable deliverable. Re-run the task or check provider settings.',
+              clientId: meta?.clientId || activeMission?.clientId,
+              campaignId: meta?.campaignId || activeMission?.campaignId,
+            })
+          }
+
+          rememberAgentWork('iris', {
+            title: requestText.slice(0, 48),
+            summary: `Handled: ${requestText.slice(0, 120)}`,
+            clientId: meta?.clientId || activeMission?.clientId,
+            campaignId: meta?.campaignId || activeMission?.campaignId,
+            missionId: createdMissionId || undefined,
+            conversationId,
+          })
+
+          if (meta?.leadAgentId && meta.leadAgentId !== 'iris') {
+            rememberAgentWork(meta.leadAgentId, {
+              title: requestText.slice(0, 48),
+              summary: `Lead on task: ${taskTitle}`,
+              clientId: meta?.clientId || activeMission?.clientId,
+              campaignId: meta?.campaignId || activeMission?.campaignId,
+              missionId: createdMissionId || undefined,
+              conversationId,
+            })
+          }
+
+          for (const collaboratorId of meta?.collaboratorAgentIds || []) {
+            rememberAgentWork(collaboratorId, {
+              title: requestText.slice(0, 48),
+              summary: `Supporting task: ${taskTitle}`,
+              clientId: meta?.clientId || activeMission?.clientId,
+              campaignId: meta?.campaignId || activeMission?.campaignId,
+              missionId: createdMissionId || undefined,
+              conversationId,
+            })
+          }
+
+          setChatStatus('idle')
+        },
+        (err) => {
+          setError(err)
+          addAssistantMessage(conversationId, `Iris could not complete that request.\n\nReason: ${err}`, 'iris', {
+            missionId: createdMissionId || undefined,
+            handoffNotes: err,
+          })
+          if (createdMissionId) {
+            updateMission(createdMissionId, {
+              status: 'blocked',
+              progress: 0,
+              handoffNotes: err,
+            })
+          }
+          setChatStatus('idle')
+        }
+      )
+    },
+    [activeConv?.messages, activeMission, addArtifact, addAssistantMessage, agencySettings.defaultModel, agencySettings.defaultProvider, agentMemories, agents, artifacts, clients, createMissionFromPrompt, irisAgent?.maxTokens, irisAgent?.model, irisAgent?.provider, irisAgent?.systemPrompt, irisAgent?.temperature, missions, providerSettings, rememberAgentWork, setChatStatus, updateMission, upsertAssistantDraft]
+  )
+
+  const askBriefQuestion = useCallback(
+    (conversationId: string, requestText: string) => {
+      const deliverableType = inferDeliverableTypeFromText(requestText)
+      const pendingBrief = createPendingBrief(requestText, deliverableType)
+      if (!pendingBrief || isBriefComplete(pendingBrief)) return false
+
+      const question = getBriefQuestion(pendingBrief)
+      if (!question) return false
+
+      setPendingBrief(conversationId, pendingBrief)
+      addAssistantMessage(
+        conversationId,
+        `${question.prompt}\n\n${question.helper}`,
+        'iris',
+        { deliverableType }
+      )
+      return true
+    },
+    [addAssistantMessage, setPendingBrief]
+  )
+
+  const handleBriefProgress = useCallback(
+    async (conversationId: string, answer: string) => {
+      const currentBriefEntry = pendingBriefRef.current
+      if (!currentBriefEntry || currentBriefEntry.conversationId !== conversationId) return false
+
+      const currentBrief = currentBriefEntry.brief
+      const currentField = getBriefQuestion(currentBrief)?.field
+      const updatedBrief = applyBriefAnswer(currentBrief, answer, currentField)
+      if (!isBriefComplete(updatedBrief)) {
+        setPendingBrief(conversationId, updatedBrief)
+        const nextQuestion = getBriefQuestion(updatedBrief)
+        if (nextQuestion) {
+          addAssistantMessage(conversationId, `${nextQuestion.prompt}\n\n${nextQuestion.helper}`, 'iris', {
+            deliverableType: updatedBrief.deliverableType,
+          })
+        }
+        return true
+      }
+
+      clearPendingBrief(conversationId)
+      addAssistantMessage(conversationId, 'Perfect. I have enough to start this now.', 'iris', {
+        deliverableType: updatedBrief.deliverableType,
+      })
+      await runTaskRequest(conversationId, composeBriefedRequest(updatedBrief))
+      return true
+    },
+    [addAssistantMessage, clearPendingBrief, runTaskRequest, setPendingBrief]
+  )
+
+  const submitUserMessage = useCallback(
+    async (rawMessage: string, attachmentContent = '') => {
+      if (chatStatus !== 'idle') return
+
+      const conversationId =
+        activeConversationId && conversations.some((conversation) => conversation.id === activeConversationId)
+          ? activeConversationId
+          : createConversation('Chat with Iris')
+
+      if (!conversationId) return
+
+      const userMsg = rawMessage.trim()
+      const fullMessage = attachmentContent.trim()
+        ? `${userMsg}\n\n[Attached files context]\n${attachmentContent.trim()}`
+        : userMsg
+
+      setError(null)
+      setActiveConversation(conversationId)
+      sendMessage(conversationId, userMsg)
+
+      const currentBriefEntry = pendingBriefRef.current
+      if (currentBriefEntry && currentBriefEntry.conversationId === conversationId) {
+        await handleBriefProgress(conversationId, userMsg)
+        return
+      }
+
+      if (shouldOpenMissionForMessage(fullMessage) && askBriefQuestion(conversationId, fullMessage)) {
+        return
+      }
+
+      await runTaskRequest(conversationId, fullMessage)
+    },
+    [activeConversationId, askBriefQuestion, chatStatus, conversations, createConversation, handleBriefProgress, runTaskRequest, sendMessage, setActiveConversation]
+  )
+
   const handleSend = useCallback(async () => {
     if (!input.trim() && attachments.length === 0 && !attachedText) return
-    if (!activeConversationId || chatStatus !== 'idle') return
 
     const userMsg = input.trim()
     const attachmentContent = attachedText.trim()
-    const fullMessage = attachmentContent 
-      ? `${userMsg}\n\n[Attached files context]\n${attachmentContent}`
-      : userMsg
 
     setInput('')
-    setError(null)
     setAttachments([])
     setAttachedText('')
-    sendMessage(activeConversationId, userMsg)
 
-    const createdMissionId = createMissionFromPrompt(userMsg, {
-      clientId: activeMission?.clientId,
-      campaignId: activeMission?.campaignId,
-    })
+    await submitUserMessage(userMsg, attachmentContent)
+  }, [input, attachments.length, attachedText, submitUserMessage])
 
-    setChatStatus('thinking')
-    let fullResponse = ''
+  const handleBriefOptionClick = useCallback(async (option: string) => {
+    if (!activeBriefQuestion || chatStatus !== 'idle') return
+    await submitUserMessage(option)
+  }, [activeBriefQuestion, chatStatus, submitUserMessage])
 
-    await requestChat(
-      {
-        provider: irisAgent?.provider || agencySettings.defaultProvider,
-        model: irisAgent?.model || agencySettings.defaultModel,
-        temperature: irisAgent?.temperature || 0.7,
-        maxTokens: irisAgent?.maxTokens || 1024,
-        messages: [...(activeConv?.messages || []), { role: 'user', content: fullMessage }],
-        systemPrompt: irisAgent?.systemPrompt,
-        providerSettings,
-        agentMemories,
-        artifacts: artifacts.slice(0, 12),
-        agents: agents.map((agent) => ({
-          id: agent.id,
-          name: agent.name,
-          specialty: agent.specialty,
-          role: agent.role,
-          skills: agent.skills,
-          tools: agent.tools,
-          systemPrompt: agent.systemPrompt,
-          provider: agent.provider,
-          model: agent.model,
-        })),
-        clients: clients.map((client) => ({
-          id: client.id,
-          name: client.name,
-          industry: client.industry,
-          description: client.description,
-          missionStatement: client.missionStatement,
-          brandPromise: client.brandPromise,
-          targetAudiences: client.targetAudiences,
-          productsAndServices: client.productsAndServices,
-          usp: client.usp,
-          keyMessages: client.keyMessages,
-          toneOfVoice: client.toneOfVoice,
-          strategicPriorities: client.strategicPriorities,
-          notes: client.notes,
-        })),
-        missions: missions.slice(0, 8),
-        currentClientId: activeMission?.clientId,
-        currentCampaignId: activeMission?.campaignId,
-      },
-      (chunk) => {
-        fullResponse += chunk
-        setChatStatus('streaming')
-        upsertAssistantDraft(activeConversationId, fullResponse, 'iris', { missionId: createdMissionId })
-      },
-      (meta) => {
-        const missionForArtifact = missions.find((mission) => mission.id === createdMissionId) || activeMission
-        const deliverableType = (meta?.deliverableType as any) || missionForArtifact?.deliverableType || 'status-report'
-        const taskTitle = buildTaskTitleFromRequest(userMsg, deliverableType)
-        const hasUsableDeliverable = looksLikeSavedDeliverable(fullResponse)
-        const artifactId = hasUsableDeliverable
-          ? addArtifact({
-              title: taskTitle,
-              deliverableType,
-              status: 'draft',
-              format: 'html',
-              content: fullResponse,
-              renderedHtml: meta?.renderedHtml,
-              sourcePrompt: meta?.executionPrompt,
-              notes: meta?.handoffNotes || 'Generated by Iris',
-              clientId: meta?.clientId || activeMission?.clientId,
-              campaignId: meta?.campaignId || activeMission?.campaignId,
-              missionId: createdMissionId,
-              agentId: meta?.leadAgentId || meta?.routedAgentId || 'iris',
-              executionSteps: meta?.executionSteps || [],
-            })
-          : undefined
-        addAssistantMessage(activeConversationId, fullResponse, meta?.routedAgentId || 'iris', { ...meta, missionId: createdMissionId, artifactId })
-        updateMission(createdMissionId, {
-          title: taskTitle,
-          summary: userMsg,
-          deliverableType,
-          status: hasUsableDeliverable ? 'review' : 'blocked',
-          progress: hasUsableDeliverable ? 75 : 15,
-          assignedAgentIds: meta?.assignedAgentIds?.length ? meta.assignedAgentIds : meta?.routedAgentId && meta.routedAgentId !== 'iris' ? ['iris', meta.routedAgentId] : ['iris'],
-          leadAgentId: meta?.leadAgentId || meta?.routedAgentId || 'iris',
-          collaboratorAgentIds: meta?.collaboratorAgentIds || [],
-          pipelineId: meta?.pipelineId || undefined,
-          pipelineName: meta?.pipelineName || undefined,
-          qualityChecklist: meta?.qualityChecklist || [],
-          handoffNotes: hasUsableDeliverable ? meta?.handoffNotes || undefined : 'Iris did not return a usable deliverable. Re-run the task or check provider settings.',
-          clientId: meta?.clientId || activeMission?.clientId,
-          campaignId: meta?.campaignId || activeMission?.campaignId,
-        })
-        rememberAgentWork('iris', {
-          title: userMsg.slice(0, 48),
-          summary: `Handled: ${userMsg.slice(0, 120)}`,
-          clientId: meta?.clientId || activeMission?.clientId,
-          campaignId: meta?.campaignId || activeMission?.campaignId,
-          missionId: createdMissionId,
-          conversationId: activeConversationId,
-        })
-        if (meta?.leadAgentId && meta.leadAgentId !== 'iris') {
-          rememberAgentWork(meta.leadAgentId, {
-            title: userMsg.slice(0, 48),
-            summary: `Lead on task: ${taskTitle}`,
-            clientId: meta?.clientId || activeMission?.clientId,
-            campaignId: meta?.campaignId || activeMission?.campaignId,
-            missionId: createdMissionId,
-            conversationId: activeConversationId,
-          })
-        }
-        for (const collaboratorId of meta?.collaboratorAgentIds || []) {
-          rememberAgentWork(collaboratorId, {
-            title: userMsg.slice(0, 48),
-            summary: `Supporting task: ${taskTitle}`,
-            clientId: meta?.clientId || activeMission?.clientId,
-            campaignId: meta?.campaignId || activeMission?.campaignId,
-            missionId: createdMissionId,
-            conversationId: activeConversationId,
-          })
-        }
-        setChatStatus('idle')
-      },
-      (err) => {
-        setError(err)
-        updateMission(createdMissionId, {
-          status: 'blocked',
-          progress: 0,
-          handoffNotes: err,
-        })
-        setChatStatus('error')
-      }
-    )
-  }, [input, attachments, attachedText, activeConversationId, chatStatus])
+  const clearPendingBriefFlow = useCallback(() => {
+    if (!activeConversationId) return
+    clearPendingBrief(activeConversationId)
+    addAssistantMessage(activeConversationId, 'Briefing cleared. Send the full request again whenever you are ready.', 'iris')
+  }, [activeConversationId, addAssistantMessage, clearPendingBrief])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -312,6 +715,7 @@ export function IrisChat() {
 
   const startNewChat = () => {
     const id = createConversation('New Chat')
+    clearPendingBrief(id)
     setActiveConversation(id)
   }
 
@@ -373,7 +777,7 @@ export function IrisChat() {
               </div>
             </div>
           ) : (
-            <div className="p-5 space-y-5">
+            <div className="p-5 pb-28 space-y-5">
               {activeConv.messages.map((msg, i) => {
                 const isUser = msg.role === 'user'
                 const showAvatar = !isUser && (i === 0 || activeConv.messages[i - 1].role === 'user')
@@ -419,6 +823,42 @@ export function IrisChat() {
                     <span className="inline-block w-2 h-2 rounded-full bg-[#9b6dff] animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="inline-block w-2 h-2 rounded-full bg-[#9b6dff] animate-bounce mx-0.5" style={{ animationDelay: '150ms' }} />
                     <span className="inline-block w-2 h-2 rounded-full bg-[#9b6dff] animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              )}
+
+              {activeBriefQuestion && chatStatus === 'idle' && (
+                <div ref={activeBriefRef} className="ml-11 rounded-2xl border border-[#3a334d] bg-[#171922] p-4 space-y-3 scroll-mt-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#9b6dff]/15">
+                      <MessageSquare size={15} className="text-[#c3a7ff]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-white">{activeBriefQuestion.prompt}</p>
+                      <p className="text-xs text-gray-400 mt-1">{activeBriefQuestion.helper}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {activeBriefQuestion.options.map((option) => (
+                      <button
+                        key={`${activeBriefQuestion.field}-${option}`}
+                        onClick={() => handleBriefOptionClick(option)}
+                        className="px-3 py-2 rounded-xl border border-[#3a334d] bg-[#1d2030] text-xs text-gray-200 hover:border-[#9b6dff] hover:text-white transition-colors"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-[11px] text-gray-500">
+                      {activeBriefQuestion.allowsFreeText ? 'You can also type a custom answer below.' : 'Pick an option to continue.'}
+                    </p>
+                    <button
+                      onClick={clearPendingBriefFlow}
+                      className="text-[11px] text-gray-500 hover:text-red-300 transition-colors"
+                    >
+                      Clear briefing
+                    </button>
                   </div>
                 </div>
               )}

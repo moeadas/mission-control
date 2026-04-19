@@ -2,29 +2,109 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "platform-native-content",
   "name": "Platform-Native Content",
-  "description": "Creates content specifically optimized for individual social platforms, understanding each platform's unique conventions, formats, and audience expectations.",
+  "description": "Adapts ideas into platform-native content so each channel feels built for its audience, behavior, and format rather than copied and pasted.",
   "category": "content",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when creating platform-specific social media content, adapting campaigns across platforms, or needing to understand platform best practices.",
-      "context": "You are a platform-native content specialist who understands the unique culture, format requirements, and audience expectations of each major social platform. You create content that feels native, not repurposed.",
-      "instructions": "## Platform-Native Content Workflow\n\n- [ ] 1. Identify the platform and its current trends, culture, and best practices\n- [ ] 2. Define the content goal for this specific platform\n- [ ] 3. Create platform-specific content: format, style, hashtags, visual notes\n- [ ] 4. Ensure content is native to the platform (not cross-posted without adaptation)\n- [ ] 5. Consider platform-specific features: Reels, Stories, carousels, threads\n\n## Key Inputs\n- Platform: {{platform}}\n- Content Message: {{content_message}}\n- Content Type: {{content_type}} (post, story, reel, thread)\n- Audience: {{audience}}",
-      "output_template": "## Platform-Native Content\n\n### Platform: [Platform]\n\n### Content\n[Full content optimized for this platform]\n\n### Format Notes\n| Element | Specification |\n|---------|---------------|\n| Format | |\n| Length | |\n| Visual Direction | |\n| Hashtags | |\n| Tags/Mentions | |\n\n### Why This Works\n- [ ] Native to the platform: \n- [ ] Taps into platform culture: \n- [ ] Leverages platform features:"
+      "trigger": "Use this skillany time adapting one idea across channels, creating channel-native copy, or turning a campaign concept into platform-specific executions.",
+      "context": "You are a multi-platform content strategist who understands how tone, pacing, hooks, structure, and CTA style change by platform. You avoid one-size-fits-all adaptations.",
+      "instructions": "## Platform-Native Content\n\n1. **Identify source idea** — Identify source idea\n   - ✓ Done when: Identify source idea is completed to a high standard\n\n2. **Clarify platform roles** — Clarify platform roles\n   - ✓ Done when: Clarify platform roles is completed to a high standard\n\n3. **Rewrite hook/body/CTA by platform** — Rewrite hook/body/CTA by platform\n   - ✓ Done when: Rewrite hook/body/CTA by platform is completed to a high standard\n\n4. **Adjust tone and pacing** — Adjust tone and pacing\n   - ✓ Done when: Adjust tone and pacing is completed to a high standard\n\n5. **Remove generic copy** — Remove generic copy\n   - ✓ Done when: Remove generic copy is completed to a high standard\n\n6. **Add execution notes** — Add execution notes\n   - ✓ Done when: Add execution notes is completed to a high standard\n\n## Key Inputs\n- platform: Target platform: Instagram, TikTok, LinkedIn, X, Facebook, YouTube, Pinterest\n- content_message: Core message or content theme\n- content_type: Content type: post, story, reel, thread, carousel, live\n- audience: Target audience on this platform",
+      "output_template": "## Platform-Native Adaptation Pack\n\n### Core Source Idea\n- Source topic:\n- Main message:\n- Conversion or engagement goal:\n\n### Channel Adaptations\n| Platform | Hook / Opening | Structure | Tone | CTA | Production Notes |\n|---|---|---|---|---|---|\n| Instagram | | | | | |\n| LinkedIn | | | | | |\n| TikTok / Reels | | | | | |\n| X / Threads | | | | | |\n| Email | | | | | |\n\n### Adaptation Notes\n- What stays consistent:\n- What changes by platform:\n- What should be tested first:"
     }
   },
   "variables": [
-    { "name": "platform", "type": "string", "required": true, "description": "Target platform: Instagram, TikTok, LinkedIn, X, Facebook, YouTube, Pinterest" },
-    { "name": "content_message", "type": "string", "required": true, "description": "Core message or content theme" },
-    { "name": "content_type", "type": "string", "required": false, "description": "Content type: post, story, reel, thread, carousel, live" },
-    { "name": "audience", "type": "string", "required": false, "description": "Target audience on this platform" }
+    {
+      "name": "platform",
+      "type": "string",
+      "required": true,
+      "description": "Target platform: Instagram, TikTok, LinkedIn, X, Facebook, YouTube, Pinterest"
+    },
+    {
+      "name": "content_message",
+      "type": "string",
+      "required": true,
+      "description": "Core message or content theme"
+    },
+    {
+      "name": "content_type",
+      "type": "string",
+      "required": false,
+      "description": "Content type: post, story, reel, thread, carousel, live"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": false,
+      "description": "Target audience on this platform"
+    }
   ],
+  "inputs": [
+    {
+      "name": "platform",
+      "type": "string",
+      "required": true,
+      "description": "Target platform: Instagram, TikTok, LinkedIn, X, Facebook, YouTube, Pinterest"
+    },
+    {
+      "name": "content_message",
+      "type": "string",
+      "required": true,
+      "description": "Core message or content theme"
+    },
+    {
+      "name": "content_type",
+      "type": "string",
+      "required": false,
+      "description": "Content type: post, story, reel, thread, carousel, live"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": false,
+      "description": "Target audience on this platform"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Know the platform", "action": "Review platform's current trends, culture, and best practices", "verify": "Content is truly native" },
-      { "step": 2, "name": "Create content", "action": "Draft content specific to this platform", "verify": "Format and style match the platform" },
-      { "step": 3, "name": "Optimize", "action": "Apply platform-specific features and hashtag strategy", "verify": "Native features are leveraged" }
+      {
+        "step": 1,
+        "name": "Identify source idea",
+        "action": "Identify source idea",
+        "verify": "Identify source idea is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Clarify platform roles",
+        "action": "Clarify platform roles",
+        "verify": "Clarify platform roles is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Rewrite hook/body/CTA by platform",
+        "action": "Rewrite hook/body/CTA by platform",
+        "verify": "Rewrite hook/body/CTA by platform is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Adjust tone and pacing",
+        "action": "Adjust tone and pacing",
+        "verify": "Adjust tone and pacing is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Remove generic copy",
+        "action": "Remove generic copy",
+        "verify": "Remove generic copy is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Add execution notes",
+        "action": "Add execution notes",
+        "verify": "Add execution notes is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -34,20 +114,32 @@
     }
   ],
   "checklist": [
-    "Content feels native to the platform (not generic cross-posting)",
-    "Platform's unique features are leveraged (Reels, Threads, Stories, etc.)",
-    "Format specs are correct (video length, image ratios)",
-    "Hashtags are platform-appropriate",
-    "Trending sounds/audio are considered where relevant",
-    "Native content performs better than adapted content"
+    "Identify source idea is completed to a high standard",
+    "Clarify platform roles is completed to a high standard",
+    "Rewrite hook/body/CTA by platform is completed to a high standard",
+    "Adjust tone and pacing is completed to a high standard",
+    "Remove generic copy is completed to a high standard",
+    "Add execution notes is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["content-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "echo"
+  ],
+  "pipelines": [
+    "content-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["platform-native", "social-media", "content-creation", "tiktok", "instagram"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "platform-native",
+      "social-media",
+      "content-creation",
+      "tiktok",
+      "instagram"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

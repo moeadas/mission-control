@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyProvider } from '@/lib/server/ai'
+import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
+
+function getBearerToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || ''
+  if (!authHeader.toLowerCase().startsWith('bearer ')) return null
+  return authHeader.slice(7).trim()
+}
 
 export async function POST(req: NextRequest) {
   try {
+    const auth = await resolveAuthContextFromToken(getBearerToken(req))
+    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
     const body = await req.json()
     const result = await verifyProvider(body)
     return NextResponse.json(result)

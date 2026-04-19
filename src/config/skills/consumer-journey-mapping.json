@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when mapping or refreshing the customer decision journey for a brand — to understand how customers move from awareness to purchase, where barriers exist, and where marketing can influence the decision.",
+      "trigger": "Use this skillany time mapping or refreshing the customer decision journey for a brand — to understand how customers move from awareness to purchase, where barriers exist, and where marketing can influence the decision.",
       "context": "You are a customer experience strategist who maps end-to-end customer journeys to identify friction points, opportunities, and the moments that matter most in the decision process.",
-      "instructions": "## Consumer Journey Mapping Workflow\n\n- [ ] 1. Define scope: Set journey boundaries (awareness to loyalty, or specific phase)\n- [ ] 2. Identify stages: Map the major journey stages\n- [ ] 3. Identify touchpoints: Document all contact points at each stage\n- [ ] 4. Map emotions: Track customer feelings throughout the journey\n- [ ] 5. Identify barriers: Where do customers drop off or get frustrated?\n- [ ] 6. Find moments of truth: Identify high-impact moments for the brand\n- [ ] 7. Assign ownership: Which team/channel owns each touchpoint\n- [ ] 8. Identify opportunities: Where can marketing intervention change behavior?\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Target audience: {{target_audience}}\n- Journey scope: {{journey_scope}}\n- Existing research: {{existing_research}}",
+      "instructions": "## Consumer Journey Mapping\n\n1. **Scope Definition** — Define journey boundaries and stages\n   - ✓ Done when: Stages are comprehensive and logical\n\n2. **Touchpoint Mapping** — Document all touchpoints per stage\n   - ✓ Done when: Touchpoints are complete\n\n3. **Emotion and Barrier Analysis** — Track emotions and identify barriers\n   - ✓ Done when: Barriers are evidenced\n\n4. **Moment of Truth Identification** — Identify high-impact moments\n   - ✓ Done when: Moments are correctly prioritized\n\n5. **Opportunity Mapping** — Identify marketing intervention points\n   - ✓ Done when: Opportunities are specific and actionable\n\n## Key Inputs\n- brand_name: Brand being mapped\n- target_audience: Target audience segment\n- journey_scope: Scope of the journey (e.g., awareness to purchase)\n- existing_research: Existing journey or customer research\n\n## When Not to Use\nThis skill overlaps with: funnel-strategy, consumer-insights. Use those instead when: you need to map a specific funnel stage rather than the full journey\n\n`strategy` `customer-journey` `cx` `mapping`",
       "output_template": "## Consumer Journey Map: {{brand_name}}\n\n### Journey Overview\n| Field | Value |\n|-------|-------|\n| Brand | {{brand_name}} |\n| Audience | {{target_audience}} |\n| Scope | {{journey_scope}} |\n| Date | {{date}} |\n\n### Journey Stages\n| Stage | Description | Duration |\n|-------|-------------|---------|\n| Awareness | | |\n| Consideration | | |\n| Decision | | |\n| Purchase | | |\n| Retention | | |\n| Advocacy | | |\n\n### Stage-by-Stage Map\n\n#### Awareness\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Consideration\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Decision\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Purchase\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Retention\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n#### Advocacy\n**Touchpoints:**\n**Customer actions:**\n**Customer emotions:** ⬜ ⬜ ⬜ ⬜ ⬜\n**Pain points:**\n**Opportunities:**\n\n### Moments of Truth\n| Moment | Stage | Why it matters | Brand action |\n|--------|-------|---------------|-------------|\n| | | | |\n\n### Drop-off Points\n| Stage | Drop-off rate | Why | Intervention |\n|-------|-------------|-----|-------------|\n| | | | |\n\n### Touchpoint Ownership\n| Touchpoint | Owner | Channel |\n|-----------|-------|--------|\n| | | |\n\n### Key Opportunities\n| Opportunity | Stage | Expected impact | Priority |\n|-------------|-------|----------------|----------|\n| | | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Existing journey or customer research"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being mapped"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience segment"
+    },
+    {
+      "name": "journey_scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope of the journey (e.g., awareness to purchase)"
+    },
+    {
+      "name": "existing_research",
+      "type": "string",
+      "required": false,
+      "description": "Existing journey or customer research"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,26 @@
     }
   ],
   "checklist": [
-    "All major journey stages are covered",
-    "Touchpoints are complete and accurate",
-    "Customer emotions are tracked at each stage",
-    "Drop-off points are identified with causes",
-    "Moments of truth are correctly prioritized",
-    "Marketing opportunities are specific and actionable"
+    "Stages are comprehensive and logical",
+    "Touchpoints are complete",
+    "Barriers are evidenced",
+    "Moments are correctly prioritized",
+    "Opportunities are specific and actionable"
   ],
-  "tools": ["document", "spreadsheet"],
-  "agents": ["nova"],
-  "pipelines": ["strategy"],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "maya"
+  ],
+  "pipelines": [
+    "strategy"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["strategy", "customer-journey", "cx", "mapping"],
-    "lastUpdated": "2026-03-24"
+    "tags": [],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -1,12 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { exportArtifactToFile } from '@/lib/server/artifact-export'
+import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 import { Artifact, ArtifactExport } from '@/lib/types'
 
 export const runtime = 'nodejs'
 
+function getBearerToken(request: NextRequest) {
+  const authHeader = request.headers.get('authorization') || ''
+  if (!authHeader.toLowerCase().startsWith('bearer ')) return null
+  return authHeader.slice(7).trim()
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const auth = await resolveAuthContextFromToken(getBearerToken(request))
+    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
     const body = await request.json()
     const artifact = body?.artifact as Artifact | undefined
     const format = body?.format as ArtifactExport['format'] | undefined

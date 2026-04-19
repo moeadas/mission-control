@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when comparing campaign or brand performance against industry benchmarks, competitor benchmarks, or historical baselines to identify gaps and improvement areas.",
+      "trigger": "Use this skillany time comparing campaign or brand performance against industry benchmarks, competitor benchmarks, or historical baselines to identify gaps and improvement areas.",
       "context": "You are a performance analyst who uses data-driven benchmarking to surface where a brand or campaign stands relative to industry standards and competitors.",
-      "instructions": "## Benchmarking Workflow\n\n- [ ] 1. Define benchmarks: Identify relevant industry standards and competitive reference points\n- [ ] 2. Gather data: Collect client performance data and industry benchmark data\n- [ ] 3. Compare metrics: Align metrics on a like-for-like basis (CPM, CTR, CPA, ROAS, etc.)\n- [ ] 4. Gap analysis: Identify where performance is above or below benchmark\n- [ ] 5. Contextualize: Consider seasonality, market conditions, and audience differences\n- [ ] 6. Recommend: Identify quick wins and longer-term improvements\n\n## Key Inputs\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Metrics to benchmark: {{metrics}}\n- Reference period: {{reference_period}}",
+      "instructions": "## Benchmarking\n\n1. **Benchmark Definition** — Identify relevant industry and competitive benchmarks\n   - ✓ Done when: Benchmarks are current and comparable\n\n2. **Data Collection** — Gather client and benchmark data\n   - ✓ Done when: Data is accurate and aligned in time period\n\n3. **Gap Analysis** — Identify performance gaps\n   - ✓ Done when: Gaps are quantified and contextualized\n\n4. **Recommendations** — Prioritize actions based on gap size and effort\n   - ✓ Done when: Recommendations are specific and actionable\n\n## Key Inputs\n- client_name: Client or brand being benchmarked\n- industry: Industry for benchmark comparison\n- metrics: Specific metrics to benchmark (e.g., CPM, CTR, ROAS)\n- reference_period: Time period for comparison",
       "output_template": "## Benchmarking Report: {{client_name}}\n\n### Benchmark Scope\n| Field | Value |\n|-------|-------|\n| Industry | {{industry}} |\n| Reference period | {{reference_period}} |\n| Date | {{date}} |\n\n### Performance vs. Benchmarks\n| Metric | Client performance | Industry benchmark | Gap | Status |\n|--------|-------------------|-------------------|-----|--------|\n| | | | | ✅ Above / ⚠️ Below |\n\n### Gap Analysis\n| Area | Gap size | Priority |\n|------|----------|----------|\n| | | |\n\n### Contextual Factors\n| Factor | Impact on benchmarking |\n|--------|----------------------|\n| Seasonality | |\n| Market conditions | |\n| Audience differences | |\n\n### Recommendations\n| Action | Expected impact | Priority |\n|--------|----------------|----------|\n| | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Time period for comparison"
     }
   ],
+  "inputs": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand being benchmarked"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Industry for benchmark comparison"
+    },
+    {
+      "name": "metrics",
+      "type": "string",
+      "required": false,
+      "description": "Specific metrics to benchmark (e.g., CPM, CTR, ROAS)"
+    },
+    {
+      "name": "reference_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period for comparison"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -75,19 +102,30 @@
     }
   ],
   "checklist": [
-    "Benchmarks are from reliable, current sources",
-    "Metrics are compared on a like-for-like basis",
-    "Seasonality and market context are considered",
-    "Gaps are quantified, not just described",
-    "Recommendations are prioritized by impact"
+    "Benchmarks are current and comparable",
+    "Data is accurate and aligned in time period",
+    "Gaps are quantified and contextualized",
+    "Recommendations are specific and actionable"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["performance-review"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "performance-review"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["analytics", "benchmarking", "performance", "research"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "analytics",
+      "benchmarking",
+      "performance",
+      "research"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

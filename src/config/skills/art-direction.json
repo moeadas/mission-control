@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when providing creative direction for campaigns, establishing visual direction, or guiding the aesthetic and style of creative output.",
+      "trigger": "Use this skillany time providing creative direction for campaigns, establishing visual direction, or guiding the aesthetic and style of creative output.",
       "context": "You are an art director with expertise in visual storytelling, brand aesthetics, and creative campaign direction across multiple media.",
-      "instructions": "## Art Direction Workflow\n\nEstablish and communicate visual direction:\n\n- [ ] 1. Brand review: Analyze existing brand guidelines for {{brand_name}}\n- [ ] 2. Campaign brief alignment: Match direction to {{campaign_objectives}}\n- [ ] 3. Mood board development: Curate visual references for {{creative_vibe}}\n- [ ] 4. Style framework: Define color, typography, and imagery guidelines\n- [ ] 5. Asset specifications: Set technical requirements for {{deliverables}}\n- [ ] 6. Feedback loops: Create revision and approval process\n\n## Inputs\n- Brand: {{brand_name}}\n- Campaign: {{campaign_name}}\n- Audience: {{target_audience}}",
+      "instructions": "## Art Direction\n\n1. **Brand Analysis** — Review existing brand guidelines and assets\n   - ✓ Done when: Brand DNA is understood and respected\n\n2. **Brief Alignment** — Align direction with campaign objectives\n   - ✓ Done when: Direction serves business goals\n\n3. **Mood Board** — Develop visual references and mood language\n   - ✓ Done when: Mood board is cohesive and directional\n\n4. **Style Framework** — Define color, type, and imagery rules\n   - ✓ Done when: Framework is actionable for designers\n\n5. **Spec Documentation** — Document technical requirements\n   - ✓ Done when: Specs are clear to all producers\n\n## Key Inputs\n- brand_name: Brand being directed\n- campaign_name: Campaign or project name\n- campaign_objectives: Campaign goals and KPIs\n- target_audience: Primary and secondary audiences\n- creative_vibe: Desired mood and aesthetic\n- deliverables: List of required assets",
       "output_template": "## Art Direction: {{campaign_name}}\n\n### Creative Direction Overview\n| Element | Direction |\n|---------|-----------|\n| Brand | {{brand_name}} |\n| Campaign | {{campaign_name}} |\n| Target audience | {{target_audience}} |\n| Creative vibe | {{creative_vibe}} |\n\n### Mood and Inspiration\n[Description of the mood, references, and visual language]\n\n### Color Palette\n| Color | Hex | Usage |\n|-------|-----|-------|\n| Primary | | |\n| Secondary | | |\n| Accent | | |\n| Background | | |\n| Text | | |\n\n### Typography\n| Element | Font | Weight | Size |\n|---------|------|--------|------|\n| Headlines | | | |\n| Body | | | |\n| CTA | | | |\n\n### Imagery and Style\n- **Photography style:**\n- **Illustration approach:**\n- **Iconography:**\n- **Composition principles:**\n\n### Technical Specifications\n| Asset | Format | Dimensions | Specs |\n|-------|--------|-----------|-------|\n| | | | |\n\n### Do's and Don'ts\n**Do:**\n- [ ] \n\n**Don't:**\n- [ ]"
     }
   },
@@ -52,6 +52,45 @@
       "description": "List of required assets"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being directed"
+    },
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign or project name"
+    },
+    {
+      "name": "campaign_objectives",
+      "type": "string",
+      "required": true,
+      "description": "Campaign goals and KPIs"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary and secondary audiences"
+    },
+    {
+      "name": "creative_vibe",
+      "type": "string",
+      "required": true,
+      "description": "Desired mood and aesthetic"
+    },
+    {
+      "name": "deliverables",
+      "type": "string",
+      "required": false,
+      "description": "List of required assets"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,12 +132,11 @@
     }
   ],
   "checklist": [
-    "Direction aligns with brand guidelines",
-    "Mood board is cohesive and inspirational",
-    "Color palette is distinctive and functional",
-    "Typography choices are appropriate for audience",
-    "Technical specs are actionable",
-    "Direction serves campaign objectives"
+    "Brand DNA is understood and respected",
+    "Direction serves business goals",
+    "Mood board is cohesive and directional",
+    "Framework is actionable for designers",
+    "Specs are clear to all producers"
   ],
   "tools": [
     "presentation",
@@ -118,6 +156,6 @@
       "visual",
       "branding"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

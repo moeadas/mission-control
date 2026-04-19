@@ -27,10 +27,58 @@ export default function TasksPage() {
   const deleteMission = useAgentsStore((state) => state.deleteMission)
   const appStateReady = useAgentsStore((state) => state.appStateReady)
 
+  function hasArtifactBody(artifact?: { content?: string; renderedHtml?: string }) {
+    return Boolean(artifact?.content?.trim() || artifact?.renderedHtml?.trim())
+  }
+
+  function safeTime(value?: string | null) {
+    if (!value) return 0
+    const time = new Date(value).getTime()
+    return Number.isFinite(time) ? time : 0
+  }
+
+  function getMissionRecencyTimestamp(missionId: string, createdAt: string) {
+    const relatedArtifacts = artifacts
+      .filter((artifact) => artifact.missionId === missionId)
+      .map((artifact) => safeTime(artifact.createdAt || artifact.updatedAt))
+
+    return Math.max(safeTime(createdAt), ...relatedArtifacts)
+  }
+
   const sortedTasks = useMemo(
-    () => [...missions].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()),
-    [missions]
+    () =>
+      [...missions].sort(
+        (a, b) =>
+          getMissionRecencyTimestamp(b.id, b.createdAt) -
+          getMissionRecencyTimestamp(a.id, a.createdAt)
+      ),
+    [artifacts, missions]
   )
+
+  function findBestArtifactForMission(missionId: string) {
+    const direct = artifacts
+      .filter((artifact) => artifact.missionId === missionId)
+      .sort((a, b) => safeTime(b.updatedAt || b.createdAt) - safeTime(a.updatedAt || a.createdAt))
+
+    const bestDirect = direct.find((artifact) => hasArtifactBody(artifact)) || direct[0]
+    if (hasArtifactBody(bestDirect)) return bestDirect
+
+    const mission = missions.find((item) => item.id === missionId)
+    if (!mission) return bestDirect
+
+    const related = artifacts
+      .filter(
+        (artifact) =>
+          artifact.id !== bestDirect?.id &&
+          artifact.clientId === mission.clientId &&
+          artifact.deliverableType === mission.deliverableType &&
+          hasArtifactBody(artifact) &&
+          (artifact.title === mission.title || artifact.sourcePrompt === mission.summary)
+      )
+      .sort((a, b) => safeTime(b.updatedAt || b.createdAt) - safeTime(a.updatedAt || a.createdAt))
+
+    return related[0] || bestDirect
+  }
 
   return (
     <ClientShell>
@@ -57,8 +105,7 @@ export default function TasksPage() {
             ) : sortedTasks.length ? (
               sortedTasks.map((mission) => {
                 const client = clients.find((item) => item.id === mission.clientId)
-                const missionArtifacts = artifacts.filter((artifact) => artifact.missionId === mission.id)
-                const latestArtifact = missionArtifacts[0]
+                const latestArtifact = findBestArtifactForMission(mission.id)
 
                 return (
                   <Card key={mission.id} hover className="h-full space-y-4 relative">
@@ -93,10 +140,12 @@ export default function TasksPage() {
 
                       <p className="text-sm text-text-secondary line-clamp-3">{mission.summary}</p>
 
-                      {latestArtifact?.content ? (
+                      {latestArtifact?.content || latestArtifact?.renderedHtml ? (
                         <div className="p-3 rounded-xl border border-border bg-base/50">
                           <p className="text-[10px] font-mono uppercase text-text-dim mb-2">Latest Output</p>
-                          <p className="text-[12px] text-text-primary line-clamp-6 whitespace-pre-wrap">{latestArtifact.content}</p>
+                          <p className="text-[12px] text-text-primary line-clamp-6 whitespace-pre-wrap">
+                            {latestArtifact.content || 'Saved HTML output available. Open task to review the full deliverable.'}
+                          </p>
                         </div>
                       ) : (
                         <div className="p-3 rounded-xl border border-border bg-base/40">
@@ -109,7 +158,7 @@ export default function TasksPage() {
                       <div className="flex items-center justify-between pt-1">
                         <div className="flex items-center gap-2 text-[11px] text-text-dim">
                           <Clock3 size={12} />
-                          Updated {new Date(mission.updatedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                          Added {new Date(getMissionRecencyTimestamp(mission.id, mission.createdAt)).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
                         </div>
                         <span className="inline-flex items-center gap-1 text-[11px] text-accent-blue">
                           Open task <ArrowRight size={12} />

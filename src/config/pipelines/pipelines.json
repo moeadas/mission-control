@@ -78,6 +78,21 @@
               "name": "Generate 30 Content Ideas",
               "description": "Create 30 strategic ideas across 5 pillars: Educational(8), Storytelling(6), Engagement(6), Authority(5), Promotional(5)",
               "assignedRole": "content-strategist",
+              "maxTokens": 8192,
+              "outputFormat": "json",
+              "outputSchema": {
+                "shape": "ideas-array",
+                "key": "ideas",
+                "itemFields": [
+                  "id",
+                  "title",
+                  "pillar",
+                  "description",
+                  "platform",
+                  "format",
+                  "difficulty"
+                ]
+              },
               "inputs": ["approved-profile"],
               "outputs": ["content-ideas"],
               "checklist": [
@@ -90,7 +105,7 @@
                 "en": "Generate exactly 30 content ideas in 5 pillars following the content-calendar-generator stage 1 template. Inject {{brand_name}}, {{niche}}, {{audience_demographics}}, {{audience_psychographics}}, {{pain_points}}, {{tone}}, {{platforms}}, {{content_goal}}.",
                 "ar": "إنشاء 30 فكرة محتوى في 5 أعمدة وفقاً لقالب المرحلة 1. حقن بيانات العميل المناسبة."
               },
-              "batching": { "batchSize": 1, "parallel": false }
+              "batching": { "batchSize": 6, "parallel": false, "itemLabel": "content ideas", "totalItems": 30 }
             },
             {
               "id": "select-ideas",

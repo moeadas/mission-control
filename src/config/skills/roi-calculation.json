@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when calculating ROI for marketing campaigns, channels, or overall marketing investment — connecting spend to business outcomes and quantifying return.",
+      "trigger": "Use this skillany time calculating roi for marketing campaigns, channels, or overall marketing investment — connecting spend to business outcomes and quantifying return.",
       "context": "You are a marketing analyst who calculates and communicates ROI rigorously, accounting for attribution complexity and connecting marketing investment to business value.",
-      "instructions": "## ROI Calculation Workflow\n\nCalculate marketing ROI accurately:\n\n- [ ] 1. Define scope: Clarify what costs and returns are included\n- [ ] 2. Cost capture: Compile all marketing costs (media, production, agency fees)\n- [ ] 3. Revenue attribution: Connect conversions to marketing touchpoints\n- [ ] 4. Value assignment: Assign monetary value to conversions\n- [ ] 5. Attribution model: Apply appropriate attribution logic\n- [ ] 6. Calculate metrics: Compute ROI, ROAS, and related metrics\n- [ ] 7. Sensitivity analysis: Test assumptions and ranges\n- [ ] 8. Present clearly: Communicate ROI in accessible language\n\n## Key Inputs\n- Campaign/period: {{campaign_name}}\n- Costs to include: {{costs}}\n- Revenue data: {{revenue_source}}\n- Attribution model: {{attribution_model}}",
+      "instructions": "## ROI Calculation\n\n1. **Scope Definition** — Define exactly what costs and returns are included\n   - ✓ Done when: Scope is clear and agreed\n\n2. **Cost Capture** — Compile all marketing costs comprehensively\n   - ✓ Done when: Costs are complete and accurate\n\n3. **Revenue Attribution** — Connect conversions to marketing activity\n   - ✓ Done when: Attribution model is appropriate\n\n4. **Value Assignment** — Assign monetary value to conversions\n   - ✓ Done when: Values are justified and consistent\n\n5. **Calculation** — Calculate ROI, ROAS, and related metrics\n   - ✓ Done when: Math is correct and documented\n\n6. **Sensitivity Analysis** — Test key assumptions and ranges\n   - ✓ Done when: Confidence range is understood\n\n7. **Presentation** — Communicate ROI in accessible, actionable format\n   - ✓ Done when: Stakeholders understand and can act on findings\n\n## Key Inputs\n- campaign_name: Campaign or period being analyzed\n- costs: Costs to include in ROI calculation\n- revenue_source: Source of conversion/revenue data\n- attribution_model: Attribution model to apply",
       "output_template": "## ROI Calculation: {{campaign_name}}\n\n### Scope Definition\n| Element | Included | Notes |\n|---------|----------|-------|\n| Media spend | | |\n| Production costs | | |\n| Agency fees | | |\n| Technology costs | | |\n| Other costs | | |\n\n### Cost Summary\n| Cost Category | Amount | Notes |\n|--------------|--------|-------|\n| Media spend | | |\n| Creative/production | | |\n| Agency fees | | |\n| Technology/platform | | |\n| Other | | |\n| **Total Investment** | | |\n\n### Revenue Attribution\n\n**Attribution model used:** {{attribution_model}}\n\n| Channel/Source | Conversions | Avg Value | Revenue |\n|---------------|-------------|-----------|---------|\n| | | | |\n| **Total** | | | |\n\n### Value Calculation\n\n| Metric | Value | Calculation |\n|--------|-------|------------|\n| Total revenue | | |\n| Total investment | | |\n| Gross profit | | |\n| Profit margin assumed | | |\n| **Net profit attributed** | | |\n\n### ROI Metrics\n\n| Metric | Value | Interpretation |\n|--------|-------|--------------|\n| **ROAS** | | |\n| **ROI** | | |\n| **CPA** | | |\n| **Gross margin** | | |\n\n### Cost Breakdown by Channel\n| Channel | Spend | Revenue | ROAS | ROI |\n|---------|-------|---------|------|-----|\n| | | | | |\n\n### Sensitivity Analysis\n\n| Assumption | Base Case | Upside | Downside |\n|-----------|-----------|--------|----------|\n| Conversion value | | | |\n| Attribution rate | | | |\n| Profit margin | | | |\n\n### Key Assumptions & Limitations\n1. \n2. \n3. \n\n### Presentation Summary\n**One-line summary:**\nFor every AED/SH spend, we generated AED/SH in revenue (X:1 ROAS / X% ROI).\n\n### Recommendations\n| Metric | Current | Benchmark | Gap | Recommendation |\n|--------|---------|-----------|-----|----------------|\n| | | | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Attribution model to apply"
     }
   ],
+  "inputs": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign or period being analyzed"
+    },
+    {
+      "name": "costs",
+      "type": "string",
+      "required": true,
+      "description": "Costs to include in ROI calculation"
+    },
+    {
+      "name": "revenue_source",
+      "type": "string",
+      "required": true,
+      "description": "Source of conversion/revenue data"
+    },
+    {
+      "name": "attribution_model",
+      "type": "string",
+      "required": false,
+      "description": "Attribution model to apply"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,13 +120,13 @@
     }
   ],
   "checklist": [
-    "All relevant costs are included",
-    "Revenue attribution is clearly documented",
-    "Attribution model is appropriate for the business",
-    "Assumptions are stated and justified",
-    "Sensitivity analysis shows range of outcomes",
-    "Metrics are calculated correctly",
-    "Presentation is accessible to non-analysts"
+    "Scope is clear and agreed",
+    "Costs are complete and accurate",
+    "Attribution model is appropriate",
+    "Values are justified and consistent",
+    "Math is correct and documented",
+    "Confidence range is understood",
+    "Stakeholders understand and can act on findings"
   ],
   "tools": [
     "spreadsheet",
@@ -107,8 +134,7 @@
     "document"
   ],
   "agents": [
-    "dex",
-    "nova"
+    "dex"
   ],
   "pipelines": [
     "reporting"
@@ -122,6 +148,6 @@
       "reporting",
       "attribution"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

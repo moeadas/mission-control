@@ -12,6 +12,7 @@ export const AGENT_ACCENT_COLORS: Record<string, string> = {
   blue: '#4f8ef7',
   purple: '#9b6dff',
   cyan: '#00d4aa',
+  sky: '#38bdf8',
   orange: '#ff7c42',
   pink: '#ff5fa0',
   yellow: '#ffd166',
@@ -29,6 +30,13 @@ export const SPECIALTY_LABELS: Record<string, string> = {
   performance: 'Performance Ops',
   seo: 'SEO & Search',
   research: 'Research',
+  'data-analytics': 'Data Analytics',
+  communications: 'Communications',
+  'content-production': 'Content Production',
+  'event-management': 'Event Management',
+  operations: 'Operations',
+  'ux-design': 'UX Design',
+  brand: 'Brand Systems',
 }
 
 export const DIVISION_LABELS: Record<string, string> = {
@@ -37,20 +45,36 @@ export const DIVISION_LABELS: Record<string, string> = {
   creative: 'Creative',
   media: 'Media',
   research: 'Research',
+  strategy: 'Strategy',
+  analytics: 'Analytics',
+  communications: 'Communications',
+  production: 'Production',
 }
 
 export const DELIVERABLE_LABELS: Record<string, string> = {
+  'short-form-copy': 'Short-Form Copy',
+  'email-campaign': 'Email Campaign',
+  'blog-article': 'Blog / Article',
+  'website-copy': 'Website Copy',
+  'video-script': 'Video / Script',
+  presentation: 'Presentation',
   'client-brief': 'Client Brief',
   'strategy-brief': 'Strategy Brief',
   'campaign-strategy': 'Campaign Strategy',
+  'brand-guidelines': 'Brand Guidelines',
   'content-calendar': 'Content Calendar',
   'campaign-copy': 'Campaign Copy',
   'creative-asset': 'Creative Asset',
   'media-plan': 'Media Plan',
+  'event-plan': 'Event Plan',
   'budget-sheet': 'Budget Sheet',
   'kpi-forecast': 'KPI Forecast',
   'seo-audit': 'SEO Audit',
+  'ui-audit': 'UI Audit',
   'research-brief': 'Research Brief',
+  'data-analysis': 'Data Analysis',
+  'pr-comms': 'PR / Comms',
+  'general-task': 'General Task',
   'status-report': 'Status Report',
 }
 

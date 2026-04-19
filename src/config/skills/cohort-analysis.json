@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when analyzing user behavior over time — to understand how different acquisition cohorts behave differently, where retention drops off, and what drives long-term customer value.",
+      "trigger": "Use this skillany time analyzing user behavior over time — to understand how different acquisition cohorts behave differently, where retention drops off, and what drives long-term customer value.",
       "context": "You are a data analyst who uses cohort analysis to uncover patterns in user behavior that simple conversion metrics miss, revealing the true value of acquisition channels and campaigns.",
-      "instructions": "## Cohort Analysis Workflow\n\n- [ ] 1. Define cohorts: Choose the cohort dimension (acquisition date, source, campaign, etc.)\n- [ ] 2. Choose metrics: DAU, retention, revenue, LTV per cohort\n- [ ] 3. Build cohort table: Plot cohorts over time with the chosen metric\n- [ ] 4. Identify patterns: Where do cohorts diverge? What's driving differences?\n- [ ] 5. Segment: Break cohorts into sub-groups to find root causes\n- [ ] 6. Recommend: Actionable steps to improve underperforming cohorts\n\n## Key Inputs\n- Cohort dimension: {{cohort_dimension}}\n- Metrics to analyze: {{metrics}}\n- Time period: {{time_period}}\n- Data sources: {{data_sources}}",
+      "instructions": "## Cohort Analysis\n\n1. **Cohort Definition** — Choose the cohort dimension\n   - ✓ Done when: Dimension is meaningful for the business question\n\n2. **Metric Selection** — Choose metrics that answer the business question\n   - ✓ Done when: Metrics are measurable and comparable\n\n3. **Table Building** — Build cohort retention or revenue tables\n   - ✓ Done when: Tables are accurate and comparable\n\n4. **Pattern Analysis** — Identify what drives cohort differences\n   - ✓ Done when: Insights are evidenced\n\n5. **Recommendations** — Derive actionable steps from findings\n   - ✓ Done when: Recommendations are specific and prioritized\n\n## Key Inputs\n- cohort_dimension: Dimension for cohort grouping (e.g., acquisition date, source)\n- metrics: Metrics to analyze per cohort (e.g., retention, revenue)\n- time_period: Time period for analysis\n- data_sources: Data sources available for analysis\n\n## When Not to Use\nThis skill overlaps with: attribution-modeling, predictive-analytics. Use those instead when: you need to predict future outcomes rather than analyze past behavior\n\n`analytics` `cohort-analysis` `retention` `lTV`",
       "output_template": "## Cohort Analysis Report\n\n### Analysis Details\n| Field | Value |\n|-------|-------|\n| Cohort dimension | {{cohort_dimension}} |\n| Metrics | {{metrics}} |\n| Period | {{time_period}} |\n| Date | {{date}} |\n\n### Cohort Retention Table\n| Cohort | Size | Week 0 | Week 1 | Week 2 | Week 3 | Week 4 |\n|--------|------|--------|--------|--------|--------|--------|\n| Jan | | | | | | |\n| Feb | | | | | | |\n| Mar | | | | | | |\n\n### Key Patterns\n**Best performing cohort:**\n**Why:**\n\n**Worst performing cohort:**\n**Why:**\n\n### Revenue Cohort Table\n| Cohort | Size | Month 1 | Month 3 | Month 6 | Month 12 | LTV |\n|--------|------|---------|---------|---------|---------|------|\n| | | | | | | |\n\n### Segment Deep-Dive\n| Segment | Behavior | Insight |\n|---------|----------|--------|\n| | | |\n\n### Recommendations\n| Action | Expected impact | Priority |\n|--------|----------------|----------|\n| | | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Data sources available for analysis"
     }
   ],
+  "inputs": [
+    {
+      "name": "cohort_dimension",
+      "type": "string",
+      "required": true,
+      "description": "Dimension for cohort grouping (e.g., acquisition date, source)"
+    },
+    {
+      "name": "metrics",
+      "type": "string",
+      "required": true,
+      "description": "Metrics to analyze per cohort (e.g., retention, revenue)"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period for analysis"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Data sources available for analysis"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,19 +108,26 @@
     }
   ],
   "checklist": [
-    "Cohort dimension is meaningful",
-    "Retention/revenue tables are accurate",
-    "Patterns are evidenced, not assumed",
-    "Differences between cohorts are explained",
+    "Dimension is meaningful for the business question",
+    "Metrics are measurable and comparable",
+    "Tables are accurate and comparable",
+    "Insights are evidenced",
     "Recommendations are specific and prioritized"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["analytics"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "dex"
+  ],
+  "pipelines": [
+    "analytics"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["analytics", "cohort-analysis", "retention", "lTV"],
-    "lastUpdated": "2026-03-24"
+    "tags": [],
+    "lastUpdated": "2026-03-30"
   }
 }

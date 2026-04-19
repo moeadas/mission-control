@@ -1,0 +1,480 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e6]
+  - generic [ref=e7]:
+    - link "Skip to main content" [ref=e8] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e9]:
+      - img [ref=e13]
+      - generic [ref=e15]:
+        - button "Refresh latest app version" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+        - button "Switch to dark mode" [ref=e22] [cursor=pointer]:
+          - img [ref=e23]
+        - button "Sign out" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - paragraph [ref=e30]: 18:38
+    - generic [ref=e31]:
+      - navigation "Main navigation" [ref=e32]:
+        - generic [ref=e34]:
+          - generic [ref=e36]: MC
+          - generic [ref=e37]:
+            - paragraph [ref=e38]: Mission Control
+            - paragraph [ref=e39]: Agency HQ
+        - generic [ref=e40]:
+          - link "Dashboard" [ref=e41] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e43]
+            - generic [ref=e48]: Dashboard
+          - link "Virtual Office" [ref=e49] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e51]
+            - generic [ref=e55]: Virtual Office
+          - link "Agents" [ref=e56] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e58]
+            - generic [ref=e61]: Agents
+          - link "Clients" [ref=e62] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e64]
+            - generic [ref=e69]: Clients
+          - link "Tasks" [ref=e70] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e73]
+            - generic [ref=e76]: Tasks
+          - link "Pipeline" [ref=e77] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e79]
+            - generic [ref=e83]: Pipeline
+          - link "Skills" [ref=e84] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e86]
+            - generic [ref=e89]: Skills
+          - link "Runner" [ref=e90] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e92]
+            - generic [ref=e94]: Runner
+          - link "Analytics" [ref=e95] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e97]
+            - generic [ref=e99]: Analytics
+          - link "Outputs" [ref=e100] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e102]
+            - generic [ref=e105]: Outputs
+          - link "Users" [ref=e106] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e108]
+            - generic [ref=e110]: Users
+          - link "Settings" [ref=e111] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e113]
+            - generic [ref=e116]: Settings
+        - generic [ref=e118]:
+          - generic [ref=e120]: MC
+          - generic [ref=e121]:
+            - paragraph [ref=e122]: Agency Mode
+            - paragraph [ref=e123]: Iris · Online
+      - main [ref=e125]:
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - heading "Tasks" [level=1] [ref=e129]:
+                - img [ref=e130]
+                - text: Tasks
+              - paragraph [ref=e133]: Every request becomes a tracked task with its brief, live output, and exports
+            - generic [ref=e134]: 16 tracked tasks
+          - generic [ref=e136]:
+            - generic [ref=e137] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e139]':
+                - img [ref=e140]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e143]':
+                - /url: /tasks/c7dab690-7066-4011-bd60-b73f772ff1ca
+                - generic [ref=e144]:
+                  - generic [ref=e145]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e146]'
+                    - paragraph [ref=e147]: General Ops · Status Report
+                  - generic [ref=e148]: blocked
+                - paragraph [ref=e149]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e151]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e152]:
+                  - generic [ref=e153]:
+                    - img [ref=e154]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e157]:
+                    - text: Open task
+                    - img [ref=e158]
+            - generic [ref=e160] [cursor=pointer]:
+              - 'button "Delete Task: i want a short content on Instaram for Victory genomics about a speca..." [ref=e162]':
+                - img [ref=e163]
+              - link [ref=e166]:
+                - /url: /tasks/972722e6-1ed9-4072-b00b-09e737ee0ae8
+                - generic [ref=e167]:
+                  - generic [ref=e168]:
+                    - 'heading "Task: i want a short content on Instaram for Victory genomics about a speca..." [level=3] [ref=e169]'
+                    - paragraph [ref=e170]: Victory Genomics · Status Report
+                  - generic [ref=e171]: blocked
+                - paragraph [ref=e172]: i want a short content on Instaram for Victory genomics about a specal 30% discount on all dna tests
+                - generic [ref=e173]:
+                  - paragraph [ref=e174]: Latest Output
+                  - paragraph [ref=e175]: "# Victory Genomics Instagram Post — 30% Discount **Option 1: Straight & Strong** 🦴 **30% OFF every DNA test — because your horse deserves the full picture.** Whole genome sequencing for Arabians, Thoroughbreds & Anglo-Arabians. One test. Lifetime updates. No panel. No shortcuts. 📅 Limited time only. 🔗 Link in bio to claim your discount. **There's more to your horse than meets the eye.** --- **Option 2: Urgency + Emotion** ⏰ This won't last. Take 30% off all Victory Genomics DNA tests — including Arabian VGnome, Thoroughbred VGnome & VGenius consults. Why wait to know every variant, every variant, every genetic story locked in your horse's DNA? 🛒 Shop now — link in bio. **One test. One lifetime. Updated forever.** --- **Option 3: Story-style hook** What if one test told you *everything* — health risks, heritage, performance traits — and kept learning as science evolves? Now it's 30% off. 🐴 Your horse's full genome story starts here. **Link in bio.** --- Want me to adjust the tone, add a carousel caption, or create multiple variations for A/B testing?"
+                - generic [ref=e176]:
+                  - generic [ref=e177]:
+                    - img [ref=e178]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e181]:
+                    - text: Open task
+                    - img [ref=e182]
+            - generic [ref=e184] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e186]':
+                - img [ref=e187]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e190]':
+                - /url: /tasks/d41e6077-7daf-4fa1-bc4b-8ecfb9953107
+                - generic [ref=e191]:
+                  - generic [ref=e192]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e193]'
+                    - paragraph [ref=e194]: General Ops · Status Report
+                  - generic [ref=e195]: blocked
+                - paragraph [ref=e196]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e198]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e199]:
+                  - generic [ref=e200]:
+                    - img [ref=e201]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e204]:
+                    - text: Open task
+                    - img [ref=e205]
+            - generic [ref=e207] [cursor=pointer]:
+              - 'button "Delete Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [ref=e209]':
+                - img [ref=e210]
+              - link [ref=e213]:
+                - /url: /tasks/c5d7f093-0b24-4e8d-9da1-9d4de6cbbcc2
+                - generic [ref=e214]:
+                  - generic [ref=e215]:
+                    - 'heading "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [level=3] [ref=e216]'
+                    - paragraph [ref=e217]: Victory Genomics · Campaign Copy
+                  - generic [ref=e218]: review
+                - paragraph [ref=e219]: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping.
+                - generic [ref=e220]:
+                  - paragraph [ref=e221]: Latest Output
+                  - paragraph [ref=e222]: "# Victory Genomics Equine Karyotyping Instagram Carousel ## Objective Educate horse owners and breeders on equine karyotyping as a critical tool for uncovering chromosomal health issues that impact fertility, pregnancy viability, and foal health—while positioning Victory Genomics' whole genome sequencing as the superior alternative to traditional karyotyping panel tests. ## Audience Primary: Horse owners, breeders, and bloodstock agents focused on breeding soundness and reproductive success. Secondary: Trainers and veterinary professionals seeking advanced genomic insights for their clients. ## Core Message Karyotyping reveals the chromosomal blueprint invisible to the naked eye—but traditional methods only capture part of the picture. Victory Genomics' whole genome sequencing delivers the complete chromosomal story, plus 20,000 genes, 5.5 million variants, and actionable insights that update for your horse's entire lifetime. ## Hook Options 1. **Visual Hook:** \"You see a healthy mare. Her chromosomes might tell a different story.\" 2. **Stat Hook:** \"65 chromosomes. Millions of possible variations. Only one test tells you everything.\" 3. **Question Hook:** \"What can't you see in your horse's pedigree, conformation, or performance?\" 4. **Bold Claim Hook:** \"Most chromosomal issues go undetected until breeding fails. Here's why—and how to change that.\" ## Carousel Cover Headline **\"There's More to Your Horse Than Meets the Eye—Especially at the Chromosome Level\"** Subhead: \"Karyotyping 101: What every breeder needs to know about chromosomal health.\" ## Slide-by-Slide Carousel Copy **Slide 1 — Hook** **The Question Every Breeder Should Ask:** *\"What can't you see in your horse's DNA?\"* Visual inspection. Pedigree papers. Performance records. But there's a layer of genetic information most owners never access—the chromosome level. ⚠️ Chromosomal abnormalities can silently impact fertility, pregnancy viability, and foal health—without any visible signs. --- **Slide 2 — What Is a Karyotype?** **The Genetic Blueprint You've Never Seen** A karyotype is a snapshot of your horse's chromosomes—the 64 paired structures that carry every gene. It reveals: ✓ Chromosomal number abnormalities ✓ Structural rearrangements (translocations) ✓ Sex chromosome patterns ✓ Mosaic conditions Think of it as a chromosomal headcount and structural map. --- **Slide 3 — Why Chromosomes Matter for Breeding** **When 64 Should Be 64—and When It Isn't** Chromosomal issues can cause: • Reduced fertility or infertility • Early embryonic loss • Viable foals"
+                - generic [ref=e223]:
+                  - generic [ref=e224]:
+                    - img [ref=e225]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e228]:
+                    - text: Open task
+                    - img [ref=e229]
+            - generic [ref=e231] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e233]':
+                - img [ref=e234]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e237]':
+                - /url: /tasks/e03c610e-d322-409b-95de-5515c0fbdeb8
+                - generic [ref=e238]:
+                  - generic [ref=e239]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e240]'
+                    - paragraph [ref=e241]: General Ops · Status Report
+                  - generic [ref=e242]: blocked
+                - paragraph [ref=e243]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e245]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e246]:
+                  - generic [ref=e247]:
+                    - img [ref=e248]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e251]:
+                    - text: Open task
+                    - img [ref=e252]
+            - generic [ref=e254] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e256]':
+                - img [ref=e257]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e260]':
+                - /url: /tasks/023613f9-0522-43a0-9a87-163467e18e78
+                - generic [ref=e261]:
+                  - generic [ref=e262]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e263]'
+                    - paragraph [ref=e264]: General Ops · Status Report
+                  - generic [ref=e265]: blocked
+                - paragraph [ref=e266]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e268]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e269]:
+                  - generic [ref=e270]:
+                    - img [ref=e271]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e274]:
+                    - text: Open task
+                    - img [ref=e275]
+            - generic [ref=e277] [cursor=pointer]:
+              - 'button "Delete Content Task: a short Instagram post for Victory Genomics about the prices of the D..." [ref=e279]':
+                - img [ref=e280]
+              - link [ref=e283]:
+                - /url: /tasks/7df4c709-f9c6-4d52-a284-3a11865d9949
+                - generic [ref=e284]:
+                  - generic [ref=e285]:
+                    - 'heading "Content Task: a short Instagram post for Victory Genomics about the prices of the D..." [level=3] [ref=e286]'
+                    - paragraph [ref=e287]: Victory Genomics · Campaign Copy
+                  - generic [ref=e288]: review
+                - paragraph [ref=e289]: Write a short Instagram post for Victory Genomics about the prices of the DNA tests.
+                - generic [ref=e290]:
+                  - paragraph [ref=e291]: Latest Output
+                  - paragraph [ref=e292]: "# Victory Genomics Instagram Post ## Objective Introduce Victory Genomics' whole genome sequencing pricing to the equine community, positioning it as access to premium science—not a commodity purchase—while driving qualified inquiries from horse owners, breeders, trainers, and bloodstock agents. ## Audience - Horse owners seeking deeper understanding of their horse's genetics - Breeders and bloodstock agents making investment decisions - Trainers optimizing performance programs - Veterinary professionals exploring genomic tools ## Key Message Premium whole genome sequencing for horses is now accessible—but this is not a budget option. This is human-grade science at a transformative cost point that delivers lifetime value through updated results as discoveries emerge. ## Hook Options 1. **Data-driven hook:** \"Your horse's genome contains 2.8 billion base pairs. Now you can read every single one.\" 2. **Exclusivity hook:** \"Human-grade genomics. Equine-tier pricing. Finally.\" 3. **ROI hook:** \"The most consequential investment you'll make in your horse costs less than one month of training.\" ## Primary Copy **Option A (Value-forward):** There's more to your horse than meets the eye. Whole genome sequencing unlocks the complete genetic story—every variant, every trait, every insight that makes your horse *your horse.* And it comes with lifetime updates as science evolves. Human-grade science. Equine pricing. Starting at [price]. Your horse's genome is worth knowing. 🔗 Link in bio to learn more. ## Supporting Variants **Option B (Community/Exclusive tone):** Most DNA tests give you a fraction of the picture. Victory Genomics gives you the whole genome—and keeps giving. New discoveries, new variants, updated results for the lifetime of your horse. This is what premium equine genomics looks like. Starting at [price]. Join the horses who know more. **Option C (Commercial/ROI tone):** When you're making breeding decisions, training choices, or investment calls—wouldn't you want the full picture? Whole genome sequencing gives you every variant, every trait, every data point. One test. Lifetime updates. Starting at [price]. Don't manage your horses on partial information. ## CTA Link in bio to explore pricing and order your kit. **Suggested Hashtags:** #EquineGenomics #HorseGenetics #WholeGenomeSequencing #VictoryGenomics #PerformanceHorses #BreederLife #EquineScience #HorseHealth #GenomicTesting #PremiumEquine **Design Direction:** Clean, scientific aesthetic with imagery of horses in motion or portrait shots. White or deep navy background with gold or teal accents. Price callout should feel premium—not discounted. Avoid \"sale,\" \"deal,\" or \"discount\" language."
+                - generic [ref=e293]:
+                  - generic [ref=e294]:
+                    - img [ref=e295]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e298]:
+                    - text: Open task
+                    - img [ref=e299]
+            - generic [ref=e301] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e303]':
+                - img [ref=e304]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e307]':
+                - /url: /tasks/a2f4b96d-a5ff-40ac-b7e6-0820239a2031
+                - generic [ref=e308]:
+                  - generic [ref=e309]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e310]'
+                    - paragraph [ref=e311]: General Ops · Status Report
+                  - generic [ref=e312]: blocked
+                - paragraph [ref=e313]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e315]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e316]:
+                  - generic [ref=e317]:
+                    - img [ref=e318]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e321]:
+                    - text: Open task
+                    - img [ref=e322]
+            - generic [ref=e324] [cursor=pointer]:
+              - 'button "Delete Task: need an instagram post for vg about the importance of beauty arabian ..." [ref=e326]':
+                - img [ref=e327]
+              - 'link "Task: need an instagram post for vg about the importance of beauty arabian ... General Ops · Status Report review need an instagram post for vg about the importance of beauty arabian product Latest Output Happy to help with that! To make sure I nail this, a few quick questions: 1. **Format** — Single image post, carousel, or Reel caption? 2. **Key message** — What angle do you want? (e.g., heritage, ingredients, efficacy, luxury, etc.) 3. **Target audience** — VG''s existing followers, new prospects, or general awareness? 4. **Tone** — Inspirational, educational, luxurious, scientific-backed? Give me those details and I''ll get the copy drafted! 🐴✨ Updated 29 Mar, 18:37 Open task" [ref=e330]':
+                - /url: /tasks/83b755f3-478a-491c-9fda-c1f34b06a16f
+                - generic [ref=e331]:
+                  - generic [ref=e332]:
+                    - 'heading "Task: need an instagram post for vg about the importance of beauty arabian ..." [level=3] [ref=e333]'
+                    - paragraph [ref=e334]: General Ops · Status Report
+                  - generic [ref=e335]: review
+                - paragraph [ref=e336]: need an instagram post for vg about the importance of beauty arabian product
+                - generic [ref=e337]:
+                  - paragraph [ref=e338]: Latest Output
+                  - paragraph [ref=e339]: "Happy to help with that! To make sure I nail this, a few quick questions: 1. **Format** — Single image post, carousel, or Reel caption? 2. **Key message** — What angle do you want? (e.g., heritage, ingredients, efficacy, luxury, etc.) 3. **Target audience** — VG's existing followers, new prospects, or general awareness? 4. **Tone** — Inspirational, educational, luxurious, scientific-backed? Give me those details and I'll get the copy drafted! 🐴✨"
+                - generic [ref=e340]:
+                  - generic [ref=e341]:
+                    - img [ref=e342]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e345]:
+                    - text: Open task
+                    - img [ref=e346]
+            - generic [ref=e348] [cursor=pointer]:
+              - 'button "Delete Content Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e350]':
+                - img [ref=e351]
+              - link [ref=e354]:
+                - /url: /tasks/2763f92d-4936-4a8a-aacb-c76aea45838a
+                - generic [ref=e355]:
+                  - generic [ref=e356]:
+                    - 'heading "Content Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e357]'
+                    - paragraph [ref=e358]: Victory Genomics · Campaign Copy
+                  - generic [ref=e359]: review
+                - paragraph [ref=e360]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - generic [ref=e361]:
+                  - paragraph [ref=e362]: Latest Output
+                  - paragraph [ref=e363]: "# Victory Genomics LinkedIn Post — DNA Testing Process Awareness ## Objective Position Victory Genomics as the trusted authority on equine whole genome sequencing by walking the audience through the testing process in an accessible, confidence-building way. ## Audience Horse owners, breeders, trainers, bloodstock agents, and veterinary professionals who are curious about genomic technology but may not fully understand what whole genome sequencing involves or why it matters. ## Key Message Whole genome sequencing is simpler than you think—and more powerful than you know. Victory Genomics translates complex genomic science into clear, actionable insight for every horse's lifetime. ## Hook Options **Option A:** Your horse's DNA holds 3 billion letters of information. Here's what it takes to read them all—and why it matters for your horse's future. **Option B:** Most DNA tests scan less than 1% of your horse's genome. We sequence 100%. Here's what that difference means for every horse you care for. **Option C:** From sample to insight, here's exactly how whole genome sequencing works—and why most tests miss the full story. --- ## Primary Copy **Your horse's genome contains more than 3 billion base pairs of data.** Most commercially available equine tests analyze a tiny fraction of that—a handful of specific genetic markers linked to known conditions. Victory Genomics does something different. We sequence your horse's **entire genome**—every chromosome, every gene, every base pair. Here's what that process looks like: **1. Sample Collection** A simple hair root or blood sample contains cells packed with your horse's DNA. The sample is shipped to our lab using standard protocols that any vet or owner can follow. **2. Laboratory Sequencing** Our sequencing technology reads the full genome—producing a complete, high-resolution map of your horse's unique genetic code. This isn't a test for a list of traits. It's a full readout. **3. Bioinformatics Analysis** Raw sequence data is processed through our equine-specific annotation pipeline. Every variant is cross-referenced against the latest genomic research and databases. **4. Continuous Interpretation** This is where Victory stands apart. Your horse's results aren't a one-time report. As science advances—as new variants are discovered, as research evolves—your horse's existing sequence is re-analyzed. You receive updated findings automatically. **5. Actionable Insight** Complex data becomes clear guidance. Health risks, trait carriers, breed composition, performance potential—translated into plain language for owners, trainers, and vets alike. --- One test. Your horse's entire genetic story. Updated for life. There's more to your horse than meets the eye. We make sure you see all of it. --- ## CTA **Ready to sequence your horse's full genome?** [Learn how it works / Request a test kit] *Link in comments* --- ## Supporting Notes - **Post length:** Approximately 400 words—ideal for LinkedIn engagement without overwhelming readers. - **Tone:** Authoritative but accessible. Positions Victory Genomics as both scientifically rigorous and practically useful. - **Format:** Line breaks and numbered steps ensure scannability on mobile. - **Hashtag recommendations:** #EquineGenomics #HorseHealth #PrecisionMedicine #EquineScience #VictoryGenomics #WholeGenomeSequencing #EquineBreeding #AnimalBiotechnology"
+                - generic [ref=e364]:
+                  - generic [ref=e365]:
+                    - img [ref=e366]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e369]:
+                    - text: Open task
+                    - img [ref=e370]
+            - generic [ref=e372] [cursor=pointer]:
+              - 'button "Delete Task: i want an istagram post forr victory genomics about hertiage dna test..." [ref=e374]':
+                - img [ref=e375]
+              - link [ref=e378]:
+                - /url: /tasks/c5c89f5c-0511-46ed-94b0-7378fbdbac54
+                - generic [ref=e379]:
+                  - generic [ref=e380]:
+                    - 'heading "Task: i want an istagram post forr victory genomics about hertiage dna test..." [level=3] [ref=e381]'
+                    - paragraph [ref=e382]: Victory Genomics · Status Report
+                  - generic [ref=e383]: blocked
+                - paragraph [ref=e384]: i want an istagram post forr victory genomics about hertiage dna test. need it formal, educational for general awareness
+                - generic [ref=e385]:
+                  - paragraph [ref=e386]: Latest Output
+                  - paragraph [ref=e387]: "I'll route this to Echo, our Copy & Content Lead. --- **Instagram Post for Victory Genomics — Heritage DNA Test** *Draft (formal, educational, general awareness)* --- **Caption:** # Heritage in Every Strand: The Science Behind Your Horse's Lineage Every horse carries a genetic story written over centuries. 🐴 Heritage DNA testing goes beyond pedigree papers — it reveals the deep lineage markers, breed signatures, and genetic lineage patterns that define your horse's unique ancestry. At Victory Genomics, our Whole Genome Sequencing decodes over 5.5 million genetic variants, giving you answers no panel test can provide. ✅ Understand your horse's true genetic heritage ✅ Confirm breed ancestry with precision ✅ Make informed breeding decisions backed by science There's more to your horse than meets the eye. *Have questions about heritage DNA testing? Drop them below 👇* #VictoryGenomics #HorseGenetics #HeritageDNA #EquineGenomics #WholeGenomeSequencing #HorseBreeding #DNATesting #EquineScience #HorseOwners #BreedIntegrity --- **Image suggestion:** Clean, high-resolution close-up of a horse's head ormane, overlaid with subtle DNA helix graphic or world map lineage visual. Minimalist brand palette (dark navy + gold/cream accents). --- *This is a draft — ready for your review. Let me know if you'd like Echo to adjust tone, length, or add a CTA.*"
+                - generic [ref=e388]:
+                  - generic [ref=e389]:
+                    - img [ref=e390]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e393]:
+                    - text: Open task
+                    - img [ref=e394]
+            - generic [ref=e396] [cursor=pointer]:
+              - 'button "Delete Content Task: a short instagram post for Victory Genomics about the prices of the d..." [ref=e398]':
+                - img [ref=e399]
+              - link [ref=e402]:
+                - /url: /tasks/1e1f4ccc-b21c-45ba-9d22-cbd4b8e508ba
+                - generic [ref=e403]:
+                  - generic [ref=e404]:
+                    - 'heading "Content Task: a short instagram post for Victory Genomics about the prices of the d..." [level=3] [ref=e405]'
+                    - paragraph [ref=e406]: Victory Genomics · Campaign Copy
+                  - generic [ref=e407]: review
+                - paragraph [ref=e408]: write a short instagram post for Victory Genomics about the prices of the dna tests
+                - generic [ref=e409]:
+                  - paragraph [ref=e410]: Latest Output
+                  - paragraph [ref=e411]: "# Victory Genomics | One Test. One Price. Every Answer. ## Objective Introduce Victory Genomics pricing in a way that reframes cost as investment—positioning whole genome sequencing as accessible entry into lifelong genetic discovery rather than a one-time purchase. ## Audience Horse owners, breeders, and trainers seeking comprehensive genetic insight. Audience is passionate about equine health and performance but may be unfamiliar with the depth of whole genome sequencing versus basic SNP tests. ## Core Message One test. One price. Lifetime value. Victory Genomics delivers complete whole genome sequencing—not a snapshot, but the full picture—updated as science evolves, with no surprise fees or retesting costs. ## Hook Options 1. **\"What if one test could answer every question—now and forever?\"** 2. **\"Most equine DNA tests check 200 markers. We read all 2.8 billion.\"** 3. **\"Your horse's complete genetic story. One price. Lifetime updates.\"** 4. **\"Stop paying for fragments. Unlock the whole genome.\"** ## Carousel Cover Headline **\"One Test. Every Answer. For Life.\"** Subtext: *Whole genome sequencing for horses — not a snapshot, but the complete picture.* ## Slide-by-Slide Carousel Copy **Slide 1: The Hook** 🧬 *Most DNA tests read a few hundred markers.* *We read 2.8 billion.* *Introducing whole genome sequencing for horses — one test for the entirety of your horse's life.* --- **Slide 2: The Comparison** ❌ **Basic SNP Tests** - Check ~200–500 genetic variants - One-time results - Limited discovery potential ✅ **Victory Genomics WGS** - Complete genome sequencing - Updated findings as science advances - One price, lifetime value --- **Slide 3: The Pricing Reveal** **One test. One price. No hidden fees.** Whole genome sequencing for horses — the most comprehensive genetic test available. *Starting at [price] for complete sequencing and lifetime updates.* --- **Slide 4: The Value Stack** 🔹 Complete genome map — not a snippet 🔹 New discoveries added automatically 🔹 Health, performance, and ancestry insights 🔹 One purchase. Your horse's entire genetic story. --- **Slide 5: The Future Included** Science doesn't stand still — and neither do we. When researchers discover new genetic links, your results update. No retest. No extra cost. Just more answers. --- **Slide 6: The CTA Slide** **Unlock your horse's full genetic potential.** 👉 Link in bio to order your Victory Genomics test today. --- ## Caption Your horse's genome contains 2.8 billion base pairs of information. Most DNA tests read a few hundred. We read them all. Introducing whole genome sequencing from Victory Genomics — the most comprehensive equine genetic test available. One test. One price. Lifetime updates as new discoveries emerge. There's more to your horse than meets the eye. Let's find it together. 🐴🔬 ## CTA **Order Your Test → Link in Bio** ## Hashtag Suggestions #EquineGenomics #HorseDNA #WholeGenomeSequencing #HorseHealth #EquineScience #VictoryGenomics #HorseBreeding #EquineWellness #GeneticTesting #HorseGenetics #OneTestForLife ## Design Direction Notes - **Color Palette:** Deep navy/charcoal background with gold or teal accents — premium science meets equine warmth - **Typography:** Clean sans-serif for data; elegant serif or script accent for headlines - **Imagery:** High-quality horse portrait (close eye or face) as hero image; subtle DNA helix or genomic pattern overlay at low opacity - **Icons:** Minimal line icons for bullet points; avoid clinical imagery - **Slide Pacing:** Generous white space; never crowd text — aim for 3-second readability per slide - **Mobile-First:** All text must be legible at 4\"–6\" screen size without zooming"
+                - generic [ref=e412]:
+                  - generic [ref=e413]:
+                    - img [ref=e414]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e417]:
+                    - text: Open task
+                    - img [ref=e418]
+            - generic [ref=e420] [cursor=pointer]:
+              - 'button "Delete Task: i want a facebook post for Victory genomics about the lifetime update..." [ref=e422]':
+                - img [ref=e423]
+              - link [ref=e426]:
+                - /url: /tasks/a9f91978-5002-4db7-885b-f8b604768fa7
+                - generic [ref=e427]:
+                  - generic [ref=e428]:
+                    - 'heading "Task: i want a facebook post for Victory genomics about the lifetime update..." [level=3] [ref=e429]'
+                    - paragraph [ref=e430]: Victory Genomics · Status Report
+                  - generic [ref=e431]: blocked
+                - paragraph [ref=e432]: i want a facebook post for Victory genomics about the lifetime updates of the dna reports they offer. make it for general awareness and as educational tone
+                - generic [ref=e433]:
+                  - paragraph [ref=e434]: Latest Output
+                  - paragraph [ref=e435]: "# Facebook Post — Victory Genomics: Lifetime DNA Report Updates --- ## Post Copy **🧬 Your horse's DNA story doesn't end at the test.** Here's something most owners don't know: most DNA tests give you one snapshot — and that's it. Victory Genomics works differently. When you sequence your horse's full genome with us, you don't just get results once. **You get results for life.** As our in-house research team uncovers new genetic variants and discoveries — and we do, every week — your report updates automatically. No re-testing. No extra kits. Just better answers as science moves forward. **That's the power of whole genome sequencing versus panel testing.** Panel tests look for a fixed list of known markers. We sequence all 20,000+ genes and 5.5 million variants in your horse's DNA — then keep watching the science so your report keeps getting smarter. One test. One sample. A lifetime of evolving insight. **Because there's more to your horse than meets the eye — and that story deepens over time.** --- ## Post Details | Element | Spec | |---|---| | **Platform** | Facebook | | **Goal** | General awareness + education | | **CTA** | Link to website or \"Learn more in comments\" | | **Suggested hashtags** | #EquineGenomics #HorseHealth #VictoryGenomics #WholeGenomeSequencing #KnowYourHorse #ForLifeResults | | **Image suggestion** | Infographic showing \"Then vs. Now\" — one-test model vs. traditional panel retesting; or a visual of a horse with layered DNA strands fading into the future | --- **Ready to post as-is, or want me to adjust the tone or length?**"
+                - generic [ref=e436]:
+                  - generic [ref=e437]:
+                    - img [ref=e438]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e441]:
+                    - text: Open task
+                    - img [ref=e442]
+            - generic [ref=e444] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e446]':
+                - img [ref=e447]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e450]':
+                - /url: /tasks/cbddb85b-0615-4a5d-b83e-cc2f94ca74da
+                - generic [ref=e451]:
+                  - generic [ref=e452]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e453]'
+                    - paragraph [ref=e454]: General Ops · Status Report
+                  - generic [ref=e455]: blocked
+                - paragraph [ref=e456]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e458]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e459]:
+                  - generic [ref=e460]:
+                    - img [ref=e461]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e464]:
+                    - text: Open task
+                    - img [ref=e465]
+            - generic [ref=e467] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e469]':
+                - img [ref=e470]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e473]':
+                - /url: /tasks/829e982c-c278-427a-a28a-dc919237b2ad
+                - generic [ref=e474]:
+                  - generic [ref=e475]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e476]'
+                    - paragraph [ref=e477]: General Ops · Status Report
+                  - generic [ref=e478]: blocked
+                - paragraph [ref=e479]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e481]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e482]:
+                  - generic [ref=e483]:
+                    - img [ref=e484]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e487]:
+                    - text: Open task
+                    - img [ref=e488]
+            - generic [ref=e490] [cursor=pointer]:
+              - 'button "Delete Task: a linkedin post for victory genomics about the process of dna testing..." [ref=e492]':
+                - img [ref=e493]
+              - 'link "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · Status Report blocked i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post Task created. Output will appear here as soon as Iris drafts it. Updated 29 Mar, 18:37 Open task" [ref=e496]':
+                - /url: /tasks/87cf575e-33b2-492f-98de-10cb92d4b725
+                - generic [ref=e497]:
+                  - generic [ref=e498]:
+                    - 'heading "Task: a linkedin post for victory genomics about the process of dna testing..." [level=3] [ref=e499]'
+                    - paragraph [ref=e500]: General Ops · Status Report
+                  - generic [ref=e501]: blocked
+                - paragraph [ref=e502]: i need a linkedin post for victory genomics about the process of dna testing . informative, awareness, single post
+                - paragraph [ref=e504]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e505]:
+                  - generic [ref=e506]:
+                    - img [ref=e507]
+                    - text: Updated 29 Mar, 18:37
+                  - generic [ref=e510]:
+                    - text: Open task
+                    - img [ref=e511]
+    - button "Open Iris chat" [ref=e513] [cursor=pointer]:
+      - img [ref=e514]
+    - generic [ref=e516]:
+      - button "Hide live task tracker" [expanded] [ref=e518] [cursor=pointer]:
+        - img [ref=e519]
+        - generic [ref=e526]: Live Tasks
+        - generic [ref=e527]: "5"
+      - generic [ref=e528]:
+        - generic [ref=e529]:
+          - generic [ref=e530]:
+            - generic [ref=e531]:
+              - img [ref=e532]
+              - text: Task Tracker
+            - paragraph [ref=e539]: Follow routing, team activity, and saved outputs without keeping Iris open.
+          - button "Close task tracker" [ref=e540] [cursor=pointer]:
+            - img [ref=e541]
+        - generic [ref=e544]:
+          - generic [ref=e545]:
+            - 'button "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · 18:37" [ref=e546] [cursor=pointer]':
+              - paragraph [ref=e547]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+              - paragraph [ref=e548]: General Ops · 18:37
+            - 'button "Task: i want a short content on Instaram for Victory genomics about a speca... Victory Genomics · 18:37" [ref=e549] [cursor=pointer]':
+              - paragraph [ref=e550]: "Task: i want a short content on Instaram for Victory genomics about a speca..."
+              - paragraph [ref=e551]: Victory Genomics · 18:37
+            - 'button "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · 18:37" [ref=e552] [cursor=pointer]':
+              - paragraph [ref=e553]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+              - paragraph [ref=e554]: General Ops · 18:37
+            - 'button "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp... Victory Genomics · 18:37" [ref=e555] [cursor=pointer]':
+              - paragraph [ref=e556]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+              - paragraph [ref=e557]: Victory Genomics · 18:37
+            - 'button "Task: a linkedin post for victory genomics about the process of dna testing... General Ops · 18:37" [ref=e558] [cursor=pointer]':
+              - paragraph [ref=e559]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+              - paragraph [ref=e560]: General Ops · 18:37
+          - generic [ref=e561]:
+            - generic [ref=e562]:
+              - generic [ref=e563]:
+                - paragraph [ref=e564]: "Task: a linkedin post for victory genomics about the process of dna testing..."
+                - paragraph [ref=e565]: General Ops · Direct execution
+              - generic [ref=e566]: blocked
+            - generic [ref=e568]:
+              - generic [ref=e569]: Progress
+              - generic [ref=e570]: 10%
+            - generic [ref=e573]:
+              - generic [ref=e578]:
+                - paragraph [ref=e579]: Analyzing
+                - paragraph [ref=e580]: Iris is interpreting the request and framing the work.
+              - generic [ref=e585]:
+                - paragraph [ref=e586]: Routing
+                - paragraph [ref=e587]: "Lead: Iris"
+              - generic [ref=e592]:
+                - paragraph [ref=e593]: Executing
+                - paragraph [ref=e594]: Ollama model error — the conversation may be too long for the model's context window. Try starting a new chat, or switch to a model with a larger context in Settings.
+              - generic [ref=e598]:
+                - paragraph [ref=e599]: Saved
+                - paragraph [ref=e600]: Waiting for the final saved output.
+            - generic [ref=e601]:
+              - paragraph [ref=e602]: Active team
+              - generic [ref=e604]:
+                - img [ref=e605]
+                - text: Iris
+            - generic [ref=e607]:
+              - paragraph [ref=e608]: Skills in play
+              - generic [ref=e610]: Skill selection appears once routing is complete.
+            - generic [ref=e611]:
+              - paragraph [ref=e612]: Live execution
+              - generic [ref=e614]:
+                - paragraph [ref=e615]: System · task execution
+                - paragraph [ref=e616]: failed
+            - generic [ref=e617]:
+              - paragraph [ref=e618]: Updated 29 Mar, 18:37
+              - link "Open task" [ref=e619] [cursor=pointer]:
+                - /url: /tasks/c7dab690-7066-4011-bd60-b73f772ff1ca
+                - text: Open task
+                - img [ref=e620]

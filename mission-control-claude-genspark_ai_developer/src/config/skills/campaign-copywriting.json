@@ -1,0 +1,138 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "campaign-copywriting",
+  "name": "Campaign Copywriting",
+  "description": "Creates all written components for advertising campaigns across formats and platforms, including headlines, body copy, CTAs, display ads, and platform-native variations.",
+  "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when writing copy for an advertising campaign — headlines, ad copy, display text, social ads, CTAs, or any written ad components across platforms.",
+      "context": "You are a creative copywriter who crafts compelling, platform-appropriate advertising copy that drives action while maintaining brand consistency and compliance.",
+      "instructions": "## Campaign Copywriting Workflow\n\nProduce high-quality campaign copy:\n\n- [ ] 1. Brief review: Understand the creative brief and campaign objectives\n- [ ] 2. Audience voice: Match tone, language, and framing to target audience\n- [ ] 3. Platform adaptation: Write for each platform's format and character limits\n- [ ] 4. Message hierarchy: Primary message, secondary support, CTA\n- [ ] 5. A/B variants: Create meaningful variations for testing\n- [ ] 6. Compliance check: Ensure all copy meets platform policies\n- [ ] 7. Final polish: Proofread and optimize for clarity and impact\n\n## Key Inputs\n- Campaign: {{campaign_name}}\n- Client: {{client_name}}\n- Platforms: {{platforms}}\n- Target audience: {{target_audience}}\n- Key message: {{primary_message}}\n- CTA: {{cta_text}}",
+      "output_template": "## Campaign Copy: {{campaign_name}}\n\n### Brief Alignment\n| Element | Copy |\n|---------|------|\n| Campaign | {{campaign_name}} |\n| Client | {{client_name}} |\n| Primary message | {{primary_message}} |\n| Tone | |\n| Audience | {{target_audience}} |\n\n### Platform Copy\n\n#### {{platform_1}}\n**Headline 1** (max {{headline_limit}} chars):\n[Headline]\n\n**Headline 2** (max {{headline_limit}} chars):\n[Headline]\n\n**Description/Body** (max {{desc_limit}} chars):\n[Body copy]\n\n**CTA:** {{cta_text}}\n\n**Display URL/Path:**\n\n#### {{platform_2}}\n[Same structure]\n\n### Variant Set\n| Platform | Variant | Headline | Body | CTA |\n|----------|---------|----------|------|-----|\n| | A | | | |\n| | B | | | |\n| | C | | | |\n\n### Compliance Notes\n- [ ] No misleading claims\n- [ ] Pricing accurate and current\n- [ ] Required disclaimers included\n- [ ] Platform policies met\n\n### Production Notes\n**CTA buttons used:**\n**Offer/promo code (if any):**\n**Landing page alignment:**"
+    }
+  },
+  "variables": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the campaign"
+    },
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "platforms",
+      "type": "string",
+      "required": true,
+      "description": "Platforms requiring copy"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience description"
+    },
+    {
+      "name": "primary_message",
+      "type": "string",
+      "required": true,
+      "description": "Core message or offer to communicate"
+    },
+    {
+      "name": "cta_text",
+      "type": "string",
+      "required": true,
+      "description": "Call-to-action text or button label"
+    },
+    {
+      "name": "tone",
+      "type": "string",
+      "required": false,
+      "description": "Tone of voice for the copy"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Brief Alignment",
+        "action": "Review brief and confirm understanding of objectives",
+        "verify": "Copy direction is clear"
+      },
+      {
+        "step": 2,
+        "name": "Audience Research",
+        "action": "Research audience language, pain points, and desires",
+        "verify": "Copy will resonate with target"
+      },
+      {
+        "step": 3,
+        "name": "Platform Copywriting",
+        "action": "Write copy for each required platform",
+        "verify": "Each version is optimized for its format"
+      },
+      {
+        "step": 4,
+        "name": "Variant Development",
+        "action": "Create A/B variants with meaningful differences",
+        "verify": "Variants test real hypotheses"
+      },
+      {
+        "step": 5,
+        "name": "Compliance Review",
+        "action": "Check all copy against platform policies",
+        "verify": "Copy is compliant and approved"
+      },
+      {
+        "step": 6,
+        "name": "Final Delivery",
+        "action": "Polish and deliver in organized format",
+        "verify": "All copy is proofed and ready for trafficking"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Write campaign copy for TechStart — B2B fintech SaaS, targeting CFOs in UAE. Platforms: Meta (feed + stories) + LinkedIn. Primary message: cut finance ops costs by 40%. CTA: Book a demo.",
+      "output": "Full copy package with headlines, body text, CTAs, and A/B variants for Meta and LinkedIn"
+    }
+  ],
+  "checklist": [
+    "Copy matches platform format and character limits",
+    "Headlines grab attention immediately",
+    "Value proposition is specific and compelling",
+    "CTA is action-oriented and clear",
+    "At least 2 A/B variants created",
+    "Copy is free of compliance issues",
+    "Tone matches brand voice guidelines"
+  ],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "finn",
+    "echo"
+  ],
+  "pipelines": [
+    "ad-creative"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "creative",
+      "copywriting",
+      "advertising",
+      "campaign",
+      "digital-ads"
+    ],
+    "lastUpdated": "2026-03-24"
+  }
+}

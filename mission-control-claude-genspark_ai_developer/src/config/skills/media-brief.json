@@ -1,0 +1,133 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "media-brief",
+  "name": "Media Brief",
+  "description": "Creates structured media briefs that translate marketing objectives into clear, actionable direction for media planning teams or agency partners.",
+  "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when creating a media brief for internal teams or external agencies to kick off media planning, RFPs, or partner activations.",
+      "context": "You are a media strategist who translates business and marketing objectives into structured media briefs. Your briefs are precise, complete, and actionable for media planners.",
+      "instructions": "## Media Brief Workflow\n\nCreate a comprehensive media brief:\n\n- [ ] 1. **Background**: Summarize brand context, market position, and competitive situation for {{client_name}}\n- [ ] 2. **Objectives**: Define clear, measurable media objectives with KPIs (awareness %, consideration lift, conversion targets)\n- [ ] 3. **Audience definition**: Detail primary and secondary audience segments with demographics, psychographics, and media habits\n- [ ] 4. **Budget and timing**: State budget ({{budget}}), timeline, and key dates (launches, seasonality, cultural events)\n- [ ] 5. **Channel considerations**: Note required channels, exclusions, and any mandatory placements\n- [ ] 6. **Creative assets**: List available creative formats, sizes, and any production dependencies\n- [ ] 7. **Measurement requirements**: Specify tracking setup, attribution model, and reporting cadence\n- [ ] 8. **Mandatories and exclusions**: List compliance requirements, competitive separation, brand safety needs\n\n## Key Inputs\n- Client: {{client_name}}\n- Campaign: {{campaign_name}}\n- Budget: {{budget}}\n- Timeline: {{timeline}}\n- Audience: {{target_audience}}",
+      "output_template": "## Media Brief: {{campaign_name}}\n\n### Brand Background\n[2-3 sentences on brand, market position, competitive context]\n\n### Campaign Overview\n| Element | Details |\n|---------|---------|\n| Client | {{client_name}} |\n| Campaign | {{campaign_name}} |\n| Budget | {{budget}} |\n| Timeline | {{timeline}} |\n| Geography | |\n\n### Media Objectives\n| Objective | KPI | Target |\n|-----------|-----|--------|\n| Awareness | Reach / Impressions | |\n| Consideration | CTR / Video Views | |\n| Conversion | CPA / ROAS | |\n\n### Target Audience\n| Segment | Demographics | Psychographics | Media Behavior |\n|---------|-------------|----------------|----------------|\n| Primary | | | |\n| Secondary | | | |\n\n### Budget Breakdown\n| Phase | Dates | Budget | % of Total |\n|-------|-------|--------|------------|\n| Launch | | | |\n| Sustain | | | |\n| Push | | | |\n\n### Channel Requirements\n| Channel | Mandatory / Recommended | Format | Notes |\n|---------|------------------------|--------|-------|\n| | | | |\n\n### Creative Assets Available\n| Format | Sizes | Status |\n|--------|-------|--------|\n| | | Ready / In Production |\n\n### Measurement & Reporting\n| Metric | Source | Frequency |\n|--------|--------|----------|\n| | | |\n\n### Mandatories & Exclusions\n- [ ] Brand safety: [requirements]\n- [ ] Competitive separation: [requirements]\n- [ ] Compliance: [requirements]"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign or project name"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Total media budget"
+    },
+    {
+      "name": "timeline",
+      "type": "string",
+      "required": true,
+      "description": "Campaign start and end dates"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Primary target audience"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Brand Context",
+        "action": "Summarize brand background and competitive position",
+        "verify": "Context is relevant and current"
+      },
+      {
+        "step": 2,
+        "name": "Define Objectives",
+        "action": "Set measurable media objectives with KPIs",
+        "verify": "Objectives are SMART and tied to business goals"
+      },
+      {
+        "step": 3,
+        "name": "Audience Detail",
+        "action": "Document audience segments with media behavior",
+        "verify": "Audience is specific enough for media targeting"
+      },
+      {
+        "step": 4,
+        "name": "Budget & Timeline",
+        "action": "Break down budget by phase and timing",
+        "verify": "Budget is realistic for objectives and channels"
+      },
+      {
+        "step": 5,
+        "name": "Channel Direction",
+        "action": "Note required and recommended channels",
+        "verify": "Channel direction matches audience and objectives"
+      },
+      {
+        "step": 6,
+        "name": "Creative Inventory",
+        "action": "List available assets and production needs",
+        "verify": "Creative timeline aligns with media timeline"
+      },
+      {
+        "step": 7,
+        "name": "Measurement Setup",
+        "action": "Define tracking, attribution, and reporting",
+        "verify": "Measurement framework covers all objectives"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Write a media brief for TechStart's product launch campaign targeting CFOs in UAE/KSA with USD 80K budget over 8 weeks.",
+      "output": "Complete brief with LinkedIn and Google as primary channels, objectives of 500K impressions and 50 qualified leads, audience profiled by job title and seniority, creative assets listed, and weekly reporting cadence."
+    }
+  ],
+  "checklist": [
+    "Background provides sufficient brand context",
+    "Objectives are measurable with clear KPIs",
+    "Audience segments include media behavior data",
+    "Budget breakdown matches phasing and objectives",
+    "Channel direction is clear but not overly prescriptive",
+    "Creative assets and production timeline addressed",
+    "Measurement framework is complete",
+    "Mandatories and exclusions are documented"
+  ],
+  "tools": [
+    "analytics",
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "media-plan"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "media",
+      "planning",
+      "media-brief"
+    ],
+    "lastUpdated": "2026-03-27"
+  }
+}

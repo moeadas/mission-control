@@ -1,11 +1,11 @@
 import pipelinesConfig from '@/config/pipelines/pipelines.json'
-import skillsLibrary from '@/config/skills/skills-library.json'
-import type { AppPersistenceSnapshot, Conversation, ChatMessage } from '@/lib/agents-store'
+import type { AppPersistenceSnapshot, AppPersistencePatch, Conversation, ChatMessage, EntityDeltaPatch } from '@/lib/agents-store'
 import type { Agent, Artifact, Mission, ProviderSettings, AgencySettings, ActivityEntry, Campaign } from '@/lib/types'
 import type { Client } from '@/lib/client-data'
 import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { mergeAgentMemories } from '@/lib/agent-memory'
 import { normalizeAgentPhotoUrl } from '@/lib/server/agent-photos'
+import { loadConfigSkillCategories } from '@/lib/server/skills-catalog'
 
 const DEFAULT_AGENCY_SLUG = 'default-agency'
 const DEFAULT_AGENCY_NAME = 'Default Agency'
@@ -174,11 +174,15 @@ function toTaskRow(mission: Mission, agencyId: string) {
       assignedAgentIds: mission.assignedAgentIds || [],
       collaboratorAgentIds: mission.collaboratorAgentIds || [],
       pipelineName: mission.pipelineName || null,
+      skillAssignments: mission.skillAssignments || {},
+      orchestrationTrace: mission.orchestrationTrace || [],
       qualityChecklist: mission.qualityChecklist || [],
       handoffNotes: mission.handoffNotes || null,
     },
     metadata: {
       campaignId: mission.campaignId || null,
+      complexity: mission.complexity || null,
+      channelingConfidence: mission.channelingConfidence || null,
       createdAt: mission.createdAt,
       updatedAt: mission.updatedAt,
     },
@@ -263,19 +267,29 @@ function buildMessageRows(conversations: Conversation[]) {
   )
 }
 
-function buildSkillRows(agencyId: string) {
-  const categories = Array.isArray(skillsLibrary.skillCategories) ? skillsLibrary.skillCategories : []
-  return categories.flatMap((category: any) =>
-    (Array.isArray(category.skills) ? category.skills : []).map((skill: any) => ({
+async function buildSkillRows(agencyId: string) {
+  const categories = await loadConfigSkillCategories()
+  return categories.flatMap((category) =>
+    category.skills.map((skill) => ({
       id: skill.id,
       agency_id: agencyId,
       name: skill.name,
       category: category.id,
       description: skill.description || '',
-      prompts: {},
-      checklist: [],
-      examples: [],
+      prompts: skill.prompts || {},
+      checklist: skill.checklist || [],
+      examples: skill.examples || [],
       metadata: {
+        ...(skill.metadata || {}),
+        difficulty: skill.difficulty || skill.metadata?.difficulty || 'intermediate',
+        freedom: skill.freedom || skill.metadata?.freedom || 'medium',
+        variables: skill.variables || [],
+        inputs: skill.inputs || [],
+        outputs: skill.outputs || [],
+        workflow: skill.workflow || { steps: [] },
+        tools: skill.tools || [],
+        agents: skill.agents || [],
+        pipelines: skill.pipelines || [],
         sourceCategoryName: category.name,
       },
       source: 'config',
@@ -369,11 +383,22 @@ export async function syncSnapshotToRelationalTables(state: AppPersistenceSnapsh
     const { error } = await supabase.from('clients').upsert(dedupedClients, { onConflict: 'id' })
     if (error) throw error
   }
-  if (!(await tableHasRows('skills', agencyId))) {
-    const dedupedSkills = dedupeByKey(buildSkillRows(agencyId), (item) => item.id)
+  {
+    const dedupedSkills = dedupeByKey(await buildSkillRows(agencyId), (item) => item.id)
     if (dedupedSkills.length) {
-      const { error } = await supabase.from('skills').upsert(dedupedSkills, { onConflict: 'id' })
-      if (error) throw error
+      const { data: existingSkills, error: existingSkillsError } = await supabase
+        .from('skills')
+        .select('id')
+        .eq('agency_id', agencyId)
+      if (existingSkillsError) throw existingSkillsError
+
+      const existingIds = new Set((existingSkills || []).map((item: any) => item.id))
+      const missingSkills = dedupedSkills.filter((skill) => !existingIds.has(skill.id))
+
+      if (missingSkills.length) {
+        const { error } = await supabase.from('skills').upsert(missingSkills, { onConflict: 'id' })
+        if (error) throw error
+      }
     }
   }
   if (!(await tableHasRows('pipelines', agencyId))) {
@@ -416,6 +441,135 @@ export async function syncSnapshotToRelationalTables(state: AppPersistenceSnapsh
   if (dedupedMessages.length) {
     const { error } = await supabase.from('messages').insert(dedupedMessages)
     if (error) throw error
+  }
+}
+
+export async function syncEntityDeltaToRelationalTables(
+  input: {
+    statePatch?: AppPersistencePatch
+    entityPatch?: EntityDeltaPatch
+  },
+  fullState: AppPersistenceSnapshot
+) {
+  const supabase = getSupabaseServerClient()
+  if (!supabase) return
+
+  const agencyId = await getDefaultAgencyId()
+  if (!agencyId) return
+
+  const statePatch = input.statePatch || {}
+  const entityPatch = input.entityPatch || {}
+
+  if (
+    statePatch.agencySettings ||
+    statePatch.providerSettings ||
+    statePatch.campaigns ||
+    statePatch.activities ||
+    statePatch.agentMemories
+  ) {
+    const { error: agencyUpdateError } = await supabase
+      .from('agencies')
+      .update({
+        settings: {
+          agencySettings: fullState.agencySettings,
+          providerSettings: fullState.providerSettings,
+          campaigns: fullState.campaigns,
+          activities: fullState.activities,
+          agentMemories: fullState.agentMemories,
+        },
+      })
+      .eq('id', agencyId)
+
+    if (agencyUpdateError) throw agencyUpdateError
+  }
+
+  if (entityPatch.agents) {
+    const upserts = dedupeByKey(entityPatch.agents.upserts.map((agent) => toAgentRow(agent, agencyId)), (item) => item.id)
+    if (upserts.length) {
+      const { error } = await supabase.from('agents').upsert(upserts, { onConflict: 'id' })
+      if (error) throw error
+    }
+    if (entityPatch.agents.deletes.length) {
+      const { error } = await supabase.from('agents').delete().in('id', entityPatch.agents.deletes).eq('agency_id', agencyId)
+      if (error) throw error
+    }
+  }
+
+  if (entityPatch.clients) {
+    const upserts = dedupeByKey(entityPatch.clients.upserts.map((client) => toClientRow(client, agencyId)), (item) => item.id)
+    if (upserts.length) {
+      const { error } = await supabase.from('clients').upsert(upserts, { onConflict: 'id' })
+      if (error) throw error
+    }
+    for (const client of entityPatch.clients.upserts) {
+      const { error: deleteKnowledgeError } = await supabase.from('knowledge_assets').delete().eq('agency_id', agencyId).eq('client_id', client.id)
+      if (deleteKnowledgeError) throw deleteKnowledgeError
+      const knowledgeRows = buildKnowledgeAssetRows([client], agencyId)
+      if (knowledgeRows.length) {
+        const { error } = await supabase.from('knowledge_assets').insert(knowledgeRows)
+        if (error) throw error
+      }
+    }
+    if (entityPatch.clients.deletes.length) {
+      const { error } = await supabase.from('clients').delete().in('id', entityPatch.clients.deletes).eq('agency_id', agencyId)
+      if (error) throw error
+    }
+  }
+
+  if (entityPatch.missions) {
+    const upserts = dedupeByKey(entityPatch.missions.upserts.map((mission) => toTaskRow(mission, agencyId)), (item) => item.id)
+    if (upserts.length) {
+      const { error } = await supabase.from('tasks').upsert(upserts, { onConflict: 'id' })
+      if (error) throw error
+    }
+    const touchedTaskIds = entityPatch.missions.upserts.map((mission) => mission.id)
+    if (touchedTaskIds.length) {
+      const { error: deleteAssignmentsError } = await supabase.from('task_assignments').delete().in('task_id', touchedTaskIds).eq('agency_id', agencyId)
+      if (deleteAssignmentsError) throw deleteAssignmentsError
+      const assignmentRows = buildTaskAssignmentRows(entityPatch.missions.upserts, agencyId)
+      if (assignmentRows.length) {
+        const { error } = await supabase.from('task_assignments').insert(assignmentRows)
+        if (error) throw error
+      }
+    }
+    if (entityPatch.missions.deletes.length) {
+      const { error } = await supabase.from('tasks').delete().in('id', entityPatch.missions.deletes).eq('agency_id', agencyId)
+      if (error) throw error
+    }
+  }
+
+  if (entityPatch.artifacts) {
+    const upserts = dedupeByKey(entityPatch.artifacts.upserts.map((artifact) => toOutputRow(artifact, agencyId)), (item) => item.id)
+    if (upserts.length) {
+      const { error } = await supabase.from('outputs').upsert(upserts, { onConflict: 'id' })
+      if (error) throw error
+    }
+    if (entityPatch.artifacts.deletes.length) {
+      const { error } = await supabase.from('outputs').delete().in('id', entityPatch.artifacts.deletes).eq('agency_id', agencyId)
+      if (error) throw error
+    }
+  }
+
+  if (entityPatch.conversations) {
+    const upserts = dedupeByKey(entityPatch.conversations.upserts.map((conversation) => toConversationRow(conversation, agencyId)), (item) => item.id)
+    if (upserts.length) {
+      const { error } = await supabase.from('conversations').upsert(upserts, { onConflict: 'id' })
+      if (error) throw error
+    }
+    const touchedConversationIds = entityPatch.conversations.upserts.map((conversation) => conversation.id)
+    if (touchedConversationIds.length) {
+      const { error: deleteMessagesError } = await supabase.from('messages').delete().in('conversation_id', touchedConversationIds)
+      if (deleteMessagesError) throw deleteMessagesError
+      const messageRows = buildMessageRows(entityPatch.conversations.upserts)
+      if (messageRows.length) {
+        const { error } = await supabase.from('messages').insert(messageRows)
+        if (error) throw error
+      }
+    }
+    if (entityPatch.conversations.deletes.length) {
+      const { error } = await supabase.from('conversations').delete().in('id', entityPatch.conversations.deletes).eq('agency_id', agencyId)
+      if (error) throw error
+    }
   }
 }
 
@@ -508,6 +662,8 @@ function mapTaskRows(rows: any[]): Mission[] {
     deliverableType: row.deliverable_type,
     status: row.status,
     priority: row.priority,
+    complexity: row.metadata?.complexity || undefined,
+    channelingConfidence: row.metadata?.channelingConfidence || undefined,
     campaignId: row.metadata?.campaignId || undefined,
     clientId: row.client_id || undefined,
     assignedAgentIds: Array.isArray(row.execution_plan?.assignedAgentIds) ? row.execution_plan.assignedAgentIds : [],
@@ -515,6 +671,8 @@ function mapTaskRows(rows: any[]): Mission[] {
     collaboratorAgentIds: Array.isArray(row.execution_plan?.collaboratorAgentIds) ? row.execution_plan.collaboratorAgentIds : [],
     pipelineId: row.pipeline_id || undefined,
     pipelineName: row.execution_plan?.pipelineName || undefined,
+    skillAssignments: row.execution_plan?.skillAssignments || {},
+    orchestrationTrace: Array.isArray(row.execution_plan?.orchestrationTrace) ? row.execution_plan.orchestrationTrace : [],
     qualityChecklist: Array.isArray(row.execution_plan?.qualityChecklist) ? row.execution_plan.qualityChecklist : [],
     handoffNotes: row.execution_plan?.handoffNotes || undefined,
     assignedBy: row.assigned_by || 'iris',

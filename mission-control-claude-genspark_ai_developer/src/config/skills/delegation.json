@@ -1,0 +1,55 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "delegation",
+  "name": "Delegation",
+  "description": "Assigns work appropriately to team members by matching tasks to skills, capacity, and development goals while maintaining accountability for outcomes in advertising projects.",
+  "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when assigning tasks to team members, distributing workload across a project team, deciding what to delegate vs. do personally, or developing junior team members.",
+      "context": "You are a delegation specialist who matches the right work to the right people. You know how to delegate without abdicating, maintain accountability, and use delegation as a development tool.",
+      "instructions": "## Delegation Workflow\n\n- [ ] 1. Define the task and its scope, deadlines, and success criteria\n- [ ] 2. Assess who is best suited: skills, capacity, and development goals\n- [ ] 3. Communicate the task with context and expectations\n- [ ] 4. Agree on checkpoints and review milestones\n- [ ] 5. Provide support without taking back the work\n- [ ] 6. Review outcomes and provide feedback\n\n## Key Inputs\n- Task: {{task}}\n- Team Members: {{team_members}} (skills, capacity, development areas)\n- Deadline: {{deadline}}\n- Success Criteria: {{success_criteria}}\n- Context: {{context}}",
+      "output_template": "## Delegation Brief\n\n### Task Overview\n| Element | Details |\n|---------|---------|\n| Task | |\n| Assigned To | |\n| Deadline | |\n| Accountability | |\n\n### Success Criteria\n| Criterion | Definition |\n|-----------|------------|\n| | |\n\n### Context Provided\n[Background and 'why this matters']\n\n### Checkpoints\n| Checkpoint | Date | Format |\n|-----------|------|--------|\n| | | |\n\n### Support Needed\n[What resources or guidance will be provided]"
+    }
+  },
+  "variables": [
+    { "name": "task", "type": "string", "required": true, "description": "Description of the task to delegate" },
+    { "name": "team_members", "type": "string", "required": true, "description": "Available team members with their skills and capacity" },
+    { "name": "deadline", "type": "string", "required": true, "description": "Deadline for the delegated task" },
+    { "name": "success_criteria", "type": "string", "required": false, "description": "Clear definition of what success looks like" },
+    { "name": "context", "type": "string", "required": false, "description": "Background and strategic context for the task" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define task", "action": "Clarify scope, deadline, and success criteria", "verify": "Task is clear and measurable" },
+      { "step": 2, "name": "Match person", "action": "Select the best person based on skills and development goals", "verify": "Person has the capacity and skills needed" },
+      { "step": 3, "name": "Brief clearly", "action": "Communicate task with full context and expectations", "verify": "Person understands both what and why" },
+      { "step": 4, "name": "Check in appropriately", "action": "Set checkpoints without micromanaging", "verify": "Person has room to own the task" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Task: Write campaign performance report for Q1. Team: Senior analyst (bandwidth: busy), Junior analyst (bandwidth: available, needs development in reporting). Deadline: Friday. Criteria: clear insights, accurate data, client-ready format.",
+      "output": "Delegated to junior analyst with senior analyst as checkpoint resource. Briefed with context: 'This report goes to our most strategic client — they use it to make budget decisions. Here's the template, and John is available for questions.' Checkpoints: draft outline Tuesday, final draft Thursday."
+    }
+  ],
+  "checklist": [
+    "Task scope is clearly defined",
+    "Right person is selected for skills and capacity",
+    "Context and expectations are communicated fully",
+    "Checkpoints are set without micromanagement",
+    "Resources and support are provided",
+    "Feedback is given after completion"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["project-management-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["delegation", "project-management", "team-management", "leadership"],
+    "lastUpdated": "2026-03-24"
+  }
+}

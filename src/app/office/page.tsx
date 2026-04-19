@@ -23,7 +23,7 @@ export default function OfficePage() {
               Virtual Office
             </h1>
             <p className="text-sm text-text-secondary mt-1">
-              Minimal shared workspace view with live desk occupancy and roaming idle agents.
+              Live mission floor with seated specialists, task bubbles, and a running trophy board.
             </p>
           </div>
 

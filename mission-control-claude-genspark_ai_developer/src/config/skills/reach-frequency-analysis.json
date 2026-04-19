@@ -1,0 +1,139 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "reach-frequency-analysis",
+  "name": "Reach & Frequency Analysis",
+  "description": "Analyzes and models reach and frequency metrics to determine optimal exposure levels for campaign effectiveness without oversaturation or wasted impressions.",
+  "category": "media",
+  "difficulty": "advanced",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when modeling campaign reach and frequency, setting frequency caps, estimating effective reach, or optimizing exposure levels to avoid ad fatigue.",
+      "context": "You are a media analytics specialist who models reach curves, frequency distributions, and effective frequency thresholds. You optimize campaign delivery for maximum impact without waste.",
+      "instructions": "## Reach & Frequency Analysis Workflow\n\nAnalyze and optimize reach and frequency:\n\n- [ ] 1. **Define parameters**: Establish target audience size, campaign duration, and budget for {{client_name}}\n- [ ] 2. **Set frequency goals**: Determine optimal frequency range based on campaign objective (awareness: 3-5x, consideration: 5-8x, conversion: 8-12x)\n- [ ] 3. **Model reach curves**: Estimate unduplicated reach at different budget levels using GRP-based or platform-native models\n- [ ] 4. **Frequency distribution**: Map expected frequency distribution (1x, 2x, 3x+) across {{target_audience}}\n- [ ] 5. **Effective reach calculation**: Calculate 1+ reach, 3+ reach (effective), and excessive frequency (10+)\n- [ ] 6. **Cross-channel deduplication**: Estimate duplicated vs. unduplicated reach across channels\n- [ ] 7. **Budget scenarios**: Model reach/frequency outcomes at 3 budget levels (conservative, recommended, stretch)\n- [ ] 8. **Frequency cap recommendations**: Set platform-level frequency caps to minimize waste\n\n## Key Inputs\n- Client: {{client_name}}\n- Target audience: {{target_audience}}\n- Budget: {{budget}}\n- Campaign duration: {{campaign_duration}}\n- Channels: {{channels}}",
+      "output_template": "## Reach & Frequency Analysis: {{client_name}}\n\n### Campaign Parameters\n| Parameter | Value |\n|-----------|-------|\n| Target Audience | {{target_audience}} |\n| Audience Universe | [estimated size] |\n| Budget | {{budget}} |\n| Duration | {{campaign_duration}} |\n| Channels | {{channels}} |\n\n### Reach Curve Estimates\n| Budget Level | 1+ Reach | 3+ Reach (Effective) | Avg Frequency | GRPs |\n|-------------|----------|---------------------|---------------|------|\n| Conservative | | | | |\n| Recommended | | | | |\n| Stretch | | | | |\n\n### Frequency Distribution\n| Frequency | % of Audience | Impressions | Status |\n|-----------|--------------|-------------|--------|\n| 1x | | | Under-exposed |\n| 2x | | | Building |\n| 3-5x | | | Effective |\n| 6-9x | | | High |\n| 10+ | | | Wasteful |\n\n### Channel Reach Contribution\n| Channel | Gross Reach | Deduplicated Reach | Overlap % |\n|---------|-------------|-------------------|----------|\n| | | | |\n\n### Frequency Cap Recommendations\n| Channel | Recommended Cap | Rationale |\n|---------|----------------|----------|\n| | /day, /week | |\n\n### Key Findings\n1. [Finding with data]\n2. [Finding with data]\n3. [Finding with data]"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience description and estimated size"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Total media budget"
+    },
+    {
+      "name": "campaign_duration",
+      "type": "string",
+      "required": true,
+      "description": "Campaign duration in weeks or months"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Media channels being planned"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Define Parameters",
+        "action": "Establish audience size, duration, and budget",
+        "verify": "Parameters are realistic and complete"
+      },
+      {
+        "step": 2,
+        "name": "Set Frequency Goals",
+        "action": "Determine optimal frequency by campaign objective",
+        "verify": "Goals are evidence-based for the objective type"
+      },
+      {
+        "step": 3,
+        "name": "Model Reach Curves",
+        "action": "Estimate reach at multiple budget levels",
+        "verify": "Curves follow realistic diminishing returns"
+      },
+      {
+        "step": 4,
+        "name": "Frequency Distribution",
+        "action": "Map expected exposure levels across audience",
+        "verify": "Distribution identifies waste and under-exposure"
+      },
+      {
+        "step": 5,
+        "name": "Effective Reach",
+        "action": "Calculate effective frequency thresholds",
+        "verify": "Effective reach maximized vs. total reach"
+      },
+      {
+        "step": 6,
+        "name": "Cross-Channel Dedup",
+        "action": "Estimate audience overlap between channels",
+        "verify": "Overlap is quantified and addressed"
+      },
+      {
+        "step": 7,
+        "name": "Budget Scenarios",
+        "action": "Present 3 budget scenarios with trade-offs",
+        "verify": "Scenarios show clear reach/frequency trade-offs"
+      },
+      {
+        "step": 8,
+        "name": "Frequency Caps",
+        "action": "Recommend platform-level caps",
+        "verify": "Caps reduce waste without limiting effective reach"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Model reach and frequency for a CPG brand launching a new product in Saudi Arabia with SAR 500K budget over 6 weeks across TV, YouTube, and Meta.",
+      "output": "Analysis showing recommended budget achieves 65% 3+ reach with average 5.2x frequency. TV drives 45% unduplicated reach, YouTube adds 15% incremental, Meta adds 12%. Frequency caps: YouTube 3/week, Meta 2/day."
+    }
+  ],
+  "checklist": [
+    "Target audience universe is quantified",
+    "Frequency goals match campaign objectives",
+    "Reach curves model diminishing returns realistically",
+    "Effective reach (3+) is prioritized over gross reach",
+    "Cross-channel overlap is estimated and addressed",
+    "Multiple budget scenarios are presented",
+    "Frequency caps are recommended per platform",
+    "Waste exposure (10+) is minimized"
+  ],
+  "tools": [
+    "analytics",
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "media-plan"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "media",
+      "planning",
+      "reach-frequency-analysis"
+    ],
+    "lastUpdated": "2026-03-27"
+  }
+}

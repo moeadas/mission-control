@@ -2,16 +2,16 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "brand-equity",
   "name": "Brand Equity Measurement",
-  "description": "Measures and manages brand strength through awareness, perception, loyalty, and association metrics — tracking how consumers think, feel, and act toward a brand.",
+  "description": "Assesses brand equity through awareness, associations, trust, distinctiveness, and memory structures, then turns findings into strategic implications.",
   "category": "research",
   "difficulty": "intermediate",
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when measuring or tracking brand equity — to understand brand awareness, perception, loyalty, and associations relative to competitors and over time.",
-      "context": "You are a brand analyst who measures brand equity using quantitative and qualitative research to track brand health and inform brand strategy decisions.",
-      "instructions": "## Brand Equity Measurement Workflow\n\n- [ ] 1. Define equity dimensions: Awareness, Associations, Perceived quality, Loyalty\n- [ ] 2. Select metrics: Choose measurable KPIs for each dimension\n- [ ] 3. Gather data: Pull from surveys, social listening, sales data, search data\n- [ ] 4. Benchmark: Compare against competitors and previous periods\n- [ ] 5. Diagnose: Identify what's driving or hurting equity\n- [ ] 6. Recommend: Actionable steps to improve brand equity\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Competitors: {{competitors}}\n- Time period: {{time_period}}\n- Data sources: {{data_sources}}",
-      "output_template": "## Brand Equity Report: {{brand_name}}\n\n### Report Details\n| Field | Value |\n|-------|-------|\n| Brand | {{brand_name}} |\n| Competitors | {{competitors}} |\n| Period | {{time_period}} |\n| Date | {{date}} |\n\n### Brand Equity Scorecard\n| Dimension | Metric | Score | vs. Last Period | vs. Competitor |\n|-----------|--------|-------|-----------------|----------------|\n| Awareness | Unaided awareness | | | |\n| Awareness | Aided awareness | | | |\n| Associations | Brand attributes | | | |\n| Perceived quality | Quality perception | | | |\n| Loyalty | NPS / Repeat purchase | | | |\n\n### Brand Funnel\n| Stage | This period | Last period | Change |\n|-------|-------------|-------------|--------|\n| Awareness | | | |\n| Consideration | | | |\n| Preference | | | |\n| Loyalty | | | |\n\n### Key Drivers of Equity\n**What is helping brand equity:**\n\n**What is hurting brand equity:**\n\n### Competitor Comparison\n| Dimension | {{brand_name}} | Competitor A | Competitor B |\n|-----------|----------------|--------------|--------------|\n| | | | |\n\n### Recommendations\n| Action | Impact on equity | Priority |\n|--------|-----------------|----------|\n| | | |"
+      "trigger": "Use this skillany time evaluating brand strength, diagnosing brand perception, reviewing equity-building opportunities, or translating brand signals into strategy.",
+      "context": "You are a brand strategist analyzing brand equity. You look beyond recall and preference to understand associations, distinctiveness, trust, and strategic implications for growth.",
+      "instructions": "## Brand Equity Measurement\n\n1. **Define equity question** — Define equity question\n   - ✓ Done when: Define equity question is completed to a high standard\n\n2. **Assess equity dimensions** — Assess equity dimensions\n   - ✓ Done when: Assess equity dimensions is completed to a high standard\n\n3. **Review associations** — Review associations\n   - ✓ Done when: Review associations is completed to a high standard\n\n4. **Identify strengths and weak spots** — Identify strengths and weak spots\n   - ✓ Done when: Identify strengths and weak spots is completed to a high standard\n\n5. **Translate into strategic implications** — Translate into strategic implications\n   - ✓ Done when: Translate into strategic implications is completed to a high standard\n\n## Key Inputs\n- brand_name: Brand being measured\n- competitors: Key competitors to compare against\n- time_period: Time period for analysis\n- data_sources: Available data sources (surveys, social, sales)",
+      "output_template": "## Brand Equity Assessment\n\n### 1. Equity Context\n- Business question:\n- Brand / category context:\n- Most important equity dimension:\n\n### 2. Equity Signals\n| Dimension | Current Signal | Interpretation |\n|---|---|---|\n| Awareness | | |\n| Familiarity | | |\n| Trust | | |\n| Differentiation | | |\n| Preference / Consideration | | |\n\n### 3. Owned Vs Desired Associations\n| Current Association | Desired Association | Gap / Opportunity |\n|---|---|---|\n| | | |\n\n### 4. Strategic Implications\n- Messaging implication:\n- Experience implication:\n- Investment implication:\n\n### 5. Recommended Next Steps\n1. \n2. \n3."
     }
   },
   "variables": [
@@ -40,37 +40,64 @@
       "description": "Available data sources (surveys, social, sales)"
     }
   ],
+  "inputs": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being measured"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Key competitors to compare against"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period for analysis"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Available data sources (surveys, social, sales)"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
         "step": 1,
-        "name": "Dimension Definition",
-        "action": "Define the four equity dimensions to measure",
-        "verify": "Dimensions are measurable and relevant"
+        "name": "Define equity question",
+        "action": "Define equity question",
+        "verify": "Define equity question is completed to a high standard"
       },
       {
         "step": 2,
-        "name": "Data Collection",
-        "action": "Gather data across all sources",
-        "verify": "Data is current and representative"
+        "name": "Assess equity dimensions",
+        "action": "Assess equity dimensions",
+        "verify": "Assess equity dimensions is completed to a high standard"
       },
       {
         "step": 3,
-        "name": "Benchmarking",
-        "action": "Compare against competitors and history",
-        "verify": "Comparisons are on a like-for-like basis"
+        "name": "Review associations",
+        "action": "Review associations",
+        "verify": "Review associations is completed to a high standard"
       },
       {
         "step": 4,
-        "name": "Diagnosis",
-        "action": "Identify drivers of equity changes",
-        "verify": "Causes are evidenced, not assumed"
+        "name": "Identify strengths and weak spots",
+        "action": "Identify strengths and weak spots",
+        "verify": "Identify strengths and weak spots is completed to a high standard"
       },
       {
         "step": 5,
-        "name": "Recommendations",
-        "action": "Propose actions to improve equity",
-        "verify": "Actions are specific and prioritized"
+        "name": "Translate into strategic implications",
+        "action": "Translate into strategic implications",
+        "verify": "Translate into strategic implications is completed to a high standard"
       }
     ]
   },
@@ -81,19 +108,32 @@
     }
   ],
   "checklist": [
-    "All four equity dimensions are measured",
-    "Data sources are credible and current",
-    "Competitor comparison is on a like-for-like basis",
-    "Drivers of change are evidenced",
-    "Recommendations are specific and prioritized"
+    "Define equity question is completed to a high standard",
+    "Assess equity dimensions is completed to a high standard",
+    "Review associations is completed to a high standard",
+    "Identify strengths and weak spots is completed to a high standard",
+    "Translate into strategic implications is completed to a high standard"
   ],
-  "tools": ["spreadsheet", "document"],
-  "agents": ["nova"],
-  "pipelines": ["brand-research"],
+  "tools": [
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "atlas"
+  ],
+  "pipelines": [
+    "brand-research"
+  ],
   "metadata": {
     "version": "1.1",
     "author": "agency",
-    "tags": ["brand", "research", "brand-equity", "awareness", "loyalty"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "brand",
+      "research",
+      "brand-equity",
+      "awareness",
+      "loyalty"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "waterfall-planning",
+  "name": "Waterfall Planning",
+  "description": "Managing sequential project phases where each stage must complete before the next begins. Structured project management for projects requiring clear gates, approvals, and documentation at each stage.",
+  "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when planning projects with sequential phases, managing projects requiring formal approvals between stages, or organizing work that follows a structured waterfall methodology.",
+      "context": "You are a waterfall project planning specialist who understands phase-gate methodology, dependency management, and how to structure sequential work that maintains quality at each stage.",
+      "instructions": "## Waterfall Planning Workflow\n\n- [ ] 1. Define project scope and phases\n- [ ] 2. Break down work within each phase\n- [ ] 3. Define phase dependencies and gates\n- [ ] 4. Create detailed phase schedules\n- [ ] 5. Establish phase entry/exit criteria\n- [ ] 6. Monitor and manage phase transitions\n\n## Key Inputs\n- Project: {{project}}\n- Phases: {{phases}}\n- Deliverables: {{deliverables}}\n- Approval Requirements: {{approvals}}\n- Timeline Constraints: {{constraints}}",
+      "output_template": "## Waterfall Project Plan\n\n### Project Overview\n| Element | Details |\n|---------|---------|\n| Project | |\n| Total Duration | |\n| Start Date | |\n| End Date | |\n\n### Phase Structure\n| Phase | Duration | Start | End | Dependencies |\n|-------|----------|-------|-----|-------------|\n| 1. Discovery | | | | None |\n| 2. Strategy | | | | Phase 1 |\n| 3. Design | | | | Phase 2 |\n| 4. Development | | | | Phase 3 |\n| 5. Testing | | | | Phase 4 |\n| 6. Launch | | | | Phase 5 |\n\n### Phase Details\n\n#### Phase 1: Discovery\n| Element | Details |\n|---------|---------|\n| Objectives | |\n| Key Tasks | |\n| Deliverables | |\n| Exit Criteria | |\n| Owner | |\n\n### Gate Reviews\n| Gate | Criteria | Reviewer | Date |\n|------|----------|----------|------|\n| Gate 1 | | | |\n| Gate 2 | | | |\n\n### Approval Workflow\n| Phase | Approver | Required Docs |\n|-------|---------|--------------|\n| | | |\n\n### Change Control\n| Element | Process |\n|---------|--------|\n| Change Request Form | ☐ |\n| Impact Assessment | ☐ |\n| Approval Authority | |\n\n### Risk Register\n| Risk | Phase | Mitigation |\n|------|-------|------------|\n| | | |"
+    }
+  },
+  "variables": [
+    { "name": "project", "type": "string", "required": true, "description": "Project name and overview" },
+    { "name": "phases", "type": "string", "required": true, "description": "Project phases and definitions" },
+    { "name": "deliverables", "type": "string", "required": false, "description": "Key deliverables per phase" },
+    { "name": "approvals", "type": "string", "required": false, "description": "Approval requirements" },
+    { "name": "constraints", "type": "string", "required": false, "description": "Timeline and resource constraints" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define phases", "action": "Structure project into logical phases", "verify": "Phases are distinct" },
+      { "step": 2, "name": "Break down work", "action": "Define tasks within each phase", "verify": "Work is detailed" },
+      { "step": 3, "name": "Set gates", "action": "Define phase entry/exit criteria", "verify": "Gates are clear" },
+      { "step": 4, "name": "Schedule phases", "action": "Create timeline for each phase", "verify": "Dependencies respected" },
+      { "step": 5, "name": "Plan approvals", "action": "Define approval workflow", "verify": "Process is efficient" },
+      { "step": 6, "name": "Monitor", "action": "Track phase progress and gates", "verify": "Quality maintained" }
+    ]
+  },
+  "examples": [
+    { "input": "Create waterfall project plan for a website redesign with phases: Discovery, Design, Development, Testing, Launch.", "output": "Complete waterfall plan with phase details, gates, and approval workflow." },
+    { "input": "Plan a product launch following waterfall methodology: Research, Strategy, Creative, Production, Media, Launch.", "output": "Waterfall plan with all phases, dependencies, and gate criteria." }
+  ],
+  "checklist": [
+    "Phases are logical and distinct",
+    "Each phase has clear deliverables",
+    "Dependencies are identified",
+    "Gate criteria are measurable",
+    "Approval process defined",
+    "Change control process established",
+    "Quality gates maintain standards",
+    "Phase transitions managed",
+    "Documentation complete at each phase"
+  ],
+  "tools": ["document", "spreadsheet", "project-management"],
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["waterfall", "project-management", "phases", "planning", "methodology"],
+    "lastUpdated": "2026-03-24"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "seasonality-modeling",
+  "name": "Seasonality Modeling",
+  "description": "Models seasonal media spending patterns, audience behavior shifts, and demand fluctuations to optimize campaign timing and budget pacing across the calendar year.",
+  "category": "media",
+  "difficulty": "advanced",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when planning media spend across seasons, optimizing budget pacing by quarter, or adjusting strategies for seasonal demand patterns.",
+      "context": "You are a media planning analyst who models seasonal patterns in consumer behavior, media costs, and competitive activity. You optimize budget allocation across the calendar year to maximize impact during peak periods and maintain presence during valleys.",
+      "instructions": "## Seasonality Modeling Workflow\n\nModel seasonal patterns for media planning:\n\n- [ ] 1. **Historical analysis**: Review past performance data by month/quarter for {{client_name}} and {{industry}}\n- [ ] 2. **Demand curve**: Map consumer demand seasonality (search trends, sales data, category patterns)\n- [ ] 3. **Cost seasonality**: Model media cost fluctuations (CPM spikes during Ramadan, Black Friday, back-to-school)\n- [ ] 4. **Competitive seasonality**: Map when competitors increase/decrease spending\n- [ ] 5. **Cultural calendar**: Factor in regional events, holidays, and cultural moments for {{market}}\n- [ ] 6. **Budget pacing model**: Create monthly budget allocation that weights toward high-ROI periods\n- [ ] 7. **Always-on vs. burst**: Define baseline and burst periods with budget ratios\n- [ ] 8. **Risk factors**: Identify potential disruptions and contingency budget reserves\n\n## Key Inputs\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Market: {{market}}\n- Annual budget: {{budget}}\n- Key periods: {{key_periods}}",
+      "output_template": "## Seasonality Model: {{client_name}}\n\n### Demand Seasonality Index\n| Month | Demand Index | Category Trend | Key Events |\n|-------|-------------|----------------|------------|\n| Jan | 80 | Low | New Year |\n| Feb | 85 | Building | |\n| Mar-Apr | 120 | Peak | Ramadan |\n| ... | | | |\n\n### Media Cost Index\n| Month | CPM Index | Inventory Availability | Cost Pressure |\n|-------|-----------|----------------------|---------------|\n| | 100 = baseline | High / Med / Low | |\n\n### Budget Pacing Model\n| Month | Budget % | Budget Amount | Strategy | Rationale |\n|-------|----------|---------------|----------|----------|\n| Jan | 6% | | Always-on | Low demand, low cost |\n| Mar | 12% | | Burst | Ramadan peak |\n| Nov | 14% | | Burst | Black Friday |\n\n### Always-On vs. Burst\n| Period | Type | Budget % | Objective |\n|--------|------|----------|----------|\n| Jan-Feb | Always-on | 12% | Maintain presence |\n| Mar-Apr | Burst | 24% | Ramadan peak |\n\n### Contingency & Risk\n| Risk Factor | Impact | Contingency | Reserve |\n|------------|--------|-------------|--------|\n| | High / Med | | % of budget |"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Industry for category benchmarks"
+    },
+    {
+      "name": "market",
+      "type": "string",
+      "required": true,
+      "description": "Geographic market"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Annual media budget"
+    },
+    {
+      "name": "key_periods",
+      "type": "string",
+      "required": false,
+      "description": "Key seasonal periods to consider"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Historical Analysis",
+        "action": "Review past performance by month",
+        "verify": "Data covers at least 12 months"
+      },
+      {
+        "step": 2,
+        "name": "Demand Mapping",
+        "action": "Map consumer demand seasonality",
+        "verify": "Demand index is evidence-based"
+      },
+      {
+        "step": 3,
+        "name": "Cost Modeling",
+        "action": "Model media cost fluctuations",
+        "verify": "Cost indices reflect actual market data"
+      },
+      {
+        "step": 4,
+        "name": "Cultural Calendar",
+        "action": "Integrate regional events and holidays",
+        "verify": "All relevant cultural moments included"
+      },
+      {
+        "step": 5,
+        "name": "Budget Pacing",
+        "action": "Create monthly budget allocation model",
+        "verify": "Pacing weights toward high-ROI periods"
+      },
+      {
+        "step": 6,
+        "name": "Risk Planning",
+        "action": "Identify disruptions and contingencies",
+        "verify": "Contingency reserve is adequate"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Model seasonality for a retail brand in UAE with AED 1.2M annual media budget.",
+      "output": "Index model showing Ramadan (Mar-Apr) and Q4 (Nov-Dec) as peak demand periods. Budget pacing: 8% in low months, 14% during Ramadan, 16% during Black Friday/DSF. Always-on baseline: 40% of total, burst: 60%."
+    }
+  ],
+  "checklist": [
+    "Historical data analyzed by month",
+    "Demand seasonality is evidence-based",
+    "Media cost fluctuations modeled",
+    "Cultural calendar includes regional events",
+    "Budget pacing maximizes high-ROI periods",
+    "Always-on vs. burst strategy is clear",
+    "Risk contingencies identified"
+  ],
+  "tools": [
+    "analytics",
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "media-plan"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "media",
+      "planning",
+      "seasonality-modeling"
+    ],
+    "lastUpdated": "2026-03-27"
+  }
+}

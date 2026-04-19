@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when establishing or reviewing work priorities — applying prioritization frameworks, resolving priority conflicts, and ensuring the team focuses on highest-value work.",
+      "trigger": "Use this skillany time establishing or reviewing work priorities — applying prioritization frameworks, resolving priority conflicts, and ensuring the team focuses on highest-value work.",
       "context": "You are a productivity specialist who helps teams focus on what matters most by applying clear prioritization frameworks and resolving competing demands.",
-      "instructions": "## Priority Management Workflow\n\nManage priorities effectively:\n\n- [ ] 1. Inventory all work: List all tasks, projects, and demands\n- [ ] 2. Assess value: Evaluate potential value of each item\n- [ ] 3. Assess urgency: Determine time sensitivity\n- [ ] 4. Apply framework: Use prioritization matrix (Eisenhower, RICE, etc.)\n- [ ] 5. Resolve conflicts: Make explicit decisions when items compete\n- [ ] 6. Communicate priorities: Ensure team understands priorities\n- [ ] 7. Review regularly: Reassess priorities as circumstances change\n\n## Key Inputs\n- Work items: {{work_items}}\n- Priority criteria: {{priority_criteria}}\n- Decision maker: {{decision_maker}}",
+      "instructions": "## Priority Management\n\n1. **Work Inventory** — Gather all work items in one place\n   - ✓ Done when: Complete picture of demands\n\n2. **Value Assessment** — Evaluate potential value of each item\n   - ✓ Done when: Value is quantified where possible\n\n3. **Urgency Assessment** — Assess time sensitivity\n   - ✓ Done when: Urgency is realistic\n\n4. **Framework Application** — Apply chosen prioritization framework\n   - ✓ Done when: Priorities are clear and justified\n\n5. **Conflict Resolution** — Resolve competing priorities explicitly\n   - ✓ Done when: Decisions are documented\n\n6. **Communication** — Communicate priorities to team and stakeholders\n   - ✓ Done when: Everyone understands priorities\n\n## Key Inputs\n- team_project: Team, project, or account\n- work_items: List of work items to prioritize\n- priority_criteria: Criteria to use for prioritization\n- framework: Prioritization framework to use",
       "output_template": "## Priority Management: {{team_project}}\n\n### Priority Framework Used: {{framework}}\n\n### Eisenhower Matrix\n\n| | **Urgent** | **Not Urgent** |\n|---|---|---|\n| **Important** | DO FIRST | SCHEDULE |\n| | | |\n| **Not Important** | DELEGATE | ELIMINATE |\n| | | |\n\n### Prioritized Work List\n\n| Priority | Item | Value | Urgency | Score | Owner | Due |\n|----------|------|-------|---------|-------|-------|-----|\n| 1 | | | | | | |\n| 2 | | | | | | |\n| 3 | | | | | | |\n| 4 | | | | | | |\n| 5 | | | | | | |\n\n### Priority Conflicts\n\n| Conflicting items | Conflict type | Resolution |\n|------------------|---------------|-----------|\n| | | |\n\n### Priority Criteria Weights\n| Criterion | Weight | Rationale |\n|-----------|--------|----------|\n| Revenue impact | | |\n| Strategic importance | | |\n| Urgency | | |\n| Effort | | |\n| Dependencies | | |\n\n### What NOT to Work On (Backlog)\n| Item | Reason for deprioritization |\n|------|---------------------------|\n| | |\n\n### Communication\n| Stakeholder | What to communicate | When |\n|------------|---------------------|------|\n| | | |\n\n### Priority Review Cadence\n| Review | Frequency | Owner |\n|--------|----------|-------|\n| Daily standup | Daily | |\n| Weekly prioritization | Weekly | |\n| Monthly strategy | Monthly | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Prioritization framework to use"
     }
   ],
+  "inputs": [
+    {
+      "name": "team_project",
+      "type": "string",
+      "required": true,
+      "description": "Team, project, or account"
+    },
+    {
+      "name": "work_items",
+      "type": "string",
+      "required": true,
+      "description": "List of work items to prioritize"
+    },
+    {
+      "name": "priority_criteria",
+      "type": "string",
+      "required": false,
+      "description": "Criteria to use for prioritization"
+    },
+    {
+      "name": "framework",
+      "type": "string",
+      "required": false,
+      "description": "Prioritization framework to use"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,13 +114,12 @@
     }
   ],
   "checklist": [
-    "All work items are captured",
-    "Value and urgency are assessed",
-    "Framework is applied consistently",
-    "Conflicts are resolved explicitly",
-    "Priorities are communicated to team",
-    "Backlog is acknowledged, not ignored",
-    "Priorities are reviewed regularly"
+    "Complete picture of demands",
+    "Value is quantified where possible",
+    "Urgency is realistic",
+    "Priorities are clear and justified",
+    "Decisions are documented",
+    "Everyone understands priorities"
   ],
   "tools": [
     "spreadsheet",
@@ -101,7 +127,7 @@
     "project-management-tool"
   ],
   "agents": [
-    "atlas"
+    "iris"
   ],
   "pipelines": [
     "operations"
@@ -115,6 +141,6 @@
       "productivity",
       "planning"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

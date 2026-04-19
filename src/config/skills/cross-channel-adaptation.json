@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when adapting creative across channels — to transform a core creative idea into platform-native formats for LinkedIn, Instagram, Google, TikTok, email, and other channels while maintaining consistency.",
+      "trigger": "Use this skillany time adapting creative across channels — to transform a core creative idea into platform-native formats for linkedin, instagram, google, tiktok, email, and other channels while maintaining consistency.",
       "context": "You are a creative strategist who adapts core creative concepts into platform-native executions across all channels, ensuring brand consistency while optimizing for each platform's unique requirements.",
-      "instructions": "## Cross-Channel Adaptation Workflow\n\n- [ ] 1. Define the core creative: The single strategic idea or message to adapt\n- [ ] 2. Map channel requirements: Format, length, aspect ratio, tone for each channel\n- [ ] 3. Create adaptations: Transform the core creative for each channel\n- [ ] 4. Maintain consistency: Ensure brand voice and key message are preserved\n- [ ] 5. Optimize for platform: Use native features, formats, and behaviors\n- [ ] 6. Review each adaptation: Does this work for its specific channel?\n- [ ] 7. Document all versions: Maintain a master file of all adaptations\n\n## Key Inputs\n- Core creative: {{core_creative}}\n- Channels: {{channels}}\n- Brand guidelines: {{brand_guidelines}}\n- Campaign message: {{campaign_message}}",
+      "instructions": "## Cross-Channel Adaptation\n\n1. **Core Definition** — Define the single strategic idea to adapt\n   - ✓ Done when: Core creative is clear and ownable\n\n2. **Channel Requirements** — Map requirements for each channel\n   - ✓ Done when: Requirements are accurate and current\n\n3. **Adaptation Creation** — Create adaptations for each channel\n   - ✓ Done when: Adaptations are platform-native\n\n4. **Consistency Check** — Verify brand consistency across all adaptations\n   - ✓ Done when: Core message is preserved everywhere\n\n5. **Documentation** — Maintain master file of all adaptations\n   - ✓ Done when: All versions are documented\n\n## Key Inputs\n- campaign_name: Campaign name\n- core_creative: Core creative concept or message\n- channels: Channels to adapt for\n- brand_guidelines: Brand guidelines to follow\n- campaign_message: Primary campaign message",
       "output_template": "## Cross-Channel Adaptation: {{campaign_name}}\n\n### Core Creative\n**Strategic idea:**\n**Key message:**\n**Brand voice:**\n\n### Channel Adaptation Matrix\n| Channel | Format | Duration/Length | Aspect ratio | Platform nuance | CTA |\n|---------|--------|----------------|-------------|----------------|-----|\n| | | | | | |\n\n### Channel Adaptations\n\n#### LinkedIn\n**Headline:**\n**Body copy:**\n**Image/video concept:**\n**CTA:**\n\n#### Instagram Feed\n**Caption:**\n**Visual concept:**\n**Hashtags:**\n\n#### Google Display\n**Headline:**\n**Description:**\n**Display URL:**\n\n#### TikTok/Reels\n**Hook:**\n**Story arc:**\n**CTA overlay:**\n\n#### Email\n**Subject line:**\n**Preheader:**\n**Body:**\n**CTA:**\n\n### Consistency Check\n| Element | Preserved across channels? | Notes |\n|---------|--------------------------|-------|\n| Key message | ✅/❌ | |\n| Brand voice | ✅/❌ | |\n| Visual identity | ✅/❌ | |\n| Offer/creative hook | ✅/❌ | |\n\n### Master Creative File\n| Asset | Channel | Status | File reference |\n|-------|---------|--------|---------------|\n| | | | |"
     }
   },
@@ -46,6 +46,39 @@
       "description": "Primary campaign message"
     }
   ],
+  "inputs": [
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "required": true,
+      "description": "Campaign name"
+    },
+    {
+      "name": "core_creative",
+      "type": "string",
+      "required": true,
+      "description": "Core creative concept or message"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Channels to adapt for"
+    },
+    {
+      "name": "brand_guidelines",
+      "type": "string",
+      "required": false,
+      "description": "Brand guidelines to follow"
+    },
+    {
+      "name": "campaign_message",
+      "type": "string",
+      "required": false,
+      "description": "Primary campaign message"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,19 +120,32 @@
     }
   ],
   "checklist": [
-    "Core creative concept is preserved across all adaptations",
-    "Brand voice is consistent in all executions",
-    "Each adaptation is optimized for its platform",
-    "Format, length, and aspect ratios are correct",
-    "All adaptations are documented in a master file"
+    "Core creative is clear and ownable",
+    "Requirements are accurate and current",
+    "Adaptations are platform-native",
+    "Core message is preserved everywhere",
+    "All versions are documented"
   ],
-  "tools": ["document", "spreadsheet"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["creative"],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "finn",
+    "lyra"
+  ],
+  "pipelines": [
+    "creative"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["creative", "cross-channel", "adaptation", "multi-platform"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "creative",
+      "cross-channel",
+      "adaptation",
+      "multi-platform"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

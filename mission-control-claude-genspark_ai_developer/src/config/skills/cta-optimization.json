@@ -1,0 +1,100 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "cta-optimization",
+  "name": "CTA Optimization",
+  "description": "Creates, tests, and optimizes calls-to-action across formats and channels — finding the words, design, placement, and format that drive the highest click and conversion rates.",
+  "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when creating, reviewing, or optimizing calls-to-action — to find the most effective copy, design, placement, and format that drives the highest click and conversion rates.",
+      "context": "You are a conversion copywriting specialist who crafts and tests CTAs that cut through noise, communicate value, and compel the user to take the desired action.",
+      "instructions": "## CTA Optimization Workflow\n\n- [ ] 1. Audit existing CTAs: What's currently being used? What's performing?\n- [ ] 2. Define the action: What exactly should the user do?\n- [ ] 3. Research options: What language, design, and format choices exist?\n- [ ] 4. Generate variants: Write 5-10 CTA options per placement\n- [ ] 5. Prioritize: Select top 2-3 for testing based on logic and evidence\n- [ ] 6. Test: A/B test CTAs in live environment\n- [ ] 7. Analyze: Which CTA performed best and why?\n- [ ] 8. Implement: Roll out winning CTA\n\n## Key Inputs\n- Placement: {{placement}}\n- Current CTA: {{current_cta}}\n- Conversion goal: {{conversion_goal}}\n- Traffic volume: {{traffic_volume}}",
+      "output_template": "## CTA Optimization: {{placement}}\n\n### CTA Audit\n| CTA | CTR | Conversion rate | Placement | Status |\n|-----|-----|----------------|---------|--------|\n| | | | | |\n\n### Current CTA Analysis\n**Copy:**\n**Design:**\n**Placement:**\n**Problems identified:**\n\n### CTA Variants Generated\n| Variant | Copy | Design | Rationale | Priority |\n|---------|------|--------|----------|----------|\n| | | | | |\n\n### Testing Plan\n| Variant A (Control) | Variant B | Variant C |\n|---------------------|-----------|-----------|\n| | | |\n\n**Test duration:**\n**Minimum sample per variant:**\n**Statistical significance threshold:**\n\n### Test Results\n| Variant | Impressions | Clicks | CTR | Conversions | CVR |\n|---------|-------------|--------|-----|------------|-----|\n| | | | | | |\n\n**Winner:**\n**Statistical significance:**\n\n### Implementation Plan\n| CTA | Where implemented | By when |\n|-----|-----------------|---------|\n| | | |\n\n### Ongoing CTA Best Practices\n- \n"
+    }
+  },
+  "variables": [
+    {
+      "name": "placement",
+      "type": "string",
+      "required": true,
+      "description": "Where the CTA will appear"
+    },
+    {
+      "name": "current_cta",
+      "type": "string",
+      "required": false,
+      "description": "Current CTA in use"
+    },
+    {
+      "name": "conversion_goal",
+      "type": "string",
+      "required": true,
+      "description": "What the CTA should achieve"
+    },
+    {
+      "name": "traffic_volume",
+      "type": "string",
+      "required": false,
+      "description": "Traffic volume for statistical significance calculation"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "CTA Audit",
+        "action": "Review current CTAs and performance",
+        "verify": "Current performance is documented"
+      },
+      {
+        "step": 2,
+        "name": "Variant Generation",
+        "action": "Generate 5-10 CTA options",
+        "verify": "Options are varied and logical"
+      },
+      {
+        "step": 3,
+        "name": "Test Design",
+        "action": "Design A/B test with top variants",
+        "verify": "Test is statistically valid"
+      },
+      {
+        "step": 4,
+        "name": "Analysis",
+        "action": "Analyze results and identify winner",
+        "verify": "Results are statistically significant"
+      },
+      {
+        "step": 5,
+        "name": "Implementation",
+        "action": "Roll out winning CTA",
+        "verify": "Winner is live and monitored"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Optimize the CTA on TechStart's pricing page. Current CTA: 'Start Free Trial' — CTR: 3.2%. Traffic: 15,000/month. Goal: increase free trial sign-ups.",
+      "output": "CTA optimization report with variant options, A/B test plan, and expected improvement"
+    }
+  ],
+  "checklist": [
+    "Current CTA performance is audited",
+    "Multiple variants are generated with rationale",
+    "Test is statistically valid",
+    "Results are correctly analyzed",
+    "Winning CTA is implemented",
+    "Best practices are documented for future CTAs"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova"],
+  "pipelines": ["creative"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["creative", "copywriting", "CTA", "optimization", "conversion"],
+    "lastUpdated": "2026-03-24"
+  }
+}

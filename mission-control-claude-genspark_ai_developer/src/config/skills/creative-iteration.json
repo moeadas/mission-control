@@ -1,0 +1,120 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "creative-iteration",
+  "name": "Creative Iteration",
+  "description": "Manages the creative review and iteration process, synthesizing feedback from clients and stakeholders into clear direction for designers and copywriters.",
+  "category": "creative",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when reviewing creative work and need to synthesize feedback into clear iteration direction — includes feedback consolidation, prioritisation, and revision briefs.",
+      "context": "You are a creative project manager who translates scattered feedback into clear, actionable revision direction without losing the original creative vision.",
+      "instructions": "## Creative Iteration Workflow\n\nManage creative feedback and iteration:\n\n- [ ] 1. Collect all feedback: Gather feedback from all stakeholders in one place\n- [ ] 2. Separate signal from noise: Identify common themes vs. isolated opinions\n- [ ] 3. Prioritise changes: Distinguish must-fix from nice-to-have\n- [ ] 4. Write clear revision brief: Translate feedback into specific, actionable changes\n- [ ] 5. Preserve the vision: Ensure feedback doesn't dilute the core idea\n- [ ] 6. Communicate direction: Brief creative team clearly\n- [ ] 7. Track iterations: Document version history and decisions\n\n## Key Inputs\n- Current creative: {{current_work}}\n- Feedback sources: {{stakeholders}}\n- Version: {{current_version}}",
+      "output_template": "## Creative Iteration Brief: {{project_name}} v{{version}}\n\n### Current Version\n{{current_version}}\n\n### Feedback Summary\n| Source | Feedback Summary |\n|--------|------------------|\n| | |\n\n### Feedback Themes (Common Signals)\n1. \n2. \n3. \n\n### Isolated Opinions (Not Actioned)\n| Feedback | Reason for Not Actioning |\n|----------|------------------------|\n| | |\n\n### Priority Classification\n| Change | Priority | Type |\n|--------|----------|------|\n| | Critical/Major/Minor |\n\n### Revision Brief\n**Must fix (Critical):**\n1. \n\n**Major improvements:**\n1. \n\n**Minor refinements:**\n1. \n\n### What NOT to Change\n[Elements that are working and should be preserved]\n\n### Vision Check\n**Original creative intent:**\n**Is intent still intact?** ✅/❌\n**Notes:**\n\n### Revision Timeline\n| Action | Owner | Due |\n|--------|-------|-----|\n| | | |\n\n### Version History\n| Version | Date | Changes |\n|---------|------|--------|\n| v1 | | Original |\n| v2 | | |\n| v3 | | [Current] |"
+    }
+  },
+  "variables": [
+    {
+      "name": "project_name",
+      "type": "string",
+      "required": true,
+      "description": "Project or campaign name"
+    },
+    {
+      "name": "current_work",
+      "type": "string",
+      "required": true,
+      "description": "Description of current creative state"
+    },
+    {
+      "name": "stakeholders",
+      "type": "string",
+      "required": true,
+      "description": "List of stakeholders who provided feedback"
+    },
+    {
+      "name": "current_version",
+      "type": "string",
+      "required": false,
+      "description": "Current version number or identifier"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Feedback Collection",
+        "action": "Gather all feedback from all sources in one document",
+        "verify": "Complete picture of all opinions"
+      },
+      {
+        "step": 2,
+        "name": "Synthesis",
+        "action": "Identify themes, separate signal from noise",
+        "verify": "Common themes are clear"
+      },
+      {
+        "step": 3,
+        "name": "Prioritisation",
+        "action": "Classify changes by priority and effort",
+        "verify": "Team knows what matters most"
+      },
+      {
+        "step": 4,
+        "name": "Briefing",
+        "action": "Write clear revision brief for creative team",
+        "verify": "Direction is specific and unambiguous"
+      },
+      {
+        "step": 5,
+        "name": "Vision Protection",
+        "action": "Ensure feedback doesn't erode core creative idea",
+        "verify": "Original vision intact"
+      },
+      {
+        "step": 6,
+        "name": "Iteration Tracking",
+        "action": "Document version history and decisions",
+        "verify": "Clear audit trail"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Synthesize feedback on TechStart hero banner from 4 stakeholders — CMO wants more white space, CFO says brand colors are wrong, designer says tagline is too long, CEO just says 'make it pop.' Current v2.",
+      "output": "Clear iteration brief separating real feedback from noise, with specific revision direction and protected elements"
+    }
+  ],
+  "checklist": [
+    "All feedback collected in one place",
+    "Common themes identified and distinguished from noise",
+    "Changes prioritised clearly",
+    "Revision brief is specific and actionable",
+    "Original creative vision protected",
+    "Version history documented"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet"
+  ],
+  "agents": [
+    "finn",
+    "nova"
+  ],
+  "pipelines": [
+    "creative-review"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "creative",
+      "iteration",
+      "review",
+      "feedback",
+      "project-management"
+    ],
+    "lastUpdated": "2026-03-24"
+  }
+}

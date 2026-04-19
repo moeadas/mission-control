@@ -1,0 +1,55 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "report-writing",
+  "name": "Research Report Writing",
+  "description": "Communicates research findings clearly and persuasively through well-structured reports that translate complex data into actionable strategic insights for advertising and marketing audiences.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when writing research reports, campaign performance reports, market intelligence summaries, or client deliverables that require clear communication of findings.",
+      "context": "You are a research report writer with expertise in translating complex data and findings into clear, actionable reports. You write for the intended audience and ensure insights drive decisions.",
+      "instructions": "## Report Writing Workflow\n\n- [ ] 1. Define the report purpose, audience, and key questions\n- [ ] 2. Gather and organize all relevant data and findings\n- [ ] 3. Structure the report: executive summary → findings → recommendations\n- [ ] 4. Write findings with clear, visual data presentation\n- [ ] 5. Translate findings into actionable recommendations\n- [ ] 6. Edit for clarity, brevity, and impact\n- [ ] 7. Format with proper headings, tables, and charts\n\n## Key Inputs\n- Report Type: {{report_type}} (research, performance, strategic)\n- Audience: {{audience}}\n- Key Findings: {{key_findings}}\n- Data/Metrics: {{data_metrics}}\n- Objective: {{objective}}",
+      "output_template": "## [Report Title]\n\n### Executive Summary\n[2-3 sentences: what we found, what it means, what to do]\n\n### Key Findings\n| Finding | Evidence | Implication |\n|---------|---------|-------------|\n| | | |\n\n### Detailed Analysis\n[Deep dive into each finding with data]\n\n### Strategic Recommendations\n| Recommendation | Rationale | Priority |\n|---------------|-----------|----------|\n| | | |\n\n### Appendix\n[Supporting data, methodology notes]"
+    }
+  },
+  "variables": [
+    { "name": "report_type", "type": "string", "required": true, "description": "Type of report: research findings, campaign performance, market intelligence, strategic review" },
+    { "name": "audience", "type": "string", "required": true, "description": "Who will read this report" },
+    { "name": "key_findings", "type": "string", "required": true, "description": "Main findings or insights to communicate" },
+    { "name": "data_metrics", "type": "string", "required": false, "description": "Data, metrics, and statistics to include" },
+    { "name": "objective", "type": "string", "required": false, "description": "What decision or action this report should drive" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Organize findings", "action": "Sort findings by importance and theme", "verify": "Most important findings are prioritized" },
+      { "step": 2, "name": "Write executive summary", "action": "Draft the 2-3 sentence summary first", "verify": "Summary captures the key story" },
+      { "step": 3, "name": "Develop sections", "action": "Write each section with supporting data", "verify": "Writing is clear and concise" },
+      { "step": 4, "name": "Make recommendations", "action": "Translate findings into specific, actionable next steps", "verify": "Recommendations follow from findings" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Report type: Consumer research. Audience: Client brand team and agency. Findings: 68% of target segment prefers 'natural' positioning, competitor X is losing share among Gen Z, price sensitivity is decreasing. Objective: Inform brand repositioning strategy.",
+      "output": "12-page report with 4 sections: market context, consumer insights, competitive dynamics, strategic recommendations. Key recommendation: shift positioning from 'premium quality' to 'natural ingredients' to capture growing segment. Supported by 6 charts and 2 consumer persona profiles."
+    }
+  ],
+  "checklist": [
+    "Executive summary is written first and stands alone",
+    "Findings are organized by importance",
+    "Data is visualized, not just described",
+    "Recommendations follow logically from findings",
+    "Writing is clear and free of jargon",
+    "Report is appropriately sized for the audience"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["report-writing", "research", "client-deliverable", "content"],
+    "lastUpdated": "2026-03-24"
+  }
+}

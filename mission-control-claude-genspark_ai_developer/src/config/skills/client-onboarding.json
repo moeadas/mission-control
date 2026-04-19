@@ -1,0 +1,133 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "client-onboarding",
+  "name": "Client Onboarding",
+  "description": "Guides new clients through a structured onboarding process, covering discovery, access setup, kickoff, and initial alignment to ensure a smooth and professional start to the engagement.",
+  "category": "client-services",
+  "difficulty": "beginner",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when a new client has signed and needs to be onboarded — includes setting up accounts, scheduling kickoff, gathering assets, and establishing working rhythms.",
+      "context": "You are a client success specialist managing the transition of new clients into the agency relationship with clarity, professionalism, and structured handoffs.",
+      "instructions": "## Client Onboarding Workflow\n\nExecute a smooth new client onboarding:\n\n- [ ] 1. Welcome & confirmation: Send welcome message and confirm contract signed\n- [ ] 2. Access provisioning: Set up client in all relevant platforms (ad accounts, analytics, PM tools)\n- [ ] 3. Stakeholder mapping: Identify key contacts and decision-makers\n- [ ] 4. Kickoff scheduling: Schedule and agenda the kickoff meeting\n- [ ] 5. Discovery gathering: Collect brand guidelines, assets, historical data, and objectives\n- [ ] 6. Internal handoff: Brief the team on account, roles, and client expectations\n- [ ] 7. First-week plan: Deliver a structured plan for the first 30 days\n\n## Key Inputs\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Primary contacts: {{key_stakeholders}}\n- Contract scope: {{scope_summary}}",
+      "output_template": "## Client Onboarding: {{client_name}}\n\n### Welcome Status\n| Step | Status | Owner | Due Date |\n|------|--------|-------|----------|\n| Contract confirmed | ✅ | CS | Done |\n| Access provisioned | ⏳ | | |\n| Kickoff scheduled | ⏳ | | |\n| Discovery complete | ⏳ | | |\n| Internal handoff | ⏳ | | |\n| 30-day plan sent | ⏳ | | |\n\n### Key Stakeholders\n| Role | Name | Contact | Notes |\n|------|------|---------|-------|\n| | | | |\n\n### Account Access\n| Platform | Access Status | Credentials Owner |\n|----------|---------------|-------------------|\n| | | |\n\n### Kickoff Agenda\n1. Introductions & roles\n2. Business objectives review\n3. Current performance snapshot\n4. Target audience alignment\n5. Timeline & milestones\n6. Q&A\n\n### Discovery Checklist\n- [ ] Brand guidelines received\n- [ ] Logo & asset files collected\n- [ ] Existing ad account access\n- [ ] Historical performance data\n- [ ] Competitor list\n- [ ] Target audience brief\n- [ ] Budget confirmation\n- [ ] Reporting cadence agreed\n\n### First 30 Days Plan\n| Week | Focus |\n|------|-------|\n| 1 | Access, discovery, kickoff |\n| 2 | Audit & baseline report |\n| 3 | Strategy alignment |\n| 4 | First campaign launch |\n\n### Internal Handoff Brief\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Scope: {{scope_summary}}\n- Key concerns: \n- Budget: {{budget}}\n- Team: [list]"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client brand or company name"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Client's industry or vertical"
+    },
+    {
+      "name": "key_stakeholders",
+      "type": "string",
+      "required": true,
+      "description": "Key client contacts and their roles"
+    },
+    {
+      "name": "scope_summary",
+      "type": "string",
+      "required": true,
+      "description": "Summary of contracted scope of work"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Agreed media budget and retainer fee"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Contract & Welcome",
+        "action": "Confirm contract signed and send welcome package",
+        "verify": "Client acknowledges receipt"
+      },
+      {
+        "step": 2,
+        "name": "Access Setup",
+        "action": "Provision access across all required platforms",
+        "verify": "All platforms accessible and tested"
+      },
+      {
+        "step": 3,
+        "name": "Stakeholder Mapping",
+        "action": "Identify and document all client stakeholders",
+        "verify": "Org chart and contact list complete"
+      },
+      {
+        "step": 4,
+        "name": "Kickoff Meeting",
+        "action": "Schedule and run the kickoff meeting with agenda",
+        "verify": "Minutes and action items documented"
+      },
+      {
+        "step": 5,
+        "name": "Discovery Collection",
+        "action": "Gather all brand assets, data, and briefs",
+        "verify": "All required materials in hand"
+      },
+      {
+        "step": 6,
+        "name": "Internal Briefing",
+        "action": "Brief the delivery team with full context",
+        "verify": "Team has everything needed to execute"
+      },
+      {
+        "step": 7,
+        "name": "30-Day Plan Delivery",
+        "action": "Deliver structured first-month plan to client",
+        "verify": "Client approves and aligns on plan"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Onboard TechStart, a B2B fintech SaaS company. Key contact: Sarah Chen (CMO). Scope: paid media + content. Budget: 50K/month.",
+      "output": "Full onboarding plan with all sections filled, kickoff agenda, discovery checklist, access tracker, and 30-day roadmap"
+    }
+  ],
+  "checklist": [
+    "Welcome message sent within 24h of signing",
+    "All platform access provisioned and tested",
+    "Kickoff meeting scheduled within first week",
+    "Discovery materials collected (brand guide, assets, data)",
+    "Internal team briefed before work begins",
+    "30-day plan delivered and client-approved",
+    "First campaign or deliverable scheduled within 30 days"
+  ],
+  "tools": [
+    "document",
+    "spreadsheet",
+    "calendar"
+  ],
+  "agents": [
+    "nova",
+    "atlas"
+  ],
+  "pipelines": [
+    "client-setup"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "client-services",
+      "onboarding",
+      "account-setup",
+      "kickoff"
+    ],
+    "lastUpdated": "2026-03-24"
+  }
+}

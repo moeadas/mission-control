@@ -1,0 +1,166 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e6]
+  - generic [ref=e402]:
+    - banner [ref=e403]:
+      - img [ref=e407]
+      - generic [ref=e409]:
+        - button "Refresh latest app version" [ref=e410] [cursor=pointer]:
+          - img [ref=e411]
+        - button "Switch to dark mode" [ref=e416] [cursor=pointer]:
+          - img [ref=e417]
+        - button "Sign out" [ref=e419] [cursor=pointer]:
+          - img [ref=e420]
+        - paragraph [ref=e424]: 22:10
+    - generic [ref=e425]:
+      - navigation "Main navigation" [ref=e426]:
+        - generic [ref=e428]:
+          - generic [ref=e430]: MC
+          - generic [ref=e431]:
+            - paragraph [ref=e432]: Mission Control
+            - paragraph [ref=e433]: Agency HQ
+        - generic [ref=e434]:
+          - link "Dashboard" [ref=e435] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e437]
+            - generic [ref=e442]: Dashboard
+          - link "Virtual Office" [ref=e443] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e445]
+            - generic [ref=e449]: Virtual Office
+          - link "Agents" [ref=e450] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e452]
+            - generic [ref=e455]: Agents
+          - link "Clients" [ref=e456] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e458]
+            - generic [ref=e463]: Clients
+          - link "Tasks" [ref=e464] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e467]
+            - generic [ref=e470]: Tasks
+          - link "Pipeline" [ref=e471] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e473]
+            - generic [ref=e477]: Pipeline
+          - link "Skills" [ref=e478] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e480]
+            - generic [ref=e483]: Skills
+          - link "Runner" [ref=e484] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e486]
+            - generic [ref=e488]: Runner
+          - link "Analytics" [ref=e489] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e491]
+            - generic [ref=e493]: Analytics
+          - link "Outputs" [ref=e494] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e496]
+            - generic [ref=e499]: Outputs
+          - link "Users" [ref=e500] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e502]
+            - generic [ref=e504]: Users
+          - link "Settings" [ref=e505] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e507]
+            - generic [ref=e510]: Settings
+        - generic [ref=e512]:
+          - generic [ref=e514]: MC
+          - generic [ref=e515]:
+            - paragraph [ref=e516]: Agency Mode
+            - paragraph [ref=e517]: Iris · Online
+      - main [ref=e519]:
+        - generic [ref=e520]:
+          - generic [ref=e521]:
+            - generic [ref=e522]:
+              - heading "Tasks" [level=1] [ref=e523]:
+                - img [ref=e524]
+                - text: Tasks
+              - paragraph [ref=e527]: Every request becomes a tracked task with its brief, live output, and exports
+            - generic [ref=e528]: 4 tracked tasks
+          - generic [ref=e530]:
+            - generic [ref=e531] [cursor=pointer]:
+              - 'button "Delete Instagram Carousel: Equine Karyotyping" [ref=e533]':
+                - img [ref=e534]
+              - 'link "Instagram Carousel: Equine Karyotyping Victory Genomics · Campaign Copy completed Instagram carousel draft for Victory Genomics about Equine Karyotyping. Task created. Output will appear here as soon as Iris drafts it. Updated 26 Mar Open task" [ref=e537]':
+                - /url: /tasks/task-1774474416710
+                - generic [ref=e538]:
+                  - generic [ref=e539]:
+                    - 'heading "Instagram Carousel: Equine Karyotyping" [level=3] [ref=e540]'
+                    - paragraph [ref=e541]: Victory Genomics · Campaign Copy
+                  - generic [ref=e542]: completed
+                - paragraph [ref=e543]: Instagram carousel draft for Victory Genomics about Equine Karyotyping.
+                - paragraph [ref=e545]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e546]:
+                  - generic [ref=e547]:
+                    - img [ref=e548]
+                    - text: Updated 26 Mar
+                  - generic [ref=e551]:
+                    - text: Open task
+                    - img [ref=e552]
+            - generic [ref=e554] [cursor=pointer]:
+              - 'button "Delete Instagram Carousel: Equine Karyotyping" [ref=e556]':
+                - img [ref=e557]
+              - 'link "Instagram Carousel: Equine Karyotyping Victory Genomics · Campaign Copy completed Instagram carousel draft for Victory Genomics about Equine Karyotyping. Task created. Output will appear here as soon as Iris drafts it. Updated 26 Mar Open task" [ref=e560]':
+                - /url: /tasks/task-1774474374430
+                - generic [ref=e561]:
+                  - generic [ref=e562]:
+                    - 'heading "Instagram Carousel: Equine Karyotyping" [level=3] [ref=e563]'
+                    - paragraph [ref=e564]: Victory Genomics · Campaign Copy
+                  - generic [ref=e565]: completed
+                - paragraph [ref=e566]: Instagram carousel draft for Victory Genomics about Equine Karyotyping.
+                - paragraph [ref=e568]: Task created. Output will appear here as soon as Iris drafts it.
+                - generic [ref=e569]:
+                  - generic [ref=e570]:
+                    - img [ref=e571]
+                    - text: Updated 26 Mar
+                  - generic [ref=e574]:
+                    - text: Open task
+                    - img [ref=e575]
+            - generic [ref=e577] [cursor=pointer]:
+              - 'button "Delete Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [ref=e579]':
+                - img [ref=e580]
+              - link [ref=e583]:
+                - /url: /tasks/292f5cf4-a7be-4bab-8a70-108131e9aa72
+                - generic [ref=e584]:
+                  - generic [ref=e585]:
+                    - 'heading "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [level=3] [ref=e586]'
+                    - paragraph [ref=e587]: General Ops · Campaign Copy
+                  - generic [ref=e588]: blocked
+                - paragraph [ref=e589]: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping.
+                - generic [ref=e590]:
+                  - paragraph [ref=e591]: Latest Output
+                  - paragraph [ref=e592]: "# Victory Genomics – Equine Karyotyping Instagram Carousel **Campaign Objective:** Drive awareness and inquiries for Victory Genomics' equine karyotyping service through educational, trust-building carousel content. **Target Audience:** Horse breeders, owners, and equine health professionals seeking genetic clarity for breeding decisions. --- ## Carousel Copy ### Slide 1 – Hook **Visual Direction:** High-contrast split—half chromosome karyotype imagery, half stunning horse portrait. Bold white text overlay. **Text:** > **Your horse's genetic blueprint is hiding something.** > > Most owners never see it. Breeders can't afford to miss it. > > 👇 Here's why karyotyping changes everything. --- ### Slide 2 – Problem **Visual Direction:** Subtle shift to muted tones. Warning/alert visual cue. Clean iconography of genetic warning signs. **Text:** > **Without genetic screening, you're breeding blind.** > > ❌ Hereditary defects going undetected > ❌ Chromosomal abnormalities causing infertility > ❌ Costly breeding mistakes that could have been prevented > ❌ Lost value in horses with hidden genetic issues > > The problem? You can't see chromosomes with your eyes. --- ### Slide 3 – Solution **Visual Direction:** Clean, clinical yet warm. Victory Genomics branding prominent. Chromosome imagery becomes central hero visual—colorized karyotype against dark background. **Text:** > **Meet equine karyotyping.** > > A simple test that maps your horse's chromosomes—46 pairs that tell the real genetic story. > > ✅ Detects chromosomal abnormalities > ✅ Confirms genetic health > ✅ Validates breeding potential > > Science-backed. Results you can act on. --- ### Slide 4 – Process **Visual Direction:** Three-panel layout. Step-by-step visual flow with icons. Feels effortless, not clinical. **Text:** > **Three steps to genetic clarity:** > > **1. Order your kit** > Simple sample collection—hair or blood. > > **2. Send to our lab** > Prepaid shipping. Real-time tracking. > > **3. Receive results** > Detailed report in your inbox within 5-7 business days. > > No vet visit required. No confusion. --- ### Slide 5 – Benefits **Visual Direction:** Aspirational imagery—healthy horses in show settings, breeding operations, performance arenas. Warm, confident tones. **Text:** > **What you gain with Victory Genomics:** > > 🐴 **Breeding confidence** — Make informed pairing decisions > 💰 **Financial protection** — Avoid costly mistakes > 🏥 **Health certainty** — Know your horse's genetic reality > 📋 **Verification** — Prove lineage integrity for registries > > The blueprint is there. We just read it for you. --- ### Slide 6 – CTA **Visual Direction:** Victory Genomics branding center frame. Bold, clean CTA button concept. Warm, inviting. **Text:** > **Ready to see your horse's full genetic story?** > > 🔬 Visit victorygenomics.com/equine > 📞 Or message us to get started > > **First test? Ask about our breedership introductory pricing.** > > #EquineHealth #HorseBreeding #GeneticTesting #VictoryGenomics #Karyotype #EquineScience #HorseGenetics #BreederLife #AnimalHealth #PrecisionMedicine --- ## Caption (for carousel post) > 🔬 Your horse's chromosomes tell a story only genetic science can read. > > Most horse owners and breeders never look beneath the surface—but those who do unlock a level of confidence that changes everything: breeding decisions, health management, and long-term value. > > Victory Genomics makes equine karyotyping accessible, clear, and actionable. No jargon. No confusion. Just answers. > > Tap the link in bio to learn more or get started. 🐴⬆️ --- ## Hashtag Recommendations ``` #"
+                - generic [ref=e593]:
+                  - generic [ref=e594]:
+                    - img [ref=e595]
+                    - text: Updated 26 Mar
+                  - generic [ref=e598]:
+                    - text: Open task
+                    - img [ref=e599]
+            - generic [ref=e601] [cursor=pointer]:
+              - 'button "Delete Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [ref=e603]':
+                - img [ref=e604]
+              - link [ref=e607]:
+                - /url: /tasks/c5d7f093-0b24-4e8d-9da1-9d4de6cbbcc2
+                - generic [ref=e608]:
+                  - generic [ref=e609]:
+                    - 'heading "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..." [level=3] [ref=e610]'
+                    - paragraph [ref=e611]: Victory Genomics · Campaign Copy
+                  - generic [ref=e612]: review
+                - paragraph [ref=e613]: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping.
+                - generic [ref=e614]:
+                  - paragraph [ref=e615]: Latest Output
+                  - paragraph [ref=e616]: "# Victory Genomics Equine Karyotyping Instagram Carousel ## Objective Educate horse owners and breeders on equine karyotyping as a critical tool for uncovering chromosomal health issues that impact fertility, pregnancy viability, and foal health—while positioning Victory Genomics' whole genome sequencing as the superior alternative to traditional karyotyping panel tests. ## Audience Primary: Horse owners, breeders, and bloodstock agents focused on breeding soundness and reproductive success. Secondary: Trainers and veterinary professionals seeking advanced genomic insights for their clients. ## Core Message Karyotyping reveals the chromosomal blueprint invisible to the naked eye—but traditional methods only capture part of the picture. Victory Genomics' whole genome sequencing delivers the complete chromosomal story, plus 20,000 genes, 5.5 million variants, and actionable insights that update for your horse's entire lifetime. ## Hook Options 1. **Visual Hook:** \"You see a healthy mare. Her chromosomes might tell a different story.\" 2. **Stat Hook:** \"65 chromosomes. Millions of possible variations. Only one test tells you everything.\" 3. **Question Hook:** \"What can't you see in your horse's pedigree, conformation, or performance?\" 4. **Bold Claim Hook:** \"Most chromosomal issues go undetected until breeding fails. Here's why—and how to change that.\" ## Carousel Cover Headline **\"There's More to Your Horse Than Meets the Eye—Especially at the Chromosome Level\"** Subhead: \"Karyotyping 101: What every breeder needs to know about chromosomal health.\" ## Slide-by-Slide Carousel Copy **Slide 1 — Hook** **The Question Every Breeder Should Ask:** *\"What can't you see in your horse's DNA?\"* Visual inspection. Pedigree papers. Performance records. But there's a layer of genetic information most owners never access—the chromosome level. ⚠️ Chromosomal abnormalities can silently impact fertility, pregnancy viability, and foal health—without any visible signs. --- **Slide 2 — What Is a Karyotype?** **The Genetic Blueprint You've Never Seen** A karyotype is a snapshot of your horse's chromosomes—the 64 paired structures that carry every gene. It reveals: ✓ Chromosomal number abnormalities ✓ Structural rearrangements (translocations) ✓ Sex chromosome patterns ✓ Mosaic conditions Think of it as a chromosomal headcount and structural map. --- **Slide 3 — Why Chromosomes Matter for Breeding** **When 64 Should Be 64—and When It Isn't** Chromosomal issues can cause: • Reduced fertility or infertility • Early embryonic loss • Viable foals"
+                - generic [ref=e617]:
+                  - generic [ref=e618]:
+                    - img [ref=e619]
+                    - text: Updated 26 Mar
+                  - generic [ref=e622]:
+                    - text: Open task
+                    - img [ref=e623]
+    - button "Open Iris chat" [ref=e625] [cursor=pointer]:
+      - img [ref=e626]

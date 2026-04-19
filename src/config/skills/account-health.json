@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when reviewing the health of a client account, assessing relationship quality, or identifying accounts that need attention.",
+      "trigger": "Use this skillany time reviewing the health of a client account, assessing relationship quality, or identifying accounts that need attention.",
       "context": "You are a client services specialist focused on account health, relationship management, and early warning signals.",
-      "instructions": "## Account Health Check Workflow\n\nConduct a comprehensive health review:\n\n- [ ] 1. Revenue analysis: Review {{current_revenue}}, contract terms, and renewal timeline ({{renewal_date}})\n- [ ] 2. Satisfaction signals: Check NPS/feedback scores, escalations, and complaint patterns\n- [ ] 3. Engagement levels: Assess communication frequency, meeting attendance, and collaboration quality\n- [ ] 4. Performance review: Compare actual vs expected KPIs for {{account_name}}\n- [ ] 5. Competitive intel: Note any competitor activity or switching intent signals\n- [ ] 6. Risk scoring: Calculate overall health score and identify red flags\n\n## Account Details\n- Account: {{account_name}}\n- Industry: {{industry}}\n- Current revenue: {{current_revenue}}\n- Contract renewal: {{renewal_date}}",
+      "instructions": "## Account Health Check\n\n1. **Revenue Review** — Analyze revenue health and contract terms\n   - ✓ Done when: Revenue and renewal timeline confirmed\n\n2. **Satisfaction Analysis** — Review satisfaction signals and feedback\n   - ✓ Done when: NPS and sentiment data gathered\n\n3. **Engagement Assessment** — Evaluate relationship quality and communication\n   - ✓ Done when: Communication patterns understood\n\n4. **Performance Review** — Compare actual vs expected KPIs\n   - ✓ Done when: Performance gaps identified\n\n5. **Risk Scoring** — Calculate health score and flag concerns\n   - ✓ Done when: Risk level determined\n\n## Key Inputs\n- account_name: Client account name\n- industry: Client industry\n- current_revenue: Current annual revenue from account\n- renewal_date: Contract renewal or expiry date\n- nps_score: Most recent NPS score\n- competitors: Known competing agencies",
       "output_template": "## Account Health Report: {{account_name}}\n\n### Executive Summary\n[Overall health score (1-10) with 2-3 sentence overview]\n\n### 1. Revenue Health\n| Metric | Value | Status |\n|--------|-------|--------|\n| Current ARR | {{current_revenue}} | |\n| Contract terms | | |\n| Renewal date | {{renewal_date}} | |\n| Upsell potential | | |\n\n### 2. Satisfaction Indicators\n| Signal | Score/Count | Trend |\n|--------|-------------|-------|\n| NPS score | | |\n| Escalations (90d) | | |\n| Complaints | | |\n| Meeting engagement | | |\n\n### 3. Performance vs Expectations\n| KPI | Expected | Actual | Gap |\n|-----|----------|--------|-----|\n| | | | |\n\n### 4. Risk Assessment\n| Risk Factor | Level | Details |\n|-------------|-------|---------|\n| Revenue risk | | |\n| Relationship risk | | |\n| Competitive risk | | |\n\n### 5. Recommended Actions\n1. [Immediate action items]\n2. [Short-term interventions]\n3. [Long-term strategy adjustments]"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Known competing agencies"
     }
   ],
+  "inputs": [
+    {
+      "name": "account_name",
+      "type": "string",
+      "required": true,
+      "description": "Client account name"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Client industry"
+    },
+    {
+      "name": "current_revenue",
+      "type": "string",
+      "required": true,
+      "description": "Current annual revenue from account"
+    },
+    {
+      "name": "renewal_date",
+      "type": "string",
+      "required": true,
+      "description": "Contract renewal or expiry date"
+    },
+    {
+      "name": "nps_score",
+      "type": "string",
+      "required": false,
+      "description": "Most recent NPS score"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Known competing agencies"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,20 +132,18 @@
     }
   ],
   "checklist": [
-    "Revenue trajectory and renewal risk assessed",
-    "Satisfaction signals reviewed and trends identified",
-    "Engagement patterns documented",
-    "Performance gaps analyzed",
-    "Risk score calculated with evidence",
-    "Action plan created with timeline"
+    "Revenue and renewal timeline confirmed",
+    "NPS and sentiment data gathered",
+    "Communication patterns understood",
+    "Performance gaps identified",
+    "Risk level determined"
   ],
   "tools": [
     "spreadsheet",
     "analytics"
   ],
   "agents": [
-    "sage",
-    "piper"
+    "sage"
   ],
   "pipelines": [],
   "metadata": {
@@ -117,6 +154,6 @@
       "client-health",
       "retention"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

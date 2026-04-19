@@ -1,0 +1,120 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "media-math",
+  "name": "Media Math",
+  "description": "Applies media planning calculations including CPM, CPC, CPA, ROAS, GRPs, TRPs, reach/frequency estimation, and budget modeling to support data-driven media decisions.",
+  "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when performing media calculations, building budget models, estimating reach and frequency, calculating efficiency metrics, or validating media plan numbers.",
+      "context": "You are a media analytics specialist who applies quantitative methods to media planning. You calculate efficiency metrics, model budget scenarios, and validate media plan projections with mathematical rigor.",
+      "instructions": "## Media Math Workflow\n\nApply media calculations to support planning:\n\n- [ ] 1. **Cost metrics**: Calculate CPM (cost per mille), CPC (cost per click), CPV (cost per view), CPA (cost per acquisition)\n- [ ] 2. **Efficiency analysis**: Compute ROAS, ACOS, and marginal CPA across channels\n- [ ] 3. **Reach estimation**: Estimate unduplicated reach using Sainsbury's formula or platform tools\n- [ ] 4. **Frequency modeling**: Calculate average frequency = GRPs / Reach%, and model frequency distributions\n- [ ] 5. **GRP/TRP calculation**: Compute GRPs (Gross Rating Points) = Reach% x Frequency for each medium\n- [ ] 6. **Budget modeling**: Build bottom-up budget models from desired outcomes (target CPA x target volume)\n- [ ] 7. **Scenario analysis**: Model 3 budget scenarios with projected outcomes\n- [ ] 8. **Validation**: Cross-check plan numbers for mathematical consistency\n\n## Key Formulas\n- CPM = (Cost / Impressions) x 1000\n- CPC = Cost / Clicks\n- CPA = Cost / Conversions\n- ROAS = Revenue / Ad Spend\n- CTR = (Clicks / Impressions) x 100\n- GRPs = Reach% x Average Frequency\n- Effective Reach = Audience reached at frequency 3+\n\n## Key Inputs\n- Client: {{client_name}}\n- Budget: {{budget}}\n- Channels: {{channels}}\n- Target metrics: {{target_metrics}}",
+      "output_template": "## Media Math Analysis: {{client_name}}\n\n### Cost Efficiency Metrics\n| Channel | Spend | Impressions | CPM | Clicks | CPC | Conversions | CPA | ROAS |\n|---------|-------|-------------|-----|--------|-----|-------------|-----|------|\n| | | | | | | | | |\n| **Total** | | | | | | | | |\n\n### Reach & Frequency Model\n| Channel | Universe | Reach % | Reach (abs) | Avg Frequency | GRPs |\n|---------|----------|---------|-------------|---------------|------|\n| | | | | | |\n| **Unduplicated** | | | | | |\n\n### Budget Scenarios\n| Scenario | Budget | Est. Reach | Est. Conversions | CPA | ROAS |\n|----------|--------|-----------|-----------------|-----|------|\n| Conservative | | | | | |\n| Recommended | | | | | |\n| Stretch | | | | | |\n\n### Formula Reference\n| Metric | Formula | Application |\n|--------|---------|-------------|\n| CPM | (Cost / Impressions) x 1000 | Compare media efficiency |\n| GRPs | Reach% x Frequency | Measure campaign weight |\n| ROAS | Revenue / Ad Spend | Measure return |\n\n### Validation Notes\n- [ ] All calculations cross-checked\n- [ ] CPM ranges match market rates\n- [ ] Reach estimates are conservative\n- [ ] Budget scenarios are internally consistent"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": true,
+      "description": "Media budget"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Media channels to calculate"
+    },
+    {
+      "name": "target_metrics",
+      "type": "string",
+      "required": false,
+      "description": "Target efficiency metrics"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Cost Metrics",
+        "action": "Calculate CPM, CPC, CPA per channel",
+        "verify": "Metrics are consistent and accurate"
+      },
+      {
+        "step": 2,
+        "name": "Efficiency Analysis",
+        "action": "Compute ROAS and marginal CPA",
+        "verify": "Efficiency compared against benchmarks"
+      },
+      {
+        "step": 3,
+        "name": "Reach Estimation",
+        "action": "Estimate unduplicated reach",
+        "verify": "Reach estimates are conservative"
+      },
+      {
+        "step": 4,
+        "name": "Frequency Modeling",
+        "action": "Calculate frequency and GRPs",
+        "verify": "Frequency is within effective range"
+      },
+      {
+        "step": 5,
+        "name": "Budget Modeling",
+        "action": "Build bottom-up budget model",
+        "verify": "Budget ties to desired outcomes"
+      },
+      {
+        "step": 6,
+        "name": "Validation",
+        "action": "Cross-check all calculations",
+        "verify": "Numbers are internally consistent"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Calculate media math for an AED 500K campaign across Meta (40%), Google (35%), and programmatic (25%) targeting 2M audience universe.",
+      "output": "Meta: AED 200K, est. 4M impressions (CPM 50), 80K clicks (CPC 2.5), 2K conversions (CPA 100). Google: AED 175K, 350K clicks (CPC 0.5), 3.5K conversions (CPA 50). Programmatic: AED 125K, 5M impressions (CPM 25), 750 conversions (CPA 167). Total reach: 65%, avg frequency 4.2x, total GRPs: 273."
+    }
+  ],
+  "checklist": [
+    "All cost metrics calculated correctly",
+    "Efficiency metrics benchmarked",
+    "Reach estimates use appropriate methodology",
+    "Frequency within effective range",
+    "Budget scenarios are internally consistent",
+    "Formulas documented and transparent",
+    "Validation checks completed"
+  ],
+  "tools": [
+    "analytics",
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "media-plan"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "media",
+      "planning",
+      "media-math"
+    ],
+    "lastUpdated": "2026-03-27"
+  }
+}

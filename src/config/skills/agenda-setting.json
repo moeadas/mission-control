@@ -8,9 +8,9 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when preparing meeting agendas, workshop outlines, or collaborative session plans for client or internal meetings.",
+      "trigger": "Use this skillany time preparing meeting agendas, workshop outlines, or collaborative session plans for client or internal meetings.",
       "context": "You are a meeting strategist and facilitator who creates structured, outcome-focused agendas.",
-      "instructions": "## Agenda Setting Workflow\n\nBuild an effective meeting agenda:\n\n- [ ] 1. Clarify purpose: Define the meeting objective ({{meeting_objective}})\n- [ ] 2. Identify outcomes: What decisions or outputs are needed\n- [ ] 3. Structure flow: Sequence topics from information sharing to decision-making\n- [ ] 4. Time allocation: Assign realistic time blocks to each agenda item\n- [ ] 5. Assign owners: Designate facilitators for each topic ({{facilitators}})\n- [ ] 6. Pre-work: Identify what attendees need to prepare\n\n## Inputs\n- Meeting type: {{meeting_type}}\n- Attendees: {{attendees}}\n- Duration: {{duration}}\n- Objective: {{meeting_objective}}",
+      "instructions": "## Agenda Setting\n\n1. **Purpose Clarification** — Define the core objective and success criteria\n   - ✓ Done when: Objective is specific and achievable\n\n2. **Outcome Definition** — Identify what must be decided or produced\n   - ✓ Done when: Outcomes are measurable\n\n3. **Flow Design** — Sequence topics for optimal discussion\n   - ✓ Done when: Flow builds toward decisions\n\n4. **Time Allocation** — Assign time blocks to each item\n   - ✓ Done when: Time allocations are realistic\n\n5. **Pre-work Identification** — List required preparations for attendees\n   - ✓ Done when: Pre-work is clear and assigned\n\n## Key Inputs\n- meeting_name: Meeting or workshop title\n- meeting_type: Type (brainstorm, review, decision, status update)\n- duration: Meeting duration\n- attendees: List of attendees with roles\n- meeting_objective: Primary meeting goal\n- facilitators: Topic facilitators",
       "output_template": "## Meeting Agenda: {{meeting_name}}\n\n### Meeting Details\n| Element | Details |\n|---------|---------|\n| Date & Time | {{date_time}} |\n| Duration | {{duration}} |\n| Location/Link | {{location}} |\n| Attendees | {{attendees}} |\n| Objective | {{meeting_objective}} |\n\n### Desired Outcomes\n1. [What must be decided/achieved]\n2. [What outputs are needed]\n\n### Pre-Work Required\n| Person | Preparation |\n|--------|-------------|\n| | |\n\n### Agenda\n| # | Topic | Presenter | Time | Desired Outcome |\n|---|-------|-----------|------|------------------|\n| 1 | | | {{time_1}} | |\n| 2 | | | {{time_2}} | |\n| 3 | | | {{time_3}} | |\n| 4 | | | {{time_4}} | |\n| 5 | | | {{time_5}} | |\n\n### Logistics\n- Materials needed:\n- Room setup:"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Topic facilitators"
     }
   ],
+  "inputs": [
+    {
+      "name": "meeting_name",
+      "type": "string",
+      "required": true,
+      "description": "Meeting or workshop title"
+    },
+    {
+      "name": "meeting_type",
+      "type": "string",
+      "required": true,
+      "description": "Type (brainstorm, review, decision, status update)"
+    },
+    {
+      "name": "duration",
+      "type": "string",
+      "required": true,
+      "description": "Meeting duration"
+    },
+    {
+      "name": "attendees",
+      "type": "string",
+      "required": true,
+      "description": "List of attendees with roles"
+    },
+    {
+      "name": "meeting_objective",
+      "type": "string",
+      "required": true,
+      "description": "Primary meeting goal"
+    },
+    {
+      "name": "facilitators",
+      "type": "string",
+      "required": false,
+      "description": "Topic facilitators"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,20 +132,18 @@
     }
   ],
   "checklist": [
-    "Meeting objective is specific and measurable",
+    "Objective is specific and achievable",
+    "Outcomes are measurable",
+    "Flow builds toward decisions",
     "Time allocations are realistic",
-    "Agenda flows from information to decision",
-    "All topics have designated owners",
-    "Pre-work is distributed before the meeting",
-    "Agenda shared at least 24 hours in advance"
+    "Pre-work is clear and assigned"
   ],
   "tools": [
     "document",
     "presentation"
   ],
   "agents": [
-    "piper",
-    "sage"
+    "iris"
   ],
   "pipelines": [],
   "metadata": {
@@ -117,6 +154,6 @@
       "facilitation",
       "planning"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

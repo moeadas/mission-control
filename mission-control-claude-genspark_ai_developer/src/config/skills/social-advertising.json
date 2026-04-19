@@ -1,0 +1,55 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "social-advertising",
+  "name": "Social Advertising",
+  "description": "Plans and executes paid advertising campaigns across social media platforms including Meta, LinkedIn, TikTok, and X to reach target audiences with relevant messaging.",
+  "category": "analytics",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when launching social ad campaigns, optimizing Meta or LinkedIn campaigns, selecting audience targeting for social platforms, or comparing social advertising performance across platforms.",
+      "context": "You are a social advertising specialist with expertise across major social platforms. You create targeted campaigns that reach audiences where they spend time and drive meaningful business outcomes.",
+      "instructions": "## Social Advertising Workflow\n\n- [ ] 1. Define campaign objective (awareness, consideration, conversion)\n- [ ] 2. Select platform(s) based on audience and objective\n- [ ] 3. Build audience targeting: demographics, interests, behaviors, lookalikes\n- [ ] 4. Select creative formats (feed, stories, reels, carousel)\n- [ ] 5. Set up campaign structure: campaigns, ad sets, ads\n- [ ] 6. Configure bidding and budget\n- [ ] 7. Launch, monitor, and optimize\n\n## Key Inputs\n- Platform(s): {{platforms}} (Meta, LinkedIn, TikTok, X, etc.)\n- Campaign Objective: {{campaign_objective}}\n- Target Audience: {{target_audience}}\n- Budget: {{budget}}\n- Creative Formats: {{creative_formats}}",
+      "output_template": "## Social Advertising Campaign Plan\n\n### Campaign Overview\n| Parameter | Value |\n|-----------|-------|\n| Platform(s) | |\n| Objective | |\n| Budget | |\n| Duration | |\n\n### Audience Targeting\n| Targeting Level | Parameters |\n|-----------------|-----------|\n| Core Audience | |\n| Custom Audience | |\n| Lookalike Audience | |\n\n### Creative Plan\n| Format | Dimensions | Copy Approach | Visual Direction |\n|--------|-----------|--------------|-----------------|\n| | | | |\n\n### Bidding & Budget\n- Bid Strategy: \n- Daily Budget: \n- Auction Insights: \n\n### Performance Targets\n| Metric | Target |\n|--------|--------|\n| Reach | |\n| CPM | |\n| CTR | |\n| CPC | |\n| CPA | |"
+    }
+  },
+  "variables": [
+    { "name": "platforms", "type": "string", "required": true, "description": "Social platforms to advertise on: Meta, LinkedIn, TikTok, X, Pinterest, etc." },
+    { "name": "campaign_objective", "type": "string", "required": true, "description": "Campaign goal: brand awareness, reach, engagement, lead generation, conversions" },
+    { "name": "target_audience", "type": "string", "required": true, "description": "Audience targeting parameters: demographics, interests, custom audiences" },
+    { "name": "budget", "type": "string", "required": true, "description": "Campaign budget and spend schedule" },
+    { "name": "creative_formats", "type": "string", "required": false, "description": "Ad formats to use: feed, stories, reels, carousel, lead forms" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Select platform", "action": "Choose platforms based on audience and objectives", "verify": "Platform aligns with target audience" },
+      { "step": 2, "name": "Build audience", "action": "Define targeting parameters and custom/lookalike audiences", "verify": "Audience is specific and large enough" },
+      { "step": 3, "name": "Create ads", "action": "Develop platform-native creative in appropriate formats", "verify": "Creative is optimized for platform" },
+      { "step": 4, "name": "Optimize", "action": "Adjust targeting, creative, and bids based on performance data", "verify": "Optimizations are grounded in data" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Platform: Meta (Facebook + Instagram). Objective: Lead generation for B2B SaaS. Audience: Decision-makers in tech, 35-55, US. Budget: $10,000/month.",
+      "output": "Campaign delivered 2,340 leads at $4.27 CPL (benchmark: $8-12 CPL). Best-performing audience: lookalike from existing customers + LinkedIn-style job title targeting. Top creative: carousel ads with ROI calculator in final frame."
+    }
+  ],
+  "checklist": [
+    "Platform selection matches where audience is active",
+    "Audience targeting is specific (not too broad)",
+    "Creative is optimized for each platform's format and specs",
+    "Tracking pixels or SDKs are properly configured",
+    "Frequency cap is set to prevent ad fatigue",
+    "Creative rotation is configured for testing"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["media-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["social-advertising", "facebook-ads", "meta-ads", "linkedin-ads", "tiktok-ads"],
+    "lastUpdated": "2026-03-24"
+  }
+}

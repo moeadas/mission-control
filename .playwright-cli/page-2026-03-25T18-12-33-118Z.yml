@@ -1,0 +1,446 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - button "Switch to light mode" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - paragraph [ref=e18]: 19:12
+    - generic [ref=e19]:
+      - navigation "Main navigation" [ref=e20]:
+        - generic [ref=e22]:
+          - generic [ref=e24]: MC
+          - generic [ref=e25]:
+            - paragraph [ref=e26]: Mission Control
+            - paragraph [ref=e27]: Agency HQ
+        - generic [ref=e28]:
+          - link "Dashboard" [ref=e29] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e31]
+            - generic [ref=e36]: Dashboard
+          - link "Virtual Office" [ref=e37] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e39]
+            - generic [ref=e43]: Virtual Office
+          - link "Agents" [ref=e44] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e46]
+            - generic [ref=e49]: Agents
+          - link "Clients" [ref=e50] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e52]
+            - generic [ref=e57]: Clients
+          - link "Tasks" [ref=e58] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e60]
+            - generic [ref=e63]: Tasks
+          - link "Pipeline" [ref=e64] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e67]
+            - generic [ref=e71]: Pipeline
+          - link "Skills" [ref=e72] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e74]
+            - generic [ref=e77]: Skills
+          - link "Runner" [ref=e78] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e80]
+            - generic [ref=e82]: Runner
+          - link "Analytics" [ref=e83] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e85]
+            - generic [ref=e87]: Analytics
+          - link "Outputs" [ref=e88] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e90]
+            - generic [ref=e93]: Outputs
+          - link "Settings" [ref=e94] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e96]
+            - generic [ref=e99]: Settings
+        - generic [ref=e101]:
+          - generic [ref=e103]: MC
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: Agency Mode
+            - paragraph [ref=e106]: Iris · Online
+      - main [ref=e108]:
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - button [ref=e112] [cursor=pointer]:
+                - img [ref=e113]
+              - generic [ref=e115]:
+                - 'heading "Edit: Content Calendar" [level=1] [ref=e116]'
+                - paragraph [ref=e117]: Pipeline · 12 activities across 9 phases
+            - button "Save Pipeline" [ref=e119] [cursor=pointer]:
+              - img [ref=e120]
+              - text: Save Pipeline
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "Basic Info" [level=3] [ref=e127]
+              - generic [ref=e128]:
+                - generic [ref=e129]:
+                  - generic [ref=e130]: Pipeline Name *
+                  - textbox "e.g., Content Calendar Pipeline" [ref=e131]: Content Calendar
+                - generic [ref=e132]:
+                  - generic [ref=e133]: Pipeline ID *
+                  - textbox "e.g., content-calendar" [ref=e134]: content-calendar
+              - generic [ref=e135]:
+                - generic [ref=e136]: Description
+                - textbox "Describe what this pipeline does..." [ref=e137]: Generate a complete 30-day content calendar with posts, hooks, repurposed versions, hashtags, and visual briefs
+              - generic [ref=e138]:
+                - generic [ref=e139]:
+                  - generic [ref=e140]: Version
+                  - textbox [ref=e141]: "1.0"
+                - generic [ref=e142]:
+                  - generic [ref=e143]: Estimated Duration
+                  - textbox "e.g., 7-10 days" [ref=e144]: 7-10 days
+                - generic [ref=e146]:
+                  - checkbox "Default Pipeline" [checked] [ref=e147]
+                  - text: Default Pipeline
+            - generic [ref=e148]:
+              - generic [ref=e149]:
+                - generic [ref=e150]:
+                  - heading "Client Profile Fields" [level=3] [ref=e151]
+                  - paragraph [ref=e152]: Fields to collect from the client before running the pipeline
+                - button "Add Field" [ref=e153] [cursor=pointer]:
+                  - img [ref=e154]
+                  - text: Add Field
+              - generic [ref=e155]:
+                - generic [ref=e156]:
+                  - generic [ref=e157]:
+                    - textbox "Field label" [ref=e158]: Brand Name
+                    - combobox [ref=e159]:
+                      - option "text" [selected]
+                      - option "textarea"
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e160]
+                    - generic [ref=e161]:
+                      - checkbox "Required" [checked] [ref=e162]
+                      - text: Required
+                  - button [ref=e163] [cursor=pointer]:
+                    - img [ref=e164]
+                - generic [ref=e167]:
+                  - generic [ref=e168]:
+                    - textbox "Field label" [ref=e169]: Industry/Niche
+                    - combobox [ref=e170]:
+                      - option "text" [selected]
+                      - option "textarea"
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e171]
+                    - generic [ref=e172]:
+                      - checkbox "Required" [checked] [ref=e173]
+                      - text: Required
+                  - button [ref=e174] [cursor=pointer]:
+                    - img [ref=e175]
+                - generic [ref=e178]:
+                  - generic [ref=e179]:
+                    - textbox "Field label" [ref=e180]: Audience Demographics
+                    - combobox [ref=e181]:
+                      - option "text"
+                      - option "textarea" [selected]
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e182]
+                    - generic [ref=e183]:
+                      - checkbox "Required" [checked] [ref=e184]
+                      - text: Required
+                  - button [ref=e185] [cursor=pointer]:
+                    - img [ref=e186]
+                - generic [ref=e189]:
+                  - generic [ref=e190]:
+                    - textbox "Field label" [ref=e191]: Audience Psychographics
+                    - combobox [ref=e192]:
+                      - option "text"
+                      - option "textarea" [selected]
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e193]
+                    - generic [ref=e194]:
+                      - checkbox "Required" [checked] [ref=e195]
+                      - text: Required
+                  - button [ref=e196] [cursor=pointer]:
+                    - img [ref=e197]
+                - generic [ref=e200]:
+                  - generic [ref=e201]:
+                    - textbox "Field label" [ref=e202]: Top 3 Pain Points
+                    - combobox [ref=e203]:
+                      - option "text"
+                      - option "textarea" [selected]
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e204]
+                    - generic [ref=e205]:
+                      - checkbox "Required" [checked] [ref=e206]
+                      - text: Required
+                  - button [ref=e207] [cursor=pointer]:
+                    - img [ref=e208]
+                - generic [ref=e211]:
+                  - generic [ref=e212]:
+                    - textbox "Field label" [ref=e213]: Brand Voice/Tone
+                    - combobox [ref=e214]:
+                      - option "text" [selected]
+                      - option "textarea"
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e215]
+                    - generic [ref=e216]:
+                      - checkbox "Required" [checked] [ref=e217]
+                      - text: Required
+                  - button [ref=e218] [cursor=pointer]:
+                    - img [ref=e219]
+                - generic [ref=e222]:
+                  - generic [ref=e223]:
+                    - textbox "Field label" [ref=e224]: Target Platforms
+                    - combobox [ref=e225]:
+                      - option "text"
+                      - option "textarea"
+                      - option "select"
+                      - option "multiselect" [selected]
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e226]: Instagram, LinkedIn, X, TikTok, Facebook
+                    - generic [ref=e227]:
+                      - checkbox "Required" [checked] [ref=e228]
+                      - text: Required
+                  - button [ref=e229] [cursor=pointer]:
+                    - img [ref=e230]
+                - generic [ref=e233]:
+                  - generic [ref=e234]:
+                    - textbox "Field label" [ref=e235]: Primary Goal
+                    - combobox [ref=e236]:
+                      - option "text"
+                      - option "textarea"
+                      - option "select" [selected]
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e237]: awareness, engagement, lead-generation, conversion
+                    - generic [ref=e238]:
+                      - checkbox "Required" [checked] [ref=e239]
+                      - text: Required
+                  - button [ref=e240] [cursor=pointer]:
+                    - img [ref=e241]
+                - generic [ref=e244]:
+                  - generic [ref=e245]:
+                    - textbox "Field label" [ref=e246]: Posts Per Platform Per Week
+                    - combobox [ref=e247]:
+                      - option "text"
+                      - option "textarea"
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json" [selected]
+                    - textbox "Options (comma-sep)" [ref=e248]
+                    - generic [ref=e249]:
+                      - checkbox "Required" [checked] [ref=e250]
+                      - text: Required
+                  - button [ref=e251] [cursor=pointer]:
+                    - img [ref=e252]
+                - generic [ref=e255]:
+                  - generic [ref=e256]:
+                    - textbox "Field label" [ref=e257]: Product/Service
+                    - combobox [ref=e258]:
+                      - option "text"
+                      - option "textarea" [selected]
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e259]
+                    - generic [ref=e260]:
+                      - checkbox "Required" [ref=e261]
+                      - text: Required
+                  - button [ref=e262] [cursor=pointer]:
+                    - img [ref=e263]
+                - generic [ref=e266]:
+                  - generic [ref=e267]:
+                    - textbox "Field label" [ref=e268]: Sample Posts for Voice Matching
+                    - combobox [ref=e269]:
+                      - option "text"
+                      - option "textarea" [selected]
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e270]
+                    - generic [ref=e271]:
+                      - checkbox "Required" [ref=e272]
+                      - text: Required
+                  - button [ref=e273] [cursor=pointer]:
+                    - img [ref=e274]
+                - generic [ref=e277]:
+                  - generic [ref=e278]:
+                    - textbox "Field label" [ref=e279]: Topics to Avoid
+                    - combobox [ref=e280]:
+                      - option "text"
+                      - option "textarea" [selected]
+                      - option "select"
+                      - option "multiselect"
+                      - option "checkbox"
+                      - option "json"
+                    - textbox "Options (comma-sep)" [ref=e281]
+                    - generic [ref=e282]:
+                      - checkbox "Required" [ref=e283]
+                      - text: Required
+                  - button [ref=e284] [cursor=pointer]:
+                    - img [ref=e285]
+            - generic [ref=e288]:
+              - generic [ref=e289]:
+                - generic [ref=e290]:
+                  - heading "Pipeline Phases" [level=3] [ref=e291]
+                  - paragraph [ref=e292]: 12 activities across 9 phases
+                - button "Add Phase" [ref=e293] [cursor=pointer]:
+                  - img [ref=e294]
+                  - text: Add Phase
+              - generic [ref=e295]:
+                - generic [ref=e296]:
+                  - generic [ref=e297] [cursor=pointer]:
+                    - generic [ref=e299]:
+                      - textbox "Phase name" [ref=e300]: Client Profile
+                      - generic [ref=e301]:
+                        - generic [ref=e302]: "Color:"
+                        - textbox [ref=e303]: "#4f8ef7"
+                      - generic [ref=e305]: 2 activities
+                    - generic [ref=e306]:
+                      - button "Add activity" [ref=e307]:
+                        - img [ref=e308]
+                      - button "Remove phase" [ref=e309]:
+                        - img [ref=e310]
+                      - img [ref=e313]
+                  - generic [ref=e315]:
+                    - generic [ref=e317] [cursor=pointer]:
+                      - img [ref=e318]
+                      - generic [ref=e326]:
+                        - paragraph [ref=e327]: Collect Client Profile
+                        - paragraph [ref=e328]: "Gather all client information: brand, audience, tone, platforms, goals"
+                      - generic [ref=e329]: client-services
+                      - img [ref=e330]
+                    - generic [ref=e333] [cursor=pointer]:
+                      - img [ref=e334]
+                      - generic [ref=e342]:
+                        - paragraph [ref=e343]: Profile Review & Approval
+                        - paragraph [ref=e344]: Present profile to client for verification before generating content
+                      - generic [ref=e345]: client-services
+                      - img [ref=e346]
+                - generic [ref=e349] [cursor=pointer]:
+                  - generic [ref=e351]:
+                    - textbox "Phase name" [ref=e352]: Content Ideas
+                    - generic [ref=e353]:
+                      - generic [ref=e354]: "Color:"
+                      - textbox [ref=e355]: "#9b6dff"
+                    - generic [ref=e357]: 2 activities
+                  - generic [ref=e358]:
+                    - button "Add activity" [ref=e359]:
+                      - img [ref=e360]
+                    - button "Remove phase" [ref=e361]:
+                      - img [ref=e362]
+                    - img [ref=e365]
+                - generic [ref=e368] [cursor=pointer]:
+                  - generic [ref=e370]:
+                    - textbox "Phase name" [ref=e371]: Hook Generation
+                    - generic [ref=e372]:
+                      - generic [ref=e373]: "Color:"
+                      - textbox [ref=e374]: "#00d4aa"
+                    - generic [ref=e376]: 1 activities
+                  - generic [ref=e377]:
+                    - button "Add activity" [ref=e378]:
+                      - img [ref=e379]
+                    - button "Remove phase" [ref=e380]:
+                      - img [ref=e381]
+                    - img [ref=e384]
+                - generic [ref=e387] [cursor=pointer]:
+                  - generic [ref=e389]:
+                    - textbox "Phase name" [ref=e390]: Post Drafting
+                    - generic [ref=e391]:
+                      - generic [ref=e392]: "Color:"
+                      - textbox [ref=e393]: "#ffd166"
+                    - generic [ref=e395]: 2 activities
+                  - generic [ref=e396]:
+                    - button "Add activity" [ref=e397]:
+                      - img [ref=e398]
+                    - button "Remove phase" [ref=e399]:
+                      - img [ref=e400]
+                    - img [ref=e403]
+                - generic [ref=e406] [cursor=pointer]:
+                  - generic [ref=e408]:
+                    - textbox "Phase name" [ref=e409]: Calendar Assembly
+                    - generic [ref=e410]:
+                      - generic [ref=e411]: "Color:"
+                      - textbox [ref=e412]: "#ff5fa0"
+                    - generic [ref=e414]: 1 activities
+                  - generic [ref=e415]:
+                    - button "Add activity" [ref=e416]:
+                      - img [ref=e417]
+                    - button "Remove phase" [ref=e418]:
+                      - img [ref=e419]
+                    - img [ref=e422]
+                - generic [ref=e425] [cursor=pointer]:
+                  - generic [ref=e427]:
+                    - textbox "Phase name" [ref=e428]: Cross-Platform
+                    - generic [ref=e429]:
+                      - generic [ref=e430]: "Color:"
+                      - textbox [ref=e431]: "#38bdf8"
+                    - generic [ref=e433]: 1 activities
+                  - generic [ref=e434]:
+                    - button "Add activity" [ref=e435]:
+                      - img [ref=e436]
+                    - button "Remove phase" [ref=e437]:
+                      - img [ref=e438]
+                    - img [ref=e441]
+                - generic [ref=e444] [cursor=pointer]:
+                  - generic [ref=e446]:
+                    - textbox "Phase name" [ref=e447]: Hashtags & SEO
+                    - generic [ref=e448]:
+                      - generic [ref=e449]: "Color:"
+                      - textbox [ref=e450]: "#a78bfa"
+                    - generic [ref=e452]: 1 activities
+                  - generic [ref=e453]:
+                    - button "Add activity" [ref=e454]:
+                      - img [ref=e455]
+                    - button "Remove phase" [ref=e456]:
+                      - img [ref=e457]
+                    - img [ref=e460]
+                - generic [ref=e463] [cursor=pointer]:
+                  - generic [ref=e465]:
+                    - textbox "Phase name" [ref=e466]: Visual Briefs
+                    - generic [ref=e467]:
+                      - generic [ref=e468]: "Color:"
+                      - textbox [ref=e469]: "#f97316"
+                    - generic [ref=e471]: 1 activities
+                  - generic [ref=e472]:
+                    - button "Add activity" [ref=e473]:
+                      - img [ref=e474]
+                    - button "Remove phase" [ref=e475]:
+                      - img [ref=e476]
+                    - img [ref=e479]
+                - generic [ref=e482] [cursor=pointer]:
+                  - generic [ref=e484]:
+                    - textbox "Phase name" [ref=e485]: Export & Delivery
+                    - generic [ref=e486]:
+                      - generic [ref=e487]: "Color:"
+                      - textbox [ref=e488]: "#22c55e"
+                    - generic [ref=e490]: 1 activities
+                  - generic [ref=e491]:
+                    - button "Add activity" [ref=e492]:
+                      - img [ref=e493]
+                    - button "Remove phase" [ref=e494]:
+                      - img [ref=e495]
+                    - img [ref=e498]
+    - button "Open Iris chat" [ref=e500] [cursor=pointer]:
+      - img [ref=e501]
+  - alert [ref=e503]

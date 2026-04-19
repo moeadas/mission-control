@@ -1,0 +1,100 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "consumer-insights",
+  "name": "Consumer Insights",
+  "description": "Discovers meaningful patterns in consumer behavior, attitudes, and motivations to generate actionable insights that inform brand strategy, creative development, and marketing decisions.",
+  "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when uncovering consumer behavior patterns, attitudes, or motivations — to generate actionable insights that inform brand strategy, product development, or marketing campaigns.",
+      "context": "You are a consumer research specialist who synthesizes data from multiple sources to surface meaningful consumer insights that drive strategic decisions.",
+      "instructions": "## Consumer Insights Workflow\n\n- [ ] 1. Define the question: What consumer behavior or attitude do we need to understand?\n- [ ] 2. Gather data: Combine quantitative (surveys, analytics) and qualitative (interviews, social)\n- [ ] 3. Identify patterns: Look for recurring behaviors, attitudes, language\n- [ ] 4. Formulate insights: Turn patterns into meaningful statements\n- [ ] 5. Validate: Is the insight true, relevant, and ownable?\n- [ ] 6. Apply: How does this insight change our strategy or creative?\n\n## Key Inputs\n- Research question: {{research_question}}\n- Target audience: {{target_audience}}\n- Data sources: {{data_sources}}\n- Brand context: {{brand_context}}",
+      "output_template": "## Consumer Insights Report\n\n### Research Question\n{{research_question}}\n\n### Audience Definition\n{{target_audience}}\n\n### Data Sources\n| Source | Type | Key finding |\n|--------|------|------------|\n| | | |\n\n### Consumer Patterns Identified\n| Pattern | Source evidence | Frequency |\n|---------|----------------|----------|\n| | | |\n\n### Key Insight 1\n**Insight statement:**\n**Evidence:**\n**Implication for brand:**\n\n### Key Insight 2\n**Insight statement:**\n**Evidence:**\n**Implication for brand:**\n\n### Key Insight 3\n**Insight statement:**\n**Evidence:**\n**Implication for brand:**\n\n### Insight Validation\n| Insight | True? | Relevant? | Ownable? | Priority |\n|---------|-------|---------|---------|---------|\n| | ✅/❌ | ✅/❌ | ✅/❌ | |\n\n### Strategic Application\n| Insight | Brand strategy change | Creative direction | Campaign message |\n|---------|---------------------|------------------|-----------------|\n| | | | |\n\n### Unmet Needs\n| Need | Currently served? | Opportunity |\n|------|----------------|------------|\n| | | |"
+    }
+  },
+  "variables": [
+    {
+      "name": "research_question",
+      "type": "string",
+      "required": true,
+      "description": "The consumer question to answer"
+    },
+    {
+      "name": "target_audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience being studied"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Available data sources"
+    },
+    {
+      "name": "brand_context",
+      "type": "string",
+      "required": false,
+      "description": "Brand context for the research"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Question Definition",
+        "action": "Clearly define the research question",
+        "verify": "Question is answerable and relevant"
+      },
+      {
+        "step": 2,
+        "name": "Data Collection",
+        "action": "Gather data from multiple sources",
+        "verify": "Data is current and representative"
+      },
+      {
+        "step": 3,
+        "name": "Pattern Identification",
+        "action": "Identify recurring behaviors and attitudes",
+        "verify": "Patterns are evidenced"
+      },
+      {
+        "step": 4,
+        "name": "Insight Formulation",
+        "action": "Turn patterns into meaningful insight statements",
+        "verify": "Insights are true, relevant, and ownable"
+      },
+      {
+        "step": 5,
+        "name": "Strategic Application",
+        "action": "Define how insights change strategy and creative",
+        "verify": "Application is specific and actionable"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Uncover consumer insights about how CFOs in UAE manage expense reporting. Sources: 15 executive interviews, Google Trends data, LinkedIn audience insights, and industry reports.",
+      "output": "Consumer insights report with 3-5 key insights, evidence, and strategic applications"
+    }
+  ],
+  "checklist": [
+    "Research question is clear and answerable",
+    "Multiple data sources are used",
+    "Insights are evidenced, not assumed",
+    "Insights pass the true/relevant/ownable test",
+    "Strategic application is specific and actionable",
+    "Unmet needs are identified"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova"],
+  "pipelines": ["research"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["research", "consumer-insights", "behavior", "strategy"],
+    "lastUpdated": "2026-03-24"
+  }
+}

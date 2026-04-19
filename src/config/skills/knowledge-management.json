@@ -2,30 +2,109 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "knowledge-management",
   "name": "Knowledge Management",
-  "description": "Organizes and shares institutional knowledge across agency teams to prevent knowledge silos, accelerate onboarding, and ensure best practices are captured and accessible.",
+  "description": "Designs knowledge management systems that make information easier to find, maintain, govern, and reuse across teams.",
   "category": "operations",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when organizing agency knowledge, building a knowledge base, improving information flow, accelerating team onboarding, or capturing expertise before team members leave.",
-      "context": "You are a knowledge management specialist who helps agencies capture, organize, and share what they know. You design systems that make it easy to find information and hard to lose it.",
-      "instructions": "## Knowledge Management Workflow\n\n- [ ] 1. Audit current knowledge: what exists, where it lives, gaps\n- [ ] 2. Define knowledge categories and taxonomy\n- [ ] 3. Identify knowledge owners and subject matter experts\n- [ ] 4. Design the knowledge architecture (wiki, database, etc.)\n- [ ] 5. Implement capture processes: templates, review cycles\n- [ ] 6. Monitor usage and iterate\n\n## Key Inputs\n- Knowledge Areas: {{knowledge_areas}}\n- Current Gaps: {{current_gaps}}\n- Team Structure: {{team_structure}}\n- Available Tools: {{available_tools}}",
-      "output_template": "## Knowledge Management Plan\n\n### Knowledge Audit\n| Knowledge Area | Owner | Location | Quality | Gap |\n|--------------|-------|----------|---------|-----|\n| | | | | |\n\n### Taxonomy\n| Category | Subcategory | Content Types |\n|---------|-------------|--------------|\n| | | |\n\n### Knowledge Owners\n| Area | SME | Owner |\n|------|-----|-------|\n| | | |\n\n### Implementation Roadmap\n| Phase | Action | Owner | Timeline |\n|-------|--------|-------|----------|\n| | | | |\n\n### Success Metrics\n- [ ] ..."
+      "trigger": "Use this skillany time organizing internal knowledge, improving findability, building knowledge repositories, or reducing information loss across teams.",
+      "context": "You are a knowledge management strategist. You think in systems: structure, ownership, retrieval, freshness, and how teams actually use information under pressure.",
+      "instructions": "## Knowledge Management\n\n1. **Define knowledge problem** — Define knowledge problem\n   - ✓ Done when: Define knowledge problem is completed to a high standard\n\n2. **Map domains and users** — Map domains and users\n   - ✓ Done when: Map domains and users is completed to a high standard\n\n3. **Define information structure** — Define information structure\n   - ✓ Done when: Define information structure is completed to a high standard\n\n4. **Assign ownership** — Assign ownership\n   - ✓ Done when: Assign ownership is completed to a high standard\n\n5. **Create governance rules** — Create governance rules\n   - ✓ Done when: Create governance rules is completed to a high standard\n\n6. **Optimize retrieval** — Optimize retrieval\n   - ✓ Done when: Optimize retrieval is completed to a high standard\n\n## Key Inputs\n- knowledge_areas: Key knowledge domains in the agency: accounts, creative, media, ops\n- current_gaps: Known gaps in institutional knowledge\n- team_structure: Team structure and key individuals\n- available_tools: Tools available: wiki, Notion, Confluence, shared drives",
+      "output_template": "## Knowledge Management Plan\n\n### 1. Problem Definition\n| Element | Detail |\n|---|---|\n| Main knowledge issue | |\n| Teams affected | |\n| Most painful failure mode | |\n\n### 2. Knowledge Architecture\n| Layer | Structure / Rule | Owner |\n|---|---|---|\n| Repository structure | | |\n| Taxonomy / tags | | |\n| Naming conventions | | |\n| Templates | | |\n\n### 3. Governance Model\n- Who contributes:\n- Who approves:\n- Review cadence:\n- Archive rule:\n\n### 4. Retrieval And Adoption Notes\n- Search / findability improvements:\n- Usage prompts or rituals:\n- Main risks to system health:"
     }
   },
   "variables": [
-    { "name": "knowledge_areas", "type": "string", "required": true, "description": "Key knowledge domains in the agency: accounts, creative, media, ops" },
-    { "name": "current_gaps", "type": "string", "required": false, "description": "Known gaps in institutional knowledge" },
-    { "name": "team_structure", "type": "string", "required": false, "description": "Team structure and key individuals" },
-    { "name": "available_tools", "type": "string", "required": false, "description": "Tools available: wiki, Notion, Confluence, shared drives" }
+    {
+      "name": "knowledge_areas",
+      "type": "string",
+      "required": true,
+      "description": "Key knowledge domains in the agency: accounts, creative, media, ops"
+    },
+    {
+      "name": "current_gaps",
+      "type": "string",
+      "required": false,
+      "description": "Known gaps in institutional knowledge"
+    },
+    {
+      "name": "team_structure",
+      "type": "string",
+      "required": false,
+      "description": "Team structure and key individuals"
+    },
+    {
+      "name": "available_tools",
+      "type": "string",
+      "required": false,
+      "description": "Tools available: wiki, Notion, Confluence, shared drives"
+    }
   ],
+  "inputs": [
+    {
+      "name": "knowledge_areas",
+      "type": "string",
+      "required": true,
+      "description": "Key knowledge domains in the agency: accounts, creative, media, ops"
+    },
+    {
+      "name": "current_gaps",
+      "type": "string",
+      "required": false,
+      "description": "Known gaps in institutional knowledge"
+    },
+    {
+      "name": "team_structure",
+      "type": "string",
+      "required": false,
+      "description": "Team structure and key individuals"
+    },
+    {
+      "name": "available_tools",
+      "type": "string",
+      "required": false,
+      "description": "Tools available: wiki, Notion, Confluence, shared drives"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Audit knowledge", "action": "Map what knowledge exists and where gaps are", "verify": "Audit is comprehensive" },
-      { "step": 2, "name": "Define taxonomy", "action": "Create clear categories and structure", "verify": "Structure is intuitive and scalable" },
-      { "step": 3, "name": "Assign owners", "action": "Designate knowledge owners for each area", "verify": "Owners are committed" },
-      { "step": 4, "name": "Implement systems", "action": "Build the knowledge infrastructure", "verify": "System is accessible and maintained" }
+      {
+        "step": 1,
+        "name": "Define knowledge problem",
+        "action": "Define knowledge problem",
+        "verify": "Define knowledge problem is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Map domains and users",
+        "action": "Map domains and users",
+        "verify": "Map domains and users is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Define information structure",
+        "action": "Define information structure",
+        "verify": "Define information structure is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Assign ownership",
+        "action": "Assign ownership",
+        "verify": "Assign ownership is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Create governance rules",
+        "action": "Create governance rules",
+        "verify": "Create governance rules is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Optimize retrieval",
+        "action": "Optimize retrieval",
+        "verify": "Optimize retrieval is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -35,20 +114,29 @@
     }
   ],
   "checklist": [
-    "Knowledge audit covers all key areas",
-    "Taxonomy is intuitive and consistently applied",
-    "Knowledge owners are identified and committed",
-    "Capture processes are embedded in workflows",
-    "Knowledge base is searchable and accessible",
-    "Usage is monitored and gaps are filled"
+    "Define knowledge problem is completed to a high standard",
+    "Map domains and users is completed to a high standard",
+    "Define information structure is completed to a high standard",
+    "Assign ownership is completed to a high standard",
+    "Create governance rules is completed to a high standard",
+    "Optimize retrieval is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["operations-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [],
+  "pipelines": [
+    "operations-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["knowledge-management", "wiki", "knowledge-base", "agency-ops"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "knowledge-management",
+      "wiki",
+      "knowledge-base",
+      "agency-ops"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

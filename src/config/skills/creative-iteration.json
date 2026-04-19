@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when reviewing creative work and need to synthesize feedback into clear iteration direction — includes feedback consolidation, prioritisation, and revision briefs.",
+      "trigger": "Use this skillany time reviewing creative work and need to synthesize feedback into clear iteration direction — includes feedback consolidation, prioritisation, and revision briefs.",
       "context": "You are a creative project manager who translates scattered feedback into clear, actionable revision direction without losing the original creative vision.",
-      "instructions": "## Creative Iteration Workflow\n\nManage creative feedback and iteration:\n\n- [ ] 1. Collect all feedback: Gather feedback from all stakeholders in one place\n- [ ] 2. Separate signal from noise: Identify common themes vs. isolated opinions\n- [ ] 3. Prioritise changes: Distinguish must-fix from nice-to-have\n- [ ] 4. Write clear revision brief: Translate feedback into specific, actionable changes\n- [ ] 5. Preserve the vision: Ensure feedback doesn't dilute the core idea\n- [ ] 6. Communicate direction: Brief creative team clearly\n- [ ] 7. Track iterations: Document version history and decisions\n\n## Key Inputs\n- Current creative: {{current_work}}\n- Feedback sources: {{stakeholders}}\n- Version: {{current_version}}",
+      "instructions": "## Creative Iteration\n\n1. **Feedback Collection** — Gather all feedback from all sources in one document\n   - ✓ Done when: Complete picture of all opinions\n\n2. **Synthesis** — Identify themes, separate signal from noise\n   - ✓ Done when: Common themes are clear\n\n3. **Prioritisation** — Classify changes by priority and effort\n   - ✓ Done when: Team knows what matters most\n\n4. **Briefing** — Write clear revision brief for creative team\n   - ✓ Done when: Direction is specific and unambiguous\n\n5. **Vision Protection** — Ensure feedback doesn't erode core creative idea\n   - ✓ Done when: Original vision intact\n\n6. **Iteration Tracking** — Document version history and decisions\n   - ✓ Done when: Clear audit trail\n\n## Key Inputs\n- project_name: Project or campaign name\n- current_work: Description of current creative state\n- stakeholders: List of stakeholders who provided feedback\n- current_version: Current version number or identifier",
       "output_template": "## Creative Iteration Brief: {{project_name}} v{{version}}\n\n### Current Version\n{{current_version}}\n\n### Feedback Summary\n| Source | Feedback Summary |\n|--------|------------------|\n| | |\n\n### Feedback Themes (Common Signals)\n1. \n2. \n3. \n\n### Isolated Opinions (Not Actioned)\n| Feedback | Reason for Not Actioning |\n|----------|------------------------|\n| | |\n\n### Priority Classification\n| Change | Priority | Type |\n|--------|----------|------|\n| | Critical/Major/Minor |\n\n### Revision Brief\n**Must fix (Critical):**\n1. \n\n**Major improvements:**\n1. \n\n**Minor refinements:**\n1. \n\n### What NOT to Change\n[Elements that are working and should be preserved]\n\n### Vision Check\n**Original creative intent:**\n**Is intent still intact?** ✅/❌\n**Notes:**\n\n### Revision Timeline\n| Action | Owner | Due |\n|--------|-------|-----|\n| | | |\n\n### Version History\n| Version | Date | Changes |\n|---------|------|--------|\n| v1 | | Original |\n| v2 | | |\n| v3 | | [Current] |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Current version number or identifier"
     }
   ],
+  "inputs": [
+    {
+      "name": "project_name",
+      "type": "string",
+      "required": true,
+      "description": "Project or campaign name"
+    },
+    {
+      "name": "current_work",
+      "type": "string",
+      "required": true,
+      "description": "Description of current creative state"
+    },
+    {
+      "name": "stakeholders",
+      "type": "string",
+      "required": true,
+      "description": "List of stakeholders who provided feedback"
+    },
+    {
+      "name": "current_version",
+      "type": "string",
+      "required": false,
+      "description": "Current version number or identifier"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,12 +114,12 @@
     }
   ],
   "checklist": [
-    "All feedback collected in one place",
-    "Common themes identified and distinguished from noise",
-    "Changes prioritised clearly",
-    "Revision brief is specific and actionable",
-    "Original creative vision protected",
-    "Version history documented"
+    "Complete picture of all opinions",
+    "Common themes are clear",
+    "Team knows what matters most",
+    "Direction is specific and unambiguous",
+    "Original vision intact",
+    "Clear audit trail"
   ],
   "tools": [
     "document",
@@ -100,7 +127,7 @@
   ],
   "agents": [
     "finn",
-    "nova"
+    "lyra"
   ],
   "pipelines": [
     "creative-review"
@@ -115,6 +142,6 @@
       "feedback",
       "project-management"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

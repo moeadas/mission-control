@@ -1,0 +1,386 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - button "Switch to light mode" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - paragraph [ref=e18]: 20:46
+    - generic [ref=e19]:
+      - navigation "Main navigation" [ref=e20]:
+        - generic [ref=e22]:
+          - generic [ref=e24]: MC
+          - generic [ref=e25]:
+            - paragraph [ref=e26]: Mission Control
+            - paragraph [ref=e27]: Agency HQ
+        - generic [ref=e28]:
+          - link "Dashboard" [ref=e29] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e31]
+            - generic [ref=e36]: Dashboard
+          - link "Virtual Office" [ref=e37] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e39]
+            - generic [ref=e43]: Virtual Office
+          - link "Agents" [ref=e44] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e47]
+            - generic [ref=e50]: Agents
+          - link "Clients" [ref=e51] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e53]
+            - generic [ref=e58]: Clients
+          - link "Tasks" [ref=e59] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e61]
+            - generic [ref=e64]: Tasks
+          - link "Pipeline" [ref=e65] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e67]
+            - generic [ref=e71]: Pipeline
+          - link "Skills" [ref=e72] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e74]
+            - generic [ref=e77]: Skills
+          - link "Runner" [ref=e78] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e80]
+            - generic [ref=e82]: Runner
+          - link "Analytics" [ref=e83] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e85]
+            - generic [ref=e87]: Analytics
+          - link "Outputs" [ref=e88] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e90]
+            - generic [ref=e93]: Outputs
+          - link "Settings" [ref=e94] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e96]
+            - generic [ref=e99]: Settings
+        - generic [ref=e101]:
+          - generic [ref=e103]: MC
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: Agency Mode
+            - paragraph [ref=e106]: Iris · Online
+      - main [ref=e108]:
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - heading "Agent Roster" [level=1] [ref=e112]:
+                - img [ref=e113]
+                - text: Agent Roster
+              - paragraph [ref=e116]: 10 agents — click any agent to edit
+            - button "New Agent" [ref=e117] [cursor=pointer]:
+              - img [ref=e118]
+              - text: New Agent
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - img [ref=e121]
+              - textbox "Search agents..." [ref=e124]
+            - generic [ref=e125]:
+              - button "All" [ref=e126] [cursor=pointer]
+              - button "Active" [ref=e127] [cursor=pointer]
+              - button "Idle" [ref=e128] [cursor=pointer]
+              - button "Paused" [ref=e129] [cursor=pointer]
+              - button "Creative" [ref=e130] [cursor=pointer]
+              - button "Client Services" [ref=e131] [cursor=pointer]
+              - button "Media" [ref=e132] [cursor=pointer]
+              - button "Research" [ref=e133] [cursor=pointer]
+              - button "Strategy" [ref=e134] [cursor=pointer]
+              - button "Copy" [ref=e135] [cursor=pointer]
+              - button "Design" [ref=e136] [cursor=pointer]
+          - generic [ref=e138]:
+            - generic [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]:
+                - img "Iris" [ref=e145]
+                - generic [ref=e150]:
+                  - generic [ref=e151]:
+                    - heading "Iris" [level=3] [ref=e152]
+                    - generic [ref=e153]: Active
+                  - paragraph [ref=e155]: Agency Operations Lead
+                  - generic [ref=e156]:
+                    - generic [ref=e157]: Mission Control
+                    - generic [ref=e158]: Client Services
+                    - generic [ref=e159]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e160]: → Coordinating active missions across the agency
+              - generic [ref=e161]:
+                - button "Pause" [ref=e162]:
+                  - img [ref=e163]
+                  - text: Pause
+                - button "Clone" [ref=e166]:
+                  - img [ref=e167]
+                  - text: Clone
+                - button "Remove" [ref=e170]:
+                  - img [ref=e171]
+                  - text: Remove
+              - paragraph [ref=e174]: Last active 2026-03-25 20:46
+              - generic [ref=e175]:
+                - generic [ref=e176]: task-triaging
+                - generic [ref=e177]: workflow-design
+                - generic [ref=e178]: cross-functional-coordination
+              - paragraph [ref=e179]: "Outputs: Status Report · Client Brief"
+            - generic [ref=e180] [cursor=pointer]:
+              - generic [ref=e181]:
+                - img [ref=e185]
+                - generic [ref=e199]:
+                  - generic [ref=e200]:
+                    - heading "Lyra" [level=3] [ref=e201]
+                    - generic [ref=e202]: Idle
+                  - paragraph [ref=e204]: Visual Production Lead
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: Creative
+                    - generic [ref=e207]: Design
+                    - generic [ref=e208]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e209]: → Preparing visual asset packs
+              - generic [ref=e210]:
+                - button "Activate" [ref=e211]:
+                  - img [ref=e212]
+                  - text: Activate
+                - button "Clone" [ref=e214]:
+                  - img [ref=e215]
+                  - text: Clone
+                - button "Remove" [ref=e218]:
+                  - img [ref=e219]
+                  - text: Remove
+              - paragraph [ref=e222]: Last active 2026-03-25 20:46
+              - generic [ref=e223]:
+                - generic [ref=e224]: art-direction
+                - generic [ref=e225]: visual-leadership
+                - generic [ref=e226]: design-systems
+              - paragraph [ref=e227]: "Outputs: Creative Asset"
+            - generic [ref=e228] [cursor=pointer]:
+              - generic [ref=e229]:
+                - img [ref=e233]
+                - generic [ref=e247]:
+                  - generic [ref=e248]:
+                    - heading "Piper" [level=3] [ref=e249]
+                    - generic [ref=e250]: Idle
+                  - paragraph [ref=e252]: Project & Traffic Manager
+                  - generic [ref=e253]:
+                    - generic [ref=e254]: Mission Control
+                    - generic [ref=e255]: Traffic Management
+                    - generic [ref=e256]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e257]: → Tracking delivery schedule
+              - generic [ref=e258]:
+                - button "Activate" [ref=e259]:
+                  - img [ref=e260]
+                  - text: Activate
+                - button "Clone" [ref=e262]:
+                  - img [ref=e263]
+                  - text: Clone
+                - button "Remove" [ref=e266]:
+                  - img [ref=e267]
+                  - text: Remove
+              - paragraph [ref=e270]: Last active 2026-03-25 20:46
+              - generic [ref=e271]:
+                - generic [ref=e272]: project-scheduling
+                - generic [ref=e273]: traffic-coordination
+                - generic [ref=e274]: resource-allocation
+              - paragraph [ref=e275]: "Outputs: Status Report · Client Brief"
+            - generic [ref=e276] [cursor=pointer]:
+              - generic [ref=e277]:
+                - img [ref=e281]
+                - generic [ref=e295]:
+                  - generic [ref=e296]:
+                    - heading "Sage" [level=3] [ref=e297]
+                    - generic [ref=e298]: Idle
+                  - paragraph [ref=e300]: Client Services Director
+                  - generic [ref=e301]:
+                    - generic [ref=e302]: Client Services
+                    - generic [ref=e303]: Client Services
+                    - generic [ref=e304]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e305]: → Preparing client presentation
+              - generic [ref=e306]:
+                - button "Activate" [ref=e307]:
+                  - img [ref=e308]
+                  - text: Activate
+                - button "Clone" [ref=e310]:
+                  - img [ref=e311]
+                  - text: Clone
+                - button "Remove" [ref=e314]:
+                  - img [ref=e315]
+                  - text: Remove
+              - paragraph [ref=e318]: Last active 2026-03-25 20:46
+              - generic [ref=e319]:
+                - generic [ref=e320]: client-relationship-management
+                - generic [ref=e321]: strategic-account-planning
+                - generic [ref=e322]: presentation-design
+              - paragraph [ref=e323]: "Outputs: Status Report · Client Brief"
+            - generic [ref=e324] [cursor=pointer]:
+              - generic [ref=e325]:
+                - img [ref=e329]
+                - generic [ref=e343]:
+                  - generic [ref=e344]:
+                    - heading "Maya" [level=3] [ref=e345]
+                    - generic [ref=e346]: Idle
+                  - paragraph [ref=e348]: Brand & Campaign Strategist
+                  - generic [ref=e349]:
+                    - generic [ref=e350]: Client Services
+                    - generic [ref=e351]: Brand Strategy
+                    - generic [ref=e352]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e353]: → Developing brand strategy
+              - generic [ref=e354]:
+                - button "Activate" [ref=e355]:
+                  - img [ref=e356]
+                  - text: Activate
+                - button "Clone" [ref=e358]:
+                  - img [ref=e359]
+                  - text: Clone
+                - button "Remove" [ref=e362]:
+                  - img [ref=e363]
+                  - text: Remove
+              - paragraph [ref=e366]: Last active 2026-03-25 20:46
+              - generic [ref=e367]:
+                - generic [ref=e368]: brand-strategy
+                - generic [ref=e369]: campaign-planning
+                - generic [ref=e370]: go-to-market-strategy
+              - paragraph [ref=e371]: "Outputs: Strategy Brief · Campaign Strategy"
+            - generic [ref=e372] [cursor=pointer]:
+              - generic [ref=e373]:
+                - img [ref=e377]
+                - generic [ref=e391]:
+                  - generic [ref=e392]:
+                    - heading "Finn" [level=3] [ref=e393]
+                    - generic [ref=e394]: Idle
+                  - paragraph [ref=e396]: Creative Director
+                  - generic [ref=e397]:
+                    - generic [ref=e398]: Creative
+                    - generic [ref=e399]: Creative
+                    - generic [ref=e400]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e401]: → Creative direction session
+              - generic [ref=e402]:
+                - button "Activate" [ref=e403]:
+                  - img [ref=e404]
+                  - text: Activate
+                - button "Clone" [ref=e406]:
+                  - img [ref=e407]
+                  - text: Clone
+                - button "Remove" [ref=e410]:
+                  - img [ref=e411]
+                  - text: Remove
+              - paragraph [ref=e414]: Last active 2026-03-25 20:46
+              - generic [ref=e415]:
+                - generic [ref=e416]: creative-concept-development
+                - generic [ref=e417]: art-direction
+                - generic [ref=e418]: visual-leadership
+              - paragraph [ref=e419]: "Outputs: Creative Asset · Campaign Strategy"
+            - generic [ref=e420] [cursor=pointer]:
+              - generic [ref=e421]:
+                - img [ref=e425]
+                - generic [ref=e439]:
+                  - generic [ref=e440]:
+                    - heading "Echo" [level=3] [ref=e441]
+                    - generic [ref=e442]: Idle
+                  - paragraph [ref=e444]: Copy & Content Lead
+                  - generic [ref=e445]:
+                    - generic [ref=e446]: Creative
+                    - generic [ref=e447]: Content & Copy
+                    - generic [ref=e448]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e449]: → Writing campaign copy
+              - generic [ref=e450]:
+                - button "Activate" [ref=e451]:
+                  - img [ref=e452]
+                  - text: Activate
+                - button "Clone" [ref=e454]:
+                  - img [ref=e455]
+                  - text: Clone
+                - button "Remove" [ref=e458]:
+                  - img [ref=e459]
+                  - text: Remove
+              - paragraph [ref=e462]: Last active 2026-03-25 20:46
+              - generic [ref=e463]:
+                - generic [ref=e464]: campaign-copywriting
+                - generic [ref=e465]: brand-voice
+                - generic [ref=e466]: direct-response-copy
+              - paragraph [ref=e467]: "Outputs: Campaign Copy · Content Calendar"
+            - generic [ref=e468] [cursor=pointer]:
+              - generic [ref=e469]:
+                - img [ref=e473]
+                - generic [ref=e487]:
+                  - generic [ref=e488]:
+                    - heading "Nova" [level=3] [ref=e489]
+                    - generic [ref=e490]: Idle
+                  - paragraph [ref=e492]: Media Planning Lead
+                  - generic [ref=e493]:
+                    - generic [ref=e494]: Media
+                    - generic [ref=e495]: Media Planning
+                    - generic [ref=e496]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e497]: → Building media plan for Q2 campaign
+              - generic [ref=e498]:
+                - button "Activate" [ref=e499]:
+                  - img [ref=e500]
+                  - text: Activate
+                - button "Clone" [ref=e502]:
+                  - img [ref=e503]
+                  - text: Clone
+                - button "Remove" [ref=e506]:
+                  - img [ref=e507]
+                  - text: Remove
+              - paragraph [ref=e510]: Last active 2026-03-25 20:46
+              - generic [ref=e511]:
+                - generic [ref=e512]: media-strategy
+                - generic [ref=e513]: channel-planning
+                - generic [ref=e514]: budget-allocation
+              - paragraph [ref=e515]: "Outputs: Media Plan · Budget Sheet"
+            - generic [ref=e516] [cursor=pointer]:
+              - generic [ref=e517]:
+                - img [ref=e521]
+                - generic [ref=e535]:
+                  - generic [ref=e536]:
+                    - heading "Dex" [level=3] [ref=e537]
+                    - generic [ref=e538]: Idle
+                  - paragraph [ref=e540]: Performance & Analytics Lead
+                  - generic [ref=e541]:
+                    - generic [ref=e542]: Media
+                    - generic [ref=e543]: Performance Ops
+                    - generic [ref=e544]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e545]: → Analyzing campaign performance
+              - generic [ref=e546]:
+                - button "Activate" [ref=e547]:
+                  - img [ref=e548]
+                  - text: Activate
+                - button "Clone" [ref=e550]:
+                  - img [ref=e551]
+                  - text: Clone
+                - button "Remove" [ref=e554]:
+                  - img [ref=e555]
+                  - text: Remove
+              - paragraph [ref=e558]: Last active 2026-03-25 20:46
+              - generic [ref=e559]:
+                - generic [ref=e560]: performance-analysis
+                - generic [ref=e561]: ab-test-design
+                - generic [ref=e562]: statistical-analysis
+              - paragraph [ref=e563]: "Outputs: Status Report · KPI Forecast"
+            - generic [ref=e564] [cursor=pointer]:
+              - generic [ref=e565]:
+                - img [ref=e569]
+                - generic [ref=e583]:
+                  - generic [ref=e584]:
+                    - heading "Atlas" [level=3] [ref=e585]
+                    - generic [ref=e586]: Idle
+                  - paragraph [ref=e588]: Research & Insights Lead
+                  - generic [ref=e589]:
+                    - generic [ref=e590]: Research
+                    - generic [ref=e591]: Research
+                    - generic [ref=e592]: Ollama · MiniMax M2.7 (Cloud)
+                  - paragraph [ref=e593]: → Researching market trends
+              - generic [ref=e594]:
+                - button "Activate" [ref=e595]:
+                  - img [ref=e596]
+                  - text: Activate
+                - button "Clone" [ref=e598]:
+                  - img [ref=e599]
+                  - text: Clone
+                - button "Remove" [ref=e602]:
+                  - img [ref=e603]
+                  - text: Remove
+              - paragraph [ref=e606]: Last active 2026-03-25 20:46
+              - generic [ref=e607]:
+                - generic [ref=e608]: market-research
+                - generic [ref=e609]: competitive-intelligence
+                - generic [ref=e610]: consumer-insights
+              - paragraph [ref=e611]: "Outputs: Research Brief · Strategy Brief"
+    - button "Open Iris chat" [ref=e612] [cursor=pointer]:
+      - img [ref=e613]
+  - alert [ref=e615]

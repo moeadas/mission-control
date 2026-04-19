@@ -10,12 +10,13 @@ export function slugifyFilePart(value: string) {
 
 export function getArtifactFamily(deliverableType: DeliverableType) {
   if (deliverableType === 'creative-asset') return 'creative'
-  if (['media-plan', 'budget-sheet', 'kpi-forecast'].includes(deliverableType)) return 'media'
+  if (['media-plan', 'budget-sheet', 'kpi-forecast', 'data-analysis'].includes(deliverableType)) return 'media'
   return 'document'
 }
 
-export function getSupportedExportFormats(artifact: Artifact): Extract<ArtifactFormat, 'docx' | 'pdf' | 'xlsx'>[] {
-  if (getArtifactFamily(artifact.deliverableType) === 'media') return ['xlsx', 'pdf']
+export function getSupportedExportFormats(artifact: Artifact): Extract<ArtifactFormat, 'docx' | 'pdf' | 'pptx' | 'xlsx' | 'csv'>[] {
+  if (getArtifactFamily(artifact.deliverableType) === 'media') return ['xlsx', 'csv', 'pdf']
+  if (artifact.deliverableType === 'presentation') return ['pptx', 'pdf']
   return ['docx', 'pdf']
 }
 

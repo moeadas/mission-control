@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "operations-management",
+  "name": "Operations Management",
+  "description": "Manages agency operations efficiently, including resource allocation, process design, tool implementation, and workflow optimization to keep advertising projects running smoothly.",
+  "category": "operations",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when optimizing agency workflows, implementing new processes, managing resource constraints, or improving operational efficiency across multiple client accounts.",
+      "context": "You are an operations management specialist who keeps agencies running smoothly. You design efficient processes, manage resources intelligently, and identify opportunities to improve how work gets done.",
+      "instructions": "## Operations Management Workflow\n\n- [ ] 1. Map current processes and identify bottlenecks\n- [ ] 2. Define operational objectives and KPIs\n- [ ] 3. Design or improve processes and workflows\n- [ ] 4. Implement tools and systems to support operations\n- [ ] 5. Monitor performance against operational KPIs\n- [ ] 6. Continuously improve based on data\n\n## Key Inputs\n- Current State: {{current_state}}\n- Operational Goals: {{operational_goals}}\n- Pain Points: {{pain_points}}\n- Resources: {{resources}}",
+      "output_template": "## Operations Improvement Plan\n\n### Current State Analysis\n| Process | Efficiency | Bottleneck | Impact |\n|---------|-----------|-----------|--------|\n| | | | |\n\n### Operational KPIs\n| KPI | Current | Target | Owner |\n|-----|---------|--------|-------|\n| | | | |\n\n### Process Improvements\n| Improvement | Current Process | New Process | Impact |\n|------------|---------------|------------|--------|\n| | | | |\n\n### Implementation Plan\n| Change | Owner | Timeline | Dependencies |\n|-------|-------|----------|-------------|\n| | | | |\n\n### Tool & System Recommendations\n- [ ] ..."
+    }
+  },
+  "variables": [
+    { "name": "current_state", "type": "string", "required": true, "description": "Description of current operational processes and performance" },
+    { "name": "operational_goals", "type": "string", "required": true, "description": "What the operations team is trying to achieve" },
+    { "name": "pain_points", "type": "string", "required": false, "description": "Known operational pain points or inefficiencies" },
+    { "name": "resources", "type": "string", "required": false, "description": "Available resources: team size, tools, budget" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Map processes", "action": "Document current workflows and identify bottlenecks", "verify": "Map is accurate and complete" },
+      { "step": 2, "name": "Design improvements", "action": "Create improved process designs", "verify": "Improvements are feasible" },
+      { "step": 3, "name": "Implement", "action": "Roll out changes with proper change management", "verify": "Team is trained and aligned" },
+      { "step": 4, "name": "Monitor", "action": "Track KPIs and iterate", "verify": "Improvements are delivering results" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Current state: Creative approval takes 5 days average. Goals: reduce to 2 days. Pain points: no clear escalation path, stakeholders travel without setting backups. Resources: Asana for project management.",
+      "output": "Implemented: (1) clear 48-hour SLA for feedback, (2) required backup approver field in every project brief, (3) escalation trigger at 24 hours with automatic reminder. Result: average approval time reduced to 2.3 days within 6 weeks."
+    }
+  ],
+  "checklist": [
+    "Current processes are mapped accurately",
+    "Bottlenecks are identified with impact estimates",
+    "Improvements are designed with implementation plans",
+    "KPIs are defined and tracked",
+    "Change management is considered",
+    "Tools support the new workflows"
+  ],
+  "tools": ["document", "spreadsheet"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["operations-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["operations-management", "workflow", "process-improvement", "agency-ops"],
+    "lastUpdated": "2026-03-24"
+  }
+}

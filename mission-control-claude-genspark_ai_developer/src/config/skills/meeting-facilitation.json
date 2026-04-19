@@ -1,0 +1,59 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "meeting-facilitation",
+  "name": "Meeting Facilitation",
+  "description": "Leading productive meetings that achieve clear outcomes, engage participants, and respect everyone's time. From kickoffs to brainstorms to retrospectives — meetings that actually move work forward.",
+  "category": "project-management",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when facilitating meetings, workshops, brainstorms, retrospectives, or any group session. Essential for kickoffs, strategic planning sessions, creative reviews, and stakeholder alignment.",
+      "context": "You are a meeting facilitation specialist who keeps discussions focused, ensures all voices are heard, and drives toward clear outcomes. You manage time, energy, and dynamics skillfully.",
+      "instructions": "## Meeting Facilitation Workflow\n\n- [ ] 1. Define meeting purpose and desired outcomes\n- [ ] 2. Create and share clear agenda\n- [ ] 3. Set ground rules and expectations\n- [ ] 4. Facilitate discussion with time management\n- [ ] 5. Capture decisions and action items\n- [ ] 6. Follow up with summary and next steps\n\n## Key Inputs\n- Meeting Type: {{type}}\n- Participants: {{participants}}\n- Purpose: {{purpose}}\n- Duration: {{duration}}\n- Key Topics: {{topics}}",
+      "output_template": "## Meeting Plan\n\n### Meeting Overview\n| Element | Details |\n|---------|---------|\n| Type | |\n| Date/Duration | |\n| Participants | |\n| Location/Link | |\n\n### Desired Outcomes\n| Outcome | Success Criteria |\n|---------|----------------|\n| | |\n\n### Agenda\n| Time | Topic | Owner | Desired Outcome |\n|------|-------|-------|----------------|\n| | | | |\n\n### Ground Rules\n1. \n2. \n3. \n\n### During Meeting\n| Item | Capture |\n|------|--------|\n| Decisions | |\n| Action Items | |\n| Parking Lot | |\n\n### Follow-Up\n| Item | Details |\n|------|--------|\n| Summary Sent | ☐ |\n| Action Items Tracked | ☐ |\n| Next Meeting Set | ☐ |"
+    }
+  },
+  "variables": [
+    { "name": "type", "type": "string", "required": true, "description": "Type: kickoff, brainstorm, review, retrospective" },
+    { "name": "participants", "type": "string", "required": true, "description": "List of participants and roles" },
+    { "name": "purpose", "type": "string", "required": true, "description": "Meeting purpose and goals" },
+    { "name": "duration", "type": "string", "required": false, "description": "Meeting duration" },
+    { "name": "topics", "type": "string", "required": false, "description": "Key topics to cover" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Define purpose", "action": "Clarify outcomes and success criteria", "verify": "Purpose is clear and achievable" },
+      { "step": 2, "name": "Create agenda", "action": "Build structured agenda with time allocations", "verify": "Agenda supports outcomes" },
+      { "step": 3, "name": "Share prep", "action": "Send agenda and pre-work in advance", "verify": "Participants are prepared" },
+      { "step": 4, "name": "Facilitate", "action": "Guide discussion, manage time, capture outputs", "verify": "Meeting stays on track" },
+      { "step": 5, "name": "Document", "action": "Record decisions and action items", "verify": "Nothing falls through cracks" },
+      { "step": 6, "name": "Follow up", "action": "Send summary with clear next steps", "verify": "Accountability is clear" }
+    ]
+  },
+  "examples": [
+    { "input": "Facilitate a creative brief kickoff meeting with the client, strategist, and creative team.", "output": "Meeting plan with agenda, facilitation notes, and follow-up template." },
+    { "input": "Lead a quarterly retrospective for a 10-person project team to identify process improvements.", "output": "Retrospective facilitation guide with exercises and action item template." }
+  ],
+  "checklist": [
+    "Clear purpose and outcomes defined",
+    "Agenda shared in advance",
+    "Right participants invited",
+    "Ground rules established",
+    "Time managed throughout",
+    "All voices heard",
+    "Decisions documented",
+    "Action items have owners",
+    "Summary sent within 24 hours",
+    "Next steps scheduled"
+  ],
+  "tools": ["document", "presentation"],
+  "agents": ["nova"],
+  "pipelines": [],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["facilitation", "meetings", "workshops", "brainstorm", "retrospective"],
+    "lastUpdated": "2026-03-24"
+  }
+}

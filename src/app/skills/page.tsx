@@ -8,6 +8,23 @@ import { Plus, Search, BookOpen, Star, Edit, ListChecks, Workflow, Zap } from 'l
 import { clsx } from 'clsx'
 import { getSupabaseAccessToken } from '@/lib/supabase/browser'
 
+const CATEGORY_ALIASES: Record<string, string> = {
+  'strategy & planning': 'strategy',
+  'creative & copy': 'creative',
+  'media & advertising': 'media',
+  'research & analytics': 'research',
+  'operations & workflow': 'operations',
+  'client services': 'client-services',
+  'content production': 'content',
+}
+
+function normalizeCategoryId(value?: string | null) {
+  const normalized = String(value || '')
+    .trim()
+    .toLowerCase()
+  return CATEGORY_ALIASES[normalized] || normalized
+}
+
 export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([])
   const [loading, setLoading] = useState(true)
@@ -32,22 +49,40 @@ export default function SkillsPage() {
       .finally(() => setLoading(false))
   }, [])
 
+  const buildSearchableText = (skill: Skill) =>
+    [
+      skill.id,
+      skill.name,
+      skill.description,
+      ...(skill.agents || []),
+      ...(skill.pipelines || []),
+      ...((skill.metadata?.tags as string[] | undefined) || []),
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+
   const filteredSkills = useMemo(() => {
     return skills.filter((skill) => {
+      const query = search.trim().toLowerCase()
+      const tokens = query.split(/\s+/).filter(Boolean)
+      const nameText = `${skill.name || ''} ${skill.id || ''}`.toLowerCase()
+      const searchable = buildSearchableText(skill)
       const matchesSearch =
-        !search ||
-        skill.name.toLowerCase().includes(search.toLowerCase()) ||
-        skill.description.toLowerCase().includes(search.toLowerCase())
-      const matchesCategory = !category || skill.category === category
+        tokens.length === 0 ||
+        tokens.every((token) => nameText.includes(token)) ||
+        searchable.includes(query)
+      const matchesCategory =
+        !category || normalizeCategoryId(skill.category) === normalizeCategoryId(category)
       return matchesSearch && matchesCategory
     })
   }, [skills, search, category])
 
   const getCategoryColor = (catId: string) =>
-    SKILL_CATEGORIES.find((c) => c.id === catId)?.color || '#666'
+    SKILL_CATEGORIES.find((c) => c.id === normalizeCategoryId(catId))?.color || '#666'
 
   const getCategoryName = (catId: string) =>
-    SKILL_CATEGORIES.find((c) => c.id === catId)?.name || catId
+    SKILL_CATEGORIES.find((c) => c.id === normalizeCategoryId(catId))?.name || catId
 
   const difficultyColors = {
     beginner: { bg: 'rgba(0,212,170,0.1)', color: '#00d4aa', label: 'beginner' },
@@ -98,7 +133,7 @@ export default function SkillsPage() {
                 Skills Library
               </h1>
               <p className="text-xs text-[var(--text-dim)] mt-1">
-                {skills.length} skills across {SKILL_CATEGORIES.length} categories
+                {filteredSkills.length} of {skills.length} skills shown across {SKILL_CATEGORIES.length} categories
               </p>
             </div>
             <Link
@@ -201,7 +236,7 @@ export default function SkillsPage() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
               {filteredSkills.map((skill, i) => {
                 const catColor = getCategoryColor(skill.category)
                 const diff = difficultyColors[skill.difficulty] || difficultyColors.beginner

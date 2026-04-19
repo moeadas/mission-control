@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "short-form-copy",
+  "name": "Short-Form Copy",
+  "description": "Writes concise, high-impact copy for ads, social media posts, headlines, taglines, and other short-form content that captures attention and drives action.",
+  "category": "content",
+  "difficulty": "intermediate",
+  "freedom": "high",
+  "prompts": {
+    "en": {
+      "trigger": "Use when writing ad headlines, social media posts, taglines, CTAs, display ad copy, or any context requiring copy under 100 words.",
+      "context": "You are a short-form copywriting specialist who masters the art of saying more with less. You know how to capture attention, create urgency, and drive action in limited space.",
+      "instructions": "## Short-Form Copy Workflow\n\n- [ ] 1. Define the goal: what action should the reader take?\n- [ ] 2. Identify the one key benefit or differentiator\n- [ ] 3. Write multiple options rapidly\n- [ ] 4. Test and iterate on word choice and structure\n- [ ] 5. Finalize copy that is specific, clear, and compelling\n\n## Key Inputs\n- Format: {{format}} (headline, tagline, social post, ad copy, CTA)\n- Product/Service: {{product_service}}\n- Key Benefit: {{key_benefit}}\n- Audience: {{audience}}\n- Tone: {{tone}}",
+      "output_template": "## Short-Form Copy Options\n\n### Copy Options\n| # | Copy | Why It Works |\n|---|------|--------------|\n| 1 | | |\n| 2 | | |\n| 3 | | |\n\n### Recommended\n**Selected Copy:** [chosen copy]\n**Rationale:** [why this copy wins]\n\n### A/B Test Options\n- [ ] Option A: [copy]\n- [ ] Option B: [copy]"
+    }
+  },
+  "variables": [
+    { "name": "format", "type": "string", "required": true, "description": "Format: headline, tagline, social post, ad copy, CTA, display ad copy" },
+    { "name": "product_service", "type": "string", "required": true, "description": "Product, service, or brand the copy is for" },
+    { "name": "key_benefit", "type": "string", "required": true, "description": "Primary benefit or message to communicate" },
+    { "name": "audience", "type": "string", "required": false, "description": "Target audience" },
+    { "name": "tone", "type": "string", "required": false, "description": "Tone: urgent, playful, serious, authoritative, warm" }
+  ],
+  "workflow": {
+    "steps": [
+      { "step": 1, "name": "Identify benefit", "action": "Define the one key benefit or message", "verify": "Benefit is specific and compelling" },
+      { "step": 2, "name": "Generate options", "action": "Write 3-5 different copy options", "verify": "Options are varied in approach" },
+      { "step": 3, "name": "Select best", "action": "Choose the strongest option and refine", "verify": "Copy is clear and actionable" }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Format: Facebook ad headline. Product: Project management SaaS. Benefit: Save 2 hours per week. Audience: Project managers at tech companies. Tone: Confident, benefit-led.",
+      "output": "Options: (1) 'Save 2 Hours Every Week' — direct benefit. (2) 'Stop Managing Chaos. Start Delivering.' — problem-solution. (3) 'The PM Tool That Actually Pays For Itself.' — ROI angle. Recommended: Option 1 for highest CTR in B2B Facebook tests. A/B test against Option 3 for conversion rate."
+    }
+  ],
+  "checklist": [
+    "Copy has a clear benefit or hook",
+    "Language is specific, not vague",
+    "Format constraints are respected",
+    "Tone matches the brand and context",
+    "CTA is implied or explicit",
+    "Multiple options are generated for testing"
+  ],
+  "tools": ["document"],
+  "agents": ["nova", "echo"],
+  "pipelines": ["content-pipeline"],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": ["short-form-copy", "copywriting", "headlines", "ads", "social-copy"],
+    "lastUpdated": "2026-03-24"
+  }
+}

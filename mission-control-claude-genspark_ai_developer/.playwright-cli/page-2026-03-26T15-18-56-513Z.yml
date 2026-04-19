@@ -1,0 +1,18 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e995]:
+    - generic [ref=e996]:
+      - paragraph [ref=e997]: Mission Control
+      - heading "Sign In" [level=1] [ref=e998]
+      - paragraph [ref=e999]: Access your clients, tasks, and outputs.
+    - generic [ref=e1000]:
+      - generic [ref=e1001]:
+        - text: Email
+        - textbox "Email" [ref=e1002]:
+          - /placeholder: name@company.com
+      - generic [ref=e1003]:
+        - text: Password
+        - textbox "Password" [ref=e1004]:
+          - /placeholder: ••••••••
+      - button "Sign In" [ref=e1005] [cursor=pointer]
+    - button "Need an account? Create one" [ref=e1006] [cursor=pointer]

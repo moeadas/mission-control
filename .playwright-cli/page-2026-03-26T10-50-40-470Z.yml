@@ -1,0 +1,181 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e16]:
+    - banner [ref=e17]:
+      - img [ref=e21]
+      - generic [ref=e23]:
+        - button "Refresh latest app version" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - button "Switch to light mode" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+        - button "Sign out" [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+        - paragraph [ref=e42]: 11:50
+    - generic [ref=e43]:
+      - navigation "Main navigation" [ref=e44]:
+        - generic [ref=e46]:
+          - generic [ref=e48]: MC
+          - generic [ref=e49]:
+            - paragraph [ref=e50]: Mission Control
+            - paragraph [ref=e51]: Agency HQ
+        - generic [ref=e52]:
+          - link "Dashboard" [ref=e53] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e56]
+            - generic [ref=e61]: Dashboard
+          - link "Virtual Office" [ref=e62] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e64]
+            - generic [ref=e68]: Virtual Office
+          - link "Agents" [ref=e69] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e71]
+            - generic [ref=e74]: Agents
+          - link "Clients" [ref=e75] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e77]
+            - generic [ref=e82]: Clients
+          - link "Tasks" [ref=e83] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e85]
+            - generic [ref=e88]: Tasks
+          - link "Analytics" [ref=e89] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e91]
+            - generic [ref=e93]: Analytics
+          - link "Outputs" [ref=e94] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e96]
+            - generic [ref=e99]: Outputs
+        - generic [ref=e101]:
+          - generic [ref=e103]: MC
+          - generic [ref=e104]:
+            - paragraph [ref=e105]: Agency Mode
+            - paragraph [ref=e106]: Iris · Online
+      - main [ref=e108]:
+        - generic [ref=e110]:
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - heading "Command Center" [level=1] [ref=e114]
+              - paragraph [ref=e115]: 1 agents active·1 clients·0 tasks running
+            - generic [ref=e116]:
+              - generic [ref=e117]:
+                - generic "Iris — active" [ref=e118]:
+                  - img "Iris" [ref=e123]
+                - generic "Lyra — idle" [ref=e124]:
+                  - img "Lyra" [ref=e129]
+                - generic "Piper — idle" [ref=e130]:
+                  - img "Piper" [ref=e135]
+                - generic "Sage — idle" [ref=e136]:
+                  - img "Sage" [ref=e141]
+                - generic "Maya — idle" [ref=e142]:
+                  - img "Maya" [ref=e147]
+                - generic "Finn — idle" [ref=e148]:
+                  - img "Finn" [ref=e153]
+              - button "All agents →" [ref=e155] [cursor=pointer]
+          - generic [ref=e156]:
+            - generic [ref=e158]:
+              - generic [ref=e159]:
+                - paragraph [ref=e160]: Active Agents
+                - generic [ref=e161]:
+                  - generic [ref=e162]: "1"
+                  - generic [ref=e163]: /10
+              - img [ref=e165]
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - paragraph [ref=e171]: Running Tasks
+                - generic [ref=e172]:
+                  - generic [ref=e173]: "0"
+                  - generic [ref=e174]: /0
+              - img [ref=e176]
+            - generic [ref=e181]:
+              - generic [ref=e182]:
+                - paragraph [ref=e183]: Completed
+                - generic [ref=e185]: "0"
+              - img [ref=e187]
+            - generic [ref=e191]:
+              - generic [ref=e192]:
+                - paragraph [ref=e193]: On Task
+                - generic [ref=e195]: "10"
+              - img [ref=e197]
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - paragraph [ref=e203]: Open Missions
+                - generic [ref=e204]:
+                  - generic [ref=e205]: "0"
+                  - generic [ref=e206]: /0
+              - img [ref=e208]
+          - generic [ref=e210]:
+            - generic [ref=e211]:
+              - generic [ref=e212]:
+                - generic [ref=e213]:
+                  - generic [ref=e214]:
+                    - heading "Active Team" [level=3] [ref=e215]
+                    - paragraph [ref=e216]: 1 active · 9 idle
+                  - button "View all →" [ref=e217] [cursor=pointer]
+                - button "Iris Iris Agency" [ref=e219] [cursor=pointer]:
+                  - img "Iris" [ref=e225]
+                  - generic [ref=e231]:
+                    - paragraph [ref=e232]: Iris
+                    - paragraph [ref=e233]: Agency
+              - generic [ref=e234]:
+                - generic [ref=e236]:
+                  - heading "Live Activity" [level=3] [ref=e239]
+                  - generic [ref=e240]: 2 events
+                - generic [ref=e241]:
+                  - generic [ref=e242]:
+                    - img "Iris" [ref=e248]
+                    - generic [ref=e249]:
+                      - generic [ref=e250]:
+                        - generic [ref=e251]: Iris
+                        - generic [ref=e252]: started
+                        - generic [ref=e253]: — routed launch narrative mission
+                      - paragraph [ref=e254]: Assigned Sage and Maya to shape Victory Genomics messaging.
+                    - generic [ref=e257]: 2026-03-26 11:50
+                  - generic [ref=e258]:
+                    - img "Atlas" [ref=e264]
+                    - generic [ref=e265]:
+                      - generic [ref=e266]:
+                        - generic [ref=e267]: Atlas
+                        - generic [ref=e268]: thinking
+                        - generic [ref=e269]: — surfaced competitor intelligence
+                      - paragraph [ref=e270]: Found recurring weak spots in panel-testing competitors versus whole-genome positioning.
+                    - generic [ref=e271]:
+                      - img [ref=e272]
+                      - generic [ref=e274]: 2026-03-26 11:50
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - heading "Quick Actions" [level=3] [ref=e277]
+                - generic [ref=e278]:
+                  - button "Add Agent Bring a new agent online" [ref=e279] [cursor=pointer]:
+                    - img [ref=e281]
+                    - generic [ref=e284]:
+                      - generic [ref=e285]: Add Agent
+                      - text: Bring a new agent online
+                    - img [ref=e287]
+                  - button "Virtual Office See the team in action" [ref=e289] [cursor=pointer]:
+                    - img [ref=e291]
+                    - generic [ref=e295]:
+                      - generic [ref=e296]: Virtual Office
+                      - text: See the team in action
+                    - img [ref=e298]
+                  - button "New Mission Create a task from scratch" [ref=e300] [cursor=pointer]:
+                    - img [ref=e302]
+                    - generic [ref=e306]:
+                      - generic [ref=e307]: New Mission
+                      - text: Create a task from scratch
+                    - img [ref=e309]
+              - generic [ref=e311]:
+                - generic [ref=e312]:
+                  - heading "Mission Queue" [level=3] [ref=e313]
+                  - generic [ref=e314]: 0 active
+                - generic [ref=e316]:
+                  - generic [ref=e317]: 🚀
+                  - paragraph [ref=e318]: No missions tracked yet
+              - generic [ref=e319]:
+                - generic [ref=e320]:
+                  - heading "In Progress" [level=3] [ref=e321]
+                  - button "View all →" [ref=e322] [cursor=pointer]
+                - paragraph [ref=e325]: All quiet — no active tasks
+    - button "Open Iris chat" [ref=e326] [cursor=pointer]:
+      - img [ref=e327]

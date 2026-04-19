@@ -1,0 +1,5 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - paragraph [ref=e4]: Loading Mission Control…
+    - paragraph [ref=e5]: Checking your workspace access
+  - alert [ref=e6]

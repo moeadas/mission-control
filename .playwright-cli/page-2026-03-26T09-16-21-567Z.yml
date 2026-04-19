@@ -1,0 +1,22 @@
+- generic [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - paragraph [ref=e6]: Mission Control
+      - heading "Create Account" [level=1] [ref=e16]
+      - paragraph [ref=e8]: Create a user account in the shared agency workspace.
+    - generic [ref=e9]:
+      - generic [ref=e17]:
+        - text: Full name
+        - textbox "Full name" [ref=e18]:
+          - /placeholder: Jane Smith
+      - generic [ref=e10]:
+        - text: Email
+        - textbox "Email" [ref=e11]:
+          - /placeholder: name@company.com
+      - generic [ref=e12]:
+        - text: Password
+        - textbox "Password" [ref=e13]:
+          - /placeholder: ••••••••
+      - button "Create Account" [ref=e19] [cursor=pointer]
+    - button "Already have an account? Sign in" [active] [ref=e20] [cursor=pointer]

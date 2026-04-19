@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when reviewing or guiding visual composition of creative assets — to ensure layouts, photography, video frames, or graphic design use composition principles effectively to guide attention.",
+      "trigger": "Use this skillany time reviewing or guiding visual composition of creative assets — to ensure layouts, photography, video frames, or graphic design use composition principles effectively to guide attention.",
       "context": "You are a visual design specialist who applies composition principles — balance, contrast, hierarchy, flow — to create visual work that communicates clearly and guides viewer attention effectively.",
-      "instructions": "## Composition Review Workflow\n\n- [ ] 1. Identify focal point: What should the viewer see first?\n- [ ] 2. Check visual hierarchy: Does size, color, and position establish clear priority?\n- [ ] 3. Assess balance: Is the layout symmetrical, asymmetrical, or radial?\n- [ ] 4. Evaluate flow: Does the eye naturally move through the content?\n- [ ] 5. Check white space: Is breathing room used effectively?\n- [ ] 6. Verify alignment: Are elements properly aligned and grids respected?\n- [ ] 7. Test with audience: Does composition communicate the intended message?\n\n## Key Inputs\n- Design asset: {{design_asset}}\n- Primary message: {{primary_message}}\n- Focal point: {{focal_point}}\n- Layout constraints: {{layout_constraints}}",
+      "instructions": "## Composition\n\n1. **Focal Point Check** — Identify if there is a clear focal point\n   - ✓ Done when: Viewer knows where to look first\n\n2. **Hierarchy Assessment** — Check if visual priority is clear\n   - ✓ Done when: Size, color, position establish priority\n\n3. **Balance Evaluation** — Assess layout balance\n   - ✓ Done when: Layout feels stable and intentional\n\n4. **Flow Check** — Verify eye flow through the design\n   - ✓ Done when: Flow is natural and guided\n\n5. **White Space Audit** — Review use of white space\n   - ✓ Done when: White space is used effectively\n\n## Key Inputs\n- design_asset: Design asset being reviewed\n- primary_message: Primary message the design should communicate\n- focal_point: Intended focal point of the design\n- layout_constraints: Layout or format constraints",
       "output_template": "## Composition Review: {{design_asset}}\n\n### Review Details\n| Field | Value |\n|-------|-------|\n| Asset | {{design_asset}} |\n| Primary message | {{primary_message}} |\n| Focal point | {{focal_point}} |\n\n### Composition Analysis\n\n#### Focal Point\n**Is there a clear focal point?** ✅ / ❌\n**Does it guide attention effectively?** ✅ / ❌\n**Notes:**\n\n#### Visual Hierarchy\n| Element | Priority | Size | Position | Color |\n|---------|----------|------|----------|-------|\n| | | | | |\n\n#### Balance\n**Type:** Symmetrical / Asymmetrical / Radial\n**Assessment:**\n\n#### Visual Flow\n**Path the eye takes:**\n**Is flow natural?** ✅ / ❌\n\n#### White Space\n**Usage:** Appropriate / Too cramped / Too sparse\n**Notes:**\n\n#### Alignment\n**Grid adherence:** ✅ / ❌\n**Notes:**\n\n### Issues Found\n| Issue | Severity | Fix |\n|-------|----------|-----|\n| | | |\n\n### Recommendations\n| Change | Impact | Priority |\n|--------|--------|----------|\n| | | |\n\n### Overall Verdict\n**Status:** ✅ Approved / ⚠️ Revisions needed / ❌ Rejected"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Layout or format constraints"
     }
   ],
+  "inputs": [
+    {
+      "name": "design_asset",
+      "type": "string",
+      "required": true,
+      "description": "Design asset being reviewed"
+    },
+    {
+      "name": "primary_message",
+      "type": "string",
+      "required": true,
+      "description": "Primary message the design should communicate"
+    },
+    {
+      "name": "focal_point",
+      "type": "string",
+      "required": false,
+      "description": "Intended focal point of the design"
+    },
+    {
+      "name": "layout_constraints",
+      "type": "string",
+      "required": false,
+      "description": "Layout or format constraints"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -81,20 +108,31 @@
     }
   ],
   "checklist": [
-    "Focal point is clear and guides attention",
-    "Visual hierarchy is established through size, color, position",
-    "Balance is intentional and appropriate for the design",
-    "Eye flow is natural",
-    "White space is used effectively",
-    "Alignment and grid are respected"
+    "Viewer knows where to look first",
+    "Size, color, position establish priority",
+    "Layout feels stable and intentional",
+    "Flow is natural and guided",
+    "White space is used effectively"
   ],
-  "tools": ["document"],
-  "agents": ["nova"],
-  "pipelines": ["creative-review"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "finn",
+    "lyra"
+  ],
+  "pipelines": [
+    "creative-review"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["creative", "design", "composition", "visual"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "creative",
+      "design",
+      "composition",
+      "visual"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

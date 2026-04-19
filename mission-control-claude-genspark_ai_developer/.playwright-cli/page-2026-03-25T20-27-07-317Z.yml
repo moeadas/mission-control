@@ -1,0 +1,159 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - button "Refresh latest app version" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - button "Switch to light mode" [ref=e16] [cursor=pointer]:
+          - img [ref=e17]
+        - paragraph [ref=e24]: 21:27
+    - generic [ref=e25]:
+      - navigation "Main navigation" [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e30]: MC
+          - generic [ref=e31]:
+            - paragraph [ref=e32]: Mission Control
+            - paragraph [ref=e33]: Agency HQ
+        - generic [ref=e34]:
+          - link "Dashboard" [ref=e35] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e37]
+            - generic [ref=e42]: Dashboard
+          - link "Virtual Office" [ref=e43] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e46]
+            - generic [ref=e50]: Virtual Office
+          - link "Agents" [ref=e51] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e53]
+            - generic [ref=e56]: Agents
+          - link "Clients" [ref=e57] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e59]
+            - generic [ref=e64]: Clients
+          - link "Tasks" [ref=e65] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e67]
+            - generic [ref=e70]: Tasks
+          - link "Pipeline" [ref=e71] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e73]
+            - generic [ref=e77]: Pipeline
+          - link "Skills" [ref=e78] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e80]
+            - generic [ref=e83]: Skills
+          - link "Runner" [ref=e84] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e86]
+            - generic [ref=e88]: Runner
+          - link "Analytics" [ref=e89] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e91]
+            - generic [ref=e93]: Analytics
+          - link "Outputs" [ref=e94] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e96]
+            - generic [ref=e99]: Outputs
+          - link "Settings" [ref=e100] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e102]
+            - generic [ref=e105]: Settings
+        - generic [ref=e107]:
+          - generic [ref=e109]: MC
+          - generic [ref=e110]:
+            - paragraph [ref=e111]: Agency Mode
+            - paragraph [ref=e112]: Iris · Online
+      - main [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - heading "Virtual Office" [level=1] [ref=e118]:
+                - img [ref=e120]
+                - text: Virtual Office
+              - paragraph [ref=e124]: Minimal shared workspace view with live desk occupancy and roaming idle agents.
+            - generic [ref=e125]:
+              - generic [ref=e126]: 1 active
+              - generic [ref=e128]: 9 idle
+              - generic [ref=e130]:
+                - img [ref=e131]
+                - text: 10 total
+          - generic [ref=e138]:
+            - generic [ref=e168]:
+              - img [ref=e169]
+              - generic [ref=e173]: Virtual Office
+            - generic [ref=e174]:
+              - generic [ref=e177]: 1 seated
+              - generic [ref=e179]:
+                - img [ref=e180]
+                - generic [ref=e183]: 9 roaming
+              - generic [ref=e185]:
+                - img [ref=e186]
+                - generic [ref=e191]: 10 total
+            - generic [ref=e192]:
+              - button "Mission Control 2 Iris" [ref=e193] [cursor=pointer]:
+                - generic [ref=e194]:
+                  - generic [ref=e195]:
+                    - paragraph [ref=e196]: Mission Control
+                    - generic [ref=e197]: "2"
+                  - img "Iris" [ref=e212]
+              - button "Client Services 2" [ref=e225] [cursor=pointer]:
+                - generic [ref=e227]:
+                  - paragraph [ref=e228]: Client Services
+                  - generic [ref=e229]: "2"
+              - button "Creative Studio 3" [ref=e251] [cursor=pointer]:
+                - generic [ref=e253]:
+                  - paragraph [ref=e254]: Creative Studio
+                  - generic [ref=e255]: "3"
+              - button "Media Planning 2" [ref=e279] [cursor=pointer]:
+                - generic [ref=e281]:
+                  - paragraph [ref=e282]: Media Planning
+                  - generic [ref=e283]: "2"
+              - button "Research Lab 1" [ref=e301] [cursor=pointer]:
+                - generic [ref=e303]:
+                  - paragraph [ref=e304]: Research Lab
+                  - generic [ref=e305]: "1"
+              - button "Lyra" [ref=e318] [cursor=pointer]:
+                - img "Lyra" [ref=e325]
+              - button "Piper" [ref=e326] [cursor=pointer]:
+                - img "Piper" [ref=e333]
+              - button "Sage" [ref=e334] [cursor=pointer]:
+                - img "Sage" [ref=e341]
+              - button "Maya" [ref=e342] [cursor=pointer]:
+                - img "Maya" [ref=e349]
+              - button "Finn" [ref=e350] [cursor=pointer]:
+                - img "Finn" [ref=e357]
+              - button "Echo" [ref=e358] [cursor=pointer]:
+                - img "Echo" [ref=e365]
+              - button "Nova" [ref=e366] [cursor=pointer]:
+                - img "Nova" [ref=e373]
+              - button "Dex" [ref=e374] [cursor=pointer]:
+                - img "Dex" [ref=e381]
+              - button "Atlas" [ref=e382] [cursor=pointer]:
+                - img "Atlas" [ref=e389]
+            - complementary [ref=e390]:
+              - generic [ref=e391]:
+                - paragraph [ref=e392]: Creative Studio
+                - generic [ref=e393]: 3 agents
+              - generic [ref=e394]:
+                - paragraph [ref=e395]: Room Roster
+                - generic [ref=e396]:
+                  - button "Lyra Lyra Visual Production Lead" [ref=e397] [cursor=pointer]:
+                    - img "Lyra" [ref=e402]
+                    - generic [ref=e403]:
+                      - paragraph [ref=e404]: Lyra
+                      - paragraph [ref=e405]: Visual Production Lead
+                  - button "Finn Finn Creative Director" [ref=e406] [cursor=pointer]:
+                    - img "Finn" [ref=e411]
+                    - generic [ref=e412]:
+                      - paragraph [ref=e413]: Finn
+                      - paragraph [ref=e414]: Creative Director
+                  - button "Echo Echo Copy & Content Lead" [ref=e415] [cursor=pointer]:
+                    - img "Echo" [ref=e420]
+                    - generic [ref=e421]:
+                      - paragraph [ref=e422]: Echo
+                      - paragraph [ref=e423]: Copy & Content Lead
+    - button "Open Iris chat" [ref=e424] [cursor=pointer]:
+      - img [ref=e425]
+  - alert [ref=e427]

@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when designing or redesigning a workflow — defining the steps, roles, inputs, outputs, and handoffs for a repeatable agency process.",
+      "trigger": "Use this skillany time designing or redesigning a workflow — defining the steps, roles, inputs, outputs, and handoffs for a repeatable agency process.",
       "context": "You are a process designer who creates clear, efficient workflows that reduce friction, eliminate waste, and make repeatable work predictable.",
-      "instructions": "## Workflow Design Workflow\n\nDesign an effective workflow:\n\n- [ ] 1. Current state: Document how the process works today\n- [ ] 2. Pain points: Identify inefficiencies and failure modes\n- [ ] 3. Goal definition: Define what the workflow should achieve\n- [ ] 4. Step mapping: Design the ideal workflow steps\n- [ ] 5. Role assignment: Assign roles and responsibilities\n- [ ] 6. Handoff design: Define how work passes between people\n- [ ] 7. Quality gates: Define checkpoints and sign-offs\n- [ ] 8. Exception handling: Design how to handle deviations\n- [ ] 9. Documentation: Write the workflow document\n- [ ] 10. Testing: Validate the workflow with real work\n\n## Key Inputs\n- Process: {{process_name}}\n- Current state: {{current_state}}\n- Goals: {{workflow_goals}}",
+      "instructions": "## Workflow Design\n\n1. **Current State Documentation** — Document how process works today\n   - ✓ Done when: Current state is understood\n\n2. **Pain Point Analysis** — Identify inefficiencies\n   - ✓ Done when: Root causes understood\n\n3. **Workflow Design** — Design the ideal workflow\n   - ✓ Done when: Workflow is efficient and realistic\n\n4. **Role Assignment** — Assign roles and responsibilities\n   - ✓ Done when: Clear ownership\n\n5. **Documentation** — Write the workflow document\n   - ✓ Done when: Document is clear and usable\n\n6. **Testing** — Test workflow with real work\n   - ✓ Done when: Workflow works in practice\n\n7. **Training & Rollout** — Train team and roll out\n   - ✓ Done when: Team can execute the workflow\n\n## Key Inputs\n- process_name: Name of the workflow/process\n- current_state: How the process currently works\n- workflow_goals: What the redesigned workflow should achieve",
       "output_template": "## Workflow Design: {{process_name}}\n\n### Process Overview\n| Field | Details |\n|-------|---------|\n| Purpose | |\n| Scope | |\n| Owner | |\n| Version | |\n\n### Goal\n1. \n2. \n3. \n\n### Pain Points (Current State)\n| Issue | Impact | Frequency |\n|-------|--------|----------|\n| | | |\n\n### Workflow Diagram\n```\n[Start] → [Step 1] → [Step 2] → [Decision] → [Step 3a] → [Step 3b] → [End]\n                    ↓\n              [Step 4]\n```\n\n### Step Details\n\n#### Step 1: [Name]\n| Field | Details |\n|-------|---------|\n| Owner | |\n| Inputs | |\n| Outputs | |\n| Tools used | |\n| Time estimate | |\n| SLA | |\n\n**Instructions:**\n1. \n2. \n\n**Quality gate:**\n- [ ] \n\n---\n\n#### Step 2: [Name]\n[Same structure]\n\n### Roles & Responsibilities\n| Role | Responsibilities |\n|------|-----------------|\n| | |\n\n### Handoff Protocol\n| From | To | What | When | How |\n|------|---|-----|------|-----|\n| | | | | |\n\n### Quality Gates\n| Gate | Checkpoint | Owner | Criteria |\n|------|-----------|-------|---------|\n| | | | |\n\n### Exception Handling\n| Exception | Detection | Response |\n|-----------|---------|---------|\n| | | |\n\n### Metrics\n| Metric | Target | How measured |\n|--------|--------|-------------|\n| | | |\n\n### Rollout Plan\n| Phase | Actions | Date |\n|-------|---------|------|\n| | | |\n\n### Training Needs\n| Role | Training required |\n|------|-----------------|\n| | |"
     }
   },
@@ -34,6 +34,27 @@
       "description": "What the redesigned workflow should achieve"
     }
   ],
+  "inputs": [
+    {
+      "name": "process_name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the workflow/process"
+    },
+    {
+      "name": "current_state",
+      "type": "string",
+      "required": true,
+      "description": "How the process currently works"
+    },
+    {
+      "name": "workflow_goals",
+      "type": "string",
+      "required": false,
+      "description": "What the redesigned workflow should achieve"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,21 +108,20 @@
     }
   ],
   "checklist": [
-    "Current state is documented",
-    "Pain points are identified and addressed",
-    "Workflow is efficient and removes waste",
-    "Roles and responsibilities are clear",
-    "Handoffs are explicit",
-    "Quality gates prevent errors",
-    "Exceptions are handled gracefully"
+    "Current state is understood",
+    "Root causes understood",
+    "Workflow is efficient and realistic",
+    "Clear ownership",
+    "Document is clear and usable",
+    "Workflow works in practice",
+    "Team can execute the workflow"
   ],
   "tools": [
     "document",
     "spreadsheet"
   ],
   "agents": [
-    "atlas",
-    "nova"
+    "iris"
   ],
   "pipelines": [
     "operations"
@@ -115,6 +135,6 @@
       "process-design",
       "efficiency"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

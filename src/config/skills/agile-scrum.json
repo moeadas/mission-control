@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when setting up agile workflows, running sprints, facilitating ceremonies, or implementing Scrum for agency or project management.",
+      "trigger": "Use this skillany time setting up agile workflows, running sprints, facilitating ceremonies, or implementing scrum for agency or project management.",
       "context": "You are an agile coach and Scrum master with deep expertise in iterative delivery, sprint planning, and team dynamics.",
-      "instructions": "## Agile/Scrum Implementation Workflow\n\nSet up or run an agile process:\n\n- [ ] 1. Team setup: Define team structure, roles ({{team_roles}}), and capacity\n- [ ] 2. Backlog creation: Build initial backlog from {{project_requirements}}\n- [ ] 3. Sprint planning: Plan sprint goals and commitments ({{sprint_length}})\n- [ ] 4. Daily operations: Run standups and manage blockers\n- [ ] 5. Review and retrospective: Demonstrate outputs and improve processes\n- [ ] 6. Velocity tracking: Measure and forecast using velocity data\n\n## Inputs\n- Team size: {{team_size}}\n- Sprint length: {{sprint_length}}\n- Working days: {{working_days}}",
+      "instructions": "## Agile / Scrum Framework\n\n1. **Team Setup** — Define roles, responsibilities, and team agreements\n   - ✓ Done when: Each member understands their role\n\n2. **Backlog Creation** — Build and prioritize initial backlog\n   - ✓ Done when: Items are estimated and ordered\n\n3. **Sprint Planning** — Plan sprint goal and commit to items\n   - ✓ Done when: Commitment matches team capacity\n\n4. **Daily Operations** — Run standups and unblock team\n   - ✓ Done when: Blockers resolved within 24h\n\n5. **Review and Retro** — Demo work and identify improvements\n   - ✓ Done when: Action items from retro are tracked\n\n## Key Inputs\n- team_name: Name of the team or project\n- team_size: Number of team members\n- team_roles: Team roles and assignments\n- sprint_length: Sprint duration in weeks\n- velocity: Historical velocity in story points\n- working_days: Working days per week",
       "output_template": "## Agile/Scrum Framework: {{team_name}}\n\n### Team Structure\n| Role | Person | Responsibilities |\n|------|--------|------------------|\n| Scrum Master | | | \n| Product Owner | | |\n| Developers | | |\n\n### Sprint Cadence\n| Ceremony | Frequency | Duration | Participants |\n|----------|-----------|---------|---------------|\n| Sprint Planning | | | |\n| Daily Standup | | | |\n| Sprint Review | | | |\n| Retrospective | | | |\n\n### Backlog Structure\n| Priority | Item | Size (SP) | Status |\n|----------|------|-----------|--------|\n| P0 | | | |\n| P1 | | | |\n| P2 | | | |\n\n### Velocity and Forecasting\n| Sprint | Committed | Completed | Velocity |\n|--------|-----------|-----------|----------|\n| n-2 | | | |\n| n-1 | | | |\n| n (current) | | | |\n\n**Forecast:** Based on velocity of {{velocity}}, {{sprint_goal}} is achievable.\n\n### Definition of Done\n- [ ] Code reviewed\n- [ ] Tests written and passing\n- [ ] Documentation updated\n- [ ] Product Owner acceptance"
     }
   },
@@ -52,6 +52,45 @@
       "description": "Working days per week"
     }
   ],
+  "inputs": [
+    {
+      "name": "team_name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the team or project"
+    },
+    {
+      "name": "team_size",
+      "type": "string",
+      "required": true,
+      "description": "Number of team members"
+    },
+    {
+      "name": "team_roles",
+      "type": "string",
+      "required": true,
+      "description": "Team roles and assignments"
+    },
+    {
+      "name": "sprint_length",
+      "type": "string",
+      "required": true,
+      "description": "Sprint duration in weeks"
+    },
+    {
+      "name": "velocity",
+      "type": "string",
+      "required": false,
+      "description": "Historical velocity in story points"
+    },
+    {
+      "name": "working_days",
+      "type": "string",
+      "required": false,
+      "description": "Working days per week"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -93,12 +132,11 @@
     }
   ],
   "checklist": [
-    "Team roles and responsibilities are clear",
-    "Backlog items are estimated and prioritized",
-    "Sprint goals are specific and achievable",
-    "Daily standups are time-boxed (15 min)",
-    "Velocity is tracked over 3+ sprints",
-    "Retrospective action items are followed up"
+    "Each member understands their role",
+    "Items are estimated and ordered",
+    "Commitment matches team capacity",
+    "Blockers resolved within 24h",
+    "Action items from retro are tracked"
   ],
   "tools": [
     "spreadsheet",
@@ -117,6 +155,6 @@
       "project-management",
       "delivery"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

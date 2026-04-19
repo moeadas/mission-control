@@ -1,0 +1,126 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "kpi-definition",
+  "name": "KPI Definition",
+  "description": "Defines and structures Key Performance Indicators for media campaigns, establishing measurement frameworks with targets, benchmarks, and reporting cadences for every level of the media plan.",
+  "category": "media",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when defining KPIs for a media campaign, setting performance targets, establishing measurement frameworks, or creating reporting dashboards.",
+      "context": "You are a media measurement specialist who defines KPIs that are meaningful, measurable, and aligned with business objectives. You set realistic targets based on industry benchmarks and historical performance.",
+      "instructions": "## KPI Definition Workflow\n\nDefine campaign KPIs:\n\n- [ ] 1. **Business alignment**: Map media KPIs to business objectives for {{client_name}} (revenue, leads, awareness lift)\n- [ ] 2. **KPI hierarchy**: Structure KPIs at campaign, channel, and ad set levels\n- [ ] 3. **Primary vs. secondary**: Distinguish primary KPIs (optimization targets) from secondary (monitoring metrics)\n- [ ] 4. **Target setting**: Set targets based on industry benchmarks and historical data for {{industry}}\n- [ ] 5. **Attribution model**: Select attribution model (last-click, linear, data-driven, marketing mix model)\n- [ ] 6. **Reporting framework**: Define reporting cadence, dashboards, and escalation triggers\n- [ ] 7. **Optimization triggers**: Set thresholds that trigger budget reallocation or creative changes\n\n## Key Inputs\n- Client: {{client_name}}\n- Industry: {{industry}}\n- Campaign objective: {{campaign_objective}}\n- Channels: {{channels}}\n- Budget: {{budget}}",
+      "output_template": "## KPI Framework: {{client_name}}\n\n### Business-to-Media KPI Map\n| Business Objective | Media KPI | Target | Attribution |\n|-------------------|-----------|--------|-------------|\n| Revenue growth | ROAS | | |\n| Lead generation | Cost per Lead | | |\n| Brand awareness | Reach / Recall | | |\n\n### KPI Hierarchy\n| Level | Primary KPI | Secondary KPIs | Target |\n|-------|------------|----------------|--------|\n| Campaign | | | |\n| Channel | | | |\n| Ad Set | | | |\n| Creative | | | |\n\n### Channel-Specific KPIs\n| Channel | KPI | Benchmark | Target | Measurement Tool |\n|---------|-----|-----------|--------|------------------|\n| | | Industry avg | | |\n\n### Reporting Framework\n| Report | Frequency | Audience | KPIs Covered |\n|--------|-----------|----------|-------------|\n| Performance dashboard | Daily | Media team | All |\n| Client report | Weekly | Client | Primary |\n| Executive summary | Monthly | Leadership | Business |\n\n### Optimization Triggers\n| KPI | Green | Yellow | Red | Action |\n|-----|-------|--------|-----|--------|\n| CPA | < target | target-120% | > 120% | Reallocation |\n| CTR | > benchmark | benchmark-50% | < 50% | Creative refresh |"
+    }
+  },
+  "variables": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "industry",
+      "type": "string",
+      "required": true,
+      "description": "Industry for benchmarks"
+    },
+    {
+      "name": "campaign_objective",
+      "type": "string",
+      "required": true,
+      "description": "Campaign objective"
+    },
+    {
+      "name": "channels",
+      "type": "string",
+      "required": true,
+      "description": "Active media channels"
+    },
+    {
+      "name": "budget",
+      "type": "string",
+      "required": false,
+      "description": "Campaign budget for efficiency targets"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Business Alignment",
+        "action": "Map media KPIs to business goals",
+        "verify": "Every KPI connects to a business outcome"
+      },
+      {
+        "step": 2,
+        "name": "KPI Hierarchy",
+        "action": "Structure KPIs by level",
+        "verify": "Hierarchy avoids conflicting metrics"
+      },
+      {
+        "step": 3,
+        "name": "Target Setting",
+        "action": "Set targets with benchmarks",
+        "verify": "Targets are ambitious but realistic"
+      },
+      {
+        "step": 4,
+        "name": "Attribution Model",
+        "action": "Select and document attribution approach",
+        "verify": "Model matches campaign complexity"
+      },
+      {
+        "step": 5,
+        "name": "Reporting Framework",
+        "action": "Define reporting cadence and dashboards",
+        "verify": "Reports serve different audience needs"
+      },
+      {
+        "step": 6,
+        "name": "Optimization Triggers",
+        "action": "Set thresholds for action",
+        "verify": "Triggers are clear and actionable"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Define KPIs for an e-commerce brand spending AED 200K/month across Meta, Google, and TikTok.",
+      "output": "Primary KPI: ROAS (target 4x). Secondary: CPA (<AED 50), CTR (>1.5%), ACOS (<25%). Channel-specific: Meta CPA <AED 45, Google ROAS 5x, TikTok CPV <AED 0.15. Weekly optimization review, monthly client report."
+    }
+  ],
+  "checklist": [
+    "KPIs align with business objectives",
+    "Primary and secondary KPIs distinguished",
+    "Targets set with industry benchmarks",
+    "Attribution model documented",
+    "Reporting cadence and audience defined",
+    "Optimization triggers are clear",
+    "KPI hierarchy avoids conflicting metrics"
+  ],
+  "tools": [
+    "analytics",
+    "spreadsheet",
+    "document"
+  ],
+  "agents": [
+    "nova",
+    "dex"
+  ],
+  "pipelines": [
+    "media-plan"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "agency",
+    "tags": [
+      "media",
+      "planning",
+      "kpi-definition"
+    ],
+    "lastUpdated": "2026-03-27"
+  }
+}

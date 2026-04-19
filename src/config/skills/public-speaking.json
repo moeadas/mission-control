@@ -2,31 +2,121 @@
   "$schema": "https://docs.openclaw.ai/skills/schema.json",
   "id": "public-speaking",
   "name": "Public Speaking",
-  "description": "Delivers confident, engaging presentations and speeches to audiences for pitches, industry events, internal meetings, and client presentations.",
+  "description": "Prepares speakers to deliver clear, persuasive, and audience-aware presentations with stronger message structure, confidence, and delivery control.",
   "category": "content",
   "difficulty": "intermediate",
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when preparing to present a pitch, deliver a keynote, run a client presentation, or speak at an industry event.",
-      "context": "You are a public speaking specialist who helps presenters connect with their audience, structure compelling narratives, and deliver with confidence. You focus on preparation, technique, and managing nerves.",
-      "instructions": "## Public Speaking Workflow\n\n- [ ] 1. Define the audience, occasion, and key message\n- [ ] 2. Structure the speech: hook → content → call to action\n- [ ] 3. Prepare visual aids if needed\n- [ ] 4. Practice: rehearse out loud multiple times\n- [ ] 5. Manage nerves: breathing, mindset, preparation\n- [ ] 6. Deliver with presence and confidence\n- [ ] 7. Handle Q&A with composure\n\n## Key Inputs\n- Occasion: {{occasion}} (pitch, keynote, internal presentation, panel)\n- Audience: {{audience}}\n- Key Message: {{key_message}}\n- Duration: {{duration}}\n- Materials: {{materials}}",
-      "output_template": "## Presentation Outline\n\n### Key Message\n[The one thing you want the audience to remember]\n\n### Speech Structure\n| Section | Time | Content |\n|---------|------|---------|\n| Opening/Hook | | |\n| Main Point 1 | | |\n| Main Point 2 | | |\n| Main Point 3 | | |\n| Call to Action | | |\n\n### Opening Lines\n[First 30 seconds — the hook]\n\n### Handling Difficult Questions\n| Question Type | Response Approach |\n|--------------|-----------------|\n| | |\n\n### Delivery Notes\n- [ ] Body language: \n- [ ] Pacing: \n- [ ] Nerves management:"
+      "trigger": "Use this skillany time preparing for presentations, talks, keynotes, pitches, internal presentations, or public speaking moments that require confidence and clarity.",
+      "context": "You are a speaking coach and message strategist. You help shape both the narrative and the delivery so the speaker sounds credible, clear, and purposeful.",
+      "instructions": "## Public Speaking\n\n1. **Define audience and takeaway** — Define audience and takeaway\n   - ✓ Done when: Define audience and takeaway is completed to a high standard\n\n2. **Build talk structure** — Build talk structure\n   - ✓ Done when: Build talk structure is completed to a high standard\n\n3. **Identify emphasis moments** — Identify emphasis moments\n   - ✓ Done when: Identify emphasis moments is completed to a high standard\n\n4. **Prepare transitions and Q&A** — Prepare transitions and Q&A\n   - ✓ Done when: Prepare transitions and Q&A is completed to a high standard\n\n5. **Tune delivery** — Tune delivery\n   - ✓ Done when: Tune delivery is completed to a high standard\n\n6. **Rehearse performance** — Rehearse performance\n   - ✓ Done when: Rehearse performance is completed to a high standard\n\n## Key Inputs\n- occasion: Type of speaking engagement: client pitch, keynote, internal, panel\n- audience: Who will be in the audience and their level of knowledge\n- key_message: The main message or takeaway\n- duration: Time available for the presentation\n- materials: Available slides, data, or other materials",
+      "output_template": "## Public Speaking Plan\n\n### 1. Talk Objective\n| Element | Definition |\n|---|---|\n| Occasion | |\n| Audience | |\n| Main takeaway | |\n| Desired audience action | |\n\n### 2. Talk Structure\n| Section | Purpose | Key Message |\n|---|---|---|\n| Opening | | |\n| Core point 1 | | |\n| Core point 2 | | |\n| Close | | |\n\n### 3. Delivery Notes\n- Strongest opening line:\n- Story / example to use:\n- Where to pause:\n- What to emphasize:\n\n### 4. Q&A / Confidence Prep\n- Likely questions:\n- Confidence anchors:\n- Rehearsal priorities:"
     }
   },
   "variables": [
-    { "name": "occasion", "type": "string", "required": true, "description": "Type of speaking engagement: client pitch, keynote, internal, panel" },
-    { "name": "audience", "type": "string", "required": true, "description": "Who will be in the audience and their level of knowledge" },
-    { "name": "key_message", "type": "string", "required": true, "description": "The main message or takeaway" },
-    { "name": "duration", "type": "string", "required": false, "description": "Time available for the presentation" },
-    { "name": "materials", "type": "string", "required": false, "description": "Available slides, data, or other materials" }
+    {
+      "name": "occasion",
+      "type": "string",
+      "required": true,
+      "description": "Type of speaking engagement: client pitch, keynote, internal, panel"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Who will be in the audience and their level of knowledge"
+    },
+    {
+      "name": "key_message",
+      "type": "string",
+      "required": true,
+      "description": "The main message or takeaway"
+    },
+    {
+      "name": "duration",
+      "type": "string",
+      "required": false,
+      "description": "Time available for the presentation"
+    },
+    {
+      "name": "materials",
+      "type": "string",
+      "required": false,
+      "description": "Available slides, data, or other materials"
+    }
   ],
+  "inputs": [
+    {
+      "name": "occasion",
+      "type": "string",
+      "required": true,
+      "description": "Type of speaking engagement: client pitch, keynote, internal, panel"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Who will be in the audience and their level of knowledge"
+    },
+    {
+      "name": "key_message",
+      "type": "string",
+      "required": true,
+      "description": "The main message or takeaway"
+    },
+    {
+      "name": "duration",
+      "type": "string",
+      "required": false,
+      "description": "Time available for the presentation"
+    },
+    {
+      "name": "materials",
+      "type": "string",
+      "required": false,
+      "description": "Available slides, data, or other materials"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Know your message", "action": "Define the one key takeaway", "verify": "Message is clear and memorable" },
-      { "step": 2, "name": "Structure", "action": "Build the narrative arc", "verify": "Structure is logical and engaging" },
-      { "step": 3, "name": "Practice", "action": "Rehearse out loud multiple times", "verify": "Timing is right" },
-      { "step": 4, "name": "Prepare for Q&A", "action": "Anticipate questions and prepare responses", "verify": "Ready for difficult questions" }
+      {
+        "step": 1,
+        "name": "Define audience and takeaway",
+        "action": "Define audience and takeaway",
+        "verify": "Define audience and takeaway is completed to a high standard"
+      },
+      {
+        "step": 2,
+        "name": "Build talk structure",
+        "action": "Build talk structure",
+        "verify": "Build talk structure is completed to a high standard"
+      },
+      {
+        "step": 3,
+        "name": "Identify emphasis moments",
+        "action": "Identify emphasis moments",
+        "verify": "Identify emphasis moments is completed to a high standard"
+      },
+      {
+        "step": 4,
+        "name": "Prepare transitions and Q&A",
+        "action": "Prepare transitions and Q&A",
+        "verify": "Prepare transitions and Q&A is completed to a high standard"
+      },
+      {
+        "step": 5,
+        "name": "Tune delivery",
+        "action": "Tune delivery",
+        "verify": "Tune delivery is completed to a high standard"
+      },
+      {
+        "step": 6,
+        "name": "Rehearse performance",
+        "action": "Rehearse performance",
+        "verify": "Rehearse performance is completed to a high standard"
+      }
     ]
   },
   "examples": [
@@ -36,20 +126,31 @@
     }
   ],
   "checklist": [
-    "Opening hook is compelling",
-    "Speech has a clear narrative arc",
-    "One key message is repeated and reinforced",
-    "Timing is practiced and appropriate",
-    "Difficult questions are anticipated",
-    "Body language and pacing are intentional"
+    "Define audience and takeaway is completed to a high standard",
+    "Build talk structure is completed to a high standard",
+    "Identify emphasis moments is completed to a high standard",
+    "Prepare transitions and Q&A is completed to a high standard",
+    "Tune delivery is completed to a high standard",
+    "Rehearse performance is completed to a high standard"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["content-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "sage"
+  ],
+  "pipelines": [
+    "content-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["public-speaking", "presentation", "pitch", "keynote"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "public-speaking",
+      "presentation",
+      "pitch",
+      "keynote"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

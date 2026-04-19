@@ -1,0 +1,139 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - img [ref=e7]
+      - generic [ref=e9]:
+        - button "Refresh latest app version" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - button "Switch to dark mode" [ref=e122] [cursor=pointer]:
+          - img [ref=e123]
+        - paragraph [ref=e24]: 23:01
+    - generic [ref=e25]:
+      - navigation "Main navigation" [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e30]: MC
+          - generic [ref=e31]:
+            - paragraph [ref=e32]: Mission Control
+            - paragraph [ref=e33]: Agency HQ
+        - generic [ref=e34]:
+          - link "Dashboard" [ref=e35] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e37]
+            - generic [ref=e42]: Dashboard
+          - link "Virtual Office" [ref=e43] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e45]
+            - generic [ref=e49]: Virtual Office
+          - link "Agents" [ref=e50] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e52]
+            - generic [ref=e55]: Agents
+          - link "Clients" [ref=e56] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e58]
+            - generic [ref=e63]: Clients
+          - link "Tasks" [ref=e64] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e67]
+            - generic [ref=e70]: Tasks
+          - link "Pipeline" [ref=e71] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e73]
+            - generic [ref=e77]: Pipeline
+          - link "Skills" [ref=e78] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e80]
+            - generic [ref=e83]: Skills
+          - link "Runner" [ref=e84] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e86]
+            - generic [ref=e88]: Runner
+          - link "Analytics" [ref=e89] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e91]
+            - generic [ref=e93]: Analytics
+          - link "Outputs" [ref=e94] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e96]
+            - generic [ref=e99]: Outputs
+          - link "Settings" [ref=e100] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e102]
+            - generic [ref=e105]: Settings
+        - generic [ref=e107]:
+          - generic [ref=e109]: MC
+          - generic [ref=e110]:
+            - paragraph [ref=e111]: Agency Mode
+            - paragraph [ref=e112]: Iris · Online
+      - main [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - link "Back to tasks" [ref=e127] [cursor=pointer]:
+                - /url: /tasks
+                - img [ref=e128]
+                - text: Back to tasks
+              - generic [ref=e130]:
+                - 'heading "Instagram Carousel: Equine Karyotyping" [level=1] [ref=e131]'
+                - generic [ref=e132]: completed
+              - paragraph [ref=e133]: Victory Genomics · Campaign Copy
+            - generic [ref=e134]:
+              - button "Pause" [ref=e135] [cursor=pointer]
+              - button "Cancel" [ref=e136] [cursor=pointer]
+              - button "Complete" [ref=e137] [cursor=pointer]
+              - button "Delete" [ref=e138] [cursor=pointer]:
+                - img [ref=e139]
+                - text: Delete
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - generic [ref=e145]:
+                - generic [ref=e146]:
+                  - img [ref=e147]
+                  - heading "Task Request" [level=2] [ref=e151]
+                - paragraph [ref=e152]: Instagram carousel draft for Victory Genomics about Equine Karyotyping.
+              - generic [ref=e153]:
+                - generic [ref=e154]:
+                  - generic [ref=e155]:
+                    - 'heading "Instagram Carousel: Equine Karyotyping" [level=2] [ref=e156]'
+                    - paragraph [ref=e157]: Client Brief · HTML
+                  - generic [ref=e158]: ready
+                - generic [ref=e159]:
+                  - button "Generate DOCX" [ref=e160] [cursor=pointer]:
+                    - img [ref=e161]
+                    - text: Generate DOCX
+                  - button "Generate PDF" [ref=e164] [cursor=pointer]:
+                    - img [ref=e165]
+                    - text: Generate PDF
+                  - button "Mark Ready" [ref=e168] [cursor=pointer]
+                  - button "Mark Delivered" [ref=e169] [cursor=pointer]
+                - paragraph [ref=e171]: No output saved yet for this task.
+                - generic [ref=e172]:
+                  - paragraph [ref=e173]: Task Brief
+                  - paragraph [ref=e174]: Create a short Instagram carousel for Victory Genomics about Equine Karyotyping.
+            - generic [ref=e175]:
+              - generic [ref=e176]:
+                - heading "Task Summary" [level=3] [ref=e177]
+                - generic [ref=e178]:
+                  - paragraph [ref=e179]: "Client: Victory Genomics"
+                  - paragraph [ref=e180]: "Type: Campaign Copy"
+                  - paragraph [ref=e181]: "Lead: Echo"
+                  - paragraph [ref=e182]: "Progress: 100%"
+                  - paragraph [ref=e183]: "Created: 3/25/2026, 10:33:36 PM"
+                  - paragraph [ref=e184]: "Updated: 3/25/2026, 10:33:36 PM"
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - img [ref=e187]
+                  - heading "Assigned Team" [level=3] [ref=e190]
+                - generic [ref=e191]:
+                  - generic [ref=e192]:
+                    - paragraph [ref=e193]: Lyra
+                    - paragraph [ref=e194]: Visual Production Lead
+                  - generic [ref=e195]:
+                    - paragraph [ref=e196]: Maya
+                    - paragraph [ref=e197]: Brand & Campaign Strategist
+                  - generic [ref=e198]:
+                    - paragraph [ref=e199]: Echo
+                    - paragraph [ref=e200]: Copy & Content Lead
+    - button "Open Iris chat" [ref=e118] [cursor=pointer]:
+      - img [ref=e119]
+  - alert [ref=e121]

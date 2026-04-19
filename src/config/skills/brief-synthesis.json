@@ -8,9 +8,9 @@
   "freedom": "medium",
   "prompts": {
     "en": {
-      "trigger": "Use when a client brief is vague, incomplete, or scattered across multiple sources and needs to be synthesized into a clear, actionable brief for the team.",
+      "trigger": "Use this skillany time a client brief is vague, incomplete, or scattered across multiple sources and needs to be synthesized into a clear, actionable brief for the team.",
       "context": "You are a strategy specialist who takes fragmented information and distills it into a clear, complete brief that aligns the team and sets up successful execution.",
-      "instructions": "## Brief Synthesis Workflow\n\nTransform fragmented inputs into a complete brief:\n\n- [ ] 1. Gather inputs: Collect all source materials (emails, call notes, brief docs)\n- [ ] 2. Identify gaps: Note what information is missing or unclear\n- [ ] 3. Stakeholder alignment: Clarify objectives with the client if needed\n- [ ] 4. Synthesize: Combine all inputs into a structured brief format\n- [ ] 5. Validate: Confirm brief is complete and accurate with client\n- [ ] 6. Distribute: Share final brief with execution team\n\n## Key Inputs\n- Raw inputs: {{raw_inputs}}\n- Client: {{client_name}}\n- Deliverable type: {{deliverable_type}}\n- Timeline: {{timeline}}",
+      "instructions": "## Brief Synthesis\n\n1. **Input Collection** — Gather all source materials and notes\n   - ✓ Done when: All relevant materials in hand\n\n2. **Gap Analysis** — Identify missing or ambiguous information\n   - ✓ Done when: Gaps are documented\n\n3. **Clarification** — Resolve gaps through client follow-up\n   - ✓ Done when: Brief is complete and unambiguous\n\n4. **Synthesis** — Write the structured brief document\n   - ✓ Done when: Brief is clear, complete, and actionable\n\n5. **Validation** — Confirm brief accuracy with client\n   - ✓ Done when: Client approves the brief\n\n6. **Distribution** — Share final brief with execution team\n   - ✓ Done when: Team has everything needed to start\n\n## Key Inputs\n- client_name: Client or brand name\n- deliverable_type: Type of deliverable (campaign, creative, content, etc.)\n- raw_inputs: Summary of all raw inputs to synthesize\n- timeline: Project timeline and key dates",
       "output_template": "## Brief Synthesis: {{client_name}} - {{deliverable_type}}\n\n### Brief Status\n| Field | Value |\n|-------|-------|\n| Status | Synthesized |\n| Client | {{client_name}} |\n| Deliverable | {{deliverable_type}} |\n| Timeline | {{timeline}} |\n| Synthesized by | |\n| Date | {{date}} |\n\n### Source Materials\n| Source | Date | Key Points |\n|--------|------|------------|\n| | | |\n\n### Information Gaps (and Resolutions)\n| Gap | Resolution |\n|-----|------------|\n| | |\n\n### Objectives\n**Primary objective:**\n**Secondary objectives:**\n\n### Target Audience\n| Attribute | Description |\n|-----------|-------------|\n| Demographics | |\n| Psychographics | |\n| Behavioral signals | |\n| Pain points | |\n\n### Key Message / Offer\n**Primary message:**\n**Supporting evidence:**\n**Proof points:**\n\n### Mandatories\n- [ ] Budget: \n- [ ] Timeline: \n- [ ] Platforms/channels: \n- [ ] Compliance requirements: \n- [ ] Stakeholder approvals: \n\n### Success Metrics\n| Metric | Target |\n|--------|--------|\n| | |\n\n### Team & Roles\n| Role | Owner |\n|------|-------|\n| | |\n\n### Approval\n| Milestone | Date |\n|-----------|------|\n| Brief approved | |\n| Work begins | |"
     }
   },
@@ -40,6 +40,33 @@
       "description": "Project timeline and key dates"
     }
   ],
+  "inputs": [
+    {
+      "name": "client_name",
+      "type": "string",
+      "required": true,
+      "description": "Client or brand name"
+    },
+    {
+      "name": "deliverable_type",
+      "type": "string",
+      "required": true,
+      "description": "Type of deliverable (campaign, creative, content, etc.)"
+    },
+    {
+      "name": "raw_inputs",
+      "type": "string",
+      "required": true,
+      "description": "Summary of all raw inputs to synthesize"
+    },
+    {
+      "name": "timeline",
+      "type": "string",
+      "required": false,
+      "description": "Project timeline and key dates"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
       {
@@ -87,22 +114,18 @@
     }
   ],
   "checklist": [
-    "All source materials reviewed and incorporated",
-    "Gaps identified and resolved with client",
-    "Objectives are specific and measurable",
-    "Target audience is clearly defined",
-    "Timeline and budget are explicit",
-    "Success metrics are defined",
-    "Brief is approved by client before distribution"
+    "All relevant materials in hand",
+    "Gaps are documented",
+    "Brief is complete and unambiguous",
+    "Brief is clear, complete, and actionable",
+    "Client approves the brief",
+    "Team has everything needed to start"
   ],
   "tools": [
     "document",
     "spreadsheet"
   ],
-  "agents": [
-    "nova",
-    "echo"
-  ],
+  "agents": [],
   "pipelines": [
     "campaign-brief"
   ],
@@ -115,6 +138,6 @@
       "planning",
       "client-services"
     ],
-    "lastUpdated": "2026-03-24"
+    "lastUpdated": "2026-03-30"
   }
 }

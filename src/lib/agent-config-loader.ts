@@ -1,50 +1,39 @@
-// Agent Config Loader - Loads agents from individual JSON config files
-// This provides a clean interface for the agents store to load agent configs
+import type { Agent } from './types'
+import {
+  AGENT_ARCHITECTURE_BUNDLES,
+  CONFIG_AGENTS,
+  CONFIG_AGENT_IDS,
+  getAgentArchitectureBundle,
+} from '@/config/agents/generated'
 
-import { Agent } from './types'
-
-const AGENT_CONFIG_FILES: Record<string, string> = {
-  iris: '@/config/agents/iris.json',
-  sage: '@/config/agents/sage.json',
-  piper: '@/config/agents/piper.json',
-  maya: '@/config/agents/maya.json',
-  finn: '@/config/agents/finn.json',
-  echo: '@/config/agents/echo.json',
-  lyra: '@/config/agents/lyra.json',
-  
-  atlas: '@/config/agents/atlas.json',
-  dex: '@/config/agents/dex.json',
+function cloneAgent(agent: Agent): Agent {
+  return {
+    ...agent,
+    tools: [...agent.tools],
+    skills: [...agent.skills],
+    responsibilities: [...agent.responsibilities],
+    primaryOutputs: [...agent.primaryOutputs],
+    position: { ...agent.position },
+  }
 }
 
 export async function loadAgentConfigs(): Promise<Partial<Agent>[]> {
-  const agents: Partial<Agent>[] = []
-  
-  for (const [id, filePath] of Object.entries(AGENT_CONFIG_FILES)) {
-    try {
-      const module = await import(/* @ts-ignore */ filePath)
-      agents.push(module.default || module)
-    } catch (error) {
-      console.warn(`Failed to load agent config for ${id}:`, error)
-    }
-  }
-  
-  return agents
+  return CONFIG_AGENTS.map(cloneAgent)
 }
 
 export async function loadAgentConfig(agentId: string): Promise<Partial<Agent> | null> {
-  const filePath = AGENT_CONFIG_FILES[agentId]
-  if (!filePath) return null
-  
-  try {
-    const module = await import(/* @ts-ignore */ filePath)
-    return module.default || module
-  } catch (error) {
-    console.warn(`Failed to load agent config for ${agentId}:`, error)
-    return null
-  }
+  const bundle = getAgentArchitectureBundle(agentId)
+  return bundle ? cloneAgent(bundle.agent) : null
 }
 
-// Get list of all configured agent IDs
 export function getConfiguredAgentIds(): string[] {
-  return Object.keys(AGENT_CONFIG_FILES)
+  return [...CONFIG_AGENT_IDS]
+}
+
+export function getAgentArchitecture(agentId: string) {
+  return getAgentArchitectureBundle(agentId)
+}
+
+export function getAllAgentArchitectures() {
+  return AGENT_ARCHITECTURE_BUNDLES
 }

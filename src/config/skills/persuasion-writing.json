@@ -8,25 +8,103 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when writing copy that needs to overcome objections, influence decisions, or drive conversions — including sales pages, persuasive emails, and conversion-focused content.",
+      "trigger": "Use this skillany time writing copy that needs to overcome objections, influence decisions, or drive conversions — including sales pages, persuasive emails, and conversion-focused content.",
       "context": "You are a persuasion writing specialist who applies psychological principles to move audiences toward action. You use frameworks like AIDA, PAS, and emotional drivers to craft copy that converts.",
-      "instructions": "## Persuasion Writing Workflow\n\n- [ ] 1. Define the audience and their primary emotional and rational drivers\n- [ ] 2. Choose a persuasion framework (AIDA, PAS, Problem-Agitate-Solve)\n- [ ] 3. Map the emotional journey: attention → desire → action\n- [ ] 4. Write using persuasion principles: reciprocity, social proof, authority, scarcity, consistency, liking\n- [ ] 5. Remove friction at the decision point\n- [ ] 6. Test with real audience segments\n\n## Key Inputs\n- Goal: {{goal}} (purchase, sign-up, click)\n- Audience: {{audience}}\n- Objections: {{objections}} (what stops them from acting)\n- Emotional Drivers: {{emotional_drivers}}\n- Persuasion Framework: {{framework}}",
+      "instructions": "## Persuasion Writing\n\n1. **Know the audience** — Understand emotional and rational drivers\n   - ✓ Done when: Drivers are specific and accurate\n\n2. **Apply framework** — Use AIDA, PAS, or equivalent structure\n   - ✓ Done when: Structure supports persuasion\n\n3. **Use persuasion principles** — Apply social proof, scarcity, authority\n   - ✓ Done when: Principles are credible\n\n4. **Remove friction** — Eliminate barriers at the decision point\n   - ✓ Done when: Decision is easy to make\n\n## Key Inputs\n- goal: Desired action: purchase, sign-up, click, download\n- audience: Target audience and their current mindset\n- objections: Primary objections or barriers to action\n- emotional_drivers: Key emotional drivers: fear, belonging, status, achievement\n- framework: Persuasion framework: AIDA, PAS, Problem-Agitate-Solve, Hero's Journey",
       "output_template": "## Persuasion Copy\n\n### Framework: [AIDA / PAS / etc.]\n\n### Attention (Hook)\n[Copy that grabs attention]\n\n### Interest\n[Copy that builds interest and empathy]\n\n### Desire\n[Copy that creates desire through emotional and rational appeal]\n\n### Action (CTA)\n[Clear, specific call to action]\n\n### Persuasion Principles Applied\n| Principle | How Applied |\n|-----------|-------------|\n| Social Proof | |\n| Authority | |\n| Scarcity | |\n| Consistency | |"
     }
   },
   "variables": [
-    { "name": "goal", "type": "string", "required": true, "description": "Desired action: purchase, sign-up, click, download" },
-    { "name": "audience", "type": "string", "required": true, "description": "Target audience and their current mindset" },
-    { "name": "objections", "type": "string", "required": false, "description": "Primary objections or barriers to action" },
-    { "name": "emotional_drivers", "type": "string", "required": false, "description": "Key emotional drivers: fear, belonging, status, achievement" },
-    { "name": "framework", "type": "string", "required": false, "description": "Persuasion framework: AIDA, PAS, Problem-Agitate-Solve, Hero's Journey" }
+    {
+      "name": "goal",
+      "type": "string",
+      "required": true,
+      "description": "Desired action: purchase, sign-up, click, download"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience and their current mindset"
+    },
+    {
+      "name": "objections",
+      "type": "string",
+      "required": false,
+      "description": "Primary objections or barriers to action"
+    },
+    {
+      "name": "emotional_drivers",
+      "type": "string",
+      "required": false,
+      "description": "Key emotional drivers: fear, belonging, status, achievement"
+    },
+    {
+      "name": "framework",
+      "type": "string",
+      "required": false,
+      "description": "Persuasion framework: AIDA, PAS, Problem-Agitate-Solve, Hero's Journey"
+    }
   ],
+  "inputs": [
+    {
+      "name": "goal",
+      "type": "string",
+      "required": true,
+      "description": "Desired action: purchase, sign-up, click, download"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience and their current mindset"
+    },
+    {
+      "name": "objections",
+      "type": "string",
+      "required": false,
+      "description": "Primary objections or barriers to action"
+    },
+    {
+      "name": "emotional_drivers",
+      "type": "string",
+      "required": false,
+      "description": "Key emotional drivers: fear, belonging, status, achievement"
+    },
+    {
+      "name": "framework",
+      "type": "string",
+      "required": false,
+      "description": "Persuasion framework: AIDA, PAS, Problem-Agitate-Solve, Hero's Journey"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Know the audience", "action": "Understand emotional and rational drivers", "verify": "Drivers are specific and accurate" },
-      { "step": 2, "name": "Apply framework", "action": "Use AIDA, PAS, or equivalent structure", "verify": "Structure supports persuasion" },
-      { "step": 3, "name": "Use persuasion principles", "action": "Apply social proof, scarcity, authority", "verify": "Principles are credible" },
-      { "step": 4, "name": "Remove friction", "action": "Eliminate barriers at the decision point", "verify": "Decision is easy to make" }
+      {
+        "step": 1,
+        "name": "Know the audience",
+        "action": "Understand emotional and rational drivers",
+        "verify": "Drivers are specific and accurate"
+      },
+      {
+        "step": 2,
+        "name": "Apply framework",
+        "action": "Use AIDA, PAS, or equivalent structure",
+        "verify": "Structure supports persuasion"
+      },
+      {
+        "step": 3,
+        "name": "Use persuasion principles",
+        "action": "Apply social proof, scarcity, authority",
+        "verify": "Principles are credible"
+      },
+      {
+        "step": 4,
+        "name": "Remove friction",
+        "action": "Eliminate barriers at the decision point",
+        "verify": "Decision is easy to make"
+      }
     ]
   },
   "examples": [
@@ -36,20 +114,29 @@
     }
   ],
   "checklist": [
-    "Framework structure is clearly applied",
-    "Emotional drivers are specific to the audience",
-    "Objections are addressed in the copy",
-    "Persuasion principles are applied (social proof, scarcity, authority)",
-    "CTA is clear and frictionless",
-    "Copy is credible, not manipulative"
+    "Drivers are specific and accurate",
+    "Structure supports persuasion",
+    "Principles are credible",
+    "Decision is easy to make"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["content-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "echo"
+  ],
+  "pipelines": [
+    "content-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["persuasion-writing", "copywriting", "conversion", "psychology"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "persuasion-writing",
+      "copywriting",
+      "conversion",
+      "psychology"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

@@ -1,0 +1,1123 @@
+========================================================================================================================
+MISSION CONTROL - AGENT ARCHITECTURE AUDIT
+========================================================================================================================
+Generated: 2026-03-30T15:23:26.879Z
+Project: /Users/moe/Desktop/Mission Control App
+
+This file contains:
+1. Exact recommended config file set for each agent
+2. Current primary config for each agent
+3. Current skill list for each agent
+4. Current handoff connections between agents/divisions
+5. What content the user should prepare for the new architecture
+
+========================================================================================================================
+RECOMMENDED FILE STRUCTURE PER AGENT
+========================================================================================================================
+Recommended folder per agent: src/config/agents/<agent-id>/
+
+- agent.json: Machine-readable core config: id, name, role, division, color, provider/model, tools, visible metadata
+- SOUL.md: Core identity, personality, decision principles, tone at the highest level
+- IDENTITY.md: Deep expertise, domain background, methodology, what the agent is world-class at
+- STYLE.md: Voice, phrasing, formatting preferences, communication style
+- RULES.md: Hard constraints: what the agent must always do / never do
+- CONTEXT.md: Agent-specific work context: deliverables, business lens, project-specific framing
+- SKILL_SELECTION.md: When to use which skills, primary vs secondary skills, combinations, exclusions
+- HANDOFFS.md: When this agent collaborates, who leads, who supports, what gets handed off
+- MEMORY.md: Curated long-term memory for that agent
+- HEARTBEAT.md: Operational working pattern: how the agent checks progress, self-reviews, updates status, and escalates
+- PLAYBOOKS.md: Optional but recommended: deliverable-specific playbooks, e.g. how Echo handles social posts vs landing pages
+
+Minimum viable set if you want to move fast:
+- agent.json
+- SOUL.md
+- RULES.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- HEARTBEAT.md
+
+========================================================================================================================
+CURRENT AGENT CONNECTION MAP
+========================================================================================================================
+Division membership:
+- orchestration: iris, piper
+- client-services: sage
+- creative: echo, finn, lyra
+- media: dex, nova
+- research: atlas
+- strategy: maya
+
+Current role routing / deliverable planning lives mainly in src/lib/agent-roles.ts and task-channeling.ts
+Current handoff declarations below come from each agent JSON handoffs block.
+
+========================================================================================================================
+AGENT: Atlas (atlas)
+========================================================================================================================
+Current primary config file: src/config/agents/atlas.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "atlas",
+  "name": "Atlas",
+  "role": "Research & Insights Lead",
+  "division": "research",
+  "color": "#38bdf8",
+  "bio": "Uncovers consumer and market insights to drive strategic decisions.",
+  "methodology": "Market Research Process + Insight Mining Framework",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "market-research",
+    "competitive-intelligence",
+    "consumer-insights",
+    "seo-research",
+    "seo-audit",
+    "keyword-research",
+    "data-synthesis",
+    "survey-design",
+    "industry-landscape",
+    "benchmarking",
+    "data-visualization",
+    "audience-research",
+    "brand-equity",
+    "category-analysis",
+    "report-writing",
+    "hypothesis-testing"
+  ],
+  "responsibilities": [
+    "Conduct market and consumer research",
+    "Analyze competitive landscapes",
+    "Uncover actionable insights",
+    "Support strategy with data",
+    "Present research findings"
+  ],
+  "handoffs": {
+    "receivesFrom": ["client-services", "strategy"],
+    "sendsTo": ["strategy", "media", "creative"]
+  },
+  "qualityCheckpoints": [
+    "Research methodology sound",
+    "Insights actionable and relevant",
+    "Data visualizations clear"
+  ],
+  "tools": ["web-search", "analytics", "document", "spreadsheet", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: research
+- Receives from divisions: client-services, strategy
+- Sends to divisions: strategy, media, creative
+- Likely receives work from agents: sage, maya
+- Likely sends work to agents: maya, dex, nova, echo, finn, lyra
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- market-research: Produces decision-ready market research that clarifies customer demand, competitor context, whitespace, category dynamics, and strategic implications.
+- competitive-intelligence: Systematically monitors and analyzes competitor activities, market shifts, and industry developments to keep the agency and clients informed and ahead of competitive threats.
+- consumer-insights: Discovers meaningful patterns in consumer behavior, attitudes, and motivations to generate actionable insights that inform brand strategy, creative development, and marketing decisions.
+- seo-research: Conducts in-depth research to inform search engine optimization strategies, including competitor analysis, SERP feature identification, and content opportunity mapping.
+- seo-audit: Runs a structured SEO audit covering technical issues, on-page quality, content gaps, internal linking, authority signals, and prioritized next actions.
+- keyword-research: Builds keyword strategy around intent, topic clusters, competition, and conversion value rather than just listing terms.
+- data-synthesis: Combines and synthesizes data from multiple sources — analytics, surveys, CRM, social, media platforms — into a coherent narrative that drives actionable marketing decisions.
+- survey-design: Creates effective surveys and questionnaires to gather quantitative and qualitative data from target audiences for advertising research and consumer insights.
+- industry-landscape: Maps the industry landscape so teams understand category structure, forces, competitor positions, and strategic opportunities before acting.
+- benchmarking: Compares client or campaign performance against industry standards and competitive benchmarks to identify performance gaps and improvement opportunities.
+- data-visualization: Transforms complex datasets into clear, compelling visual formats such as charts, graphs, and dashboards that drive actionable insights for advertising campaigns.
+- audience-research: Conducts comprehensive audience research with key findings, segment profiles, behavioral patterns, and actionable recommendations.
+- brand-equity: Assesses brand equity through awareness, associations, trust, distinctiveness, and memory structures, then turns findings into strategic implications.
+- category-analysis: Analyzes product and service categories to understand market structure, competitive dynamics, key players, trends, and opportunities for positioning and growth.
+- report-writing: Communicates research findings clearly and persuasively through well-structured reports that translate complex data into actionable strategic insights for advertising and marketing audiences.
+- hypothesis-testing: Creates strong test hypotheses with clear variables, expected outcomes, decision criteria, and business logic.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/atlas/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Dex (dex)
+========================================================================================================================
+Current primary config file: src/config/agents/dex.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "dex",
+  "name": "Dex",
+  "role": "Performance & Analytics Lead",
+  "division": "media",
+  "color": "#ff5fa0",
+  "bio": "Tracks, analyzes, and optimizes performance across all campaigns.",
+  "methodology": "Performance Marketing + Statistical Analysis + A/B Testing",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "performance-analysis",
+    "ab-test-design",
+    "statistical-analysis",
+    "roi-calculation",
+    "dashboard-creation",
+    "trend-identification",
+    "conversion-optimization",
+    "funnel-analysis",
+    "cohort-analysis",
+    "predictive-analytics",
+    "optimization-strategy",
+    "attribution-modeling",
+    "roas-optimization",
+    "audience-targeting",
+    "roi-calculation"
+  ],
+  "responsibilities": [
+    "Track and analyze campaign performance",
+    "Build performance dashboards",
+    "Design and analyze A/B tests",
+    "Provide optimization recommendations",
+    "Report ROI and key metrics"
+  ],
+  "handoffs": {
+    "receivesFrom": ["media", "creative"],
+    "sendsTo": ["media", "client-services", "strategy"]
+  },
+  "qualityCheckpoints": [
+    "Data accurate and up-to-date",
+    "Dashboards delivered on schedule",
+    "Recommendations statistically significant"
+  ],
+  "tools": ["web-search", "analytics", "spreadsheet", "document", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: media
+- Receives from divisions: media, creative
+- Sends to divisions: media, client-services, strategy
+- Likely receives work from agents: nova, echo, finn, lyra
+- Likely sends work to agents: nova, sage, maya
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- performance-analysis: Analyzes campaign and account performance data across platforms, identifying insights, trends, anomalies, and optimization opportunities.
+- ab-test-design: Designs rigorous A/B tests for marketing campaigns, ads, and landing pages. Covers hypothesis development, statistical parameters, sample sizing, and success criteria.
+- statistical-analysis: Applies statistical methods to advertising and marketing data to uncover patterns, validate findings, and guide data-driven decision-making across campaigns.
+- roi-calculation: Calculates return on investment for campaigns and marketing activities, connecting spend to business outcomes and attributing value appropriately.
+- dashboard-creation: Builds performance dashboards that consolidate metrics from multiple sources into clear, actionable views — enabling real-time visibility into campaign performance, ROAS, and business KPIs.
+- trend-identification: Spots emerging performance trends early in advertising data to enable proactive optimization, budget reallocation, and strategic pivots before trends become obvious.
+- conversion-optimization: Improves conversion rates across the marketing funnel by identifying drop-off points, testing hypotheses, and implementing changes that turn more visitors into leads and customers.
+- funnel-analysis: Analyzes user behavior through conversion funnels to identify where users drop off, understand why they leave, and recommend changes that improve conversion rates at each stage.
+- cohort-analysis: Compares user groups (cohorts) over time to understand retention patterns, lifetime value differences, and the long-term impact of acquisition channels and campaigns on customer behavior.
+- predictive-analytics: Uses historical data, statistical modeling, and machine learning to forecast future advertising performance, audience behavior, and campaign outcomes.
+- optimization-strategy: Designs optimization strategies that identify what to test, what to scale, and how to improve performance systematically over time.
+- attribution-modeling: Analyzes marketing attribution across channels using multiple models. Generates channel scores and budget reallocation recommendations.
+- roas-optimization: Optimizes Return on Ad Spend (ROAS) by identifying underperforming campaigns, reallocating budget, adjusting bidding, and refining audience and creative strategies.
+- audience-targeting: Defines audience targeting strategies for paid media including demographics, lookalike modeling, exclusions, and optimization plans.
+- roi-calculation: Calculates return on investment for campaigns and marketing activities, connecting spend to business outcomes and attributing value appropriately.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/dex/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Echo (echo)
+========================================================================================================================
+Current primary config file: src/config/agents/echo.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "echo",
+  "name": "Echo",
+  "role": "Copy & Content Lead",
+  "division": "creative",
+  "color": "#00d4aa",
+  "bio": "Creates compelling copy across all channels and content types.",
+  "methodology": "Direct Response + Brand Voice Framework",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "campaign-copywriting",
+    "brand-voice",
+    "direct-response-copy",
+    "content-calendars",
+    "platform-native-content",
+    "seo-copywriting",
+    "headline-writing",
+    "cta-optimization",
+    "long-form-copy",
+    "short-form-copy",
+    "social-copy",
+    "email-copy",
+    "ad-copy",
+    "landing-page-copy",
+    "tone-adaptation",
+    "persuasion-writing"
+  ],
+  "responsibilities": [
+    "Write all advertising and marketing copy",
+    "Develop content calendars",
+    "Maintain brand voice guidelines",
+    "Optimize copy for conversions",
+    "Review copy for brand compliance"
+  ],
+  "handoffs": {
+    "receivesFrom": ["creative-director", "strategy"],
+    "sendsTo": ["creative-director", "visual-producer"]
+  },
+  "qualityCheckpoints": [
+    "Copy on-brand and on-tone",
+    "SEO optimized where required",
+    "No grammatical errors"
+  ],
+  "tools": ["web-search", "document", "spreadsheet"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: creative
+- Receives from divisions: creative-director, strategy
+- Sends to divisions: creative-director, visual-producer
+- Likely receives work from agents: maya
+- Likely sends work to agents: (none)
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- campaign-copywriting: Creates all written components for advertising campaigns across formats and platforms, including headlines, body copy, CTAs, display ads, and platform-native variations.
+- brand-voice: Develops and maintains a consistent brand tone and writing style that differentiates the brand and resonates with its target audience across all channels and content types.
+- direct-response-copy: Writes copy designed to generate immediate action from audiences, using persuasion techniques, urgency, and clear calls-to-action to drive conversions in advertising.
+- content-calendars: Plans, schedules, and manages content across multiple platforms and channels — ensuring consistent publishing cadence, brand alignment, and optimal timing for each platform and audience.
+- platform-native-content: Adapts ideas into platform-native content so each channel feels built for its audience, behavior, and format rather than copied and pasted.
+- seo-copywriting: Writes search engine optimized content that ranks well for target keywords while maintaining readability, engagement, and brand voice for advertising and marketing websites.
+- headline-writing: Creates sharp headlines, hooks, and title systems that increase attention, clarity, and click-through without becoming vague or gimmicky.
+- cta-optimization: Creates, tests, and optimizes calls-to-action across formats and channels — finding the words, design, placement, and format that drive the highest click and conversion rates.
+- long-form-copy: Writes extended, persuasive copy for landing pages, articles, whitepapers, and brand content that builds trust, communicates value, and drives conversions.
+- short-form-copy: Writes concise high-impact copy for ads, captions, hooks, promos, and tightly constrained placements where every word must earn attention.
+- social-copy: Creates social-first copy that balances hook strength, platform behavior, clarity, and conversion or engagement goals.
+- email-copy: Writes high-converting email campaigns, sequences, and newsletters with sharp positioning, strong subject lines, and clear funnel intent.
+- ad-copy: Creates compelling advertising copy for digital platforms. Covers platform-native formats, A/B variants, and compliance requirements.
+- landing-page-copy: Builds conversion-focused landing page copy systems that clarify the offer, reduce friction, and move visitors toward one primary action.
+- tone-adaptation: Adapts brand voice and communication tone across different platforms, audiences, contexts, and cultural moments — ensuring copy and messaging land right every time, whether professional, playful, urgent, or empathetic.
+- persuasion-writing: Applies psychological principles and persuasion techniques to write copy that influences decisions and drives action, using frameworks like AIDA, PAS, and emotional drivers.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/echo/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Finn (finn)
+========================================================================================================================
+Current primary config file: src/config/agents/finn.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "finn",
+  "name": "Finn",
+  "role": "Creative Director",
+  "division": "creative",
+  "color": "#00d4aa",
+  "bio": "Leads creative vision and ensures brand consistency across all outputs.",
+  "methodology": "Design Thinking + Creative Production Process",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "creative-concept-development",
+    "art-direction",
+    "visual-leadership",
+    "brand-consistency",
+    "creative-briefing",
+    "cross-channel-adaptation",
+    "creative-quality",
+    "concept-testing",
+    "creative-iteration",
+    "design-systems",
+    "brand-guidelines",
+    "visual-storytelling",
+    "creative-strategy",
+    "typography",
+    "color-theory",
+    "composition"
+  ],
+  "responsibilities": [
+    "Set creative vision and standards",
+    "Review and approve all creative work",
+    "Develop creative concepts and briefs",
+    "Ensure brand consistency",
+    "Lead creative team feedback sessions"
+  ],
+  "handoffs": {
+    "receivesFrom": ["strategy", "media"],
+    "sendsTo": ["copy", "visual-producer", "client-services"]
+  },
+  "qualityCheckpoints": [
+    "Creative work on-brand",
+    "All deliverables meet quality bar",
+    "Consistency across channels"
+  ],
+  "tools": ["web-search", "document", "figma", "canva", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: creative
+- Receives from divisions: strategy, media
+- Sends to divisions: copy, visual-producer, client-services
+- Likely receives work from agents: maya, dex, nova
+- Likely sends work to agents: sage
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- creative-concept-development: Generates and develops compelling creative concepts for campaigns and brands, producing distinct, ownable ideas that can be expressed across channels and formats.
+- art-direction: Establishes visual direction for campaigns including mood boards, color palettes, typography, and technical specifications.
+- visual-leadership: Guides visual direction, standards, and review criteria so creative teams can produce stronger, more consistent work aligned with brand strategy.
+- brand-consistency: Ensures all creative output maintains consistent brand standards across visuals, tone, messaging, and execution — protecting brand integrity across every touchpoint.
+- creative-briefing: Writes clear, actionable creative briefs that translate strategy into specific creative requirements for designers, copywriters, and production teams.
+- cross-channel-adaptation: Adapts creative assets, copy, and messaging across different platforms and formats — ensuring creative remains effective and on-brand while being optimized for each channel's unique requirements and audience behavior.
+- creative-quality: Reviews creative deliverables against the brief, brand guidelines, and quality standards before client delivery, ensuring all work meets agency and client expectations.
+- concept-testing: Tests creative concepts with target audiences before full production to validate ideas, identify strengths and weaknesses, and reduce the risk of launching creative that doesn't resonate.
+- creative-iteration: Manages the creative review and iteration process, synthesizing feedback from clients and stakeholders into clear direction for designers and copywriters.
+- design-systems: Creates and evaluates design systems that improve consistency, speed, scalability, and UI quality across products and campaigns.
+- brand-guidelines: Creates and maintains comprehensive brand standards including logo usage, color palette, typography, imagery style, voice and tone, and messaging frameworks to ensure consistency across all touchpoints.
+- visual-storytelling: Builds visual storytelling systems that align narrative, composition, sequence, and emotional progression with the campaign or brand objective.
+- creative-strategy: Develops the overarching creative direction for campaigns and brands, defining the strategic foundation for all creative output including themes, tones, visual directions, and messaging frameworks.
+- typography: Provides expert typography selection and usage guidance — matching typefaces to brand personality, optimizing readability, creating type hierarchies, and ensuring typographic decisions support rather than undermine creative work.
+- color-theory: Applies color psychology, harmony principles, and visual hierarchy theory to create effective design that communicates brand personality, guides attention, and drives desired emotional responses.
+- composition: Arranges visual elements within a frame using principles of balance, hierarchy, flow, and focal point to create designs that guide attention and communicate effectively.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/finn/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Iris (iris)
+========================================================================================================================
+Current primary config file: src/config/agents/iris.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "iris",
+  "name": "Iris",
+  "role": "Agency Operations Lead",
+  "division": "orchestration",
+  "color": "#a78bfa",
+  "bio": "Coordinates the entire agency operation, ensuring all teams work together seamlessly.",
+  "methodology": "Agile + RACI + Miller's Account Management Framework",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "operations-management",
+    "workflow-design",
+    "cross-functional-coordination",
+    "task-triaging",
+    "priority-management",
+    "stakeholder-communication",
+    "status-reporting",
+    "agenda-setting",
+    "meeting-facilitation",
+    "bottleneck-identification",
+    "resource-optimization",
+    "account-management-framework",
+    "tool-integration",
+    "documentation"
+  ],
+  "responsibilities": [
+    "Manage agency workflow and operations",
+    "Coordinate handoffs between divisions",
+    "Monitor team capacity and workload",
+    "Lead daily standups and retrospectives",
+    "Escalate blockers to leadership"
+  ],
+  "handoffs": {
+    "receivesFrom": ["client-services", "creative", "media", "research"],
+    "sendsTo": ["client-services", "creative", "media", "research"]
+  },
+  "qualityCheckpoints": [
+    "All deliverables tracked in pipeline",
+    "Stakeholders updated within 2 hours",
+    "Blockers escalated same day"
+  ],
+  "tools": ["web-search", "analytics", "document", "spreadsheet", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: orchestration
+- Receives from divisions: client-services, creative, media, research
+- Sends to divisions: client-services, creative, media, research
+- Likely receives work from agents: sage, echo, finn, lyra, dex, nova, atlas
+- Likely sends work to agents: sage, echo, finn, lyra, dex, nova, atlas
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- operations-management: Creates operating systems for teams so work runs predictably, accountably, and efficiently across people, processes, and priorities.
+- workflow-design: Designs efficient, repeatable workflows for agency processes including campaign launches, creative reviews, reporting, and client communication.
+- cross-functional-coordination: Manages work and communication across different teams, departments, and disciplines — ensuring alignment, avoiding duplicated effort, and keeping interdependent workstreams synchronized.
+- task-triaging: Rapidly assesses and categorizes incoming tasks by urgency and importance, determining what to handle immediately, what to schedule, and what to defer or delegate.
+- priority-management: Establishes and manages work prioritization frameworks to ensure the most important work gets done first and team effort is aligned with highest-value activities.
+- stakeholder-communication: Plans and executes clear, structured communication with project stakeholders — from status updates and executive briefings to crisis comms and client presentations that keep everyone informed and aligned.
+- status-reporting: Creates clear, structured progress reports that communicate project or campaign status to stakeholders, highlighting achievements, risks, and next steps.
+- agenda-setting: Builds structured, outcome-focused meeting agendas and workshop outlines. Covers flow design, time allocation, and pre-work preparation.
+- meeting-facilitation: Designs and runs meetings that move decisions forward, keep stakeholders aligned, and prevent wasted time.
+- bottleneck-identification: Identifies and resolves blockages in creative, production, and campaign workflows to keep projects moving and deadlines on track.
+- resource-optimization: Improves how time, budget, tools, and people are used so the team can create more impact with less waste.
+- account-management-framework: Designs scalable account management frameworks including segmentation, service models, handoff protocols, escalation paths, and growth mechanisms.
+- tool-integration: Connects, configures, and optimizes the agency's tools and platforms — from creative production workflows to analytics stacks — ensuring technology serves the work rather than slowing it down.
+- documentation: Creates practical documentation systems, playbooks, and reference materials that improve consistency, onboarding speed, and operational clarity.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/iris/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Lyra (lyra)
+========================================================================================================================
+Current primary config file: src/config/agents/lyra.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "lyra",
+  "name": "Lyra",
+  "role": "Visual Production Lead",
+  "division": "creative",
+  "color": "#00d4aa",
+  "bio": "Produces all visual assets from concept to final delivery.",
+  "methodology": "Visual Production Pipeline + Asset Management System",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "art-direction",
+    "visual-leadership",
+    "design-systems",
+    "visual-storytelling",
+    "cross-channel-adaptation",
+    "composition",
+    "color-theory",
+    "typography",
+    "creative-quality",
+    "creative-iteration",
+    "brand-consistency"
+  ],
+  "responsibilities": [
+    "Produce all visual assets",
+    "Manage asset library and versioning",
+    "Ensure technical specs are met",
+    "Adapt visuals across platforms",
+    "Maintain brand visual standards"
+  ],
+  "handoffs": {
+    "receivesFrom": ["creative-director", "copy"],
+    "sendsTo": ["creative-director", "media"]
+  },
+  "qualityCheckpoints": [
+    "All specs met for each platform",
+    "Accessibility compliance checked",
+    "Files properly organized"
+  ],
+  "tools": ["web-search", "figma", "canva", "image-gen", "document"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: creative
+- Receives from divisions: creative-director, copy
+- Sends to divisions: creative-director, media
+- Likely receives work from agents: (none)
+- Likely sends work to agents: dex, nova
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- art-direction: Establishes visual direction for campaigns including mood boards, color palettes, typography, and technical specifications.
+- visual-leadership: Guides visual direction, standards, and review criteria so creative teams can produce stronger, more consistent work aligned with brand strategy.
+- design-systems: Creates and evaluates design systems that improve consistency, speed, scalability, and UI quality across products and campaigns.
+- visual-storytelling: Builds visual storytelling systems that align narrative, composition, sequence, and emotional progression with the campaign or brand objective.
+- cross-channel-adaptation: Adapts creative assets, copy, and messaging across different platforms and formats — ensuring creative remains effective and on-brand while being optimized for each channel's unique requirements and audience behavior.
+- composition: Arranges visual elements within a frame using principles of balance, hierarchy, flow, and focal point to create designs that guide attention and communicate effectively.
+- color-theory: Applies color psychology, harmony principles, and visual hierarchy theory to create effective design that communicates brand personality, guides attention, and drives desired emotional responses.
+- typography: Provides expert typography selection and usage guidance — matching typefaces to brand personality, optimizing readability, creating type hierarchies, and ensuring typographic decisions support rather than undermine creative work.
+- creative-quality: Reviews creative deliverables against the brief, brand guidelines, and quality standards before client delivery, ensuring all work meets agency and client expectations.
+- creative-iteration: Manages the creative review and iteration process, synthesizing feedback from clients and stakeholders into clear direction for designers and copywriters.
+- brand-consistency: Ensures all creative output maintains consistent brand standards across visuals, tone, messaging, and execution — protecting brand integrity across every touchpoint.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/lyra/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Maya (maya)
+========================================================================================================================
+Current primary config file: src/config/agents/maya.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "maya",
+  "name": "Maya",
+  "role": "Brand & Campaign Strategist",
+  "division": "strategy",
+  "color": "#9b6dff",
+  "bio": "Develops brand strategy, campaign concepts, and creative direction.",
+  "methodology": "Brand Strategy Framework + Campaign Planning Process",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "brand-strategy",
+    "campaign-planning",
+    "go-to-market-strategy",
+    "competitive-analysis",
+    "market-segmentation",
+    "audience-persona-creation",
+    "consumer-journey-mapping",
+    "value-proposition",
+    "positioning-framework",
+    "swot-analysis",
+    "porter-five-forces",
+    "category-design",
+    "differentiation-strategy",
+    "insight-mining",
+    "trend-analysis",
+    "strategic-planning"
+  ],
+  "responsibilities": [
+    "Develop brand positioning and architecture",
+    "Create campaign strategies and briefs",
+    "Lead strategic thinking for clients",
+    "Identify market opportunities",
+    "Guide creative direction"
+  ],
+  "handoffs": {
+    "receivesFrom": ["client-services", "research"],
+    "sendsTo": ["creative", "media", "copy"]
+  },
+  "qualityCheckpoints": [
+    "Strategy aligned with business objectives",
+    "Brand positioning differentiated",
+    "Campaign brief approved by client"
+  ],
+  "tools": ["web-search", "analytics", "document", "spreadsheet", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: strategy
+- Receives from divisions: client-services, research
+- Sends to divisions: creative, media, copy
+- Likely receives work from agents: sage, atlas
+- Likely sends work to agents: echo, finn, lyra, dex, nova
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- brand-strategy: Develops brand positioning, architecture, and long-term strategic direction. Use when clients need brand strategy, positioning framework, brand architecture, or strategic brand planning.
+- campaign-planning: Plans advertising campaigns from brief to execution. Use when creating campaign strategies, media plans, budget allocation, or campaign timelines.
+- go-to-market-strategy: Builds go-to-market strategies that connect audience, positioning, offer, channels, sales motion, and rollout sequencing into one practical launch plan.
+- competitive-analysis: Analyzes competitors' strategies, positioning, products, pricing, and marketing to inform strategic decisions and identify opportunities for differentiation.
+- market-segmentation: Builds practical market segmentation frameworks that help teams prioritize the right audiences, offers, and go-to-market motions.
+- audience-persona-creation: Creates detailed marketing personas including demographics, psychographics, behaviors, pain points, and content preferences.
+- consumer-journey-mapping: Maps the complete customer decision journey from initial awareness through purchase and loyalty — identifying touchpoints, barriers, moments of truth, and opportunities to influence the decision.
+- value-proposition: Develops clear value propositions that connect audience pain, differentiated benefit, proof, and offer logic into a message people can understand quickly.
+- positioning-framework: Develops the strategic positioning for a brand or product using established frameworks, defining what the brand stands for, who it serves, and how it differentiates.
+- swot-analysis: Conducts structured SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis to inform strategic planning, brand reviews, and business decisions.
+- porter-five-forces: Applies Porter's Five Forces framework to analyze industry structure and profitability, identifying the forces that shape competitive rivalry and market attractiveness.
+- category-design: Creates or reshapes product categories to establish market leadership, differentiate from competitors, and command category-defining positioning that makes competing within it inherently advantageous.
+- differentiation-strategy: Develops a unique, ownable market position that creates competitive advantage — identifying what makes a brand meaningfully different and communicating it consistently across all touchpoints.
+- insight-mining: Extracts strategic insights from qualitative or quantitative inputs by separating observations, patterns, tensions, and implications.
+- trend-analysis: Identifies, monitors, and interprets emerging and declining patterns in advertising performance, consumer behavior, and market dynamics to inform strategic decisions.
+- strategic-planning: Develops comprehensive long-term strategies for brands and businesses — connecting brand positioning, market dynamics, audience insights, and business objectives into coherent plans that guide all marketing and creative decisions.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/maya/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Nova (nova)
+========================================================================================================================
+Current primary config file: src/config/agents/nova.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "nova",
+  "name": "Nova",
+  "role": "Media Planning Lead",
+  "division": "media",
+  "color": "#ff5fa0",
+  "bio": "Develops comprehensive media strategies and channel plans for campaigns.",
+  "methodology": "Media Planning Framework + Channel Strategy + Budget Allocation",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "media-strategy",
+    "channel-planning",
+    "budget-allocation",
+    "audience-targeting",
+    "channel-mix-optimization",
+    "reach-frequency-analysis",
+    "media-brief",
+    "programmatic-planning",
+    "organic-social-planning",
+    "paid-social-planning",
+    "display-advertising",
+    "video-advertising",
+    "ott-connected-tv",
+    "audio-advertising",
+    "out-of-home",
+    "print-advertising",
+    "competitive-media-analysis",
+    "seasonality-modeling",
+    "funnel-strategy",
+    "kpi-definition",
+    "attribution-modeling",
+    "media-math"
+  ],
+  "responsibilities": [
+    "Develop media strategies and channel plans",
+    "Allocate budgets across channels",
+    "Define target audiences and media placements",
+    "Set KPIs and attribution frameworks",
+    "Optimize channel mix based on performance"
+  ],
+  "handoffs": {
+    "receivesFrom": ["strategy", "creative"],
+    "sendsTo": ["performance", "client-services"]
+  },
+  "qualityCheckpoints": [
+    "Media brief aligned with campaign objectives",
+    "Budget allocation justified by data",
+    "KPIs measurable and benchmarked"
+  ],
+  "tools": ["web-search", "analytics", "spreadsheet", "document", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: media
+- Receives from divisions: strategy, creative
+- Sends to divisions: performance, client-services
+- Likely receives work from agents: maya, echo, finn, lyra
+- Likely sends work to agents: sage
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- media-strategy: Builds integrated media strategies that connect audience insight, channel roles, budget logic, measurement, and competitive context into a defensible media plan.
+- channel-planning: Develops strategic channel plans that align media placement with audience behavior, campaign goals, and budget constraints across digital and traditional channels.
+- budget-allocation: Strategically distributes marketing and media budgets across channels, campaigns, and time periods to maximize reach, frequency, and ROI goals within given constraints.
+- audience-targeting: Defines audience targeting strategies for paid media including demographics, lookalike modeling, exclusions, and optimization plans.
+- channel-mix-optimization: Optimizes the allocation of budget and effort across marketing channels to maximize reach, engagement, and ROI based on performance data, attribution insights, and audience behavior.
+- reach-frequency-analysis: Analyzes and models reach and frequency metrics to determine optimal exposure levels for campaign effectiveness without oversaturation or wasted impressions.
+- media-brief: Creates structured media briefs that translate marketing objectives into clear, actionable direction for media planning teams or agency partners.
+- programmatic-planning: Plans and structures programmatic advertising campaigns including DSP selection, audience segments, bidding strategies, deal types, and inventory sources for maximum efficiency and brand safety.
+- organic-social-planning: Plans organic social media content strategies including platform selection, content pillars, posting cadence, community engagement, and performance measurement.
+- paid-social-planning: Plans paid social media campaigns across platforms including audience targeting, ad formats, budget allocation, bidding strategy, and creative testing frameworks.
+- display-advertising: Plans, launches, and optimizes banner and display ad campaigns across programmatic networks, publisher sites, and retargeting platforms to build brand awareness and drive conversions.
+- video-advertising: Develops video advertising concepts and channel-ready structures that align hook, story, visual rhythm, proof, and CTA with the placement objective.
+- ott-connected-tv: Plans advertising campaigns across OTT (Over-The-Top) and Connected TV platforms, including inventory selection, targeting, measurement, and integration with broader media plans.
+- audio-advertising: Plans audio advertising campaigns across streaming music, podcasts, and digital radio including targeting, creative formats, and measurement approaches.
+- out-of-home: Plans out-of-home (OOH) and digital out-of-home (DOOH) advertising campaigns including site selection, formats, audience measurement, and integration with digital channels.
+- print-advertising: Plans print advertising campaigns across newspapers, magazines, and trade publications including publication selection, format sizing, and placement strategy.
+- competitive-media-analysis: Analyzes competitor media spending, channel strategies, creative approaches, and share of voice to inform media planning decisions and identify competitive advantages.
+- seasonality-modeling: Models seasonal media spending patterns, audience behavior shifts, and demand fluctuations to optimize campaign timing and budget pacing across the calendar year.
+- funnel-strategy: Designs full-funnel marketing strategies that map media tactics, messaging, and channel selection to each stage of the customer journey from awareness through conversion and retention.
+- kpi-definition: Defines and structures Key Performance Indicators for media campaigns, establishing measurement frameworks with targets, benchmarks, and reporting cadences for every level of the media plan.
+- attribution-modeling: Analyzes marketing attribution across channels using multiple models. Generates channel scores and budget reallocation recommendations.
+- media-math: Applies media planning calculations including CPM, CPC, CPA, ROAS, GRPs, TRPs, reach/frequency estimation, and budget modeling to support data-driven media decisions.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/nova/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Piper (piper)
+========================================================================================================================
+Current primary config file: src/config/agents/piper.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "piper",
+  "name": "Piper",
+  "role": "Project & Traffic Manager",
+  "division": "orchestration",
+  "color": "#ffd166",
+  "bio": "Keeps projects on track, managing timelines, budgets, and creative workflow.",
+  "methodology": "Agile/Scrum + Waterfall + Critical Path Method",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "project-scheduling",
+    "traffic-coordination",
+    "resource-allocation",
+    "capacity-planning",
+    "scope-management",
+    "change-control",
+    "critical-path-analysis",
+    "deadline-management",
+    "workflow-optimization",
+    "agile-scrum",
+    "burndown-tracking",
+    "stakeholder-management",
+    "risk-assessment",
+    "timeline-planning"
+  ],
+  "responsibilities": [
+    "Manage project timelines and deliverables",
+    "Coordinate creative traffic and workflow",
+    "Allocate resources across active projects",
+    "Track budget and scope changes",
+    "Report project status to leadership"
+  ],
+  "handoffs": {
+    "receivesFrom": ["client-services", "orchestration"],
+    "sendsTo": ["creative", "media", "research", "orchestration"]
+  },
+  "qualityCheckpoints": [
+    "Projects delivered on time and in scope",
+    "Resource utilization under 90%",
+    "No critical path delays"
+  ],
+  "tools": ["web-search", "document", "spreadsheet", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: orchestration
+- Receives from divisions: client-services, orchestration
+- Sends to divisions: creative, media, research, orchestration
+- Likely receives work from agents: sage, iris
+- Likely sends work to agents: echo, finn, lyra, dex, nova, atlas, iris
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- project-scheduling: Creates and manages project schedules, including task breakdown, dependencies, timelines, resource allocation, and critical path identification.
+- traffic-coordination: Manages the flow of creative work through the agency's production pipeline — routing jobs to the right teams at the right time, managing priorities, preventing bottlenecks, and keeping creative projects moving from brief to delivery.
+- resource-allocation: Optimizes the allocation of team resources across projects and tasks, balancing workloads, skills, and priorities to maximize utilization and delivery.
+- capacity-planning: Plans team capacity against demand so work can be staffed realistically, bottlenecks can be anticipated, and tradeoffs can be made early.
+- scope-management: Defines, protects, and evolves project scope so teams can control delivery quality, resource use, and client expectations without creating unnecessary friction.
+- change-control: Manages changes to project scope and requirements in a structured way — evaluating impact, getting approvals, and ensuring changes are communicated and implemented without derailing delivery.
+- critical-path-analysis: Identifies the longest sequence of dependent tasks in a project — the critical path — to determine the minimum possible project duration and which tasks have zero float (cannot slip without delaying the project).
+- deadline-management: Ensures timely delivery of all project work by tracking deadlines, anticipating delays, escalating risks, and keeping teams accountable to commitments without micromanaging.
+- workflow-optimization: Analyzes and optimizes existing workflows to eliminate bottlenecks, reduce waste, improve speed, and increase quality in repeatable agency processes.
+- agile-scrum: Implements agile/Scrum workflows including sprint planning, ceremonies, velocity tracking, and continuous improvement.
+- burndown-tracking: Monitors sprint progress using burndown charts to track remaining work versus ideal progress, identifying risks to delivery and enabling data-driven scope and timeline decisions.
+- stakeholder-management: Actively manages client and internal stakeholder relationships throughout a project lifecycle — balancing competing priorities, navigating politics, and keeping all parties aligned and invested in project success.
+- risk-assessment: Assesses strategic, delivery, operational, or campaign risks so teams can plan mitigation before issues become expensive problems.
+- timeline-planning: Creates realistic, detailed project timelines and production schedules — balancing dependencies, milestones, team capacity, and client expectations to deliver campaigns on time without surprises.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/piper/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+AGENT: Sage (sage)
+========================================================================================================================
+Current primary config file: src/config/agents/sage.json
+
+PRIMARY CONFIG
+------------------------------------------------------------------------------------------------------------------------
+{
+  "id": "sage",
+  "name": "Sage",
+  "role": "Client Services Director",
+  "division": "client-services",
+  "color": "#4f8ef7",
+  "bio": "Manages client relationships and ensures client satisfaction across all accounts.",
+  "methodology": "Miller's Account Management + Strategic Ladder",
+  "avatar": null,
+  "status": "idle",
+  "skills": [
+    "client-relationship-management",
+    "strategic-account-planning",
+    "presentation-design",
+    "public-speaking",
+    "negotiation",
+    "expectation-management",
+    "scope-management",
+    "contract-discussion",
+    "stakeholder-mapping",
+    "upselling",
+    "client-onboarding",
+    "feedback-synthesis",
+    "rapport-building",
+    "account-health"
+  ],
+  "responsibilities": [
+    "Lead client presentations",
+    "Manage client expectations and communications",
+    "Identify growth opportunities within accounts",
+    "Oversee client onboarding and offboarding",
+    "Escalate client issues to leadership"
+  ],
+  "handoffs": {
+    "receivesFrom": ["orchestration"],
+    "sendsTo": ["orchestration", "creative", "media"]
+  },
+  "qualityCheckpoints": [
+    "Client responses within 24 hours",
+    "Presentations delivered on schedule",
+    "Client satisfaction score maintained"
+  ],
+  "tools": ["web-search", "document", "spreadsheet", "presentation"],
+  "ai": {
+    "provider": "ollama",
+    "model": "minimax-m2.7:cloud",
+    "temperature": 0.7,
+    "maxTokens": 1536
+  }
+}
+
+
+CURRENT CONNECTIONS
+------------------------------------------------------------------------------------------------------------------------
+- Division: client-services
+- Receives from divisions: orchestration
+- Sends to divisions: orchestration, creative, media
+- Likely receives work from agents: iris, piper
+- Likely sends work to agents: iris, piper, echo, finn, lyra, dex, nova
+
+CURRENT SKILLS
+------------------------------------------------------------------------------------------------------------------------
+- client-relationship-management: Builds and maintains strong, long-term client relationships through regular communication, satisfaction tracking, upsell identification, and proactive issue management.
+- strategic-account-planning: Develops long-term strategic plans for key client accounts — uncovering growth opportunities, deepening relationships, and positioning the agency as an indispensable creative partner rather than just a vendor.
+- presentation-design: Creates compelling, well-structured presentations for client meetings, pitches, status updates, and strategic recommendations that communicate clearly and build confidence.
+- public-speaking: Prepares speakers to deliver clear, persuasive, and audience-aware presentations with stronger message structure, confidence, and delivery control.
+- negotiation: Prepares for and executes client negotiations across pricing, scope, timelines, and terms. Uses structured frameworks to achieve win-win outcomes while protecting agency interests.
+- expectation-management: Sets, communicates, and maintains realistic expectations with clients and stakeholders to prevent misunderstandings, build trust, and ensure successful campaign outcomes.
+- scope-management: Defines, protects, and evolves project scope so teams can control delivery quality, resource use, and client expectations without creating unnecessary friction.
+- contract-discussion: Facilitates structured contract discussions with prospective or existing clients, covering scope definition, pricing, terms, and mutual expectations to land agreements clearly.
+- stakeholder-mapping: Identifies and analyzes all key stakeholders for a project, account, or initiative — mapping their influence, interests, relationships, and strategic importance to inform engagement and communication strategies.
+- upselling: Identifies and executes strategic growth opportunities within existing client accounts — expanding scope, introducing new services, and deepening the agency's value to grow revenue without losing relationship quality.
+- client-onboarding: Guides new clients through a structured onboarding process, covering discovery, access setup, kickoff, and initial alignment to ensure a smooth and professional start to the engagement.
+- feedback-synthesis: Transforms client and stakeholder feedback into clear, actionable items that drive creative iteration, project improvements, and aligned deliverables without losing the core intent of the original feedback.
+- rapport-building: Builds intentional relationship plans that increase trust, openness, and long-term partnership quality with clients and stakeholders.
+- account-health: Reviews client account health across revenue, satisfaction, engagement, and performance. Generates health scores and recommended actions.
+
+FILES I WANT YOU TO PREPARE FOR THIS AGENT
+------------------------------------------------------------------------------------------------------------------------
+Create these files under: src/config/agents/sage/
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+- PLAYBOOKS.md
+
+========================================================================================================================
+WHAT I NEED FROM YOU
+========================================================================================================================
+For EACH agent, please provide these authored files:
+- agent.json
+- SOUL.md
+- IDENTITY.md
+- STYLE.md
+- RULES.md
+- CONTEXT.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- MEMORY.md
+- HEARTBEAT.md
+
+If that is too much at once, start with these 6 files for all agents:
+- agent.json
+- SOUL.md
+- RULES.md
+- SKILL_SELECTION.md
+- HANDOFFS.md
+- HEARTBEAT.md
+
+And if you want the fastest possible rollout, start with only these agents first:
+- iris
+- echo
+- maya
+- atlas
+- nova
+
+These 5 agents control most of the task intake, strategy, copy, research, and media orchestration quality.
+
+========================================================================================================================
+NOTES ON SOUL.MD AND HEARTBEAT.MD
+========================================================================================================================
+Yes, I do want SOUL.md.
+- SOUL.md should define the agent core identity and decision principles.
+- It is different from IDENTITY.md: SOUL is the distilled behavioral core, IDENTITY is the deeper background.
+
+Yes, HEARTBEAT.md is useful too.
+- It is not required by the current app architecture today, but it would be very valuable for this product.
+- HEARTBEAT.md should define how the agent behaves while work is in motion:
+  - how it checks status
+  - when it updates progress
+  - when it asks for clarification
+  - when it escalates to Iris
+  - when it marks work blocked / ready / complete
+- This is especially important for your tracker UI and visible orchestration trace.
+
+Conclusion:
+- SOUL.md: strongly recommended
+- HEARTBEAT.md: strongly recommended for Mission Control specifically
+- Neither should replace agent.json; they should enrich it

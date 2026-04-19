@@ -8,25 +8,103 @@
   "freedom": "high",
   "prompts": {
     "en": {
-      "trigger": "Use when writing landing page copy, website content, blog posts, articles, case studies, or any context requiring detailed, persuasive copy over 500 words.",
+      "trigger": "Use this skillany time writing landing page copy, website content, blog posts, articles, case studies, or any context requiring detailed, persuasive copy over 500 words.",
       "context": "You are a long-form copywriting specialist who crafts detailed, persuasive content that builds trust and drives action. You structure information logically, maintain engagement, and guide readers to a clear conclusion.",
-      "instructions": "## Long-Form Copy Workflow\n\n- [ ] 1. Define the goal and the one action you want the reader to take\n- [ ] 2. Understand the audience and their objections\n- [ ] 3. Structure the copy: hook → problem → solution → proof → CTA\n- [ ] 4. Write the full copy with clear subheadings and scannable sections\n- [ ] 5. Edit for flow, clarity, and engagement\n- [ ] 6. Optimize the CTA\n\n## Key Inputs\n- Format: {{format}} (landing page, article, case study, whitepaper)\n- Goal: {{goal}} (conversion, engagement, education)\n- Product/Service: {{product_service}}\n- Audience: {{audience}}\n- Key Points: {{key_points}}",
+      "instructions": "## Long-Form Copy\n\n1. **Define structure** — Outline the content structure and key sections\n   - ✓ Done when: Structure supports the goal\n\n2. **Write hook and body** — Draft engaging copy with clear subheadings\n   - ✓ Done when: Writing is clear and persuasive\n\n3. **Add proof** — Include testimonials, data, and credibility markers\n   - ✓ Done when: Proof is specific and credible\n\n4. **Optimize CTA** — Write clear, compelling call to action\n   - ✓ Done when: CTA is specific and action-oriented\n\n## Key Inputs\n- format: Format: landing page, article, case study, whitepaper, pillar page\n- goal: Goal: conversion, engagement, education, lead generation\n- product_service: Product, service, or brand being promoted\n- audience: Target audience and their knowledge level\n- key_points: Key messages, benefits, or points to cover",
       "output_template": "## Long-Form Copy Brief\n\n### Content Details\n| Element | Details |\n|---------|---------|\n| Format | |\n| Goal | |\n| Word Count Target | |\n| Audience | |\n\n### Content Structure\n| Section | Purpose | Word Count |\n|---------|---------|-----------|\n| Hook | | |\n| Problem | | |\n| Solution | | |\n| Proof | | |\n| CTA | | |\n\n### Full Copy\n[Complete written content]\n\n### CTA Options\n- [ ] Primary CTA:\n- [ ] Secondary CTA:"
     }
   },
   "variables": [
-    { "name": "format", "type": "string", "required": true, "description": "Format: landing page, article, case study, whitepaper, pillar page" },
-    { "name": "goal", "type": "string", "required": true, "description": "Goal: conversion, engagement, education, lead generation" },
-    { "name": "product_service", "type": "string", "required": true, "description": "Product, service, or brand being promoted" },
-    { "name": "audience", "type": "string", "required": true, "description": "Target audience and their knowledge level" },
-    { "name": "key_points", "type": "string", "required": false, "description": "Key messages, benefits, or points to cover" }
+    {
+      "name": "format",
+      "type": "string",
+      "required": true,
+      "description": "Format: landing page, article, case study, whitepaper, pillar page"
+    },
+    {
+      "name": "goal",
+      "type": "string",
+      "required": true,
+      "description": "Goal: conversion, engagement, education, lead generation"
+    },
+    {
+      "name": "product_service",
+      "type": "string",
+      "required": true,
+      "description": "Product, service, or brand being promoted"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience and their knowledge level"
+    },
+    {
+      "name": "key_points",
+      "type": "string",
+      "required": false,
+      "description": "Key messages, benefits, or points to cover"
+    }
   ],
+  "inputs": [
+    {
+      "name": "format",
+      "type": "string",
+      "required": true,
+      "description": "Format: landing page, article, case study, whitepaper, pillar page"
+    },
+    {
+      "name": "goal",
+      "type": "string",
+      "required": true,
+      "description": "Goal: conversion, engagement, education, lead generation"
+    },
+    {
+      "name": "product_service",
+      "type": "string",
+      "required": true,
+      "description": "Product, service, or brand being promoted"
+    },
+    {
+      "name": "audience",
+      "type": "string",
+      "required": true,
+      "description": "Target audience and their knowledge level"
+    },
+    {
+      "name": "key_points",
+      "type": "string",
+      "required": false,
+      "description": "Key messages, benefits, or points to cover"
+    }
+  ],
+  "outputs": [],
   "workflow": {
     "steps": [
-      { "step": 1, "name": "Define structure", "action": "Outline the content structure and key sections", "verify": "Structure supports the goal" },
-      { "step": 2, "name": "Write hook and body", "action": "Draft engaging copy with clear subheadings", "verify": "Writing is clear and persuasive" },
-      { "step": 3, "name": "Add proof", "action": "Include testimonials, data, and credibility markers", "verify": "Proof is specific and credible" },
-      { "step": 4, "name": "Optimize CTA", "action": "Write clear, compelling call to action", "verify": "CTA is specific and action-oriented" }
+      {
+        "step": 1,
+        "name": "Define structure",
+        "action": "Outline the content structure and key sections",
+        "verify": "Structure supports the goal"
+      },
+      {
+        "step": 2,
+        "name": "Write hook and body",
+        "action": "Draft engaging copy with clear subheadings",
+        "verify": "Writing is clear and persuasive"
+      },
+      {
+        "step": 3,
+        "name": "Add proof",
+        "action": "Include testimonials, data, and credibility markers",
+        "verify": "Proof is specific and credible"
+      },
+      {
+        "step": 4,
+        "name": "Optimize CTA",
+        "action": "Write clear, compelling call to action",
+        "verify": "CTA is specific and action-oriented"
+      }
     ]
   },
   "examples": [
@@ -36,20 +114,29 @@
     }
   ],
   "checklist": [
-    "Hook grabs attention in the first sentence",
-    "Structure flows logically with clear subheadings",
-    "Copy is scannable (short paragraphs, bullets)",
-    "Benefits are specific and quantified where possible",
-    "Proof points (testimonials, data) are included",
-    "CTA is clear, specific, and action-oriented"
+    "Structure supports the goal",
+    "Writing is clear and persuasive",
+    "Proof is specific and credible",
+    "CTA is specific and action-oriented"
   ],
-  "tools": ["document"],
-  "agents": ["nova", "echo"],
-  "pipelines": ["content-pipeline"],
+  "tools": [
+    "document"
+  ],
+  "agents": [
+    "echo"
+  ],
+  "pipelines": [
+    "content-pipeline"
+  ],
   "metadata": {
     "version": "1.0",
     "author": "agency",
-    "tags": ["long-form-copy", "copywriting", "landing-page", "content-writing"],
-    "lastUpdated": "2026-03-24"
+    "tags": [
+      "long-form-copy",
+      "copywriting",
+      "landing-page",
+      "content-writing"
+    ],
+    "lastUpdated": "2026-03-30"
   }
 }

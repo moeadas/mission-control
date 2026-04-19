@@ -1,0 +1,99 @@
+{
+  "$schema": "https://docs.openclaw.ai/skills/schema.json",
+  "id": "brand-equity",
+  "name": "Brand Equity Measurement",
+  "description": "Measures and manages brand strength through awareness, perception, loyalty, and association metrics — tracking how consumers think, feel, and act toward a brand.",
+  "category": "research",
+  "difficulty": "intermediate",
+  "freedom": "medium",
+  "prompts": {
+    "en": {
+      "trigger": "Use when measuring or tracking brand equity — to understand brand awareness, perception, loyalty, and associations relative to competitors and over time.",
+      "context": "You are a brand analyst who measures brand equity using quantitative and qualitative research to track brand health and inform brand strategy decisions.",
+      "instructions": "## Brand Equity Measurement Workflow\n\n- [ ] 1. Define equity dimensions: Awareness, Associations, Perceived quality, Loyalty\n- [ ] 2. Select metrics: Choose measurable KPIs for each dimension\n- [ ] 3. Gather data: Pull from surveys, social listening, sales data, search data\n- [ ] 4. Benchmark: Compare against competitors and previous periods\n- [ ] 5. Diagnose: Identify what's driving or hurting equity\n- [ ] 6. Recommend: Actionable steps to improve brand equity\n\n## Key Inputs\n- Brand: {{brand_name}}\n- Competitors: {{competitors}}\n- Time period: {{time_period}}\n- Data sources: {{data_sources}}",
+      "output_template": "## Brand Equity Report: {{brand_name}}\n\n### Report Details\n| Field | Value |\n|-------|-------|\n| Brand | {{brand_name}} |\n| Competitors | {{competitors}} |\n| Period | {{time_period}} |\n| Date | {{date}} |\n\n### Brand Equity Scorecard\n| Dimension | Metric | Score | vs. Last Period | vs. Competitor |\n|-----------|--------|-------|-----------------|----------------|\n| Awareness | Unaided awareness | | | |\n| Awareness | Aided awareness | | | |\n| Associations | Brand attributes | | | |\n| Perceived quality | Quality perception | | | |\n| Loyalty | NPS / Repeat purchase | | | |\n\n### Brand Funnel\n| Stage | This period | Last period | Change |\n|-------|-------------|-------------|--------|\n| Awareness | | | |\n| Consideration | | | |\n| Preference | | | |\n| Loyalty | | | |\n\n### Key Drivers of Equity\n**What is helping brand equity:**\n\n**What is hurting brand equity:**\n\n### Competitor Comparison\n| Dimension | {{brand_name}} | Competitor A | Competitor B |\n|-----------|----------------|--------------|--------------|\n| | | | |\n\n### Recommendations\n| Action | Impact on equity | Priority |\n|--------|-----------------|----------|\n| | | |"
+    }
+  },
+  "variables": [
+    {
+      "name": "brand_name",
+      "type": "string",
+      "required": true,
+      "description": "Brand being measured"
+    },
+    {
+      "name": "competitors",
+      "type": "string",
+      "required": false,
+      "description": "Key competitors to compare against"
+    },
+    {
+      "name": "time_period",
+      "type": "string",
+      "required": false,
+      "description": "Time period for analysis"
+    },
+    {
+      "name": "data_sources",
+      "type": "string",
+      "required": false,
+      "description": "Available data sources (surveys, social, sales)"
+    }
+  ],
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Dimension Definition",
+        "action": "Define the four equity dimensions to measure",
+        "verify": "Dimensions are measurable and relevant"
+      },
+      {
+        "step": 2,
+        "name": "Data Collection",
+        "action": "Gather data across all sources",
+        "verify": "Data is current and representative"
+      },
+      {
+        "step": 3,
+        "name": "Benchmarking",
+        "action": "Compare against competitors and history",
+        "verify": "Comparisons are on a like-for-like basis"
+      },
+      {
+        "step": 4,
+        "name": "Diagnosis",
+        "action": "Identify drivers of equity changes",
+        "verify": "Causes are evidenced, not assumed"
+      },
+      {
+        "step": 5,
+        "name": "Recommendations",
+        "action": "Propose actions to improve equity",
+        "verify": "Actions are specific and prioritized"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "input": "Measure TechStart's brand equity in the UAE B2B fintech market. Competitors: SAP Concur, Moss. Data from customer survey, Google Trends, and social listening.",
+      "output": "Full brand equity scorecard with competitor comparison and actionable recommendations"
+    }
+  ],
+  "checklist": [
+    "All four equity dimensions are measured",
+    "Data sources are credible and current",
+    "Competitor comparison is on a like-for-like basis",
+    "Drivers of change are evidenced",
+    "Recommendations are specific and prioritized"
+  ],
+  "tools": ["spreadsheet", "document"],
+  "agents": ["nova"],
+  "pipelines": ["brand-research"],
+  "metadata": {
+    "version": "1.1",
+    "author": "agency",
+    "tags": ["brand", "research", "brand-equity", "awareness", "loyalty"],
+    "lastUpdated": "2026-03-24"
+  }
+}

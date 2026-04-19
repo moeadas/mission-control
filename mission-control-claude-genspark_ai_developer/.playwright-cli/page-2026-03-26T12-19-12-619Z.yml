@@ -1,0 +1,249 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - generic [ref=e16]:
+    - banner [ref=e17]:
+      - img [ref=e21]
+      - generic [ref=e23]:
+        - button "Refresh latest app version" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - button "Switch to dark mode" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+        - button "Sign out" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+        - paragraph [ref=e38]: 13:19
+    - generic [ref=e39]:
+      - navigation "Main navigation" [ref=e40]:
+        - generic [ref=e42]:
+          - generic [ref=e44]: MC
+          - generic [ref=e45]:
+            - paragraph [ref=e46]: Mission Control
+            - paragraph [ref=e47]: Agency HQ
+        - generic [ref=e48]:
+          - link "Dashboard" [ref=e49] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e52]
+            - generic [ref=e57]: Dashboard
+          - link "Virtual Office" [ref=e58] [cursor=pointer]:
+            - /url: /office
+            - img [ref=e60]
+            - generic [ref=e64]: Virtual Office
+          - link "Agents" [ref=e65] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e67]
+            - generic [ref=e70]: Agents
+          - link "Clients" [ref=e71] [cursor=pointer]:
+            - /url: /clients
+            - img [ref=e73]
+            - generic [ref=e78]: Clients
+          - link "Tasks" [ref=e79] [cursor=pointer]:
+            - /url: /tasks
+            - img [ref=e81]
+            - generic [ref=e84]: Tasks
+          - link "Pipeline" [ref=e85] [cursor=pointer]:
+            - /url: /pipeline
+            - img [ref=e87]
+            - generic [ref=e91]: Pipeline
+          - link "Skills" [ref=e92] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e94]
+            - generic [ref=e97]: Skills
+          - link "Runner" [ref=e98] [cursor=pointer]:
+            - /url: /pipeline/run
+            - img [ref=e100]
+            - generic [ref=e102]: Runner
+          - link "Analytics" [ref=e103] [cursor=pointer]:
+            - /url: /analytics
+            - img [ref=e105]
+            - generic [ref=e107]: Analytics
+          - link "Outputs" [ref=e108] [cursor=pointer]:
+            - /url: /outputs
+            - img [ref=e110]
+            - generic [ref=e113]: Outputs
+          - link "Users" [ref=e114] [cursor=pointer]:
+            - /url: /users
+            - img [ref=e116]
+            - generic [ref=e118]: Users
+          - link "Settings" [ref=e119] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e121]
+            - generic [ref=e124]: Settings
+        - generic [ref=e126]:
+          - generic [ref=e128]: MC
+          - generic [ref=e129]:
+            - paragraph [ref=e130]: Agency Mode
+            - paragraph [ref=e131]: Iris · Online
+      - main [ref=e133]:
+        - generic [ref=e135]:
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - heading "Command Center" [level=1] [ref=e139]
+              - paragraph [ref=e140]: 1 agents active·1 clients·2 tasks running
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic "Atlas — idle" [ref=e143]:
+                  - img "Atlas" [ref=e148]
+                - generic "Dex — idle" [ref=e149]:
+                  - img "Dex" [ref=e154]
+                - generic "Echo — idle" [ref=e155]:
+                  - img "Echo" [ref=e160]
+                - generic "Finn — idle" [ref=e161]:
+                  - img "Finn" [ref=e166]
+                - generic "Iris — active" [ref=e167]:
+                  - img "Iris" [ref=e172]
+                - generic "Lyra — idle" [ref=e173]:
+                  - img "Lyra" [ref=e178]
+              - button "All agents →" [ref=e180] [cursor=pointer]
+          - generic [ref=e181]:
+            - generic [ref=e183]:
+              - generic [ref=e184]:
+                - paragraph [ref=e185]: Active Agents
+                - generic [ref=e186]:
+                  - generic [ref=e187]: "1"
+                  - generic [ref=e188]: /10
+              - img [ref=e190]
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - paragraph [ref=e196]: Running Tasks
+                - generic [ref=e197]:
+                  - generic [ref=e198]: "2"
+                  - generic [ref=e199]: /4
+              - img [ref=e201]
+            - generic [ref=e206]:
+              - generic [ref=e207]:
+                - paragraph [ref=e208]: Completed
+                - generic [ref=e210]: "2"
+              - img [ref=e212]
+            - generic [ref=e216]:
+              - generic [ref=e217]:
+                - paragraph [ref=e218]: On Task
+                - generic [ref=e220]: "10"
+              - img [ref=e222]
+            - generic [ref=e226]:
+              - generic [ref=e227]:
+                - paragraph [ref=e228]: Open Missions
+                - generic [ref=e229]:
+                  - generic [ref=e230]: "2"
+                  - generic [ref=e231]: /4
+              - img [ref=e233]
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - generic [ref=e238]:
+                  - generic [ref=e239]:
+                    - heading "Active Team" [level=3] [ref=e240]
+                    - paragraph [ref=e241]: 1 active · 9 idle
+                  - button "View all →" [ref=e242] [cursor=pointer]
+                - button "Iris Iris Agency" [ref=e244] [cursor=pointer]:
+                  - img "Iris" [ref=e250]
+                  - generic [ref=e256]:
+                    - paragraph [ref=e257]: Iris
+                    - paragraph [ref=e258]: Agency
+              - generic [ref=e259]:
+                - generic [ref=e261]:
+                  - heading "Live Activity" [level=3] [ref=e264]
+                  - generic [ref=e265]: 2 events
+                - generic [ref=e266]:
+                  - generic [ref=e267]:
+                    - img "Iris" [ref=e273]
+                    - generic [ref=e274]:
+                      - generic [ref=e275]:
+                        - generic [ref=e276]: Iris
+                        - generic [ref=e277]: started
+                        - generic [ref=e278]: — routed launch narrative mission
+                      - paragraph [ref=e279]: Assigned Sage and Maya to shape Victory Genomics messaging.
+                    - generic [ref=e282]: 2026-03-26 13:19
+                  - generic [ref=e283]:
+                    - img "Atlas" [ref=e289]
+                    - generic [ref=e290]:
+                      - generic [ref=e291]:
+                        - generic [ref=e292]: Atlas
+                        - generic [ref=e293]: thinking
+                        - generic [ref=e294]: — surfaced competitor intelligence
+                      - paragraph [ref=e295]: Found recurring weak spots in panel-testing competitors versus whole-genome positioning.
+                    - generic [ref=e296]:
+                      - img [ref=e297]
+                      - generic [ref=e299]: 2026-03-26 13:19
+            - generic [ref=e300]:
+              - generic [ref=e301]:
+                - heading "Quick Actions" [level=3] [ref=e302]
+                - generic [ref=e303]:
+                  - button "Add Agent Bring a new agent online" [ref=e304] [cursor=pointer]:
+                    - img [ref=e306]
+                    - generic [ref=e309]:
+                      - generic [ref=e310]: Add Agent
+                      - text: Bring a new agent online
+                    - img [ref=e312]
+                  - button "Virtual Office See the team in action" [ref=e314] [cursor=pointer]:
+                    - img [ref=e316]
+                    - generic [ref=e320]:
+                      - generic [ref=e321]: Virtual Office
+                      - text: See the team in action
+                    - img [ref=e323]
+                  - button "New Mission Create a task from scratch" [ref=e325] [cursor=pointer]:
+                    - img [ref=e327]
+                    - generic [ref=e331]:
+                      - generic [ref=e332]: New Mission
+                      - text: Create a task from scratch
+                    - img [ref=e334]
+              - generic [ref=e336]:
+                - generic [ref=e337]:
+                  - heading "Mission Queue" [level=3] [ref=e338]
+                  - generic [ref=e339]: 2 active
+                - generic [ref=e340]:
+                  - generic [ref=e341] [cursor=pointer]:
+                    - generic [ref=e342]:
+                      - generic [ref=e343]:
+                        - paragraph [ref=e344]: "Instagram Carousel: Equine Karyotyping"
+                        - paragraph [ref=e345]: Victory Genomics · completed
+                      - generic [ref=e346]: 100%
+                    - generic [ref=e349]:
+                      - button "⏸" [ref=e350]
+                      - button "✓" [ref=e351]
+                      - button "✕" [ref=e352]
+                  - generic [ref=e353] [cursor=pointer]:
+                    - generic [ref=e354]:
+                      - generic [ref=e355]:
+                        - paragraph [ref=e356]: "Instagram Carousel: Equine Karyotyping"
+                        - paragraph [ref=e357]: Victory Genomics · completed
+                      - generic [ref=e358]: 100%
+                    - generic [ref=e361]:
+                      - button "⏸" [ref=e362]
+                      - button "✓" [ref=e363]
+                      - button "✕" [ref=e364]
+                  - generic [ref=e365] [cursor=pointer]:
+                    - generic [ref=e366]:
+                      - generic [ref=e367]:
+                        - paragraph [ref=e368]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                        - paragraph [ref=e369]: General ops · queued
+                      - generic [ref=e370]: 0%
+                    - generic [ref=e372]:
+                      - button "⏸" [ref=e373]
+                      - button "✓" [ref=e374]
+                      - button "✕" [ref=e375]
+                  - generic [ref=e376] [cursor=pointer]:
+                    - generic [ref=e377]:
+                      - generic [ref=e378]:
+                        - paragraph [ref=e379]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                        - paragraph [ref=e380]: Victory Genomics · review
+                      - generic [ref=e381]: 75%
+                    - generic [ref=e384]:
+                      - button "⏸" [ref=e385]
+                      - button "✓" [ref=e386]
+                      - button "✕" [ref=e387]
+              - generic [ref=e388]:
+                - generic [ref=e389]:
+                  - heading "In Progress" [level=3] [ref=e390]
+                  - button "View all →" [ref=e391] [cursor=pointer]
+                - generic [ref=e392]:
+                  - generic [ref=e393]:
+                    - generic [ref=e396]:
+                      - paragraph [ref=e397]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                      - paragraph [ref=e398]: General Ops
+                    - generic [ref=e399]: 0%
+                  - generic [ref=e400]:
+                    - generic [ref=e403]:
+                      - paragraph [ref=e404]: "Content Task: a short Instagram carousel for Victory Genomics about Equine Karyotyp..."
+                      - paragraph [ref=e405]: Victory Genomics
+                    - generic [ref=e406]: 75%
+    - button "Open Iris chat" [ref=e407] [cursor=pointer]:
+      - img [ref=e408]
