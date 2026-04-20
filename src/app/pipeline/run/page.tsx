@@ -54,6 +54,36 @@ export default function PipelineRunPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<'run' | 'skills' | 'active'>('run')
 
+  function buildDirectExecutionPipeline() {
+    return {
+      id: 'direct-execution',
+      name: 'Direct Specialist Execution',
+      description: 'Fallback execution mode for deliverables that do not have a formal pipeline yet.',
+      version: 'system',
+      isDefault: true,
+      estimatedDuration: 'Adaptive',
+      clientProfileFields: [],
+      phases: [
+        {
+          id: 'direct',
+          name: 'Direct Execution',
+          color: 'accent-purple',
+          activities: [
+            {
+              id: 'direct-execution',
+              name: 'Specialist Delivery',
+              description: 'Run the shared specialist execution flow without a formal pipeline.',
+              assignedRole: 'specialist',
+              inputs: [],
+              outputs: [],
+              checklist: [],
+            },
+          ],
+        },
+      ],
+    } as Pipeline
+  }
+
   useEffect(() => {
     async function loadPipelines() {
       try {
@@ -127,7 +157,9 @@ export default function PipelineRunPage() {
             if (!instance.taskId) return instance
             const update = updates.find((entry) => entry?.taskId === instance.taskId)
             if (!update) return instance
-            const pipeline = pipelines.find((entry) => entry.id === instance.pipelineId)
+            const pipeline =
+              pipelines.find((entry) => entry.id === instance.pipelineId) ||
+              (instance.pipelineId === 'direct-execution' ? buildDirectExecutionPipeline() : null)
             return pipeline ? applyExecutionStateToInstance(instance, update.state, pipeline) : instance
           })
         )
@@ -167,32 +199,45 @@ export default function PipelineRunPage() {
     setIsRouting(false)
   }
 
-  const startPipeline = async (pipelineId: string) => {
-    const pipeline = pipelines.find(p => p.id === pipelineId)
-    if (!pipeline) return
+  const startExecution = async (routing: { pipelineId?: string; pipelineName?: string; executionMode?: 'pipeline' | 'direct' }) => {
+    const isDirectExecution = routing.executionMode === 'direct' || routing.pipelineId === 'direct-execution'
+    const pipeline = !isDirectExecution && routing.pipelineId
+      ? pipelines.find((entry) => entry.id === routing.pipelineId) || null
+      : null
+    const directPipeline = buildDirectExecutionPipeline()
+    const clientData = createPipelineInstance(pipeline || directPipeline, selectedClient, {}, language).clientData
 
-    const clientData = createPipelineInstance(pipeline, selectedClient, {}, language).clientData
-    const validation = validatePipelineClientData(pipeline, clientData)
-    if (!validation.ok) {
+    if (pipeline) {
+      const validation = validatePipelineClientData(pipeline, clientData)
+      if (!validation.ok) {
+        setRoutingResult({
+          success: false,
+          message: validation.message,
+          availablePipelines: [
+            {
+              id: pipeline.id,
+              name: pipeline.name,
+              description: [
+                validation.missingFields.length ? `Missing required fields: ${validation.missingFields.join(', ')}` : '',
+                validation.missingTemplateVariables.length
+                  ? `Missing template variables: ${validation.missingTemplateVariables.join(', ')}`
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' • '),
+              version: pipeline.version,
+              phases: pipeline.phases.map(ph => ({ id: ph.id, name: ph.name })),
+            },
+          ],
+        })
+        return
+      }
+    }
+
+    if (!pipeline && !isDirectExecution) {
       setRoutingResult({
         success: false,
-        message: validation.message,
-        availablePipelines: [
-          {
-            id: pipeline.id,
-            name: pipeline.name,
-            description: [
-              validation.missingFields.length ? `Missing required fields: ${validation.missingFields.join(', ')}` : '',
-              validation.missingTemplateVariables.length
-                ? `Missing template variables: ${validation.missingTemplateVariables.join(', ')}`
-                : '',
-            ]
-              .filter(Boolean)
-              .join(' • '),
-            version: pipeline.version,
-            phases: pipeline.phases.map(ph => ({ id: ph.id, name: ph.name })),
-          },
-        ],
+        message: 'The selected execution mode is not available.',
       })
       return
     }
@@ -218,7 +263,7 @@ export default function PipelineRunPage() {
           description: taskDescription,
           clientId: selectedClient,
           language,
-          pipelineId,
+          pipelineId: pipeline?.id,
         }),
       })
 
@@ -227,12 +272,16 @@ export default function PipelineRunPage() {
         throw new Error(payload?.error || 'Failed to launch tracked pipeline run.')
       }
 
-      const instance = createPipelineInstance(pipeline, selectedClient, clientData, language)
+      const instance = createPipelineInstance(pipeline || directPipeline, selectedClient, clientData, language)
       instance.id = payload.taskId || instance.id
       instance.taskId = payload.taskId
       instance.status = 'running'
-      instance.pipelineName = pipeline.name
-      instance.currentPhaseName = payload.pipeline?.phases?.[0]?.name || pipeline.phases[0]?.name || null
+      instance.pipelineId = payload.executionMode === 'direct' ? 'direct-execution' : (pipeline?.id || instance.pipelineId)
+      instance.pipelineName = payload.pipeline?.name || routing.pipelineName || pipeline?.name || directPipeline.name
+      instance.currentPhaseName =
+        payload.pipeline?.phases?.[0]?.name ||
+        pipeline?.phases[0]?.name ||
+        'Direct Execution'
       instance.progress = 5
       instance.jobStatus = payload.job?.status || 'queued'
 
@@ -409,16 +458,20 @@ export default function PipelineRunPage() {
                       
                       <div className="bg-base-200 rounded-lg p-4 mb-4">
                         <p className="text-sm">
-                          <span className="text-text-secondary">Pipeline:</span>{' '}
+                          <span className="text-text-secondary">
+                            {routingResult.executionMode === 'direct' ? 'Execution mode:' : 'Pipeline:'}
+                          </span>{' '}
                           <span className="font-medium">{routingResult.pipelineName}</span>
                         </p>
                         <p className="text-xs text-text-dim mt-1">
-                          {selectedPipeline?.description}
+                          {routingResult.executionMode === 'direct'
+                            ? 'This deliverable will run through the shared specialist task runner without a formal pipeline template.'
+                            : selectedPipeline?.description}
                         </p>
                       </div>
                       
                       <button
-                        onClick={() => startPipeline(routingResult.pipelineId)}
+                        onClick={() => startExecution(routingResult)}
                         disabled={isLaunching}
                         className={clsx(
                           'w-full py-3 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors',

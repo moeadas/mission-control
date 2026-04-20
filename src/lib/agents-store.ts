@@ -22,6 +22,7 @@ import { AgentMemory, appendAgentMemoryNote, buildDefaultAgentMemories, mergeAge
 import { buildTaskTitleFromRequest } from './task-output'
 import { inferDeliverableTypeFromText, getDeliverableSpec } from './deliverables'
 import type { IrisPendingBrief } from './iris-briefing'
+import pipelinesConfig from '@/config/pipelines/pipelines.json'
 
 export interface ChatMessage {
   id: string
@@ -204,6 +205,26 @@ function inferMissionDeliverableType(prompt: string): Mission['deliverableType']
   return inferDeliverableTypeFromText(prompt)
 }
 
+function resolveMissionPipelineMetadata(
+  deliverableType: Mission['deliverableType'],
+  pipelineId?: string | null,
+  pipelineName?: string | null
+) {
+  const spec = getDeliverableSpec(deliverableType)
+  const resolvedPipelineId = pipelineId || spec.pipelineId || null
+  const configuredPipelines = Array.isArray((pipelinesConfig as any).pipelines) ? (pipelinesConfig as any).pipelines : []
+  const resolvedPipelineName =
+    pipelineName ||
+    (resolvedPipelineId
+      ? configuredPipelines.find((pipeline: any) => pipeline.id === resolvedPipelineId)?.name || null
+      : null)
+
+  return {
+    pipelineId: resolvedPipelineId,
+    pipelineName: resolvedPipelineName,
+  }
+}
+
 function inferDivision(agent: Partial<Agent> & Record<string, any>): Agent['division'] {
   if (VALID_DIVISIONS.has(agent.division as Agent['division'])) return agent.division as Agent['division']
   if (VALID_DIVISIONS.has(agent.unit as Agent['division'])) return agent.unit as Agent['division']
@@ -308,6 +329,11 @@ function normalizePersistedState(persistedState: any) {
         const assignedAgentIds = Array.isArray(mission.assignedAgentIds) && mission.assignedAgentIds.length
           ? mission.assignedAgentIds.filter(Boolean)
           : [leadAgentId, ...collaboratorAgentIds].filter(Boolean)
+        const pipeline = resolveMissionPipelineMetadata(
+          mission.deliverableType || 'status-report',
+          mission.pipelineId,
+          mission.pipelineName
+        )
 
         return {
           ...mission,
@@ -319,6 +345,8 @@ function normalizePersistedState(persistedState: any) {
           assignedAgentIds,
           leadAgentId,
           collaboratorAgentIds,
+          pipelineId: pipeline.pipelineId ?? undefined,
+          pipelineName: pipeline.pipelineName ?? undefined,
           assignedBy: mission.assignedBy || 'iris',
           progress: typeof mission.progress === 'number' ? mission.progress : mission.status === 'completed' ? 100 : 0,
           createdAt: mission.createdAt || nowIso(),
@@ -367,10 +395,17 @@ function mergeHydratedMission(localMission: Mission | undefined, incomingMission
 
   const incomingAssignedAgentIds = Array.isArray(incomingMission.assignedAgentIds) ? incomingMission.assignedAgentIds : []
   const localAssignedAgentIds = Array.isArray(localMission.assignedAgentIds) ? localMission.assignedAgentIds : []
+  const pipeline = resolveMissionPipelineMetadata(
+    incomingMission.deliverableType || localMission.deliverableType,
+    incomingMission.pipelineId || localMission.pipelineId,
+    incomingMission.pipelineName || localMission.pipelineName
+  )
 
   return {
     ...localMission,
     ...incomingMission,
+    pipelineId: pipeline.pipelineId ?? undefined,
+    pipelineName: pipeline.pipelineName ?? undefined,
     assignedAgentIds: incomingAssignedAgentIds.length ? incomingAssignedAgentIds : localAssignedAgentIds,
     leadAgentId: incomingMission.leadAgentId || localMission.leadAgentId,
     collaboratorAgentIds:
@@ -715,6 +750,7 @@ export const useAgentsStore = create<AgentsState>()(
       createMissionFromPrompt: (prompt, options) => {
         const deliverableType = inferMissionDeliverableType(prompt)
         const spec = getDeliverableSpec(deliverableType)
+        const pipeline = resolveMissionPipelineMetadata(deliverableType, spec.pipelineId, null)
         const title = buildTaskTitleFromRequest(prompt, deliverableType)
         const missionId = uuidv4()
         const leadAgentId = spec.defaultLead && spec.defaultLead !== 'iris' ? spec.defaultLead : undefined
@@ -734,6 +770,8 @@ export const useAgentsStore = create<AgentsState>()(
           channelingConfidence: deliverableType === 'general-task' ? 'medium' : deliverableType === 'status-report' ? 'low' : 'medium',
           campaignId: options?.campaignId,
           clientId: options?.clientId,
+          pipelineId: pipeline.pipelineId ?? undefined,
+          pipelineName: pipeline.pipelineName ?? undefined,
           assignedAgentIds,
           leadAgentId,
           collaboratorAgentIds,

@@ -402,8 +402,10 @@ Task execution now has three layers:
 
 3. **Retry / resume execution route**
    - `/api/tasks/[id]/execution` supports `GET` for live execution state and `POST` for retry/resume actions
-   - execution is queued through `src/lib/server/execution-queue.ts`
-   - the queue is currently in-process, not yet a detached worker service
+  - execution is queued through `src/lib/server/execution-queue.ts`
+  - queue state is now persisted through `task_runs` entries with stage `execution-job` instead of an in-memory `Map`
+  - this makes live execution status durable across UI polling and removes the old memory-only queue state
+  - the dispatcher still runs in-process today, so a true detached worker remains a future infrastructure upgrade
 
 Task detail UI now surfaces:
 
@@ -644,7 +646,12 @@ If the final lead-model pass returns no visible output:
 
 ### Standalone Pipeline Runner Safeguards
 
-- `src/lib/pipeline-execution.ts` now calls the real authenticated `/api/chat` runtime instead of returning a fake hardcoded agent response
+- `src/lib/pipeline-execution.ts` is now a compatibility layer only:
+  - routing preview
+  - client field validation
+  - tracked runner instance scaffolding
+  - remote execution-state mapping
+  - the old client-side execution exports now throw a deprecation error if called accidentally
 - `createPipelineInstance()` seeds client data from the selected client profile, so the runner no longer starts with an empty prompt context
 - `validatePipelineClientData()` now checks:
   - required `clientProfileFields`
@@ -1026,11 +1033,13 @@ Pipeline and skill editing surfaces now use a shared editor theme layer from `sr
   - execution is queued through `/api/tasks/[id]/execution` semantics
   - live progress is polled from persisted `workflow_instances` + `task_runs`
   - the page no longer acts as a disconnected local pipeline engine
+  - if no formal pipeline exists for the classified deliverable, the runner now falls back to **Direct Specialist Execution** instead of failing outright
 - `src/lib/pipeline-execution.ts` is now a compatibility layer for:
   - route matching
   - client-field validation
   - pipeline task scaffolding for the runner UI
   - mapping persisted execution state back into runner task cards
+  - deprecated client-side execution exports now throw immediately if anything still tries to use them
 - `src/lib/server/autonomous-task.ts` now:
   - builds per-agent skill context
   - runs pipeline activities through the assigned role/agent mapping
@@ -1078,6 +1087,10 @@ Access at: http://localhost:3000
 - `pendingBriefs` stay out of shared app-state sync and relational persistence:
   - they are recovered from local browser persistence after remounts
   - cross-device pending-brief recovery still needs a safer dedicated persistence design rather than the shared-state sync loop
+- Execution queue state is no longer stored in an in-memory `Map`:
+  - `src/lib/server/execution-queue.ts` persists queue lifecycle entries as `task_runs` with stage `execution-job`
+  - `/api/tasks/[id]/execution` now reads that persisted job state back out for live polling
+  - this makes queue/running/completed/failed status durable even if the UI refreshes
 - Deliverable routing defaults are now centralized through `src/lib/deliverables.ts` compatibility helpers:
   - `agent-roles.ts` reads registry defaults instead of maintaining a fully separate lead/collaborator matrix
   - `task-channeling.ts` now derives lead, collaborator, and complexity defaults from the same deliverable registry and only keeps skill-pattern overrides

@@ -20,6 +20,7 @@ import { ensureTaskExecutionPersistence, insertTaskRun, upsertWorkflowExecutionS
 import { loadConfigSkillCategories, mergeDbSkillsWithConfig } from '@/lib/server/skills-catalog'
 import { buildTaskChannelingPlan } from '@/lib/server/task-channeling'
 import { getConfigPipelines, mergeDatabasePipelines } from '@/lib/pipeline-loader'
+import { getDeliverableSpec } from '@/lib/deliverables'
 
 // DEBUG: Log incoming requests
 function debugLog(label: string, data: any) {
@@ -79,6 +80,41 @@ function enforceDeliverableDraft(responseText: string, deliverableType: string) 
   if (!looksLikeCoordinationOnly) return responseText
 
   return 'I have not drafted the deliverable yet. I should respond with the actual draft content and save it as an internal output artifact instead of only returning routing/status language.'
+}
+
+function parseStructuredExecutionError(message?: string | null) {
+  if (!message || !message.includes('|')) return null
+
+  const parsed: Record<string, string> = {}
+  const segments = message.split('|').map((segment) => segment.trim()).filter(Boolean)
+  for (const segment of segments.slice(1)) {
+    const separatorIndex = segment.indexOf('=')
+    if (separatorIndex <= 0) continue
+    const key = segment.slice(0, separatorIndex).trim()
+    const value = segment.slice(separatorIndex + 1).trim()
+    if (key && value) parsed[key] = value
+  }
+
+  const [phaseId, phaseName] = (parsed.phase || '').split(':')
+  const [activityId, activityName] = (parsed.activity || '').split(':')
+  const [agentId, agentName] = (parsed.agent || '').split(':')
+
+  return {
+    phaseId: phaseId || undefined,
+    phaseName: phaseName || undefined,
+    activityId: activityId || undefined,
+    activityName: activityName || undefined,
+    agentId: agentId || undefined,
+    agentName: agentName || undefined,
+    expected: parsed.expected,
+    pillar: parsed.pillar,
+    batch: parsed.batch,
+    requested: parsed.requested,
+    tokenCap: parsed.tokenCap,
+    responseLength: parsed.responseLength,
+    reason: parsed.reason,
+    snippet: parsed.snippet,
+  }
 }
 
 async function getDefaultAgencyId() {
@@ -149,6 +185,7 @@ async function loadSkills() {
 
 export async function POST(req: NextRequest) {
   let requestBody: any = null
+  let persistedPipelineId: string | null = null
   try {
     const auth = await resolveAuthContextFromToken(getBearerToken(req))
     if (!auth) {
@@ -300,8 +337,25 @@ export async function POST(req: NextRequest) {
     })
 
     // Infer which pipeline matches this request
+    const deliverableSpec = getDeliverableSpec(deliverableType as any)
+    const missionSnapshot = Array.isArray(missions)
+      ? missions.find((mission: any) => mission?.id === missionId)
+      : null
     const pipelineHint = inferPipeline(userContent, pipelines)
-    const pipelineDefinition = pipelineHint ? pipelines.find((pipeline: any) => pipeline.id === pipelineHint.id) || null : null
+    const resolvedPipelineId =
+      pipelineHint?.id ||
+      deliverableSpec.pipelineId ||
+      missionSnapshot?.pipelineId ||
+      null
+    persistedPipelineId = resolvedPipelineId
+    const pipelineDefinition = resolvedPipelineId
+      ? pipelines.find((pipeline: any) => pipeline.id === resolvedPipelineId) || null
+      : null
+    const resolvedPipelineName =
+      pipelineDefinition?.name ||
+      pipelineHint?.name ||
+      missionSnapshot?.pipelineName ||
+      null
     const routedAgent = agents.find((agent: any) => agent.id === routing.routedAgentId)
     const scopedClient =
       clients.find((client: any) => client.id === routing.clientId || client.id === currentClientId) ||
@@ -367,7 +421,7 @@ export async function POST(req: NextRequest) {
       deliverableType,
       request: userContent,
       routedAgentId: routing.routedAgentId,
-      pipelinePhases: pipelineHint?.phases,
+      pipelinePhases: pipelineDefinition?.phases?.map((phase: any) => phase.name) || pipelineHint?.phases,
     })
     const channelingPlan = buildTaskChannelingPlan({
       request: userContent,
@@ -391,12 +445,8 @@ export async function POST(req: NextRequest) {
       clientTargetAudiences: scopedClient?.targetAudiences,
       clientBrandPromise: scopedClient?.brandPromise,
       clientKeyMessages: scopedClient?.keyMessages,
-      pipelineName: pipelineHint?.name || undefined,
+      pipelineName: resolvedPipelineName || undefined,
     })
-
-    const missionSnapshot = Array.isArray(missions)
-      ? missions.find((mission: any) => mission?.id === missionId)
-      : null
 
     if (missionId) {
       try {
@@ -413,8 +463,8 @@ export async function POST(req: NextRequest) {
           leadAgentId: channelingPlan.leadAgentId,
           collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
           assignedAgentIds: channelingPlan.assignedAgentIds,
-          pipelineId: pipelineHint?.id || missionSnapshot?.pipelineId || null,
-          pipelineName: pipelineHint?.name || missionSnapshot?.pipelineName || null,
+          pipelineId: resolvedPipelineId,
+          pipelineName: resolvedPipelineName,
           skillAssignments: channelingPlan.selectedSkillsByAgent,
           orchestrationTrace: channelingPlan.orchestrationTrace,
           qualityChecklist: executionPlan.qualityChecklist,
@@ -434,18 +484,20 @@ export async function POST(req: NextRequest) {
     }
 
     // Build pipeline context for Iris
-    const pipelineContext = pipelineHint
+    const pipelineContext = pipelineDefinition || pipelineHint
       ? [
           '',
           `--- PIPELINE ROUTING ---`,
-          `This request matches the "${pipelineHint.name}" pipeline (confidence: ${pipelineHint.confidence}).`,
-          `Pipeline phases: ${pipelineHint.phases.map((p: string) => `"${p}"`).join(' → ')}.`,
-          `Estimated duration: ${pipelineHint.estimatedDuration}.`,
-          `Client profile fields needed: ${pipelineHint.clientProfileFields.map((f: any) => f.label).join(', ') || 'none'}.`,
+          `This request matches the "${resolvedPipelineName || 'tracked execution'}" pipeline${pipelineHint?.confidence ? ` (confidence: ${pipelineHint.confidence})` : ''}.`,
+          `Pipeline phases: ${(pipelineDefinition?.phases?.map((p: any) => `"${p.name}"`) || pipelineHint?.phases?.map((p: string) => `"${p}"`) || []).join(' → ')}.`,
+          pipelineHint?.estimatedDuration ? `Estimated duration: ${pipelineHint.estimatedDuration}.` : '',
+          pipelineHint?.clientProfileFields?.length
+            ? `Client profile fields needed: ${pipelineHint.clientProfileFields.map((f: any) => f.label).join(', ')}.`
+            : '',
           ``,
           `To execute this pipeline, Iris should:`,
           `1. Confirm the client and collect any missing profile data`,
-          `2. Route to the pipeline via /app/pipeline/${pipelineHint.id}`,
+          `2. Route to the pipeline via /app/pipeline/${resolvedPipelineId}`,
           `3. Assign agents to phases based on their roles (client-services → intake, copy → drafting, etc.)`,
         ].join('\n')
       : ''
@@ -536,11 +588,11 @@ Orchestration trace:
 
     try {
       if (missionId && canPersistMissionExecution) {
-        await upsertWorkflowExecutionState({
-          taskId: missionId,
-          pipelineId: pipelineDefinition?.id || null,
-          status: 'active',
-          currentPhase: pipelineDefinition?.phases?.[0]?.name || 'Execution',
+          await upsertWorkflowExecutionState({
+            taskId: missionId,
+            pipelineId: resolvedPipelineId,
+            status: 'active',
+            currentPhase: pipelineDefinition?.phases?.[0]?.name || 'Execution',
           progress: 5,
           context: {
             source: 'chat',
@@ -555,7 +607,7 @@ Orchestration trace:
           status: 'in_progress',
           inputPayload: {
             deliverableType,
-            pipelineId: pipelineDefinition?.id || null,
+            pipelineId: resolvedPipelineId,
           },
           startedAt: new Date().toISOString(),
         })
@@ -587,7 +639,7 @@ Orchestration trace:
                 onPhaseStart: async ({ phase, progress }) => {
                   await upsertWorkflowExecutionState({
                     taskId: missionId,
-                    pipelineId: pipelineDefinition?.id || null,
+                    pipelineId: resolvedPipelineId,
                     status: 'active',
                     currentPhase: phase.name,
                     progress,
@@ -607,7 +659,7 @@ Orchestration trace:
                   })
                   await upsertWorkflowExecutionState({
                     taskId: missionId,
-                    pipelineId: pipelineDefinition?.id || null,
+                    pipelineId: resolvedPipelineId,
                     status: 'active',
                     currentPhase: phase.name,
                     progress,
@@ -628,7 +680,7 @@ Orchestration trace:
                   })
                   await upsertWorkflowExecutionState({
                     taskId: missionId,
-                    pipelineId: pipelineDefinition?.id || null,
+                    pipelineId: resolvedPipelineId,
                     status: 'paused',
                     currentPhase: phase.name,
                     progress,
@@ -695,7 +747,7 @@ Orchestration trace:
                 onPhaseStart: async ({ phase, progress }) => {
                   await upsertWorkflowExecutionState({
                     taskId: missionId,
-                    pipelineId: pipelineDefinition?.id || null,
+                    pipelineId: resolvedPipelineId,
                     status: 'active',
                     currentPhase: phase.name,
                     progress,
@@ -715,7 +767,7 @@ Orchestration trace:
                   })
                   await upsertWorkflowExecutionState({
                     taskId: missionId,
-                    pipelineId: pipelineDefinition?.id || null,
+                    pipelineId: resolvedPipelineId,
                     status: 'active',
                     currentPhase: phase.name,
                     progress,
@@ -736,7 +788,7 @@ Orchestration trace:
                   })
                   await upsertWorkflowExecutionState({
                     taskId: missionId,
-                    pipelineId: pipelineDefinition?.id || null,
+                    pipelineId: resolvedPipelineId,
                     status: 'paused',
                     currentPhase: phase.name,
                     progress,
@@ -785,7 +837,7 @@ Orchestration trace:
       })
       await upsertWorkflowExecutionState({
         taskId: missionId,
-        pipelineId: pipelineDefinition?.id || null,
+        pipelineId: resolvedPipelineId,
         status: qualityResult?.ok === false ? 'paused' : 'completed',
         currentPhase: pipelineDefinition?.phases?.at(-1)?.name || 'Quality Control',
         progress: qualityResult?.ok === false ? 82 : 100,
@@ -812,8 +864,8 @@ Orchestration trace:
         clientId: routing.clientId || currentClientId || null,
         campaignId: currentCampaignId || null,
         deliverableType,
-        pipelineId: pipelineHint?.id || null,
-        pipelineName: pipelineHint?.name || null,
+        pipelineId: resolvedPipelineId,
+        pipelineName: resolvedPipelineName,
         qualityChecklist: executionPlan.qualityChecklist,
         handoffNotes: executionPlan.handoffNotes,
         executionSteps,
@@ -834,20 +886,71 @@ Orchestration trace:
           ? await supabase.from('tasks').select('id').eq('id', requestBody.missionId).maybeSingle()
           : { data: null }
         if (existingTask?.id) {
+          const structuredError = parseStructuredExecutionError(
+            err instanceof Error ? err.message : 'Chat execution failed.'
+          )
+          if (structuredError?.phaseId && structuredError?.activityId) {
+            await insertTaskRun({
+              taskId: requestBody.missionId,
+              agentId: structuredError.agentId || null,
+              stage: `${structuredError.phaseId}:${structuredError.activityId}`,
+              status: 'failed',
+              errorMessage: err instanceof Error ? err.message : 'Chat execution failed.',
+              outputPayload: {
+                expected: structuredError.expected || null,
+                phaseName: structuredError.phaseName || null,
+                activityName: structuredError.activityName || null,
+                agentName: structuredError.agentName || null,
+                pillar: structuredError.pillar || null,
+                batch: structuredError.batch || null,
+                requested: structuredError.requested || null,
+                tokenCap: structuredError.tokenCap || null,
+                responseLength: structuredError.responseLength || null,
+                reason: structuredError.reason || null,
+                responseSnippet: structuredError.snippet || null,
+              },
+              startedAt: new Date().toISOString(),
+              completedAt: new Date().toISOString(),
+            })
+          }
           await insertTaskRun({
             taskId: requestBody.missionId,
             stage: 'task-execution',
             status: 'failed',
             errorMessage: err instanceof Error ? err.message : 'Chat execution failed.',
+            outputPayload: structuredError
+              ? {
+                  expected: structuredError.expected || null,
+                  phaseId: structuredError.phaseId || null,
+                  phaseName: structuredError.phaseName || null,
+                  activityId: structuredError.activityId || null,
+                  activityName: structuredError.activityName || null,
+                  agentId: structuredError.agentId || null,
+                  agentName: structuredError.agentName || null,
+                  pillar: structuredError.pillar || null,
+                  batch: structuredError.batch || null,
+                  requested: structuredError.requested || null,
+                  tokenCap: structuredError.tokenCap || null,
+                  responseLength: structuredError.responseLength || null,
+                  reason: structuredError.reason || null,
+                  responseSnippet: structuredError.snippet || null,
+                }
+              : {},
             startedAt: new Date().toISOString(),
             completedAt: new Date().toISOString(),
           })
           await upsertWorkflowExecutionState({
             taskId: requestBody.missionId,
+            pipelineId: persistedPipelineId,
             status: 'paused',
-            currentPhase: 'Execution',
+            currentPhase: structuredError?.phaseName || 'Execution',
             progress: 10,
-            context: { error: err instanceof Error ? err.message : 'Chat execution failed.' },
+            context: {
+              error: err instanceof Error ? err.message : 'Chat execution failed.',
+              phaseId: structuredError?.phaseId || null,
+              activityId: structuredError?.activityId || null,
+              reason: structuredError?.reason || null,
+            },
           })
         }
       } catch {}

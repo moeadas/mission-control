@@ -6,6 +6,7 @@ import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { mergeAgentMemories } from '@/lib/agent-memory'
 import { normalizeAgentPhotoUrl } from '@/lib/server/agent-photos'
 import { loadConfigSkillCategories } from '@/lib/server/skills-catalog'
+import { getDeliverableSpec } from '@/lib/deliverables'
 
 const DEFAULT_AGENCY_SLUG = 'default-agency'
 const DEFAULT_AGENCY_NAME = 'Default Agency'
@@ -153,6 +154,15 @@ function toClientRow(client: AppPersistenceSnapshot['clients'][number], agencyId
 }
 
 function toTaskRow(mission: Mission, agencyId: string) {
+  const deliverableSpec = getDeliverableSpec(mission.deliverableType)
+  const resolvedPipelineId = mission.pipelineId || deliverableSpec.pipelineId || null
+  const configuredPipelines = Array.isArray((pipelinesConfig as any).pipelines) ? (pipelinesConfig as any).pipelines : []
+  const resolvedPipelineName =
+    mission.pipelineName ||
+    (resolvedPipelineId
+      ? configuredPipelines.find((pipeline: any) => pipeline.id === resolvedPipelineId)?.name || null
+      : null)
+
   return {
     id: mission.id,
     agency_id: agencyId,
@@ -165,7 +175,7 @@ function toTaskRow(mission: Mission, agencyId: string) {
     owner_user_id: mission.ownerUserId || null,
     assigned_by: mission.assignedBy || null,
     lead_agent_id: mission.leadAgentId || mission.assignedAgentIds?.[0] || null,
-    pipeline_id: mission.pipelineId || null,
+    pipeline_id: resolvedPipelineId,
     progress: mission.progress,
     due_date: mission.dueDate || null,
     started_at: null,
@@ -173,7 +183,7 @@ function toTaskRow(mission: Mission, agencyId: string) {
     execution_plan: {
       assignedAgentIds: mission.assignedAgentIds || [],
       collaboratorAgentIds: mission.collaboratorAgentIds || [],
-      pipelineName: mission.pipelineName || null,
+      pipelineName: resolvedPipelineName,
       skillAssignments: mission.skillAssignments || {},
       orchestrationTrace: mission.orchestrationTrace || [],
       qualityChecklist: mission.qualityChecklist || [],

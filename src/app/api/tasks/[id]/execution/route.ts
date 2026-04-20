@@ -31,7 +31,7 @@ export async function GET(
     return NextResponse.json(
       {
         ...state,
-        job: getExecutionJobState(id),
+        job: await getExecutionJobState(id, auth),
       },
       { headers: { 'Cache-Control': 'no-store' } }
     )
@@ -55,7 +55,7 @@ export async function POST(
     const body = (await request.json().catch(() => ({}))) as { action?: 'retry' | 'resume' }
     const action = body.action === 'resume' ? 'resume' : 'retry'
 
-    const job = queueTaskExecution(id, auth, action)
+    const job = await queueTaskExecution(id, auth, action)
 
     return NextResponse.json(
       {

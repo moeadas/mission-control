@@ -12,6 +12,7 @@ import type { AuthContext } from '@/lib/supabase/auth'
 import { loadConfigSkillCategories, mergeDbSkillsWithConfig } from '@/lib/server/skills-catalog'
 import type { ChannelingConfidence, DeliverableComplexity, Mission, MissionPriority, MissionStatus } from '@/lib/types'
 import { getConfigPipelines, mergeDatabasePipelines } from '@/lib/pipeline-loader'
+import { getDeliverableSpec } from '@/lib/deliverables'
 
 function toStableUuid(value: string) {
   const hex = Buffer.from(value).toString('hex').padEnd(32, '0').slice(0, 32)
@@ -124,6 +125,8 @@ export async function ensureTaskExecutionPersistence(input: {
   if (!supabase || !agencyId) return null
 
   const now = new Date().toISOString()
+  const deliverableSpec = getDeliverableSpec(input.deliverableType)
+  const resolvedPipelineId = input.pipelineId || deliverableSpec.pipelineId || null
   const assignedAgentIds = Array.from(
     new Set(
       [
@@ -146,7 +149,7 @@ export async function ensureTaskExecutionPersistence(input: {
     owner_user_id: input.ownerUserId || input.auth.userId,
     assigned_by: input.assignedBy || 'iris',
     lead_agent_id: input.leadAgentId || assignedAgentIds[0] || null,
-    pipeline_id: input.pipelineId || null,
+    pipeline_id: resolvedPipelineId,
     progress: typeof input.progress === 'number' ? input.progress : 0,
     due_date: null,
     started_at: null,
@@ -511,6 +514,27 @@ export async function runTaskExecution(taskId: string, auth: AuthContext, action
             currentPhase: phase.name,
             progress,
             context: { action, activePhaseId: phase.id, lastActivityId: activity.id },
+          })
+        },
+        onActivityFailure: async ({ phase, activity, agent, runtime, progress, error, outputPayload }) => {
+          await insertTaskRun({
+            taskId,
+            agentId: agent.id,
+            stage: `${phase.id}:${activity.id}`,
+            status: 'failed',
+            inputPayload: { phaseId: phase.id, activityId: activity.id },
+            outputPayload: { provider: runtime.provider, model: runtime.model, ...(outputPayload || {}) },
+            errorMessage: error,
+            startedAt: new Date().toISOString(),
+            completedAt: new Date().toISOString(),
+          })
+          await upsertWorkflowExecutionState({
+            taskId,
+            pipelineId: pipeline?.id || task.pipeline_id,
+            status: 'paused',
+            currentPhase: phase.name,
+            progress,
+            context: { action, activePhaseId: phase.id, lastActivityId: activity.id, error },
           })
         },
       },

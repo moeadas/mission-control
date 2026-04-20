@@ -98,20 +98,11 @@ export async function POST(request: NextRequest) {
       (spec.pipelineId ? pipelines.find((entry: any) => entry.id === spec.pipelineId) : null) ||
       null
 
-    if (!pipeline) {
-      return NextResponse.json(
-        {
-          error: `No tracked pipeline is available for ${spec.label.toLowerCase()} work yet.`,
-          deliverableType,
-        },
-        { status: 422 }
-      )
-    }
-
     const taskId = uuidv4()
     const assignedAgentIds = Array.from(
       new Set(['iris', routing.routedAgentId, ...routing.collaboratorAgentIds].filter(Boolean))
     )
+    const executionMode = pipeline ? 'pipeline' : 'direct'
 
     await ensureTaskExecutionPersistence({
       taskId,
@@ -125,13 +116,17 @@ export async function POST(request: NextRequest) {
       leadAgentId: routing.routedAgentId,
       collaboratorAgentIds: routing.collaboratorAgentIds,
       assignedAgentIds,
-      pipelineId: pipeline.id,
-      pipelineName: pipeline.name,
+      pipelineId: pipeline?.id || null,
+      pipelineName: pipeline?.name || 'Direct Specialist Execution',
       orchestrationTrace: [
-        `Pipeline Runner launched ${pipeline.name}.`,
+        pipeline
+          ? `Pipeline Runner launched ${pipeline.name}.`
+          : `Pipeline Runner launched direct specialist execution for ${spec.label.toLowerCase()} work.`,
         routing.routingReason,
       ],
-      handoffNotes: `Pipeline Runner started ${pipeline.name} for ${spec.label.toLowerCase()} work.`,
+      handoffNotes: pipeline
+        ? `Pipeline Runner started ${pipeline.name} for ${spec.label.toLowerCase()} work.`
+        : `Pipeline Runner started direct specialist execution for ${spec.label.toLowerCase()} work because no formal pipeline is wired yet.`,
       status: 'queued',
       priority: spec.complexity === 'high' ? 'high' : 'medium',
       progress: 0,
@@ -139,18 +134,21 @@ export async function POST(request: NextRequest) {
       channelingConfidence: routing.confidence,
     })
 
-    const job = queueTaskExecution(taskId, auth, 'retry')
+    const job = await queueTaskExecution(taskId, auth, 'retry')
 
     return NextResponse.json(
       {
         ok: true,
         taskId,
         deliverableType,
-        pipeline: {
-          id: pipeline.id,
-          name: pipeline.name,
-          phases: pipeline.phases || [],
-        },
+        executionMode,
+        pipeline: pipeline
+          ? {
+              id: pipeline.id,
+              name: pipeline.name,
+              phases: pipeline.phases || [],
+            }
+          : null,
         routing,
         job,
       },

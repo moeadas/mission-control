@@ -1,11 +1,9 @@
-// Pipeline Execution Engine
-// Handles task routing, pipeline execution, and agent coordination
+// Pipeline runner compatibility layer.
+// Execution now lives on the shared server task lifecycle via /api/pipeline/run.
 
 import { useAgentsStore } from './agents-store'
 import type { Pipeline, Phase, Activity } from '@/lib/stores/pipelines-store'
 import { pickAgentForRole } from '@/lib/agent-roles'
-import { getSupabaseBrowserClient } from '@/lib/supabase/browser'
-import { useSkillsStore } from '@/lib/stores/skills-store'
 import type { Client } from '@/lib/client-data'
 import { inferDeliverableTypeFromText, getDeliverableSpec } from '@/lib/deliverables'
 
@@ -123,73 +121,6 @@ export function validatePipelineClientData(
         ? 'Pipeline setup is incomplete. Fill the missing client profile fields before running this pipeline.'
         : undefined,
   }
-}
-
-function buildKnowledgeAssetsContext(clientId: string) {
-  const client = useAgentsStore.getState().clients.find((entry) => entry.id === clientId)
-  const assets = Array.isArray(client?.knowledgeAssets) ? client.knowledgeAssets : []
-  if (!assets.length) return ''
-
-  return [
-    'Client knowledge assets:',
-    ...assets.slice(0, 8).map((asset) =>
-      `- ${asset.title} (${asset.type}, ${asset.status})${asset.summary ? `: ${asset.summary}` : ''}${asset.extractedInsights ? ` | Insights: ${asset.extractedInsights}` : ''}`
-    ),
-  ].join('\n')
-}
-
-async function getSkillContextForAgent(agentId: string) {
-  const skillsStore = useSkillsStore.getState()
-  if (!skillsStore.isLoaded) {
-    await skillsStore.loadSkills()
-  }
-
-  const agent = useAgentsStore.getState().agents.find((entry) => entry.id === agentId)
-  const skillDefinitions = (agent?.skills || [])
-    .map((skillId) => skillsStore.getSkill(skillId))
-    .filter(Boolean)
-    .slice(0, 8)
-
-  if (!skillDefinitions.length) return ''
-
-  return [
-    'Assigned specialist skills:',
-    ...skillDefinitions.map((skill) =>
-      [
-        `- ${skill!.name}`,
-        skill!.description ? `  Description: ${skill!.description}` : '',
-        skill!.prompts?.en?.instructions ? `  Instructions: ${skill!.prompts.en.instructions}` : '',
-        skill!.prompts?.en?.output_template ? `  Output template: ${skill!.prompts.en.output_template}` : '',
-      ]
-        .filter(Boolean)
-        .join('\n')
-    ),
-  ].join('\n')
-}
-
-// Build execution context from client data
-function buildContext(
-  promptTemplate: string,
-  clientData: Record<string, string>,
-  language: 'en' | 'ar',
-  extraContext = ''
-): string {
-  let context = promptTemplate
-  
-  // Replace all {{variable}} placeholders
-  for (const [key, value] of Object.entries(clientData)) {
-    const placeholder = `{{${key}}}`
-    context = context.split(placeholder).join(value)
-  }
-  
-  // Select language
-  if (language === 'ar' && context.includes('{{language}}')) {
-    context = context.split('{{language}}').join('Arabic')
-  } else if (language === 'en' && context.includes('{{language}}')) {
-    context = context.split('{{language}}').join('English')
-  }
-
-  return extraContext ? `${extraContext}\n\n${context}` : context
 }
 
 // Get agent for a role
@@ -319,122 +250,33 @@ export function applyExecutionStateToInstance(
   }
 }
 
-// Execute a single task
+function buildLegacyExecutionError() {
+  return new Error(
+    'Client-side pipeline execution has been retired. Use /api/pipeline/run and the shared server task lifecycle instead.'
+  )
+}
+
+/**
+ * @deprecated Client-side execution is retired. Launch work through /api/pipeline/run.
+ */
 export async function executeTask(
-  instance: PipelineInstance,
-  task: PipelineTask,
-  pipeline: Pipeline
+  _instance: PipelineInstance,
+  _task: PipelineTask,
+  _pipeline: Pipeline
 ): Promise<PipelineOutput> {
-  // Find the activity
-  const phase = pipeline.phases.find(p => p.id === task.phaseId)
-  const activity = phase?.activities.find(a => a.id === task.activityId)
-  
-  if (!activity) {
-    throw new Error(`Activity not found: ${task.activityId}`)
-  }
-  
-  // Get the prompt based on language
-  const promptTemplate = activity.prompts?.[instance.language] || activity.prompts?.en || ''
-  
-  if (!promptTemplate) {
-    throw new Error(`No prompt found for activity: ${activity.id}`)
-  }
-  
-  // Build the context
-  const agent = getAgentForRole(useAgentsStore.getState().agents, activity.assignedRole)
-  const skillContext = await getSkillContextForAgent(agent?.id || 'iris')
-  const knowledgeContext = buildKnowledgeAssetsContext(instance.clientId)
-  const context = buildContext(
-    promptTemplate,
-    instance.clientData,
-    instance.language,
-    [skillContext, knowledgeContext].filter(Boolean).join('\n\n')
-  )
-  
-  // Call the AI agent
-  // This would integrate with the actual agent execution system
-  const response = await callAgent(agent?.id || 'iris', context)
-  
-  return {
-    taskId: task.id,
-    content: response,
-    format: 'markdown',
-    artifacts: [],
-  }
+  throw buildLegacyExecutionError()
 }
 
+/**
+ * @deprecated Client-side execution is retired. Launch work through /api/pipeline/run.
+ */
 export async function executeActivityBatch(
-  instance: PipelineInstance,
-  phaseId: string,
-  activityId: string,
-  pipeline: Pipeline
+  _instance: PipelineInstance,
+  _phaseId: string,
+  _activityId: string,
+  _pipeline: Pipeline
 ): Promise<PipelineOutput[]> {
-  const tasks = instance.tasks.filter(
-    (task) => task.phaseId === phaseId && task.activityId === activityId && task.status === 'pending'
-  )
-
-  const phase = pipeline.phases.find((entry) => entry.id === phaseId)
-  const activity = phase?.activities.find((entry) => entry.id === activityId)
-  if (!activity || !tasks.length) return []
-
-  const batchSize = Math.max(1, activity.batching?.batchSize || 1)
-  const parallel = activity.batching?.parallel !== false
-  const outputs: PipelineOutput[] = []
-
-  for (let index = 0; index < tasks.length; index += batchSize) {
-    const slice = tasks.slice(index, index + batchSize)
-    const runner = async (task: PipelineTask) => executeTask(instance, task, pipeline)
-
-    if (parallel) {
-      outputs.push(...(await Promise.all(slice.map(runner))))
-    } else {
-      for (const task of slice) {
-        outputs.push(await runner(task))
-      }
-    }
-  }
-
-  return outputs
-}
-
-// Call an AI agent
-async function callAgent(agentId: string, prompt: string): Promise<string> {
-  const supabase = getSupabaseBrowserClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session?.access_token) {
-    throw new Error('You need to sign in before running pipeline tasks.')
-  }
-
-  const state = useAgentsStore.getState()
-  const response = await fetch('/api/chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
-    body: JSON.stringify({
-      messages: [{ role: 'user', content: prompt }],
-      providerSettings: state.providerSettings,
-      agentMemories: state.agentMemories,
-      artifacts: state.artifacts,
-      agents: state.agents,
-      clients: state.clients,
-      missions: state.missions,
-      systemPrompt: `Execute this pipeline activity as agent ${agentId}. Produce only the actual activity output with no routing or management boilerplate.`,
-      provider: state.agents.find((agent) => agent.id === agentId)?.provider || state.providerSettings.routing.primaryProvider,
-      model: state.agents.find((agent) => agent.id === agentId)?.model || undefined,
-    }),
-  })
-
-  const payload = await response.json().catch(() => ({}))
-  if (!response.ok) {
-    throw new Error(payload?.error || 'Pipeline agent execution failed.')
-  }
-
-  return payload.response || ''
+  throw buildLegacyExecutionError()
 }
 
 // Get next pending task
@@ -462,6 +304,7 @@ export interface TaskResponse {
   pipelineName?: string
   instanceId?: string
   taskId?: string
+  executionMode?: 'pipeline' | 'direct'
   message: string
   availablePipelines?: Array<{
     id: string
@@ -516,8 +359,11 @@ export async function routeTask(
 
   if (!matchedPipeline) {
     return {
-      success: false,
-      message: `Iris classified this as ${spec.label.toLowerCase()} work, but there is no tracked pipeline wired for it yet.`,
+      success: true,
+      executionMode: 'direct',
+      pipelineId: 'direct-execution',
+      pipelineName: 'Direct Specialist Execution',
+      message: `Iris classified this as ${spec.label.toLowerCase()} work. No formal pipeline is wired yet, so the shared task runner will launch direct specialist execution instead.`,
       availablePipelines: availablePipelines.map(p => ({
         id: p.id,
         name: p.name,
@@ -530,6 +376,7 @@ export async function routeTask(
 
   return {
     success: true,
+    executionMode: 'pipeline',
     pipelineId: matchedPipeline.id,
     pipelineName: matchedPipeline.name,
     message: `Matched ${matchedPipeline.name} for ${spec.label.toLowerCase()} work.`,
