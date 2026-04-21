@@ -7,6 +7,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
+  serverExternalPackages: ['uuid'],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '4mb',
+    },
+  },
   async headers() {
     return [
       {

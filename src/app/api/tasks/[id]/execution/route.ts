@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 import { loadTaskExecutionState } from '@/lib/server/task-execution'
-import { getExecutionJobState, queueTaskExecution } from '@/lib/server/execution-queue'
+import {
+  getExecutionJobState,
+  queueTaskExecution,
+} from '@/lib/server/execution-queue'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 300
 
 function getBearerToken(request: NextRequest) {
   const authHeader = request.headers.get('authorization') || ''
@@ -28,10 +32,12 @@ export async function GET(
       return NextResponse.json({ error: 'Task not found' }, { status: 404 })
     }
 
+    const job = await getExecutionJobState(id, auth)
+
     return NextResponse.json(
       {
         ...state,
-        job: await getExecutionJobState(id, auth),
+        job,
       },
       { headers: { 'Cache-Control': 'no-store' } }
     )

@@ -73,40 +73,13 @@ export default function TaskDetailPage() {
     return Boolean(artifact?.content?.trim() || artifact?.renderedHtml?.trim())
   }
 
-  if (!appStateReady && !mission) {
-    return (
-      <ClientShell>
-        <div className="p-6">
-          <Card>
-            <p className="text-sm text-text-primary">Loading task…</p>
-          </Card>
-        </div>
-      </ClientShell>
-    )
-  }
-
-  if (!mission) {
-    return (
-      <ClientShell>
-        <div className="p-6">
-          <Card>
-            <p className="text-sm text-text-primary">Task not found.</p>
-            <Link href="/tasks" className="inline-flex items-center gap-2 text-sm text-accent-blue mt-3">
-              <ArrowLeft size={14} />
-              Back to tasks
-            </Link>
-          </Card>
-        </div>
-      </ClientShell>
-    )
-  }
-
-  const client = clients.find((item) => item.id === mission.clientId)
-  const assignedAgentIds = Array.isArray(mission.assignedAgentIds) ? mission.assignedAgentIds : []
+  const client = mission ? clients.find((item) => item.id === mission.clientId) : undefined
+  const assignedAgentIds = Array.isArray(mission?.assignedAgentIds) ? mission.assignedAgentIds : []
   const assignedAgents = agents.filter((agent) => assignedAgentIds.includes(agent.id))
-  const leadAgent = agents.find((item) => item.id === mission.leadAgentId)
-  const supportAgents = assignedAgents.filter((agent) => agent.id !== mission.leadAgentId)
+  const leadAgent = mission ? agents.find((item) => item.id === mission.leadAgentId) : undefined
+  const supportAgents = assignedAgents.filter((agent) => agent.id !== mission?.leadAgentId)
   const displayArtifacts = useMemo(() => {
+    if (!mission) return missionArtifacts
     const contentfulDirect = missionArtifacts.filter((artifact) => hasArtifactBody(artifact))
     if (contentfulDirect.length) return contentfulDirect
 
@@ -122,9 +95,10 @@ export default function TaskDetailPage() {
       .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 
     return related.length ? related : missionArtifacts
-  }, [artifacts, mission.clientId, mission.deliverableType, mission.summary, mission.title, missionArtifacts, params.id])
+  }, [artifacts, mission, missionArtifacts, params.id])
 
   const latestArtifact = displayArtifacts[0]
+  const latestArtifactHasBody = hasArtifactBody(latestArtifact)
   const executionSteps = latestArtifact?.executionSteps || []
   const workingAgentIds = Array.from(
     new Set(
@@ -142,8 +116,8 @@ export default function TaskDetailPage() {
         .slice(0, 8)
     )
   )
-  const skillAssignments = mission.skillAssignments || {}
-  const orchestrationTrace = mission.orchestrationTrace || []
+  const skillAssignments = mission?.skillAssignments || {}
+  const orchestrationTrace = mission?.orchestrationTrace || []
 
   const flowSteps = [
     {
@@ -156,26 +130,26 @@ export default function TaskDetailPage() {
       id: 'routing',
       label: 'Routing',
       detail: leadAgent ? `Lead: ${leadAgent.name}${supportAgents.length ? ` · Support: ${supportAgents.map((agent) => agent.name).join(', ')}` : ''}` : 'Awaiting assignment',
-      state: leadAgent ? 'done' : mission.status === 'blocked' ? 'warning' : 'active',
+      state: leadAgent ? 'done' : mission?.status === 'blocked' ? 'warning' : 'active',
     },
     {
       id: 'execution',
       label: 'Execution',
-      detail: mission.pipelineName || executionSteps.length ? `${mission.pipelineName || 'Direct execution'} · ${executionSteps.length || 0} logged step${executionSteps.length === 1 ? '' : 's'}` : 'Waiting for execution',
+      detail: mission?.pipelineName || executionSteps.length ? `${mission?.pipelineName || 'Direct execution'} · ${executionSteps.length || 0} logged step${executionSteps.length === 1 ? '' : 's'}` : 'Waiting for execution',
       state:
-        mission.status === 'completed' || displayArtifacts.length
+        mission?.status === 'completed' || mission?.status === 'review'
           ? 'done'
-          : mission.status === 'blocked'
+          : mission?.status === 'blocked'
             ? 'warning'
-            : mission.status === 'queued' || mission.status === 'in_progress' || mission.status === 'review'
+            : mission?.status === 'queued' || mission?.status === 'in_progress'
               ? 'active'
               : 'idle',
     },
     {
       id: 'output',
       label: 'Saved Output',
-      detail: latestArtifact ? `Latest artifact: ${latestArtifact.title}` : 'No artifact saved yet',
-      state: latestArtifact ? 'done' : mission.status === 'blocked' ? 'warning' : 'idle',
+      detail: latestArtifactHasBody ? `Latest artifact: ${latestArtifact?.title}` : latestArtifact ? 'Artifact placeholder exists, but final content is not ready yet' : 'No artifact saved yet',
+      state: latestArtifactHasBody ? 'done' : mission?.status === 'blocked' ? 'warning' : mission?.status === 'review' || mission?.status === 'completed' ? 'active' : 'idle',
     },
   ] as const
 
@@ -203,6 +177,7 @@ export default function TaskDetailPage() {
   }
 
   useEffect(() => {
+    if (!mission) return
     let active = true
     const supabase = getSupabaseBrowserClient()
 
@@ -223,9 +198,10 @@ export default function TaskDetailPage() {
     return () => {
       active = false
     }
-  }, [params.id])
+  }, [mission, params.id])
 
   useEffect(() => {
+    if (!mission) return
     const shouldPoll =
       executionBusy !== null ||
       executionState?.job?.status === 'queued' ||
@@ -270,7 +246,7 @@ export default function TaskDetailPage() {
       cancelled = true
       if (timer) clearTimeout(timer)
     }
-  }, [executionBusy, executionState?.job?.status, executionState?.workflow?.status, params.id])
+  }, [executionBusy, executionState?.job?.status, executionState?.workflow?.status, mission, params.id])
 
   async function refreshSharedState() {
     const supabase = getSupabaseBrowserClient()
@@ -360,6 +336,34 @@ export default function TaskDetailPage() {
     } finally {
       setExportingKey(null)
     }
+  }
+
+  if (!appStateReady && !mission) {
+    return (
+      <ClientShell>
+        <div className="p-6">
+          <Card>
+            <p className="text-sm text-text-primary">Loading task…</p>
+          </Card>
+        </div>
+      </ClientShell>
+    )
+  }
+
+  if (!mission) {
+    return (
+      <ClientShell>
+        <div className="p-6">
+          <Card>
+            <p className="text-sm text-text-primary">Task not found.</p>
+            <Link href="/tasks" className="inline-flex items-center gap-2 text-sm text-accent-blue mt-3">
+              <ArrowLeft size={14} />
+              Back to tasks
+            </Link>
+          </Card>
+        </div>
+      </ClientShell>
+    )
   }
 
   return (

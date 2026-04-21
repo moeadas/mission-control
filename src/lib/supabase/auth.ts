@@ -92,3 +92,38 @@ export async function resolveAuthContextFromToken(token: string | null | undefin
     providerSettings: extractProviderSettings(data.user),
   }
 }
+
+export async function resolveAuthContextFromUserId(userId: string | null | undefined): Promise<AuthContext | null> {
+  if (!userId) return null
+
+  const supabase = getSupabaseServerClient()
+  if (!supabase) return null
+
+  const { data, error } = await supabase.auth.admin.getUserById(userId)
+  if (error || !data.user?.id || !data.user.email) return null
+
+  const email = data.user.email.toLowerCase()
+  const superAdminEmail = getSuperAdminEmail()
+  const defaultRole = email === superAdminEmail ? 'super_admin' : 'member'
+
+  const { data: profile, error: profileLookupError } = await supabase
+    .from('profiles')
+    .select('role, is_active')
+    .eq('id', data.user.id)
+    .maybeSingle()
+
+  if (profileLookupError) {
+    throw profileLookupError
+  }
+
+  const role = email === superAdminEmail ? 'super_admin' : profile?.role === 'super_admin' ? 'super_admin' : defaultRole
+  const isActive = profile?.is_active ?? true
+  if (!isActive) return null
+
+  return {
+    userId: data.user.id,
+    email: data.user.email,
+    role,
+    providerSettings: extractProviderSettings(data.user),
+  }
+}

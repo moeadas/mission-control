@@ -114,8 +114,12 @@ export function validateDeliverableQuality(
     }
   }
 
-  if (deliverableType === 'content-calendar' && !/\|.+\|.+\|/.test(trimmed)) {
-    issues.push('Content calendar is missing a table layout.')
+  if (deliverableType === 'content-calendar') {
+    const hasTable = /\|.+\|.+\|/.test(trimmed)
+    const hasJsonCalendar = /\{[\s\S]*"ideas"[\s\S]*\}/.test(trimmed) || /\{[\s\S]*"calendar"[\s\S]*\}/.test(trimmed)
+    if (!hasTable && !hasJsonCalendar) {
+      issues.push('Content calendar is missing a table or structured calendar layout.')
+    }
   }
 
   if (deliverableType === 'short-form-copy' && trimmed.length > 900) {

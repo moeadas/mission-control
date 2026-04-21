@@ -21,8 +21,9 @@ import { DEFAULT_PROVIDER_SETTINGS, normalizeProviderSettings, stripProviderSecr
 import { AgentMemory, appendAgentMemoryNote, buildDefaultAgentMemories, mergeAgentMemories } from './agent-memory'
 import { buildTaskTitleFromRequest } from './task-output'
 import { inferDeliverableTypeFromText, getDeliverableSpec } from './deliverables'
+import { resolveTaskRoutingBlueprint } from './server/task-channeling'
 import type { IrisPendingBrief } from './iris-briefing'
-import pipelinesConfig from '@/config/pipelines/pipelines.json'
+import pipelineNamesConfig from '@/config/pipelines/pipeline-names.json'
 
 export interface ChatMessage {
   id: string
@@ -84,6 +85,46 @@ export interface AppPersistenceSnapshot {
   providerSettings: ProviderSettings
   agentMemories: Record<string, AgentMemory>
   pendingBriefs: Record<string, IrisPendingBrief>
+  activeConversationId?: string | null
+  isIrisOpen?: boolean
+}
+
+const IRIS_CHAT_BACKUP_KEY = 'moes-mission-control:iris-chat-backup'
+
+type IrisChatBackup = {
+  conversations: Conversation[]
+  activeConversationId: string | null
+  pendingBriefs: Record<string, IrisPendingBrief>
+  isIrisOpen: boolean
+}
+
+function writeIrisChatBackup(snapshot: IrisChatBackup) {
+  if (typeof window === 'undefined') return
+  try {
+    window.sessionStorage.setItem(IRIS_CHAT_BACKUP_KEY, JSON.stringify(snapshot))
+  } catch {
+    // Ignore backup failures; they are best-effort only.
+  }
+}
+
+function readIrisChatBackup(): IrisChatBackup | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.sessionStorage.getItem(IRIS_CHAT_BACKUP_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return {
+      conversations: Array.isArray(parsed?.conversations) ? parsed.conversations : [],
+      activeConversationId:
+        typeof parsed?.activeConversationId === 'string' || parsed?.activeConversationId === null
+          ? parsed.activeConversationId
+          : null,
+      pendingBriefs: parsed?.pendingBriefs && typeof parsed.pendingBriefs === 'object' ? parsed.pendingBriefs : {},
+      isIrisOpen: Boolean(parsed?.isIrisOpen),
+    }
+  } catch {
+    return null
+  }
 }
 
 export type AppPersistencePatch = Partial<AppPersistenceSnapshot>
@@ -158,7 +199,7 @@ export function createAppPersistenceSnapshot(
     agencySettings: state.agencySettings,
     providerSettings: state.providerSettings,
     agentMemories: state.agentMemories,
-    pendingBriefs: {},
+    pendingBriefs: state.pendingBriefs,
   }
 }
 
@@ -191,9 +232,9 @@ function createLocalPersistenceSnapshot(
     })),
     conversations: state.conversations.map((conversation) => ({
       ...conversation,
-      messages: conversation.messages.slice(-6).map((message) => ({
+      messages: conversation.messages.slice(-20).map((message) => ({
         ...message,
-        content: message.content.length > 500 ? `${message.content.slice(0, 497)}...` : message.content,
+        content: message.content.length > 2000 ? `${message.content.slice(0, 1997)}...` : message.content,
       })),
     })),
     providerSettings: stripProviderSecrets(state.providerSettings),
@@ -212,7 +253,7 @@ function resolveMissionPipelineMetadata(
 ) {
   const spec = getDeliverableSpec(deliverableType)
   const resolvedPipelineId = pipelineId || spec.pipelineId || null
-  const configuredPipelines = Array.isArray((pipelinesConfig as any).pipelines) ? (pipelinesConfig as any).pipelines : []
+  const configuredPipelines = Array.isArray((pipelineNamesConfig as any).pipelines) ? (pipelineNamesConfig as any).pipelines : []
   const resolvedPipelineName =
     pipelineName ||
     (resolvedPipelineId
@@ -387,6 +428,11 @@ function normalizePersistedState(persistedState: any) {
     },
     providerSettings: normalizeProviderSettings(persistedState.providerSettings),
     agentMemories: mergeAgentMemories(persistedState.agentMemories, agents),
+    activeConversationId:
+      typeof persistedState.activeConversationId === 'string' || persistedState.activeConversationId === null
+        ? persistedState.activeConversationId
+        : null,
+    isIrisOpen: typeof persistedState.isIrisOpen === 'boolean' ? persistedState.isIrisOpen : false,
   }
 }
 
@@ -581,6 +627,7 @@ interface AgentsState {
   clearConversation: (id: string) => void
   setPendingBrief: (conversationId: string, brief: IrisPendingBrief) => void
   clearPendingBrief: (conversationId: string) => void
+  restoreChatSession: () => boolean
 }
 
 export const useAgentsStore = create<AgentsState>()(
@@ -608,6 +655,18 @@ export const useAgentsStore = create<AgentsState>()(
       pendingBriefs: {},
       appStateReady: false,
       currentUser: null,
+
+      restoreChatSession: () => {
+        const backup = readIrisChatBackup()
+        if (!backup?.conversations?.length) return false
+        set((state) => ({
+          conversations: state.conversations.length ? state.conversations : backup.conversations,
+          activeConversationId: state.activeConversationId || backup.activeConversationId,
+          pendingBriefs: Object.keys(state.pendingBriefs).length ? state.pendingBriefs : backup.pendingBriefs,
+          isIrisOpen: state.isIrisOpen || backup.isIrisOpen,
+        }))
+        return true
+      },
 
       selectAgent: (id) => set({ selectedAgentId: id }),
       openEditor: (id) => set({ editingAgentId: id, isEditorOpen: true }),
@@ -753,8 +812,15 @@ export const useAgentsStore = create<AgentsState>()(
         const pipeline = resolveMissionPipelineMetadata(deliverableType, spec.pipelineId, null)
         const title = buildTaskTitleFromRequest(prompt, deliverableType)
         const missionId = uuidv4()
-        const leadAgentId = spec.defaultLead && spec.defaultLead !== 'iris' ? spec.defaultLead : undefined
-        const collaboratorAgentIds = spec.defaultCollaborators || []
+        const routingBlueprint = resolveTaskRoutingBlueprint({
+          request: prompt,
+          deliverableType,
+          agents: get().agents,
+        })
+        const leadAgentId = routingBlueprint.leadAgentId && routingBlueprint.leadAgentId !== 'iris'
+          ? routingBlueprint.leadAgentId
+          : undefined
+        const collaboratorAgentIds = routingBlueprint.collaboratorAgentIds || []
         const assignedAgentIds = options?.assignedAgentIds?.length
           ? options.assignedAgentIds
           : Array.from(new Set(['iris', ...(leadAgentId ? [leadAgentId] : []), ...collaboratorAgentIds]))
@@ -767,7 +833,7 @@ export const useAgentsStore = create<AgentsState>()(
           status: 'queued',
           priority: 'medium',
           complexity: getDeliverableSpec(deliverableType).complexity,
-          channelingConfidence: deliverableType === 'general-task' ? 'medium' : deliverableType === 'status-report' ? 'low' : 'medium',
+          channelingConfidence: routingBlueprint.confidence,
           campaignId: options?.campaignId,
           clientId: options?.clientId,
           pipelineId: pipeline.pipelineId ?? undefined,
@@ -944,9 +1010,23 @@ export const useAgentsStore = create<AgentsState>()(
         const hasConversation = convId ? state.conversations.some((conversation) => conversation.id === convId) : false
         if (!convId || !hasConversation) convId = get().createConversation('Chat with Iris')
         set({ isIrisOpen: true, activeConversationId: convId })
+        writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: true,
+        })
       },
 
-      closeIris: () => set({ isIrisOpen: false }),
+      closeIris: () => {
+        set({ isIrisOpen: false })
+        writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: false,
+        })
+      },
       setChatStatus: (status) => set({ chatStatus: status }),
       setAppStateReady: (ready) => set({ appStateReady: ready }),
       setAuthenticatedUser: (user) => set({ currentUser: user }),
@@ -962,12 +1042,26 @@ export const useAgentsStore = create<AgentsState>()(
           updatedAt: nowIso(),
         }
         set((state) => ({ conversations: [conversation, ...state.conversations], activeConversationId: id }))
+        writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
+        })
         return id
       },
 
       deleteConversation: (id) =>
         set((state) => {
           const remaining = state.conversations.filter((conversation) => conversation.id !== id)
+          queueMicrotask(() =>
+            writeIrisChatBackup({
+              conversations: get().conversations,
+              activeConversationId: get().activeConversationId,
+              pendingBriefs: get().pendingBriefs,
+              isIrisOpen: get().isIrisOpen,
+            })
+          )
           return {
             conversations: remaining,
             activeConversationId: state.activeConversationId === id ? remaining[0]?.id || null : state.activeConversationId,
@@ -978,6 +1072,14 @@ export const useAgentsStore = create<AgentsState>()(
         set((state) => {
           const hasConversation = state.conversations.some((conversation) => conversation.id === id)
           if (!hasConversation) return state
+          queueMicrotask(() =>
+            writeIrisChatBackup({
+              conversations: get().conversations,
+              activeConversationId: get().activeConversationId,
+              pendingBriefs: get().pendingBriefs,
+              isIrisOpen: true,
+            })
+          )
           return { ...state, activeConversationId: id, isIrisOpen: true }
         }),
 
@@ -998,10 +1100,16 @@ export const useAgentsStore = create<AgentsState>()(
             }
           }),
         }))
+        writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
+        })
       },
 
       upsertAssistantDraft: (conversationId, content, agentId, meta) =>
-        set((state) => ({
+        (set((state) => ({
           conversations: state.conversations.map((conversation) => {
             if (conversation.id !== conversationId) return conversation
             const messages = [...conversation.messages]
@@ -1013,10 +1121,15 @@ export const useAgentsStore = create<AgentsState>()(
             }
             return { ...conversation, messages, updatedAt: nowIso() }
           }),
+        })), writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
         })),
 
       addAssistantMessage: (conversationId, content, agentId, meta) =>
-        set((state) => ({
+        (set((state) => ({
           conversations: state.conversations.map((conversation) => {
             if (conversation.id !== conversationId) return conversation
             const messages = conversation.messages
@@ -1024,36 +1137,57 @@ export const useAgentsStore = create<AgentsState>()(
               .concat({ id: uuidv4(), role: 'assistant', content, timestamp: nowIso(), agentId, meta })
             return { ...conversation, messages, updatedAt: nowIso() }
           }),
+        })), writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
         })),
 
       clearConversation: (id) =>
-        set((state) => ({
+        (set((state) => ({
           conversations: state.conversations.map((conversation) =>
             conversation.id === id ? { ...conversation, messages: [] } : conversation
           ),
           pendingBriefs: state.pendingBriefs[id]
             ? Object.fromEntries(Object.entries(state.pendingBriefs).filter(([conversationId]) => conversationId !== id))
             : state.pendingBriefs,
+        })), writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
         })),
 
       setPendingBrief: (conversationId, brief) =>
-        set((state) => ({
+        (set((state) => ({
           pendingBriefs: {
             ...state.pendingBriefs,
             [conversationId]: brief,
           },
+        })), writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
         })),
 
       clearPendingBrief: (conversationId) =>
-        set((state) => ({
+        (set((state) => ({
           pendingBriefs: Object.fromEntries(
             Object.entries(state.pendingBriefs).filter(([id]) => id !== conversationId)
           ),
+        })), writeIrisChatBackup({
+          conversations: get().conversations,
+          activeConversationId: get().activeConversationId,
+          pendingBriefs: get().pendingBriefs,
+          isIrisOpen: get().isIrisOpen,
         })),
     }),
     {
       name: 'moes-mission-control',
       version: 6,
+      skipHydration: true,
       migrate: (persistedState: any, version) => {
         if (!persistedState) return persistedState
         if (version < 2) {
@@ -1082,6 +1216,8 @@ export const useAgentsStore = create<AgentsState>()(
       },
       partialize: (state) => ({
         ...createLocalPersistenceSnapshot(state),
+        activeConversationId: state.activeConversationId,
+        isIrisOpen: state.isIrisOpen,
       }),
     }
   )

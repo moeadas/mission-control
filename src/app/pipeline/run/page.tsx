@@ -125,6 +125,7 @@ export default function PipelineRunPage() {
     if (!activeTaskIds.length) return
 
     let cancelled = false
+    let pollCount = 0
 
     const poll = async () => {
       try {
@@ -165,17 +166,23 @@ export default function PipelineRunPage() {
         )
       } catch (error) {
         console.error('Failed to poll pipeline execution:', error)
+        pollCount += 1
+      } finally {
+        if (!cancelled) {
+          const delay = Math.min(2500 * Math.pow(1.4, pollCount), 15000)
+          window.setTimeout(() => {
+            if (!cancelled) poll()
+          }, delay)
+        }
       }
     }
 
     poll()
-    const intervalId = window.setInterval(poll, 2500)
 
     return () => {
       cancelled = true
-      window.clearInterval(intervalId)
     }
-  }, [instances, pipelines, supabase])
+  }, [instances.length, instances.map((instance) => instance.taskId).join(','), pipelines, supabase])
 
   const handleRouteTask = async () => {
     if (!taskDescription.trim()) return

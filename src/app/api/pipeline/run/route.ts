@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { buildTaskTitleFromRequest } from '@/lib/task-output'
 import { getConfigPipelines, mergeDatabasePipelines } from '@/lib/pipeline-loader'
-import { inferDeliverableType, inferRoutingContext } from '@/lib/server/ai'
+import { inferDeliverableType, inferRoutingContext, resolvePipelineSelection } from '@/lib/server/ai'
 import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { resolveAuthContextFromToken } from '@/lib/supabase/auth'
 import { getDeliverableSpec } from '@/lib/deliverables'
@@ -11,6 +11,7 @@ import { ensureTaskExecutionPersistence } from '@/lib/server/task-execution'
 import { queueTaskExecution } from '@/lib/server/execution-queue'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 300
 
 function getBearerToken(request: NextRequest) {
   const authHeader = request.headers.get('authorization') || ''
@@ -92,11 +93,13 @@ export async function POST(request: NextRequest) {
       })),
     })
 
-    const pipeline =
-      (body.pipelineId ? pipelines.find((entry: any) => entry.id === body.pipelineId) : null) ||
-      (routing.pipelineId ? pipelines.find((entry: any) => entry.id === routing.pipelineId) : null) ||
-      (spec.pipelineId ? pipelines.find((entry: any) => entry.id === spec.pipelineId) : null) ||
-      null
+    const pipelineSelection = resolvePipelineSelection({
+      content: description,
+      deliverableType,
+      pipelines,
+      preferredPipelineId: body.pipelineId || routing.pipelineId || null,
+    })
+    const pipeline = pipelineSelection.pipeline
 
     const taskId = uuidv4()
     const assignedAgentIds = Array.from(

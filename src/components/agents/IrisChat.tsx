@@ -18,6 +18,8 @@ import {
   type IrisPendingBrief,
 } from '@/lib/iris-briefing'
 
+const IRIS_LIVE_SESSION_KEY = 'moes-mission-control:iris-live-session'
+
 const IRIS = {
   id: 'iris',
   name: 'Iris',
@@ -26,6 +28,8 @@ const IRIS = {
   color: '#a78bfa',
   status: 'active' as const,
 }
+
+const nowIso = () => new Date().toISOString()
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
@@ -119,6 +123,17 @@ function shouldOpenMissionForMessage(message: string) {
   return isSubstantiveRequest(trimmed)
 }
 
+function getLegacyConversationBrief(conversation?: { briefing?: any } | null): IrisPendingBrief | null {
+  const legacyBriefing = conversation?.briefing
+  if (!legacyBriefing?.active || !legacyBriefing?.originalRequest || !legacyBriefing?.deliverableType) return null
+
+  return {
+    originalRequest: String(legacyBriefing.originalRequest),
+    deliverableType: legacyBriefing.deliverableType,
+    values: typeof legacyBriefing.fields === 'object' && legacyBriefing.fields ? legacyBriefing.fields : {},
+  }
+}
+
 async function requestChat(
   payload: Record<string, unknown>,
   onChunk: (text: string) => void,
@@ -158,7 +173,13 @@ async function requestChat(
   }
 }
 
-export function IrisChat() {
+export function IrisChat({
+  forcedOpen = false,
+  onRequestClose,
+}: {
+  forcedOpen?: boolean
+  onRequestClose?: () => void
+}) {
   const isIrisOpen = useAgentsStore((state) => state.isIrisOpen)
   const closeIris = useAgentsStore((state) => state.closeIris)
   const conversations = useAgentsStore((state) => state.conversations)
@@ -186,71 +207,141 @@ export function IrisChat() {
   const chatStatus = useAgentsStore((state) => state.chatStatus)
   const setChatStatus = useAgentsStore((state) => state.setChatStatus)
   const rememberAgentWork = useAgentsStore((state) => state.rememberAgentWork)
+  const restoreChatSession = useAgentsStore((state) => state.restoreChatSession)
+  const appStateReady = useAgentsStore((state) => state.appStateReady)
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [attachments, setAttachments] = useState<File[]>([])
   const [attachedText, setAttachedText] = useState<string>('')
-  const [pendingBriefState, setPendingBriefState] = useState<{ conversationId: string; brief: IrisPendingBrief } | null>(null)
-  const pendingBriefRef = useRef<{ conversationId: string; brief: IrisPendingBrief } | null>(null)
+  const [isBriefSubmitting, setIsBriefSubmitting] = useState(false)
+  const [anchoredConversationId, setAnchoredConversationId] = useState<string | null>(null)
+  const [liveConversationId, setLiveConversationId] = useState<string | null>(null)
+  const [liveMessages, setLiveMessages] = useState<ChatMessage[]>([])
+  const [livePendingBrief, setLivePendingBrief] = useState<IrisPendingBrief | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const activeBriefRef = useRef<HTMLDivElement>(null)
+  const panelOpen = forcedOpen || isIrisOpen
 
-  const activeConv = conversations.find((conversation) => conversation.id === activeConversationId)
+  const fallbackConversationId =
+    conversations.find((conversation) => conversation.messages.length > 0)?.id ||
+    conversations[0]?.id ||
+    null
+
+  const resolvedConversationId =
+    (anchoredConversationId && conversations.some((conversation) => conversation.id === anchoredConversationId)
+      ? anchoredConversationId
+      : null) ||
+    (activeConversationId && conversations.some((conversation) => conversation.id === activeConversationId)
+      ? activeConversationId
+      : null) ||
+    fallbackConversationId
+
+  const activeConv = conversations.find((conversation) => conversation.id === resolvedConversationId)
   const irisAgent = agents.find((agent) => agent.id === 'iris')
   const activeMission = missions.find((mission) => mission.id === activeMissionId)
-  const storePendingBrief = activeConversationId ? pendingBriefs[activeConversationId] || null : null
-  const activePendingBrief = useMemo(
-    () => (pendingBriefState?.conversationId === activeConversationId ? pendingBriefState.brief : null),
-    [activeConversationId, pendingBriefState]
-  )
+  const storePendingBrief =
+    (resolvedConversationId ? pendingBriefs[resolvedConversationId] || null : null) ||
+    getLegacyConversationBrief(activeConv as any)
+  const displayedConversationId = liveConversationId || null
+  const displayedMessages = liveMessages
+  const activePendingBrief = livePendingBrief || null
   const activeBriefQuestion = useMemo(
     () => (activePendingBrief ? getBriefQuestion(activePendingBrief) : null),
     [activePendingBrief]
   )
 
+  const persistLiveSession = useCallback((next: {
+    conversationId: string | null
+    messages: ChatMessage[]
+    pendingBrief: IrisPendingBrief | null
+  }) => {
+    if (typeof window === 'undefined') return
+    try {
+      window.sessionStorage.setItem(IRIS_LIVE_SESSION_KEY, JSON.stringify(next))
+    } catch {
+      // Best effort only.
+    }
+  }, [])
+
+  const replaceLiveSession = useCallback((next: {
+    conversationId: string | null
+    messages: ChatMessage[]
+    pendingBrief: IrisPendingBrief | null
+  }) => {
+    setLiveConversationId(next.conversationId)
+    setLiveMessages(next.messages)
+    setLivePendingBrief(next.pendingBrief)
+    persistLiveSession(next)
+  }, [persistLiveSession])
+
+  const appendLiveMessage = useCallback((message: ChatMessage, conversationId: string) => {
+    setLiveConversationId(conversationId)
+    setLiveMessages((current) => {
+      const next = [...current, message]
+      persistLiveSession({ conversationId, messages: next, pendingBrief: livePendingBrief })
+      return next
+    })
+  }, [livePendingBrief, persistLiveSession])
+
+  const stageLiveSession = useCallback((next: {
+    conversationId: string
+    messages: ChatMessage[]
+    pendingBrief: IrisPendingBrief | null
+  }) => {
+    persistLiveSession(next)
+    setLiveConversationId(next.conversationId)
+    setLiveMessages(next.messages)
+    setLivePendingBrief(next.pendingBrief)
+  }, [persistLiveSession])
+
+  const upsertLiveDraft = useCallback((conversationId: string, content: string, meta?: ChatMessage['meta']) => {
+    setLiveConversationId(conversationId)
+    setLiveMessages((current) => {
+      const next = [...current]
+      const last = next[next.length - 1]
+      if (last?.role === 'assistant' && last.id === 'draft') {
+        next[next.length - 1] = { ...last, content, timestamp: nowIso(), meta }
+      } else {
+        next.push({ id: 'draft', role: 'assistant', content, timestamp: nowIso(), agentId: 'iris', meta })
+      }
+      persistLiveSession({ conversationId, messages: next, pendingBrief: livePendingBrief })
+      return next
+    })
+  }, [livePendingBrief, persistLiveSession])
+
+  const commitLiveAssistantMessage = useCallback((conversationId: string, content: string, meta?: ChatMessage['meta']) => {
+    setLiveConversationId(conversationId)
+    setLiveMessages((current) => {
+      const next = current
+        .filter((message) => message.id !== 'draft')
+        .concat({ id: crypto.randomUUID(), role: 'assistant', content, timestamp: nowIso(), agentId: 'iris', meta })
+      persistLiveSession({ conversationId, messages: next, pendingBrief: livePendingBrief })
+      return next
+    })
+  }, [livePendingBrief, persistLiveSession])
+
+  const setLocalPendingBrief = useCallback((conversationId: string, brief: IrisPendingBrief | null) => {
+    setLiveConversationId(conversationId)
+    setLivePendingBrief(brief)
+    persistLiveSession({
+      conversationId,
+      messages: liveMessages,
+      pendingBrief: brief,
+    })
+  }, [liveMessages, persistLiveSession])
+
   const setPendingBrief = useCallback((conversationId: string, brief: IrisPendingBrief) => {
-    const next = { conversationId, brief }
-    pendingBriefRef.current = next
-    setPendingBriefState(next)
     setPendingBriefInStore(conversationId, brief)
+    setLocalPendingBrief(conversationId, brief)
   }, [setPendingBriefInStore])
 
   const clearPendingBrief = useCallback((conversationId: string) => {
     clearPendingBriefInStore(conversationId)
-    if (pendingBriefRef.current?.conversationId === conversationId) {
-      pendingBriefRef.current = null
-      setPendingBriefState(null)
-    }
-  }, [clearPendingBriefInStore])
-
-  useEffect(() => {
-    if (!activeConversationId) {
-      pendingBriefRef.current = null
-      setPendingBriefState(null)
-      return
-    }
-
-    if (storePendingBrief) {
-      const next = { conversationId: activeConversationId, brief: storePendingBrief }
-      const current = pendingBriefRef.current
-      if (
-        current?.conversationId !== next.conversationId ||
-        JSON.stringify(current.brief) !== JSON.stringify(next.brief)
-      ) {
-        pendingBriefRef.current = next
-        setPendingBriefState(next)
-      }
-      return
-    }
-
-    if (pendingBriefRef.current?.conversationId === activeConversationId || pendingBriefState?.conversationId === activeConversationId) {
-      pendingBriefRef.current = null
-      setPendingBriefState(null)
-    }
-  }, [activeConversationId, pendingBriefState?.conversationId, storePendingBrief])
+    setLocalPendingBrief(conversationId, null)
+  }, [clearPendingBriefInStore, setLocalPendingBrief])
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
@@ -259,23 +350,112 @@ export function IrisChat() {
 
   useEffect(() => {
     if (!activeBriefQuestion) return
+    setIsBriefSubmitting(false)
     requestAnimationFrame(() => {
       activeBriefRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     })
   }, [activeBriefQuestion?.field])
 
   useEffect(() => {
-    if (!isIrisOpen) return
+    if (typeof window === 'undefined') return
+    ;(window as any).__IRIS_DEBUG__ = {
+      panelOpen,
+      isIrisOpen,
+      forcedOpen,
+      activeConversationId,
+      anchoredConversationId,
+      resolvedConversationId,
+      displayedConversationId,
+      storeConversationCount: conversations.length,
+      displayedMessageCount: displayedMessages.length,
+      liveConversationId,
+      liveMessageCount: liveMessages.length,
+      pendingBriefKeys: Object.keys(pendingBriefs || {}),
+      hasActivePendingBrief: Boolean(activePendingBrief),
+      activeBriefField: activeBriefQuestion?.field || null,
+      chatStatus,
+      appStateReady,
+    }
+  }, [
+    activeBriefQuestion?.field,
+    activeConversationId,
+    activePendingBrief,
+    anchoredConversationId,
+    appStateReady,
+    chatStatus,
+    conversations.length,
+    displayedConversationId,
+    displayedMessages.length,
+    forcedOpen,
+    isIrisOpen,
+    liveConversationId,
+    liveMessages.length,
+    panelOpen,
+    pendingBriefs,
+    resolvedConversationId,
+  ])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const raw = window.sessionStorage.getItem(IRIS_LIVE_SESSION_KEY)
+      if (!raw) return
+      const parsed = JSON.parse(raw)
+      if (parsed?.conversationId && Array.isArray(parsed?.messages)) {
+        setLiveConversationId(parsed.conversationId)
+        setLiveMessages(parsed.messages)
+        setLivePendingBrief(parsed?.pendingBrief || null)
+      }
+    } catch {
+      // Ignore malformed session backups.
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!panelOpen) return
+    if (liveConversationId || liveMessages.length || livePendingBrief) return
+    if (!resolvedConversationId || !activeConv) return
+    replaceLiveSession({
+      conversationId: resolvedConversationId,
+      messages: activeConv.messages || [],
+      pendingBrief: storePendingBrief,
+    })
+  }, [activeConv, liveConversationId, liveMessages.length, livePendingBrief, panelOpen, replaceLiveSession, resolvedConversationId, storePendingBrief])
+
+  useEffect(() => {
+    if (!panelOpen) return
+    if (!conversations.length) {
+      restoreChatSession()
+    }
+  }, [conversations.length, panelOpen, restoreChatSession])
+
+  useEffect(() => {
+    if (!panelOpen) return
     if (activeConv) return
     const fallbackConversationId = conversations[0]?.id
     if (fallbackConversationId) {
+      setAnchoredConversationId(fallbackConversationId)
       setActiveConversation(fallbackConversationId)
     }
-  }, [activeConv, conversations, isIrisOpen, setActiveConversation])
+  }, [activeConv, conversations, panelOpen, setActiveConversation])
 
   useEffect(() => {
-    if (isIrisOpen) setTimeout(() => inputRef.current?.focus(), 300)
-  }, [isIrisOpen])
+    if (!panelOpen) return
+    if (!resolvedConversationId) return
+    if (activeConversationId === resolvedConversationId) return
+    setActiveConversation(resolvedConversationId)
+  }, [activeConversationId, panelOpen, resolvedConversationId, setActiveConversation])
+
+  useEffect(() => {
+    if (!panelOpen) return
+    if (!resolvedConversationId) return
+    if (activePendingBrief || chatStatus !== 'idle') return
+    setAnchoredConversationId(resolvedConversationId)
+  }, [activePendingBrief, chatStatus, panelOpen, resolvedConversationId])
+
+  useEffect(() => {
+    if (panelOpen) setTimeout(() => inputRef.current?.focus(), 300)
+  }, [panelOpen])
 
   useEffect(() => {
     if (!activeMissionId) return
@@ -283,6 +463,7 @@ export function IrisChat() {
 
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | null = null
+    let pollCount = 0
 
     const pollExecution = async () => {
       try {
@@ -305,6 +486,7 @@ export function IrisChat() {
         const runs = Array.isArray(payload?.runs) ? payload.runs : []
 
         if (workflow) {
+          const isTerminal = ['completed', 'cancelled'].includes(String(workflow.status || ''))
           const nextStatus =
             workflow.status === 'active'
               ? 'in_progress'
@@ -323,12 +505,19 @@ export function IrisChat() {
             status: nextStatus as any,
             handoffNotes: [phaseNote, latestRunNote].filter(Boolean).join('\n') || undefined,
           })
+
+          if (isTerminal) {
+            cancelled = true
+            return
+          }
         }
       } catch {
         // Keep polling lightweight and silent in the chat shell.
       } finally {
         if (!cancelled) {
-          timer = setTimeout(pollExecution, 2000)
+          pollCount += 1
+          const delay = Math.min(2000 * Math.pow(1.4, pollCount), 15000)
+          timer = setTimeout(pollExecution, delay)
         }
       }
     }
@@ -400,7 +589,7 @@ export function IrisChat() {
           model: irisAgent?.model || agencySettings.defaultModel,
           temperature: irisAgent?.temperature || 0.7,
           maxTokens: irisAgent?.maxTokens || 4096,
-          messages: [...(activeConv?.messages || []), { role: 'user', content: requestText }],
+          messages: [...displayedMessages, { role: 'user', content: requestText }],
           systemPrompt: irisAgent?.systemPrompt,
           providerSettings,
           agentMemories,
@@ -448,6 +637,7 @@ export function IrisChat() {
               handoffNotes: 'Specialists are working on the deliverable.',
             })
           }
+          upsertLiveDraft(conversationId, fullResponse, { missionId: createdMissionId || undefined })
           upsertAssistantDraft(conversationId, fullResponse, 'iris', { missionId: createdMissionId || undefined })
         },
         (meta) => {
@@ -461,9 +651,11 @@ export function IrisChat() {
           const missionForArtifact = (createdMissionId ? missions.find((mission) => mission.id === createdMissionId) : null) || activeMission
           const deliverableType = (meta?.deliverableType as any) || missionForArtifact?.deliverableType || 'status-report'
           const taskTitle = buildTaskTitleFromRequest(requestText, deliverableType)
+          const isBackgroundExecution = (meta as any)?.executionMode === 'background'
           const passedQualityGate = passesQualityGate(meta)
           const hasUsableDeliverable = looksLikeSavedDeliverable(fullResponse) && passedQualityGate
           const shouldPersistArtifact =
+            !isBackgroundExecution &&
             deliverableType !== 'status-report' &&
             isLikelyDeliverableResponse(fullResponse) &&
             passedQualityGate
@@ -507,6 +699,12 @@ export function IrisChat() {
                 })
               : undefined
 
+          commitLiveAssistantMessage(conversationId, fullResponse, {
+            ...meta,
+            missionId: createdMissionId || undefined,
+            artifactId,
+            handoffNotes: [meta?.handoffNotes, buildAssignmentNote(meta)].filter(Boolean).join('\n'),
+          })
           addAssistantMessage(conversationId, fullResponse, meta?.routedAgentId || 'iris', {
             ...meta,
             missionId: createdMissionId || undefined,
@@ -520,8 +718,8 @@ export function IrisChat() {
               title: taskTitle,
               summary: requestText,
               deliverableType: resolvedDeliverableType,
-              status: shouldPersistArtifact ? 'review' : 'blocked',
-              progress: shouldPersistArtifact ? 92 : 15,
+              status: isBackgroundExecution ? 'in_progress' : shouldPersistArtifact ? 'review' : 'blocked',
+              progress: isBackgroundExecution ? 12 : shouldPersistArtifact ? 92 : 15,
               complexity: getDeliverableSpec(resolvedDeliverableType).complexity,
               channelingConfidence:
                 (meta as any)?.confidence ||
@@ -536,6 +734,8 @@ export function IrisChat() {
               qualityChecklist: meta?.qualityChecklist || [],
               handoffNotes: shouldPersistArtifact
                 ? [meta?.handoffNotes, buildAssignmentNote(meta)].filter(Boolean).join('\n') || undefined
+                : isBackgroundExecution
+                  ? [meta?.handoffNotes, buildAssignmentNote(meta), 'Task queued for background execution.'].filter(Boolean).join('\n') || undefined
                 : (meta as any)?.quality?.ok === false
                   ? `Quality gate failed: ${((meta as any)?.quality?.issues || []).join(' | ')}`
                   : 'Iris did not return a usable deliverable. Re-run the task or check provider settings.',
@@ -579,6 +779,10 @@ export function IrisChat() {
         },
         (err) => {
           setError(err)
+          commitLiveAssistantMessage(conversationId, `Iris could not complete that request.\n\nReason: ${err}`, {
+            missionId: createdMissionId || undefined,
+            handoffNotes: err,
+          })
           addAssistantMessage(conversationId, `Iris could not complete that request.\n\nReason: ${err}`, 'iris', {
             missionId: createdMissionId || undefined,
             handoffNotes: err,
@@ -594,7 +798,7 @@ export function IrisChat() {
         }
       )
     },
-    [activeConv?.messages, activeMission, addArtifact, addAssistantMessage, agencySettings.defaultModel, agencySettings.defaultProvider, agentMemories, agents, artifacts, clients, createMissionFromPrompt, irisAgent?.maxTokens, irisAgent?.model, irisAgent?.provider, irisAgent?.systemPrompt, irisAgent?.temperature, missions, providerSettings, rememberAgentWork, setChatStatus, updateMission, upsertAssistantDraft]
+    [activeMission, addArtifact, addAssistantMessage, agencySettings.defaultModel, agencySettings.defaultProvider, agentMemories, agents, artifacts, clients, createMissionFromPrompt, displayedMessages, irisAgent?.maxTokens, irisAgent?.model, irisAgent?.provider, irisAgent?.systemPrompt, irisAgent?.temperature, missions, providerSettings, rememberAgentWork, setChatStatus, updateMission, upsertAssistantDraft]
   )
 
   const askBriefQuestion = useCallback(
@@ -607,6 +811,11 @@ export function IrisChat() {
       if (!question) return false
 
       setPendingBrief(conversationId, pendingBrief)
+      commitLiveAssistantMessage(
+        conversationId,
+        `${question.prompt}\n\n${question.helper}`,
+        { deliverableType }
+      )
       addAssistantMessage(
         conversationId,
         `${question.prompt}\n\n${question.helper}`,
@@ -615,14 +824,12 @@ export function IrisChat() {
       )
       return true
     },
-    [addAssistantMessage, setPendingBrief]
+    [addAssistantMessage, commitLiveAssistantMessage, setPendingBrief]
   )
 
   const handleBriefProgress = useCallback(
     async (conversationId: string, answer: string, briefOverride?: IrisPendingBrief) => {
-      const currentBrief =
-        briefOverride ||
-        (pendingBriefRef.current?.conversationId === conversationId ? pendingBriefRef.current.brief : null)
+      const currentBrief = briefOverride || livePendingBrief || pendingBriefs[conversationId] || null
       if (!currentBrief) return false
 
       const currentField = getBriefQuestion(currentBrief)?.field
@@ -631,6 +838,9 @@ export function IrisChat() {
         setPendingBrief(conversationId, updatedBrief)
         const nextQuestion = getBriefQuestion(updatedBrief)
         if (nextQuestion) {
+          commitLiveAssistantMessage(conversationId, `${nextQuestion.prompt}\n\n${nextQuestion.helper}`, {
+            deliverableType: updatedBrief.deliverableType,
+          })
           addAssistantMessage(conversationId, `${nextQuestion.prompt}\n\n${nextQuestion.helper}`, 'iris', {
             deliverableType: updatedBrief.deliverableType,
           })
@@ -639,13 +849,16 @@ export function IrisChat() {
       }
 
       clearPendingBrief(conversationId)
+      commitLiveAssistantMessage(conversationId, 'Perfect. I have enough to start this now.', {
+        deliverableType: updatedBrief.deliverableType,
+      })
       addAssistantMessage(conversationId, 'Perfect. I have enough to start this now.', 'iris', {
         deliverableType: updatedBrief.deliverableType,
       })
       await runTaskRequest(conversationId, composeBriefedRequest(updatedBrief))
       return true
     },
-    [addAssistantMessage, clearPendingBrief, runTaskRequest, setPendingBrief]
+    [addAssistantMessage, clearPendingBrief, commitLiveAssistantMessage, livePendingBrief, pendingBriefs, runTaskRequest, setPendingBrief]
   )
 
   const submitUserMessage = useCallback(
@@ -653,9 +866,7 @@ export function IrisChat() {
       if (chatStatus !== 'idle') return
 
       const conversationId =
-        activeConversationId && conversations.some((conversation) => conversation.id === activeConversationId)
-          ? activeConversationId
-          : createConversation('Chat with Iris')
+        liveConversationId || createConversation('Chat with Iris')
 
       if (!conversationId) return
 
@@ -663,12 +874,22 @@ export function IrisChat() {
       const fullMessage = attachmentContent.trim()
         ? `${userMsg}\n\n[Attached files context]\n${attachmentContent.trim()}`
         : userMsg
-      const briefEntryBeforeSend = pendingBriefRef.current
-      const activeBriefForConversation =
-        briefEntryBeforeSend?.conversationId === conversationId ? briefEntryBeforeSend.brief : null
+      const activeBriefForConversation = livePendingBrief || pendingBriefs[conversationId] || null
 
       setError(null)
+      setAnchoredConversationId(conversationId)
       setActiveConversation(conversationId)
+      const stagedUserMessages = displayedMessages.concat({
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: userMsg,
+        timestamp: nowIso(),
+      })
+      stageLiveSession({
+        conversationId,
+        messages: stagedUserMessages,
+        pendingBrief: activeBriefForConversation,
+      })
       sendMessage(conversationId, userMsg)
 
       if (activeBriefForConversation) {
@@ -682,7 +903,7 @@ export function IrisChat() {
 
       await runTaskRequest(conversationId, fullMessage)
     },
-    [activeConversationId, askBriefQuestion, chatStatus, conversations, createConversation, handleBriefProgress, runTaskRequest, sendMessage, setActiveConversation]
+    [askBriefQuestion, chatStatus, createConversation, displayedMessages, handleBriefProgress, liveConversationId, livePendingBrief, pendingBriefs, runTaskRequest, sendMessage, setActiveConversation, stageLiveSession]
   )
 
   const handleSend = useCallback(async () => {
@@ -699,19 +920,27 @@ export function IrisChat() {
   }, [input, attachments.length, attachedText, submitUserMessage])
 
   const handleBriefOptionClick = useCallback(async (option: string) => {
-    if (!activeBriefQuestion || chatStatus !== 'idle') return
-    if (!activeConversationId || !activePendingBrief) return
+    if (!activeBriefQuestion || chatStatus !== 'idle' || isBriefSubmitting) return
+    if (!displayedConversationId || !activePendingBrief) return
 
     setError(null)
-    sendMessage(activeConversationId, option)
-    await handleBriefProgress(activeConversationId, option, activePendingBrief)
-  }, [activeBriefQuestion, activeConversationId, activePendingBrief, chatStatus, handleBriefProgress, sendMessage])
+    setIsBriefSubmitting(true)
+    try {
+      setAnchoredConversationId(displayedConversationId)
+      appendLiveMessage({ id: crypto.randomUUID(), role: 'user', content: option, timestamp: nowIso() }, displayedConversationId)
+      sendMessage(displayedConversationId, option)
+      await handleBriefProgress(displayedConversationId, option, activePendingBrief)
+    } finally {
+      setIsBriefSubmitting(false)
+    }
+  }, [activeBriefQuestion, activePendingBrief, appendLiveMessage, chatStatus, displayedConversationId, handleBriefProgress, isBriefSubmitting, sendMessage])
 
   const clearPendingBriefFlow = useCallback(() => {
-    if (!activeConversationId) return
-    clearPendingBrief(activeConversationId)
-    addAssistantMessage(activeConversationId, 'Briefing cleared. Send the full request again whenever you are ready.', 'iris')
-  }, [activeConversationId, addAssistantMessage, clearPendingBrief])
+    if (!displayedConversationId) return
+    clearPendingBrief(displayedConversationId)
+    commitLiveAssistantMessage(displayedConversationId, 'Briefing cleared. Send the full request again whenever you are ready.')
+    addAssistantMessage(displayedConversationId, 'Briefing cleared. Send the full request again whenever you are ready.', 'iris')
+  }, [displayedConversationId, addAssistantMessage, clearPendingBrief, commitLiveAssistantMessage])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -723,14 +952,19 @@ export function IrisChat() {
   const startNewChat = () => {
     const id = createConversation('New Chat')
     clearPendingBrief(id)
+    replaceLiveSession({ conversationId: id, messages: [], pendingBrief: null })
+    setAnchoredConversationId(id)
     setActiveConversation(id)
   }
 
-  if (!isIrisOpen) return null
+  if (!panelOpen || !appStateReady) return null
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={closeIris} />
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+        onClick={() => (onRequestClose ? onRequestClose() : closeIris())}
+      />
       <div className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#12141a] border-l border-[#2a2d38] z-50 flex flex-col shadow-2xl">
         {/* Header */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-[#2a2d38]">
@@ -743,6 +977,24 @@ export function IrisChat() {
               {getModelLabel(irisAgent?.model || agencySettings.defaultModel)} · {getProviderLabel(irisAgent?.provider || agencySettings.defaultProvider)}
             </p>
           </div>
+          <div
+            data-iris-debug
+            className="sr-only"
+          >
+            {JSON.stringify({
+              panelOpen,
+              activeConversationId,
+              anchoredConversationId,
+              resolvedConversationId,
+              displayedConversationId,
+              storeConversationCount: conversations.length,
+              displayedMessageCount: displayedMessages.length,
+              liveConversationId,
+              liveMessageCount: liveMessages.length,
+              activeBriefField: activeBriefQuestion?.field || null,
+              chatStatus,
+            })}
+          </div>
           <div className="flex items-center gap-2">
             {chatStatus === 'idle' && (
               <span className="w-2 h-2 rounded-full bg-green-500" title="Ready" />
@@ -753,7 +1005,10 @@ export function IrisChat() {
             <button onClick={startNewChat} className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white transition-colors" title="New chat">
               <Plus size={18} />
             </button>
-            <button onClick={closeIris} className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white transition-colors">
+            <button
+              onClick={() => (onRequestClose ? onRequestClose() : closeIris())}
+              className="p-2 hover:bg-[#1a1d26] rounded-lg text-gray-400 hover:text-white transition-colors"
+            >
               <X size={18} />
             </button>
           </div>
@@ -761,7 +1016,7 @@ export function IrisChat() {
 
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto">
-          {!activeConv || activeConv.messages.length === 0 ? (
+          {!displayedConversationId || displayedMessages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full p-8 text-center">
               <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-5" style={{ background: `${IRIS.color}15` }}>
                 <AgentBot name={IRIS.name} avatar={IRIS.avatar} color={IRIS.color} status="active" animation="idle" size={64} />
@@ -785,9 +1040,9 @@ export function IrisChat() {
             </div>
           ) : (
             <div className="p-5 pb-28 space-y-5">
-              {activeConv.messages.map((msg, i) => {
+              {displayedMessages.map((msg, i) => {
                 const isUser = msg.role === 'user'
-                const showAvatar = !isUser && (i === 0 || activeConv.messages[i - 1].role === 'user')
+                const showAvatar = !isUser && (i === 0 || displayedMessages[i - 1].role === 'user')
                 return (
                   <div key={`${msg.id}-${i}`} className={clsx('flex gap-3', isUser && 'flex-row-reverse')}>
                     {!isUser && (
@@ -850,7 +1105,13 @@ export function IrisChat() {
                       <button
                         key={`${activeBriefQuestion.field}-${option}`}
                         onClick={() => handleBriefOptionClick(option)}
-                        className="px-3 py-2 rounded-xl border border-[#3a334d] bg-[#1d2030] text-xs text-gray-200 hover:border-[#9b6dff] hover:text-white transition-colors"
+                        disabled={isBriefSubmitting}
+                        className={clsx(
+                          'px-3 py-2 rounded-xl border text-xs transition-colors',
+                          isBriefSubmitting
+                            ? 'border-[#2f3242] bg-[#181b26] text-gray-500 cursor-wait'
+                            : 'border-[#3a334d] bg-[#1d2030] text-gray-200 hover:border-[#9b6dff] hover:text-white'
+                        )}
                       >
                         {option}
                       </button>
@@ -858,7 +1119,11 @@ export function IrisChat() {
                   </div>
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-[11px] text-gray-500">
-                      {activeBriefQuestion.allowsFreeText ? 'You can also type a custom answer below.' : 'Pick an option to continue.'}
+                      {isBriefSubmitting
+                        ? 'Saving your answer...'
+                        : activeBriefQuestion.allowsFreeText
+                          ? 'You can also type a custom answer below.'
+                          : 'Pick an option to continue.'}
                     </p>
                     <button
                       onClick={clearPendingBriefFlow}

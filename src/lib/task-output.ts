@@ -1,6 +1,6 @@
 import { DeliverableType } from '@/lib/types'
-import { getDeliverableAgentPlan } from '@/lib/agent-roles'
 import { getDeliverableSpec } from '@/lib/deliverables'
+import { resolveTaskRoutingBlueprint } from '@/lib/server/task-channeling'
 
 export function buildTaskTitleFromRequest(request: string, deliverableType: DeliverableType) {
   const trimmed = request.trim()
@@ -322,11 +322,12 @@ export function buildTaskExecutionPlan(input: {
   pipelinePhases?: string[]
 }) : TaskExecutionPlan {
   const lower = input.request.toLowerCase()
-  const { leadAgentId, collaboratorAgentIds } = getDeliverableAgentPlan(
-    input.deliverableType,
-    input.request,
-    input.routedAgentId
-  )
+  const { leadAgentId, collaboratorAgentIds } = resolveTaskRoutingBlueprint({
+    request: input.request,
+    deliverableType: input.deliverableType,
+    routedAgentId: input.routedAgentId,
+    agents: [],
+  })
 
   const qualityChecklist =
     input.pipelinePhases?.length

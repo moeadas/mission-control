@@ -28,16 +28,20 @@ const PERSISTED_STATE_KEYS = [
 ] as const
 
 const ENTITY_COLLECTION_KEYS = ['agents', 'clients', 'missions', 'artifacts'] as const
+const IRIS_PANEL_VISIBILITY_KEY = 'mission-control:iris-panel-visible'
 
 export function ClientShell({ children }: { children: React.ReactNode }) {
   const openIris = useAgentsStore((state) => state.openIris)
+  const closeIris = useAgentsStore((state) => state.closeIris)
   const isIrisOpen = useAgentsStore((state) => state.isIrisOpen)
   const themeMode = useAgentsStore((state) => state.agencySettings.themeMode)
   const hydrateAgentPhotos = useAgentsStore((state) => state.hydrateAgentPhotos)
   const hydrateAppState = useAgentsStore((state) => state.hydrateAppState)
   const setAppStateReady = useAgentsStore((state) => state.setAppStateReady)
   const setAuthenticatedUser = useAgentsStore((state) => state.setAuthenticatedUser)
+  const appStateReady = useAgentsStore((state) => state.appStateReady)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [irisPanelVisible, setIrisPanelVisible] = useState(false)
   const pathname = usePathname()
   const supabase = useMemo(() => getSupabaseBrowserClient(), [])
 
@@ -87,7 +91,13 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
       })
       .catch(() => null)
 
-    supabase.auth.getSession()
+    Promise.resolve()
+      .then(async () => {
+        if (!useAgentsStore.persist.hasHydrated()) {
+          await useAgentsStore.persist.rehydrate()
+        }
+        return supabase.auth.getSession()
+      })
       .then(({ data }) => {
         const accessToken = data.session?.access_token
         authHeaders = accessToken
@@ -260,6 +270,46 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      if (window.sessionStorage.getItem(IRIS_PANEL_VISIBILITY_KEY) === '1') {
+        setIrisPanelVisible(true)
+      }
+    } catch {
+      // Ignore session storage issues.
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      if (irisPanelVisible) {
+        window.sessionStorage.setItem(IRIS_PANEL_VISIBILITY_KEY, '1')
+      } else {
+        window.sessionStorage.removeItem(IRIS_PANEL_VISIBILITY_KEY)
+      }
+    } catch {
+      // Ignore session storage issues.
+    }
+  }, [irisPanelVisible])
+
+  useEffect(() => {
+    if (isIrisOpen) {
+      setIrisPanelVisible(true)
+    }
+  }, [isIrisOpen])
+
+  const handleOpenIris = () => {
+    setIrisPanelVisible(true)
+    openIris()
+  }
+
+  const handleCloseIris = () => {
+    setIrisPanelVisible(false)
+    closeIris()
+  }
+
   return (
     <div className="flex flex-col h-screen bg-[var(--bg-base)] overflow-hidden">
       <a
@@ -314,7 +364,14 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
 
       {/* Iris Chat FAB */}
       <button
-        onClick={openIris}
+        onClick={
+          appStateReady
+            ? irisPanelVisible
+              ? handleCloseIris
+              : handleOpenIris
+            : undefined
+        }
+        disabled={!appStateReady}
         className={`
           fixed bottom-20 md:bottom-6 right-4 md:right-6 z-40
           flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full
@@ -323,14 +380,15 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
           transition-all duration-200
           hover:scale-110 hover:shadow-xl
           active:scale-95
+          disabled:cursor-wait disabled:opacity-60 disabled:hover:scale-100
         `}
-        aria-label={isIrisOpen ? 'Close Iris chat' : 'Open Iris chat'}
+        aria-label={irisPanelVisible ? 'Close Iris chat' : 'Open Iris chat'}
         style={{ boxShadow: '0 4px 20px rgba(155, 109, 255, 0.4)' }}
       >
-        {isIrisOpen ? <X size={20} /> : <MessageCircle size={22} />}
+        {irisPanelVisible ? <X size={20} /> : <MessageCircle size={22} />}
       </button>
 
-      <IrisChat />
+      <IrisChat forcedOpen={irisPanelVisible} onRequestClose={handleCloseIris} />
       <GlobalTaskTracker />
       <ToastContainer />
     </div>

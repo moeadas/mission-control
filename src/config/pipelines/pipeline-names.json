@@ -1,0 +1,12 @@
+{
+  "pipelines": [
+    { "id": "content-calendar", "name": "Content Calendar Pipeline" },
+    { "id": "campaign-brief", "name": "Campaign Brief Pipeline" },
+    { "id": "strategy-brief", "name": "Strategy Brief Pipeline" },
+    { "id": "seo-audit", "name": "SEO Audit Pipeline" },
+    { "id": "competitor-research", "name": "Competitor Research Pipeline" },
+    { "id": "ad-creative", "name": "Ad Creative Pipeline" },
+    { "id": "client-brief", "name": "Client Brief Pipeline" },
+    { "id": "media-plan", "name": "Media Plan Pipeline" }
+  ]
+}

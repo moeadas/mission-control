@@ -4,7 +4,7 @@ import { buildArtifactHtml } from '@/lib/output-html'
 import { buildTaskExecutionPlan } from '@/lib/task-output'
 import { buildTaskChannelingPlan } from '@/lib/server/task-channeling'
 import { executeAutonomousTask } from '@/lib/server/autonomous-task'
-import { inferPipeline } from '@/lib/server/ai'
+import { resolvePipelineSelection } from '@/lib/server/ai'
 import { normalizeProviderSettings, resolveTaskRuntime } from '@/lib/provider-settings'
 import { sanitizePromptProfile, sanitizePromptValue } from '@/lib/server/prompt-safety'
 import { getSupabaseServerClient } from '@/lib/supabase/server'
@@ -182,24 +182,32 @@ export async function ensureTaskExecutionPersistence(input: {
 
   if (error) throw error
 
-  const { error: deleteAssignmentsError } = await supabase
-    .from('task_assignments')
-    .delete()
-    .eq('agency_id', agencyId)
-    .eq('task_id', input.taskId)
-  if (deleteAssignmentsError) throw deleteAssignmentsError
+  try {
+    const { error: deleteAssignmentsError } = await supabase
+      .from('task_assignments')
+      .delete()
+      .eq('agency_id', agencyId)
+      .eq('task_id', input.taskId)
+    if (deleteAssignmentsError) throw deleteAssignmentsError
 
-  if (assignedAgentIds.length) {
-    const assignmentRows = assignedAgentIds.map((agentId) => ({
-      agency_id: agencyId,
-      task_id: input.taskId,
-      agent_id: agentId,
-      role: agentId === (input.leadAgentId || assignedAgentIds[0]) ? 'lead' : 'support',
-      status: input.status || 'queued',
-      handoff_notes: input.handoffNotes || null,
-    }))
-    const { error: insertAssignmentsError } = await supabase.from('task_assignments').insert(assignmentRows)
-    if (insertAssignmentsError) throw insertAssignmentsError
+    if (assignedAgentIds.length) {
+      const assignmentRows = assignedAgentIds.map((agentId) => ({
+        agency_id: agencyId,
+        task_id: input.taskId,
+        agent_id: agentId,
+        role: agentId === (input.leadAgentId || assignedAgentIds[0]) ? 'lead' : 'support',
+        status: input.status || 'queued',
+        handoff_notes: input.handoffNotes || null,
+      }))
+      const { error: insertAssignmentsError } = await supabase.from('task_assignments').insert(assignmentRows)
+      if (insertAssignmentsError) throw insertAssignmentsError
+    }
+  } catch (assignmentError) {
+    console.warn('[ensureTaskExecutionPersistence] assignment sync failed; continuing with persisted task row.', {
+      taskId: input.taskId,
+      assignedAgentIds,
+      error: assignmentError instanceof Error ? assignmentError.message : String(assignmentError),
+    })
   }
 
   return data
@@ -410,7 +418,13 @@ export async function runTaskExecution(taskId: string, auth: AuthContext, action
 
   const clientContext = buildClientContext(client, knowledgeAssets || [])
   const clientProfile = buildClientProfile(client)
-  const pipeline = task.pipeline_id ? pipelines.find((entry: any) => entry.id === task.pipeline_id) || null : inferPipeline(task.summary || task.title, pipelines)?.id ? pipelines.find((entry: any) => entry.id === inferPipeline(task.summary || task.title, pipelines)?.id) || null : null
+  const pipelineSelection = resolvePipelineSelection({
+    content: task.summary || task.title,
+    deliverableType: task.deliverable_type,
+    pipelines,
+    preferredPipelineId: task.pipeline_id,
+  })
+  const pipeline = pipelineSelection.pipeline
   const executionPlan = buildTaskExecutionPlan({
     deliverableType: task.deliverable_type,
     request: task.summary || task.title,
@@ -494,6 +508,25 @@ export async function runTaskExecution(taskId: string, auth: AuthContext, action
             currentPhase: phase.name,
             progress,
             context: { action, activePhaseId: phase.id },
+          })
+        },
+        onActivityStart: async ({ phase, activity, agent, runtime, progress }) => {
+          await insertTaskRun({
+            taskId,
+            agentId: agent.id,
+            stage: `${phase.id}:${activity.id}`,
+            status: 'in_progress',
+            inputPayload: { phaseId: phase.id, activityId: activity.id },
+            outputPayload: { provider: runtime.provider, model: runtime.model, event: 'activity-started' },
+            startedAt: new Date().toISOString(),
+          })
+          await upsertWorkflowExecutionState({
+            taskId,
+            pipelineId: pipeline?.id || task.pipeline_id,
+            status: 'active',
+            currentPhase: phase.name,
+            progress,
+            context: { action, activePhaseId: phase.id, activeActivityId: activity.id },
           })
         },
         onActivityComplete: async ({ phase, activity, agent, runtime, summary, outputIds, progress }) => {
@@ -624,6 +657,12 @@ export async function runTaskExecution(taskId: string, auth: AuthContext, action
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Task execution failed.'
     const now = new Date().toISOString()
+    const latestState = await loadTaskExecutionState(taskId, auth).catch(() => null)
+    const lastPhase = latestState?.workflow?.current_phase || pipeline?.phases?.[0]?.name || 'Execution'
+    const lastProgress =
+      typeof latestState?.workflow?.progress === 'number'
+        ? Math.max(10, latestState.workflow.progress)
+        : 10
 
     await insertTaskRun({
       taskId,
@@ -638,9 +677,14 @@ export async function runTaskExecution(taskId: string, auth: AuthContext, action
       taskId,
       pipelineId: pipeline?.id || task.pipeline_id,
       status: 'paused',
-      currentPhase: pipeline?.phases?.[0]?.name || 'Execution',
-      progress: 10,
-      context: { action, error: message, failedAt: now },
+      currentPhase: lastPhase,
+      progress: lastProgress,
+      context: {
+        ...(latestState?.workflow?.context || {}),
+        action,
+        error: message,
+        failedAt: now,
+      },
     })
     await supabase
       .from('tasks')

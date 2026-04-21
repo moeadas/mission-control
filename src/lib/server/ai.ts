@@ -1,6 +1,7 @@
 import { AIProvider, DeliverableType } from '@/lib/types'
 import { DELIVERABLE_REGISTRY, getDeliverableSpec, inferDeliverableTypeFromText, isSubstantiveRequest } from '@/lib/deliverables'
 import { getDeliverableOutputSpec } from '@/lib/task-output'
+import { resolveTaskRoutingBlueprint } from '@/lib/server/task-channeling'
 
 type VerifyPayload =
   | { provider: 'ollama'; baseUrl: string }
@@ -76,7 +77,13 @@ export async function generateText(input: {
   ollamaBaseUrl?: string
   ollamaContextWindow?: number
   geminiApiKey?: string
+  timeoutMs?: number
 }) {
+  const timeoutMs = Math.max(5_000, input.timeoutMs || 90_000)
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(`Timed out after ${timeoutMs}ms`), timeoutMs)
+
+  try {
   if (input.provider === 'gemini') {
     if (!input.geminiApiKey) throw new Error('Gemini API key missing.')
 
@@ -109,6 +116,7 @@ export async function generateText(input: {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        signal: controller.signal,
       }
     )
 
@@ -160,6 +168,7 @@ export async function generateText(input: {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(ollamaPayload),
+    signal: controller.signal,
   })
 
   if (response.status === 500 && isCloudModel) {
@@ -168,6 +177,7 @@ export async function generateText(input: {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(ollamaPayload),
+      signal: controller.signal,
     })
   }
 
@@ -178,6 +188,14 @@ export async function generateText(input: {
 
   const data = await response.json()
   return data.message?.content || ''
+  } catch (error) {
+    if (error instanceof Error && (error.name === 'AbortError' || /timed out/i.test(error.message))) {
+      throw new ProviderError(input.provider, `Model call timed out after ${Math.round(timeoutMs / 1000)}s.`)
+    }
+    throw error
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 export function getFriendlyProviderError(error: unknown) {
@@ -225,42 +243,25 @@ export function inferRoutingContext(input: {
   const client =
     input.clientHints.find((item) => lower.includes(item.name.toLowerCase()) || lower.includes(item.id.toLowerCase())) || null
 
-  const availableAgentIds = new Set(input.agents.map((agent) => agent.id))
-  let routedAgentId = spec.defaultLead
-
-  if (!availableAgentIds.has(routedAgentId)) {
-    routedAgentId = spec.defaultCollaborators.find((id) => availableAgentIds.has(id)) || 'iris'
-  }
-
-  const collaborators = new Set(spec.defaultCollaborators.filter((id) => id !== routedAgentId && availableAgentIds.has(id)))
-  const dynamicSignals: Array<{ pattern: RegExp; agentId: string }> = [
-    { pattern: /(visual|image|design|creative|artwork|graphic|mockup|illustration|banner)/i, agentId: 'lyra' },
-    { pattern: /(research|data|market|competitor|benchmark|analysis|insight|trend)/i, agentId: 'atlas' },
-    { pattern: /(stakeholder|board|investor|executive|c-suite|management|pitch|presentation)/i, agentId: 'sage' },
-    { pattern: /(copy|caption|headline|hook|cta|content|script|article|blog|email)/i, agentId: 'echo' },
-    { pattern: /(channel|media|budget|spend|allocation|paid|organic|schedule)/i, agentId: 'nova' },
-    { pattern: /(excel|spreadsheet|kpi|pacing|budget sheet|forecast|projection|dashboard)/i, agentId: 'dex' },
-    { pattern: /(timeline|handoff|traffic|resourcing|schedule|project plan)/i, agentId: 'piper' },
-    { pattern: /(concept|creative direction|campaign concept|idea|brainstorm)/i, agentId: 'finn' },
-    { pattern: /(strategy|positioning|messaging|audience|persona|brand)/i, agentId: 'maya' },
-  ]
-
-  for (const signal of dynamicSignals) {
-    if (signal.pattern.test(lower) && signal.agentId !== routedAgentId && availableAgentIds.has(signal.agentId)) {
-      collaborators.add(signal.agentId)
-    }
-  }
+  const routingBlueprint = resolveTaskRoutingBlueprint({
+    request: input.content,
+    deliverableType,
+    agents: input.agents,
+  })
+  const routedAgentId = routingBlueprint.leadAgentId
+  const collaborators = new Set(routingBlueprint.collaboratorAgentIds)
 
   const routedAgent = input.agents.find((agent) => agent.id === routedAgentId)
   const patternMatches = spec.patterns.filter((pattern) => pattern.test(lower)).length
   const confidence: 'high' | 'medium' | 'low' =
-    deliverableType === 'status-report'
+    routingBlueprint.confidence ||
+    (deliverableType === 'status-report'
       ? 'low'
       : patternMatches >= 2
         ? 'high'
         : patternMatches === 1 || deliverableType === 'general-task'
           ? 'medium'
-          : 'low'
+          : 'low')
 
   const collaboratorNames = Array.from(collaborators)
     .map((id) => input.agents.find((agent) => agent.id === id)?.name || id)
@@ -332,6 +333,36 @@ export function inferPipeline(content: string, pipelines: any[]): PipelineHint |
     phases: pipeline.phases.map((p: any) => p.name),
     estimatedDuration: pipeline.estimatedDuration,
     clientProfileFields: pipeline.clientProfileFields || [],
+  }
+}
+
+export function resolvePipelineSelection(input: {
+  content: string
+  deliverableType: DeliverableType
+  pipelines: any[]
+  preferredPipelineId?: string | null
+  fallbackPipelineId?: string | null
+}) {
+  const spec = getDeliverableSpec(input.deliverableType)
+  const inferred = inferPipeline(input.content, input.pipelines)
+
+  const orderedIds = [
+    input.preferredPipelineId || null,
+    inferred?.id || null,
+    spec.pipelineId || null,
+    input.fallbackPipelineId || null,
+  ].filter(Boolean) as string[]
+
+  const pipeline =
+    orderedIds
+      .map((pipelineId) => input.pipelines.find((entry: any) => entry.id === pipelineId) || null)
+      .find(Boolean) || null
+
+  return {
+    hint: inferred,
+    pipeline,
+    pipelineId: pipeline?.id || null,
+    pipelineName: pipeline?.name || inferred?.name || null,
   }
 }
 

@@ -230,6 +230,41 @@ function computeChannelingConfidence(input: {
   return 'low'
 }
 
+export function resolveTaskRoutingBlueprint(input: {
+  request: string
+  deliverableType: DeliverableType
+  routedAgentId?: string
+  agents: RuntimeAgent[]
+  pipeline?: PipelineLike | null
+}) {
+  const initialBase = getDeliverableAgentPlan(input.deliverableType, input.request, input.routedAgentId)
+  const leadAgentId = resolveLeadAgent(
+    input.deliverableType,
+    input.routedAgentId,
+    initialBase.leadAgentId,
+    input.agents
+  )
+
+  const collaboratorAgentIds = unique([
+    ...(initialBase.collaboratorAgentIds || []),
+    ...inferCollaborators(input.request, input.deliverableType, leadAgentId, input.agents),
+  ]).filter((id) => id !== 'iris' && id !== leadAgentId)
+
+  const confidence = computeChannelingConfidence({
+    deliverableType: input.deliverableType,
+    leadAgentId,
+    selectedSkillsByAgent: { [leadAgentId]: [] },
+    pipeline: input.pipeline || null,
+    agents: input.agents,
+  })
+
+  return {
+    leadAgentId,
+    collaboratorAgentIds,
+    confidence,
+  }
+}
+
 export function buildTaskChannelingPlan(input: {
   request: string
   deliverableType: DeliverableType

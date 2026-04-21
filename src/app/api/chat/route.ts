@@ -6,7 +6,7 @@ import {
   inferDeliverableType,
   inferRoutingContext,
   ProviderError,
-  inferPipeline,
+  resolvePipelineSelection,
 } from '@/lib/server/ai'
 import { buildTaskExecutionPlan, buildTaskTitleFromRequest } from '@/lib/task-output'
 import { executeAutonomousTask } from '@/lib/server/autonomous-task'
@@ -17,10 +17,12 @@ import { normalizeProviderSettings, resolveFallbackRuntime, resolveTaskRuntime }
 import { sanitizePromptProfile, sanitizePromptValue } from '@/lib/server/prompt-safety'
 import { validateDeliverableQuality } from '@/lib/output-quality'
 import { ensureTaskExecutionPersistence, insertTaskRun, upsertWorkflowExecutionState } from '@/lib/server/task-execution'
+import { queueTaskExecution } from '@/lib/server/execution-queue'
 import { loadConfigSkillCategories, mergeDbSkillsWithConfig } from '@/lib/server/skills-catalog'
 import { buildTaskChannelingPlan } from '@/lib/server/task-channeling'
 import { getConfigPipelines, mergeDatabasePipelines } from '@/lib/pipeline-loader'
 import { getDeliverableSpec } from '@/lib/deliverables'
+export const maxDuration = 300
 
 // DEBUG: Log incoming requests
 function debugLog(label: string, data: any) {
@@ -29,26 +31,25 @@ function debugLog(label: string, data: any) {
   }
 }
 
-const TASK_KEYWORDS = /\b(create|make|build|draft|generate|write|produce|design|plan|schedule|audit|analyze|research|forecast|calendar|campaign|brief|copy|content calendar|media plan|budget|strategy|kpi|seo|competitor|carousel|caption|social post|hashtag|visual|banner|ad creative|launch plan|report)\b/i
+const TASK_KEYWORDS = /\b(create|make|build|draft|generate|write|produce|design|plan|schedule|audit|analyze|research|forecast|calendar|campaign|brief|copy|content calendar|media plan|budget|strategy|kpi|seo|competitor|carousel|caption|social post|hashtag|visual|banner|ad creative|launch plan|report|logo|hero|brand|persona|ux|email|newsletter|infographic|reel|script|mockup|wireframe)\b/i
 
 function isConversationalMessage(content: string): boolean {
   if (TASK_KEYWORDS.test(content)) return false
-  if (content.trim().length < 80) return true
+  if (content.trim().length < 40) return true
   if (/^(who|what|how|why|when|where|can you|do you|tell me|explain|describe|show me)\b/i.test(content.trim())) return true
   return false
 }
 
 function enforceArtifactTruth(responseText: string, artifacts: any[]) {
   const lower = responseText.toLowerCase()
-  const claimsDelivery =
-    lower.includes('delivered') ||
+  const isCoordinationLanguage =
     lower.includes('shared drive') ||
     lower.includes('client inbox') ||
-    lower.includes('.docx') ||
-    lower.includes('.pdf') ||
-    lower.includes('.xlsx') ||
-    lower.includes('saved in') ||
-    lower.includes('file:')
+    lower.includes('saved in')
+  const claimsDelivery =
+    lower.includes('delivered') ||
+    ((lower.includes('.docx') || lower.includes('.pdf') || lower.includes('.xlsx') || lower.includes('file:')) &&
+      isCoordinationLanguage)
 
   if (!claimsDelivery) return responseText
 
@@ -114,6 +115,167 @@ function parseStructuredExecutionError(message?: string | null) {
     responseLength: parsed.responseLength,
     reason: parsed.reason,
     snippet: parsed.snippet,
+  }
+}
+
+function extractConfirmedBriefFields(requestText: string) {
+  const marker = '\n\nConfirmed brief:\n'
+  const markerIndex = requestText.indexOf(marker)
+  if (markerIndex < 0) return {}
+
+  const briefBlock = requestText.slice(markerIndex + marker.length).trim()
+  if (!briefBlock) return {}
+
+  return Object.fromEntries(
+    briefBlock
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const separatorIndex = line.indexOf(':')
+        if (separatorIndex <= 0) return null
+        const key = line.slice(0, separatorIndex).trim()
+        const value = line.slice(separatorIndex + 1).trim()
+        if (!key || !value) return null
+        return [key, value.includes(', ') ? value.split(', ').map((item) => item.trim()).filter(Boolean) : value]
+      })
+      .filter(Boolean) as Array<[string, string | string[]]>
+  )
+}
+
+function buildExecutionHooks(input: {
+  missionId?: string
+  canPersistMissionExecution: boolean
+  resolvedPipelineId: string | null
+  source: 'chat' | 'chat-fallback'
+}) {
+  if (!input.missionId || !input.canPersistMissionExecution) return undefined
+
+  return {
+    onPhaseStart: async ({ phase, progress }: any) => {
+      await upsertWorkflowExecutionState({
+        taskId: input.missionId!,
+        pipelineId: input.resolvedPipelineId,
+        status: 'active',
+        currentPhase: phase.name,
+        progress,
+        context: { source: input.source, phaseId: phase.id },
+      })
+    },
+    onActivityComplete: async ({ phase, activity, agent, runtime, summary, outputIds, progress }: any) => {
+      await insertTaskRun({
+        taskId: input.missionId!,
+        agentId: agent.id,
+        stage: `${phase.id}:${activity.id}`,
+        status: 'completed',
+        inputPayload: { phaseId: phase.id, activityId: activity.id, outputIds },
+        outputPayload: { summary, provider: runtime.provider, model: runtime.model },
+        startedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+      })
+      await upsertWorkflowExecutionState({
+        taskId: input.missionId!,
+        pipelineId: input.resolvedPipelineId,
+        status: 'active',
+        currentPhase: phase.name,
+        progress,
+        context: { source: input.source, phaseId: phase.id, activityId: activity.id },
+      })
+    },
+    onActivityFailure: async ({ phase, activity, agent, runtime, progress, error, outputPayload }: any) => {
+      await insertTaskRun({
+        taskId: input.missionId!,
+        agentId: agent.id,
+        stage: `${phase.id}:${activity.id}`,
+        status: 'failed',
+        inputPayload: { phaseId: phase.id, activityId: activity.id },
+        outputPayload: { provider: runtime.provider, model: runtime.model, ...(outputPayload || {}) },
+        errorMessage: error,
+        startedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+      })
+      await upsertWorkflowExecutionState({
+        taskId: input.missionId!,
+        pipelineId: input.resolvedPipelineId,
+        status: 'paused',
+        currentPhase: phase.name,
+        progress,
+        context: { source: input.source, phaseId: phase.id, activityId: activity.id, error },
+      })
+    },
+  }
+}
+
+async function runAutonomousWithFallback(input: {
+  request: string
+  provider: 'ollama' | 'gemini'
+  model: string
+  temperature: number
+  maxTokens: number
+  normalizedProviderSettings: any
+  deliverableType: any
+  executionPrompt: string
+  clientContext: string
+  clientProfile: any
+  agents: any[]
+  channelingPlan: any
+  executionPlan: any
+  pipelineDefinition: any
+  skillCategories: any[]
+  missionId?: string
+  canPersistMissionExecution: boolean
+  resolvedPipelineId: string | null
+}) {
+  let actualProvider = input.provider
+  let actualModel = input.model
+  let fallbackUsed = false
+
+  const runOnce = async (source: 'chat' | 'chat-fallback') =>
+    executeAutonomousTask({
+      request: input.request,
+      provider: actualProvider,
+      model: actualModel,
+      temperature: input.temperature,
+      maxTokens: input.maxTokens,
+      ollamaBaseUrl: input.normalizedProviderSettings?.ollama?.baseUrl,
+      ollamaContextWindow: input.normalizedProviderSettings?.ollama?.contextWindow,
+      geminiApiKey: input.normalizedProviderSettings?.gemini?.apiKey,
+      deliverableType: input.deliverableType,
+      executionPrompt: input.executionPrompt,
+      clientContext: input.clientContext,
+      clientProfile: input.clientProfile,
+      agents: input.agents,
+      leadAgentId: input.channelingPlan.leadAgentId,
+      collaboratorAgentIds: input.channelingPlan.collaboratorAgentIds,
+      selectedSkillsByAgent: input.channelingPlan.selectedSkillsByAgent,
+      qualityChecklist: input.executionPlan.qualityChecklist,
+      pipeline: input.pipelineDefinition,
+      skillCategories: input.skillCategories,
+      hooks: buildExecutionHooks({
+        missionId: input.missionId,
+        canPersistMissionExecution: input.canPersistMissionExecution,
+        resolvedPipelineId: input.resolvedPipelineId,
+        source,
+      }),
+    })
+
+  try {
+    const result = await runOnce('chat')
+    return { ...result, actualProvider, actualModel, fallbackUsed }
+  } catch (error) {
+    const fallbackRuntime = resolveFallbackRuntime({
+      settings: input.normalizedProviderSettings,
+      currentProvider: actualProvider,
+      requestedModel: input.model,
+    })
+
+    if (!fallbackRuntime) throw error
+
+    actualProvider = fallbackRuntime.provider
+    actualModel = fallbackRuntime.model
+    fallbackUsed = true
+    const result = await runOnce('chat-fallback')
+    return { ...result, actualProvider, actualModel, fallbackUsed }
   }
 }
 
@@ -341,19 +503,21 @@ export async function POST(req: NextRequest) {
     const missionSnapshot = Array.isArray(missions)
       ? missions.find((mission: any) => mission?.id === missionId)
       : null
-    const pipelineHint = inferPipeline(userContent, pipelines)
+    const pipelineSelection = resolvePipelineSelection({
+      content: userContent,
+      deliverableType: deliverableType as any,
+      pipelines,
+      preferredPipelineId: missionSnapshot?.pipelineId || null,
+    })
     const resolvedPipelineId =
-      pipelineHint?.id ||
-      deliverableSpec.pipelineId ||
+      pipelineSelection.pipelineId ||
       missionSnapshot?.pipelineId ||
       null
     persistedPipelineId = resolvedPipelineId
-    const pipelineDefinition = resolvedPipelineId
-      ? pipelines.find((pipeline: any) => pipeline.id === resolvedPipelineId) || null
-      : null
+    const pipelineDefinition = pipelineSelection.pipeline
     const resolvedPipelineName =
       pipelineDefinition?.name ||
-      pipelineHint?.name ||
+      pipelineSelection.hint?.name ||
       missionSnapshot?.pipelineName ||
       null
     const routedAgent = agents.find((agent: any) => agent.id === routing.routedAgentId)
@@ -421,7 +585,7 @@ export async function POST(req: NextRequest) {
       deliverableType,
       request: userContent,
       routedAgentId: routing.routedAgentId,
-      pipelinePhases: pipelineDefinition?.phases?.map((phase: any) => phase.name) || pipelineHint?.phases,
+      pipelinePhases: pipelineDefinition?.phases?.map((phase: any) => phase.name) || pipelineSelection.hint?.phases,
     })
     const channelingPlan = buildTaskChannelingPlan({
       request: userContent,
@@ -446,6 +610,7 @@ export async function POST(req: NextRequest) {
       clientBrandPromise: scopedClient?.brandPromise,
       clientKeyMessages: scopedClient?.keyMessages,
       pipelineName: resolvedPipelineName || undefined,
+      briefFields: extractConfirmedBriefFields(userContent),
     })
 
     if (missionId) {
@@ -484,15 +649,15 @@ export async function POST(req: NextRequest) {
     }
 
     // Build pipeline context for Iris
-    const pipelineContext = pipelineDefinition || pipelineHint
+    const pipelineContext = pipelineDefinition || pipelineSelection.hint
       ? [
           '',
           `--- PIPELINE ROUTING ---`,
-          `This request matches the "${resolvedPipelineName || 'tracked execution'}" pipeline${pipelineHint?.confidence ? ` (confidence: ${pipelineHint.confidence})` : ''}.`,
-          `Pipeline phases: ${(pipelineDefinition?.phases?.map((p: any) => `"${p.name}"`) || pipelineHint?.phases?.map((p: string) => `"${p}"`) || []).join(' → ')}.`,
-          pipelineHint?.estimatedDuration ? `Estimated duration: ${pipelineHint.estimatedDuration}.` : '',
-          pipelineHint?.clientProfileFields?.length
-            ? `Client profile fields needed: ${pipelineHint.clientProfileFields.map((f: any) => f.label).join(', ')}.`
+          `This request matches the "${resolvedPipelineName || 'tracked execution'}" pipeline${pipelineSelection.hint?.confidence ? ` (confidence: ${pipelineSelection.hint.confidence})` : ''}.`,
+          `Pipeline phases: ${(pipelineDefinition?.phases?.map((p: any) => `"${p.name}"`) || pipelineSelection.hint?.phases?.map((p: string) => `"${p}"`) || []).join(' → ')}.`,
+          pipelineSelection.hint?.estimatedDuration ? `Estimated duration: ${pipelineSelection.hint.estimatedDuration}.` : '',
+          pipelineSelection.hint?.clientProfileFields?.length
+            ? `Client profile fields needed: ${pipelineSelection.hint.clientProfileFields.map((f: any) => f.label).join(', ')}.`
             : '',
           ``,
           `To execute this pipeline, Iris should:`,
@@ -614,85 +779,78 @@ Orchestration trace:
       }
 
       if (deliverableType !== 'status-report') {
-        const result = await executeAutonomousTask({
-          request: userContent,
-          provider: actualProvider,
-          model: actualModel,
-          temperature,
-          maxTokens,
-          ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
-          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
-          geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
-          deliverableType,
-          executionPrompt,
-          clientContext,
-          clientProfile,
-          agents,
-          leadAgentId: channelingPlan.leadAgentId,
-          collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
-          selectedSkillsByAgent: channelingPlan.selectedSkillsByAgent,
-          qualityChecklist: executionPlan.qualityChecklist,
-          pipeline: pipelineDefinition,
-          skillCategories,
-          hooks: missionId && canPersistMissionExecution
-            ? {
-                onPhaseStart: async ({ phase, progress }) => {
-                  await upsertWorkflowExecutionState({
-                    taskId: missionId,
-                    pipelineId: resolvedPipelineId,
-                    status: 'active',
-                    currentPhase: phase.name,
-                    progress,
-                    context: { source: 'chat', phaseId: phase.id },
-                  })
-                },
-                onActivityComplete: async ({ phase, activity, agent, runtime, summary, outputIds, progress }) => {
-                  await insertTaskRun({
-                    taskId: missionId,
-                    agentId: agent.id,
-                    stage: `${phase.id}:${activity.id}`,
-                    status: 'completed',
-                    inputPayload: { phaseId: phase.id, activityId: activity.id, outputIds },
-                    outputPayload: { summary, provider: runtime.provider, model: runtime.model },
-                    startedAt: new Date().toISOString(),
-                    completedAt: new Date().toISOString(),
-                  })
-                  await upsertWorkflowExecutionState({
-                    taskId: missionId,
-                    pipelineId: resolvedPipelineId,
-                    status: 'active',
-                    currentPhase: phase.name,
-                    progress,
-                    context: { source: 'chat', phaseId: phase.id, activityId: activity.id },
-                  })
-                },
-                onActivityFailure: async ({ phase, activity, agent, runtime, progress, error, outputPayload }) => {
-                  await insertTaskRun({
-                    taskId: missionId,
-                    agentId: agent.id,
-                    stage: `${phase.id}:${activity.id}`,
-                    status: 'failed',
-                    inputPayload: { phaseId: phase.id, activityId: activity.id },
-                    outputPayload: { provider: runtime.provider, model: runtime.model, ...(outputPayload || {}) },
-                    errorMessage: error,
-                    startedAt: new Date().toISOString(),
-                    completedAt: new Date().toISOString(),
-                  })
-                  await upsertWorkflowExecutionState({
-                    taskId: missionId,
-                    pipelineId: resolvedPipelineId,
-                    status: 'paused',
-                    currentPhase: phase.name,
-                    progress,
-                    context: { source: 'chat', phaseId: phase.id, activityId: activity.id, error },
-                  })
-                },
-              }
-            : undefined,
-        })
-        responseText = result.response
-        executionSteps = result.executionSteps
-        qualityResult = result.qualityResult
+        if (missionId && canPersistMissionExecution) {
+          const job = await queueTaskExecution(missionId, auth, 'retry')
+          responseText = [
+            `I’ve locked the brief and queued this for ${agents.find((agent: any) => agent.id === channelingPlan.leadAgentId)?.name || channelingPlan.leadAgentId}.`,
+            channelingPlan.collaboratorAgentIds.length
+              ? `Support team: ${channelingPlan.collaboratorAgentIds.join(', ')}.`
+              : 'No extra support agents are needed right now.',
+            resolvedPipelineName
+              ? `Execution is now running through ${resolvedPipelineName}.`
+              : 'Execution is now running through the direct specialist flow.',
+          ].join(' ')
+          executionSteps = []
+          qualityResult = null
+          fallbackUsed = false
+
+          return NextResponse.json({
+            response: responseText,
+            meta: {
+              routedAgentId: routing.routedAgentId,
+              leadAgentId: channelingPlan.leadAgentId,
+              collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
+              assignedAgentIds: channelingPlan.assignedAgentIds,
+              selectedSkillsByAgent: channelingPlan.selectedSkillsByAgent,
+              orchestrationTrace: channelingPlan.orchestrationTrace,
+              confidence: channelingPlan.confidence,
+              resolvedDeliverableType: channelingPlan.resolvedDeliverableType,
+              clientId: routing.clientId || currentClientId || null,
+              campaignId: currentCampaignId || null,
+              deliverableType,
+              pipelineId: resolvedPipelineId,
+              pipelineName: resolvedPipelineName,
+              qualityChecklist: executionPlan.qualityChecklist,
+              handoffNotes: executionPlan.handoffNotes,
+              executionSteps,
+              quality: qualityResult,
+              executionPrompt,
+              renderedHtml: null,
+              provider: actualProvider,
+              model: actualModel,
+              fallbackUsed,
+              executionMode: 'background',
+              executionJob: job,
+            },
+          })
+        } else {
+          const result = await runAutonomousWithFallback({
+            request: userContent,
+            provider: actualProvider,
+            model: actualModel,
+            temperature,
+            maxTokens,
+            normalizedProviderSettings,
+            deliverableType,
+            executionPrompt,
+            clientContext,
+            clientProfile,
+            agents,
+            channelingPlan,
+            executionPlan,
+            pipelineDefinition,
+            skillCategories,
+            missionId,
+            canPersistMissionExecution,
+            resolvedPipelineId,
+          })
+          responseText = result.response
+          executionSteps = result.executionSteps
+          qualityResult = result.qualityResult
+          actualProvider = result.actualProvider
+          actualModel = result.actualModel
+          fallbackUsed = result.fallbackUsed
+        }
       } else {
         responseText = await generateText({
           provider: actualProvider,
@@ -707,112 +865,7 @@ Orchestration trace:
       }
     } catch (error) {
       console.log('[CHAT ERROR]', error instanceof Error ? error.message : String(error), 'Provider:', actualProvider)
-      const fallbackRuntime = resolveFallbackRuntime({
-        settings: normalizedProviderSettings,
-        currentProvider: actualProvider,
-        requestedModel: model,
-      })
-
-      if (!fallbackRuntime) {
-        throw error
-      }
-
-      actualProvider = fallbackRuntime.provider
-      actualModel = fallbackRuntime.model
-      fallbackUsed = true
-
-      if (deliverableType !== 'status-report') {
-        const result = await executeAutonomousTask({
-          request: userContent,
-          provider: actualProvider,
-          model: actualModel,
-          temperature,
-          maxTokens,
-          ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
-          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
-          geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
-          deliverableType,
-          executionPrompt,
-          clientContext,
-          clientProfile,
-          agents,
-          leadAgentId: channelingPlan.leadAgentId,
-          collaboratorAgentIds: channelingPlan.collaboratorAgentIds,
-          selectedSkillsByAgent: channelingPlan.selectedSkillsByAgent,
-          qualityChecklist: executionPlan.qualityChecklist,
-          pipeline: pipelineDefinition,
-          skillCategories,
-          hooks: missionId && canPersistMissionExecution
-            ? {
-                onPhaseStart: async ({ phase, progress }) => {
-                  await upsertWorkflowExecutionState({
-                    taskId: missionId,
-                    pipelineId: resolvedPipelineId,
-                    status: 'active',
-                    currentPhase: phase.name,
-                    progress,
-                    context: { source: 'chat-fallback', phaseId: phase.id },
-                  })
-                },
-                onActivityComplete: async ({ phase, activity, agent, runtime, summary, outputIds, progress }) => {
-                  await insertTaskRun({
-                    taskId: missionId,
-                    agentId: agent.id,
-                    stage: `${phase.id}:${activity.id}`,
-                    status: 'completed',
-                    inputPayload: { phaseId: phase.id, activityId: activity.id, outputIds },
-                    outputPayload: { summary, provider: runtime.provider, model: runtime.model },
-                    startedAt: new Date().toISOString(),
-                    completedAt: new Date().toISOString(),
-                  })
-                  await upsertWorkflowExecutionState({
-                    taskId: missionId,
-                    pipelineId: resolvedPipelineId,
-                    status: 'active',
-                    currentPhase: phase.name,
-                    progress,
-                    context: { source: 'chat-fallback', phaseId: phase.id, activityId: activity.id },
-                  })
-                },
-                onActivityFailure: async ({ phase, activity, agent, runtime, progress, error, outputPayload }) => {
-                  await insertTaskRun({
-                    taskId: missionId,
-                    agentId: agent.id,
-                    stage: `${phase.id}:${activity.id}`,
-                    status: 'failed',
-                    inputPayload: { phaseId: phase.id, activityId: activity.id },
-                    outputPayload: { provider: runtime.provider, model: runtime.model, ...(outputPayload || {}) },
-                    errorMessage: error,
-                    startedAt: new Date().toISOString(),
-                    completedAt: new Date().toISOString(),
-                  })
-                  await upsertWorkflowExecutionState({
-                    taskId: missionId,
-                    pipelineId: resolvedPipelineId,
-                    status: 'paused',
-                    currentPhase: phase.name,
-                    progress,
-                    context: { source: 'chat-fallback', phaseId: phase.id, activityId: activity.id, error },
-                  })
-                },
-              }
-            : undefined,
-        })
-        responseText = result.response
-        executionSteps = result.executionSteps
-        qualityResult = result.qualityResult
-      } else {
-        responseText = await generateText({
-          provider: actualProvider,
-          model: actualModel,
-          temperature,
-          maxTokens,
-          messages: [...chatMessages],
-          ollamaBaseUrl: normalizedProviderSettings?.ollama?.baseUrl,
-          ollamaContextWindow: normalizedProviderSettings?.ollama?.contextWindow,
-          geminiApiKey: normalizedProviderSettings?.gemini?.apiKey,
-        })
-      }
+      throw error
     }
 
     responseText = enforceArtifactTruth(responseText, artifacts)

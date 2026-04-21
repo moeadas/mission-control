@@ -6,6 +6,7 @@ import type { Pipeline, Phase, Activity } from '@/lib/stores/pipelines-store'
 import { pickAgentForRole } from '@/lib/agent-roles'
 import type { Client } from '@/lib/client-data'
 import { inferDeliverableTypeFromText, getDeliverableSpec } from '@/lib/deliverables'
+import { resolvePipelineSelection } from '@/lib/server/ai'
 
 export interface PipelineInstance {
   id: string
@@ -338,24 +339,11 @@ export async function routeTask(
   const { description } = request
   const deliverableType = inferDeliverableTypeFromText(description)
   const spec = getDeliverableSpec(deliverableType)
-  const lowerDesc = description.toLowerCase()
-
-  let matchedPipeline =
-    (spec.pipelineId ? availablePipelines.find((pipeline) => pipeline.id === spec.pipelineId) : null) || null
-
-  if (!matchedPipeline) {
-    const ranked = availablePipelines
-      .map((pipeline) => {
-        const haystack = [pipeline.name, pipeline.description, ...(pipeline.phases || []).map((phase) => phase.name)].join(' ').toLowerCase()
-        const score = lowerDesc
-          .split(/\s+/)
-          .filter((token) => token.length > 3)
-          .reduce((total, token) => total + (haystack.includes(token) ? 1 : 0), 0)
-        return { pipeline, score }
-      })
-      .sort((a, b) => b.score - a.score)
-    matchedPipeline = ranked[0] && ranked[0].score > 0 ? ranked[0].pipeline : null
-  }
+  const matchedPipeline = resolvePipelineSelection({
+    content: description,
+    deliverableType,
+    pipelines: availablePipelines,
+  }).pipeline
 
   if (!matchedPipeline) {
     return {
